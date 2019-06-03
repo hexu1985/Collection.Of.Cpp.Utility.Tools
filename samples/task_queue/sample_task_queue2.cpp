@@ -1,3 +1,6 @@
+/** \example sample_task_queue2.cpp
+ * This is an example of how to use the TaskQueue class.
+ */
 #include "task_queue.hpp"
 #include <thread>
 #include <iostream>
