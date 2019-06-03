@@ -1,5 +1,5 @@
-#ifndef GUL_MINI_UTIL_TASK_QUEUE_INC
-#define GUL_MINI_UTIL_TASK_QUEUE_INC
+#ifndef GUL_MINI_UTILS_TASK_QUEUE_INC
+#define GUL_MINI_UTILS_TASK_QUEUE_INC
 
 #include <memory>
 #include <deque>
