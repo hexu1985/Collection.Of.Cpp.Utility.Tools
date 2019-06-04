@@ -1,9 +1,9 @@
-/** \example sample_thread1.cpp
- * This is an example of how to use the Thread class.
+/** \example sample_worker_thread1.cpp
+ * This is an example of how to use the WorkerThread class.
  */
 #include <iostream>
 #include <chrono>
-#include "thread.hpp"
+#include "worker_thread.hpp"
 
 using namespace MiniUtils;
 
@@ -61,7 +61,7 @@ public:
 int main()
 {
 	Foo foo(1);
-    Thread mythread("test");
+    WorkerThread mythread("test");
     mythread.start();
 
 	auto task_queue = mythread.get_task_queue();

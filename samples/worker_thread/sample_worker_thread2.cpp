@@ -1,10 +1,10 @@
-/** \example sample_thread2.cpp
- * This is an example of how to use the Thread class.
+/** \example sample_worker_thread2.cpp
+ * This is an example of how to use the WorkerThread class.
  */
 #include <iostream>
 #include <chrono>
 #include <string>
-#include "thread.hpp"
+#include "worker_thread.hpp"
 
 using namespace MiniUtils;
 
@@ -22,8 +22,8 @@ void print_string(std::string str)
 
 void repush_task()
 {
-    auto task_queue = this_thread::get_task_queue();
-    auto name = this_thread::get_name();
+    auto task_queue = current_worker_thread::get_task_queue();
+    auto name = current_worker_thread::get_name();
     std::cout << __func__ << " in thread " << name << std::endl;
     if (task_queue) {
         std::cout << __func__ << " in thread " << name << ", push another task" << std::endl;
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         nsec = std::stoi(argv[1]);
     }
 
-    Thread mythread("test");
+    WorkerThread mythread("test");
     mythread.start();
 
 	auto task_queue = mythread.get_task_queue();

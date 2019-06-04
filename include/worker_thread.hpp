@@ -9,21 +9,21 @@
 namespace MiniUtils {
 
 /**
- * @brief 基于TaskQueue的线程类
+ * @brief 基于TaskQueue的工作线程类
  */
-class Thread {
+class WorkerThread {
 public:
     /**
-     * @brief 构造一个线程类对象
+     * @brief 构造一个工作线程类对象
      *
      * @param name 线程名
      */
-    Thread(const std::string &name);
+    WorkerThread(const std::string &name);
 
     /**
-     * @brief 析构线程类对象
+     * @brief 析构工作线程类对象
      */
-    ~Thread();
+    ~WorkerThread();
 
     /**
      * @brief 创建一个TaskQueue, 以及一个工作线程处理TaskQueue的任务
@@ -50,15 +50,15 @@ public:
     std::shared_ptr<TaskQueue> get_task_queue();
 
     /**
-     * @brief 获取线程名
+     * @brief 获取工作线程名
      *
      * @return 线程名
      */
     const std::string &get_name() const;
 
 private:
-    Thread(const Thread &) = delete;
-    void operator =(const Thread &) = delete;
+    WorkerThread(const WorkerThread &) = delete;
+    void operator =(const WorkerThread &) = delete;
 
 private:
     void task_process();
@@ -68,19 +68,21 @@ private:
     std::shared_ptr<TaskQueue> task_queue_;
 };
 
-namespace this_thread {
+namespace current_worker_thread {
 
 /**
- * @brief 获取当前线程的TaskQueue
+ * @brief 获取当前工作线程的TaskQueue
  *
  * @return TaskQueue的指针, 如果当前线程没有TaskQueue, 返回空指针
  */
 std::shared_ptr<TaskQueue> get_task_queue();
 
 /**
- * @brief 获取当前线程的名字
+ * @brief 获取当前工作线程的名字
  *
- * @return 线程名
+ * @return 工作线程名
+ *
+ * @note 如果当前线程不是由WorkerThread创建的, 工作线程名可能为空
  */
 const std::string &get_name();
 
