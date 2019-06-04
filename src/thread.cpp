@@ -6,6 +6,9 @@ using namespace std;
 
 namespace MiniUtils {
 
+thread_local shared_ptr<TaskQueue> current_thread_task_queue;
+thread_local string current_thread_name;
+
 // ThreadInterrupt 
 struct ThreadInterrupt {
 };
@@ -59,6 +62,9 @@ const string &Thread::get_name() const
 
 void Thread::task_process()
 {
+    current_thread_task_queue = this->task_queue_;
+    current_thread_name = this->name_;
+
     TaskQueue &incoming_queue = *task_queue_;
 	while (true) {
         TaskPtrList working_list;
@@ -74,6 +80,20 @@ void Thread::task_process()
 		}
 	}
 }
+
+namespace this_thread {
+
+std::shared_ptr<TaskQueue> get_task_queue()
+{
+    return current_thread_task_queue;
+}
+
+const std::string &get_name()
+{
+    return current_thread_name;
+}
+
+}   // namespace this_thread
 
 }   // namespace MiniUtils
 

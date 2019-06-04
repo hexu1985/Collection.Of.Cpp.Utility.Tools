@@ -35,6 +35,14 @@ private:
     std::shared_ptr<TaskQueue> task_queue_;
 };
 
+namespace this_thread {
+
+std::shared_ptr<TaskQueue> get_task_queue();
+
+const std::string &get_name();
+
+}   // namespace this_thread
+
 }   // namespace MiniUtils
 
 #endif 
