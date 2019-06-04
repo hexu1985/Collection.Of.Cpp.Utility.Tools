@@ -1,3 +1,6 @@
+/** \example sample_thread1.cpp
+ * This is an example of how to use the Thread class.
+ */
 #include <iostream>
 #include <chrono>
 #include "thread.hpp"
