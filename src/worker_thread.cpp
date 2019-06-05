@@ -6,6 +6,8 @@ using namespace std;
 
 namespace MiniUtils {
 
+namespace {     // details
+
 thread_local shared_ptr<TaskQueue> current_thread_task_queue;
 thread_local string current_thread_name;
 
@@ -18,57 +20,15 @@ void this_thread_exit()
     throw WorkerThreadInterrupt();
 }
 
-// WorkerThread
-WorkerThread::WorkerThread(const string &name): name_(name) 
+void task_process(WorkerThread *worker_thread)
 {
-}
+    current_thread_task_queue = worker_thread->getTaskQueue();
+    current_thread_name = worker_thread->getName();
 
-WorkerThread::~WorkerThread() 
-{
-    if (is_run()) {
-        stop();
-    }
-}
-
-void WorkerThread::start() 
-{
-    assert(!thread_ && !task_queue_);
-    task_queue_ = make_shared<TaskQueue>();
-    thread_ = make_shared<thread>(&WorkerThread::task_process, this);
-}
-
-void WorkerThread::stop() 
-{
-    task_queue_->push_task(&this_thread_exit);
-    thread_->join();
-    thread_.reset();
-    task_queue_.reset();
-}
-
-bool WorkerThread::is_run() 
-{
-    return (thread_ ? true : false);
-}
-
-shared_ptr<TaskQueue> WorkerThread::get_task_queue() 
-{
-    return task_queue_;
-}
-
-const string &WorkerThread::get_name() const
-{
-    return name_;
-}
-
-void WorkerThread::task_process()
-{
-    current_thread_task_queue = this->task_queue_;
-    current_thread_name = this->name_;
-
-    TaskQueue &incoming_queue = *task_queue_;
+    TaskQueue &incoming_queue = *current_thread_task_queue;
 	while (true) {
         TaskPtrList working_list;
-		incoming_queue.pop_task(working_list);
+		incoming_queue.popTask(working_list);
 		while (!working_list.empty()) {
 			auto task = working_list.front();
 			working_list.pop_front();
@@ -79,6 +39,50 @@ void WorkerThread::task_process()
             }
 		}
 	}
+}
+
+}   // namespace {
+
+// WorkerThread
+WorkerThread::WorkerThread(const string &name): name_(name) 
+{
+}
+
+WorkerThread::~WorkerThread() 
+{
+    if (isRun()) {
+        stop();
+    }
+}
+
+void WorkerThread::start() 
+{
+    assert(!thread_ && !taskQueue_);
+    taskQueue_ = make_shared<TaskQueue>();
+    thread_ = make_shared<thread>(&task_process, this);
+}
+
+void WorkerThread::stop() 
+{
+    taskQueue_->pushTask(&this_thread_exit);
+    thread_->join();
+    thread_.reset();
+    taskQueue_.reset();
+}
+
+bool WorkerThread::isRun() 
+{
+    return (thread_ ? true : false);
+}
+
+shared_ptr<TaskQueue> WorkerThread::getTaskQueue() 
+{
+    return taskQueue_;
+}
+
+const string &WorkerThread::getName() const
+{
+    return name_;
 }
 
 namespace current_worker_thread {

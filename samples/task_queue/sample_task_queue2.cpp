@@ -12,7 +12,7 @@ void processor(TaskQueue &task_queue)
 {
 	while (true) {
         TaskPtrList task_list;
-		task_queue.pop_task(task_list);
+		task_queue.popTask(task_list);
 		while (!task_list.empty()) {
 			auto task = task_list.front();
 			task_list.pop_front();
@@ -65,12 +65,12 @@ int main()
 	std::thread proc_thread(processor, std::ref(task_queue));
     std::string str = "hello";
 	for (int i = 0; i < 10; i++) {
-		task_queue.push_task(make_task(print_int, i));
-		task_queue.push_task(make_task(print_string, str));
-		task_queue.push_task(make_task(&Foo::print, &foo));
-		task_queue.push_task(make_task(&Foo::print, pfoo));
+		task_queue.pushTask(make_task(print_int, i));
+		task_queue.pushTask(make_task(print_string, str));
+		task_queue.pushTask(make_task(&Foo::print, &foo));
+		task_queue.pushTask(make_task(&Foo::print, pfoo));
 	}
-	task_queue.push_task(make_task(process_exit));
+	task_queue.pushTask(make_task(process_exit));
 	proc_thread.join();
 	return 0;
 }

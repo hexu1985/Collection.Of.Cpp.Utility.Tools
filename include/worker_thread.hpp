@@ -40,32 +40,30 @@ public:
      *
      * @return 如果工作线程正在运行, 返回true; 否则返回false
      */
-    bool is_run();
+    bool isRun();
 
     /**
      * @brief 获取TaskQueue
      *
      * @return TaskQueue的指针
      */
-    std::shared_ptr<TaskQueue> get_task_queue();
+    std::shared_ptr<TaskQueue> getTaskQueue();
 
     /**
      * @brief 获取工作线程名
      *
      * @return 线程名
      */
-    const std::string &get_name() const;
+    const std::string &getName() const;
 
 private:
     WorkerThread(const WorkerThread &) = delete;
     void operator =(const WorkerThread &) = delete;
 
 private:
-    void task_process();
-
     std::string name_;
     std::shared_ptr<std::thread> thread_;
-    std::shared_ptr<TaskQueue> task_queue_;
+    std::shared_ptr<TaskQueue> taskQueue_;
 };
 
 namespace current_worker_thread {

@@ -85,8 +85,8 @@ typedef std::deque<TaskPtr> TaskPtrList;
  */
 class TaskQueue: public std::deque<std::shared_ptr<TaskBase>> {
 private:
-    std::mutex queue_mtx_;
-    std::condition_variable queue_cv_;
+    std::mutex queueMtx_;
+    std::condition_variable queueCV_;
 
 public:
     /**
@@ -98,9 +98,9 @@ public:
      * @note 可以参考std::thread构造函数的用法
      */
     template <typename ...Args>
-    void push_task(Args &&...args)
+    void pushTask(Args &&...args)
     {
-        this->push_task(make_task(std::forward<Args>(args)...));
+        this->pushTask(make_task(std::forward<Args>(args)...));
     }
 
     /**
@@ -108,11 +108,11 @@ public:
      *
      * @param task 任务指针
      */
-    void push_task(std::shared_ptr<TaskBase> task) 
+    void pushTask(std::shared_ptr<TaskBase> task) 
     {
-        std::lock_guard<std::mutex> lck(queue_mtx_);
+        std::lock_guard<std::mutex> lck(queueMtx_);
         this->push_back(task);
-        queue_cv_.notify_one();
+        queueCV_.notify_one();
     }
 
     /**
@@ -120,11 +120,11 @@ public:
      *
      * @return 任务指针
      */
-	std::shared_ptr<TaskBase> pop_task() 
+	std::shared_ptr<TaskBase> popTask() 
     {
-        std::unique_lock<std::mutex> lck(queue_mtx_);
+        std::unique_lock<std::mutex> lck(queueMtx_);
         while (this->empty()) {
-            queue_cv_.wait(lck);
+            queueCV_.wait(lck);
         }
         auto task = this->front();
         this->pop_front();
@@ -136,11 +136,11 @@ public:
      *
      * @param task_list 任务指针列表
      */
-    void pop_task(std::deque<std::shared_ptr<TaskBase>> &task_list)
+    void popTask(std::deque<std::shared_ptr<TaskBase>> &task_list)
     {
-        std::unique_lock<std::mutex> lck(queue_mtx_);
+        std::unique_lock<std::mutex> lck(queueMtx_);
         while (this->empty()) {
-            queue_cv_.wait(lck);
+            queueCV_.wait(lck);
         }
         this->swap(task_list);
     }

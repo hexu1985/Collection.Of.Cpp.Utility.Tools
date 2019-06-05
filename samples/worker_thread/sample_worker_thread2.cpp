@@ -27,7 +27,7 @@ void repush_task()
     std::cout << __func__ << " in thread " << name << std::endl;
     if (task_queue) {
         std::cout << __func__ << " in thread " << name << ", push another task" << std::endl;
-        task_queue->push_task(&print_string, name);
+        task_queue->pushTask(&print_string, name);
     }
 }
 
@@ -41,13 +41,13 @@ int main(int argc, char *argv[])
     WorkerThread mythread("test");
     mythread.start();
 
-	auto task_queue = mythread.get_task_queue();
+	auto task_queue = mythread.getTaskQueue();
 	for (int i = 0; i < 10; i++) {
-		task_queue->push_task(print_int, i);
-		task_queue->push_task(&repush_task);
+		task_queue->pushTask(print_int, i);
+		task_queue->pushTask(&repush_task);
 	}
 
-    std::cout << "main thread with sleep " << nsec << " seconds before stop thread " << mythread.get_name() << std::endl;
+    std::cout << "main thread with sleep " << nsec << " seconds before stop thread " << mythread.getName() << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(nsec));
     mythread.stop();
 	return 0;
