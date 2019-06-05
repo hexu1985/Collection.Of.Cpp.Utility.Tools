@@ -1,3 +1,10 @@
+/**
+ * @file worker_thread.hpp
+ * @brief 一个处理任务队列的工作线程
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-06-05
+ */
 #ifndef GUL_MINI_UTILS_THREAD_INC
 #define GUL_MINI_UTILS_THREAD_INC
 

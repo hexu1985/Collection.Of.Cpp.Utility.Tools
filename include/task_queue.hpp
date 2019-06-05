@@ -1,3 +1,10 @@
+/**
+ * @file task_queue.hpp
+ * @brief 一个线程安全的任务队列类
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-06-05
+ */
 #ifndef GUL_MINI_UTILS_TASK_QUEUE_INC
 #define GUL_MINI_UTILS_TASK_QUEUE_INC
 
