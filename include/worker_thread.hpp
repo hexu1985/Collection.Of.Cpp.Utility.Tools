@@ -5,8 +5,8 @@
  * @version 1.0
  * @date 2019-06-05
  */
-#ifndef GUL_MINI_UTILS_THREAD_INC
-#define GUL_MINI_UTILS_THREAD_INC
+#ifndef MINI_UTILS_THREAD_INC
+#define MINI_UTILS_THREAD_INC
 
 #include <thread>
 #include <string>

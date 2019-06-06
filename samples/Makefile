@@ -1,5 +1,5 @@
 
-SUBDIRS = task_queue worker_thread
+SUBDIRS = task_queue worker_thread spin_lock
 
 all:
 	@$(MAKE) $(MFLAGS) WHAT_TO_MAKE=$@ common
