@@ -1,3 +1,6 @@
+/** \example sample_mt_queue1.cpp
+ * This is an example of how to use the MTQueue class.
+ */
 #include <iostream>
 #include <cstdio>
 #include <thread>
