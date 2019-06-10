@@ -17,13 +17,16 @@ namespace MiniUtils {
 
 /**
  * @brief 自旋锁
+ *
+ * @note 基于std::atomic_flag实现
  */
 class SpinLock {
+private:
     std::atomic_flag flag_;
 
 public:
     /**
-     * @brief 创建一个自旋锁
+     * @brief 创建一个自旋锁, 初始化为清除状态
      */
     SpinLock(): flag_(ATOMIC_FLAG_INIT) {}
 
@@ -32,6 +35,8 @@ public:
      */
     void lock() 
     {
+        // 获取flag之前状态并同时设置flag为设置状态,
+        // 如果之前为清除状态, 说明获取锁成功, 否则继续自旋
         while (flag_.test_and_set(std::memory_order_acquire));
     }
 
@@ -40,7 +45,18 @@ public:
      */
     void unlock()
     {
+        // 设置flag为清除状态
         flag_.clear(std::memory_order_release);
+    }
+
+    /**
+     * @brief 尝试获取锁
+     *
+     * @return 获取锁成功返回true, 否则返回false
+     */
+    bool tryLock()
+    {
+        return !flag_.test_and_set(std::memory_order_acquire);
     }
 };
 
