@@ -1,12 +1,12 @@
 /**
- * @file task_queue.hpp
+ * @file TaskQueue.hpp
  * @brief 一个线程安全的任务队列类
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-06-05
  */
-#ifndef MINI_UTILS_TASK_QUEUE_INC
-#define MINI_UTILS_TASK_QUEUE_INC
+#ifndef MINI_UTILS_TASKQUEUE_INC
+#define MINI_UTILS_TASKQUEUE_INC
 
 #include <memory>
 #include <deque>
@@ -24,7 +24,7 @@ struct TaskBase {
     virtual ~TaskBase() {}
 
     /**
-     * @brief 运行当前任务
+     * @brief 运行当前任务, 由子类override
      */
     virtual void run() = 0;
 };
@@ -35,14 +35,14 @@ struct TaskBase {
 template <typename Fn>
 struct Task: public TaskBase {
     /**
-     * @brief 从仿函数构造一个具体任务类
+     * @brief 从仿函数对象构造一个具体任务类
      *
      * @param fn 仿函数
      */
     Task(Fn &&fn): f_(std::forward<Fn>(fn)) {}
 
     /**
-     * @brief 运行当前任务
+     * @brief 运行当前任务, 调用具体的仿函数对象
      */
     virtual void run() { f_(); }
 

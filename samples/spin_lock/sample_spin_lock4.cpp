@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream> // std::cout
-#include "spin_lock.hpp"  // SpinLock
+#include "SpinLock.hpp"  // SpinLock
  
 using namespace MiniUtils;
 

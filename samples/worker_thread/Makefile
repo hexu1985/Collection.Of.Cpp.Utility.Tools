@@ -17,4 +17,4 @@ clean:
 	$(RM) $(PROGS)
 
 %: %.cpp
-	$(CXX) -o $@ ../../src/worker_thread.cpp $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH) 
+	$(CXX) -o $@ ../../src/WorkerThread.cpp $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH) 

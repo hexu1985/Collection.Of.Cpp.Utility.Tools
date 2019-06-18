@@ -1,4 +1,4 @@
-#include "worker_thread.hpp"
+#include "WorkerThread.hpp"
 
 #include <cassert>
 

@@ -1,5 +1,5 @@
 /**
- * @file spin_lock.hpp
+ * @file SpinLock.hpp
  * @brief 一个自旋锁类
  * @author hexu_1985@sina.com
  * @version 1.0
@@ -8,8 +8,8 @@
  * @see C++ Concurrency in Action, Chapter 5, spinlock_mutex \n
  * https://github.com/subjam/concurrency-in-action
  */
-#ifndef MINI_UTILS_SPIN_LOCK_INC
-#define MINI_UTILS_SPIN_LOCK_INC
+#ifndef MINI_UTILS_SPINLOCK_INC
+#define MINI_UTILS_SPINLOCK_INC
 
 #include <atomic> 
 

@@ -3,7 +3,7 @@
  */
 #include <iostream>       // std::cout
 #include <thread>         // std::thread
-#include "spin_lock.hpp"  // SpinLock
+#include "SpinLock.hpp"  // SpinLock
 
 using namespace MiniUtils;
 

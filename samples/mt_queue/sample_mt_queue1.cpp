@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <thread>
 
-#include "mt_queue.hpp"
+#include "MTQueue.hpp"
 
 using namespace MiniUtils; 
 

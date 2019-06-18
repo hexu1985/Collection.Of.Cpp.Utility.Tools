@@ -1,17 +1,17 @@
 /**
- * @file worker_thread.hpp
+ * @file WorkerThread.hpp
  * @brief 一个处理任务队列的工作线程
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-06-05
  */
-#ifndef MINI_UTILS_THREAD_INC
-#define MINI_UTILS_THREAD_INC
+#ifndef MINI_UTILS_WORKERTHREAD_INC
+#define MINI_UTILS_WORKERTHREAD_INC
 
 #include <thread>
 #include <string>
 
-#include "task_queue.hpp"
+#include "TaskQueue.hpp"
 
 namespace MiniUtils {
 

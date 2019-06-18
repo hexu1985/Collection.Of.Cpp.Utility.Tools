@@ -10,7 +10,7 @@ VPATH =
 
 SOURCES = $(shell ls *.cpp)
 OBJECTS = $(SOURCES:%.cpp=%.o)
-STATICLIB = libmini_utils.a
+STATICLIB = libMiniUtils.a
 
 all: $(STATICLIB)
 	@echo "STATICLIB = $(STATICLIB)" 

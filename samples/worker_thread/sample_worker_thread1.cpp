@@ -3,7 +3,7 @@
  */
 #include <iostream>
 #include <chrono>
-#include "worker_thread.hpp"
+#include "WorkerThread.hpp"
 
 using namespace MiniUtils;
 
