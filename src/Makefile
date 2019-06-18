@@ -10,9 +10,10 @@ VPATH =
 
 SOURCES = $(shell ls *.cpp)
 OBJECTS = $(SOURCES:%.cpp=%.o)
-STATICLIB = libMiniUtils.a
+STATICLIB = libmini_utils.a
 
 all: $(STATICLIB)
+	@bash ./gen_mini_utils_header.sh
 	@echo "STATICLIB = $(STATICLIB)" 
 
 .PHONY: clean
