@@ -8,8 +8,8 @@
  * @see C++ Concurrency in Action, Chapter 5, spinlock_mutex \n
  * https://github.com/subjam/concurrency-in-action
  */
-#ifndef MINI_UTILS_SPINLOCK_INC
-#define MINI_UTILS_SPINLOCK_INC
+#ifndef MINI_UTILS_SPIN_LOCK_INC
+#define MINI_UTILS_SPIN_LOCK_INC
 
 #include <atomic> 
 

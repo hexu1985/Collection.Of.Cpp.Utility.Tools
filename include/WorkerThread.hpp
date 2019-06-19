@@ -5,8 +5,8 @@
  * @version 1.0
  * @date 2019-06-05
  */
-#ifndef MINI_UTILS_WORKERTHREAD_INC
-#define MINI_UTILS_WORKERTHREAD_INC
+#ifndef MINI_UTILS_WORKER_THREAD_INC
+#define MINI_UTILS_WORKER_THREAD_INC
 
 #include <thread>
 #include <string>

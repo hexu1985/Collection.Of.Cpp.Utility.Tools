@@ -8,8 +8,8 @@
  * @see C++ Concurrency in Action, Chapter 4, queue \n
  * https://github.com/subjam/concurrency-in-action
  */
-#ifndef MINI_UTILS_MTQUEUE_INC
-#define MINI_UTILS_MTQUEUE_INC
+#ifndef MINI_UTILS_MT_QUEUE_INC
+#define MINI_UTILS_MT_QUEUE_INC
 
 #include <mutex>
 #include <condition_variable>

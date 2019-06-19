@@ -5,8 +5,8 @@
  * @version 1.0
  * @date 2019-06-05
  */
-#ifndef MINI_UTILS_TASKQUEUE_INC
-#define MINI_UTILS_TASKQUEUE_INC
+#ifndef MINI_UTILS_TASK_QUEUE_INC
+#define MINI_UTILS_TASK_QUEUE_INC
 
 #include <memory>
 #include <deque>
