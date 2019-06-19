@@ -1,7 +1,7 @@
 #ifndef TIMER_BASE_GET_TIME_OF_DAY_INC
 #define TIMER_BASE_GET_TIME_OF_DAY_INC
 
-#include <gettimeofday.h>
+#include <sys/time.h>
 
 /*
 	TimerBaseGetTimeOfDay: timer base class for C++03 and earlier
