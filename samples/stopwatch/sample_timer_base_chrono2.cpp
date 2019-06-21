@@ -1,4 +1,6 @@
-// steady_clock example
+/** \example sample_timer_base_chrono2.cpp
+ * This is an example of how to use the TimerBaseSteady class.
+ */
 #include <iostream>
 #include <thread>
 #include "TimerBaseChrono.hpp"

@@ -1,4 +1,6 @@
-// steady_clock example
+/** \example sample_timer_base_chrono3.cpp
+ * This is an example of how to use the TimerBaseHighResolution class.
+ */
 #include <iostream>
 #include <thread>
 #include "TimerBaseChrono.hpp"

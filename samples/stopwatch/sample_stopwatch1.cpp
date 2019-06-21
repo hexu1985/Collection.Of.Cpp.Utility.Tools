@@ -1,3 +1,6 @@
+/** \example sample_stopwatch1.cpp
+ * This is an example of how to use the Stopwatch class.
+ */
 #include <iostream>
 #include <chrono>
 #include <thread>

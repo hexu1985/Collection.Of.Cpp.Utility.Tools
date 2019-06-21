@@ -1,3 +1,15 @@
+/**
+ * @file BasicStopwatch.hpp
+ * @brief 一个带打印功能的计时器的模板类
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-06-20
+ *
+ * @note 需要自己实现一个TimerBase类, 具体可参考 TimerBaseChrono.hpp
+ *
+ * @see Optimized C++, Chapter 3, TimerBaseChrono \n
+ * https://github.com/hexu1985/Optimized.Cpp
+ */
 #ifndef MINI_UTILS_BASIC_STOPWATCH_H
 #define MINI_UTILS_BASIC_STOPWATCH_H
 
@@ -67,36 +79,87 @@
 
 namespace MiniUtils {
 
+/**
+ * @brief 一个带打印功能的计时器的模板类
+ *
+ * @tparam T 实际完成计时功能的基类
+ */
 template <typename T> 
 class BasicStopwatch : public T {
 public:
     typedef T BaseTimer;
 
-    // create, optionally start timing an activity
+    /**
+     * @brief 创建一个计时器
+     *
+     * @param start 是否构造时就启动计时
+     */
     explicit BasicStopwatch(bool start);
+
+    /**
+     * @brief 创建一个计时器
+     *
+     * @param activity 自定义的activity字符串
+     * @param start 是否构造时就启动计时
+     */
     explicit BasicStopwatch(char const* activity = "Stopwatch",
                              bool start=true);
 
+    /**
+     * @brief 创建一个计时器
+     *
+     * @param log 使用自定义的输出流
+     * @param activity 自定义的activity字符串
+     * @param start 是否构造时就启动计时
+     */
     BasicStopwatch(std::ostream& log,
                     char const* activity="Stopwatch", 
                     bool start=true); 
 
-    // stop and destroy a stopwatch
+    /**
+     * @brief 停止并析构计时器
+     */
     ~BasicStopwatch();
 
-    // get last lap time (time of last stop)
+    /**
+     * @brief 获取最后一次lap时间
+     *
+     * @return 毫秒时间
+     */
     unsigned long getLap() const;
 
-    // predicate: return true if the stopwatch is running
+    /**
+     * @brief 判断计时器是否已经运行
+     *
+     * @return 如果已经运行, 返回true, 否则返回false
+     */
     bool isStarted() const;
 
-    // show accumulated time, keep running, set/return lap
+    /**
+     * @brief 显示当前累积时间(从计时器开始), 并更新lap时间
+     *
+     * @param event 打印时显示的事件信息
+     *
+     * @return 返回更新后的lap时间
+     */
     unsigned long show(char const* event="show");
 
-    // (re)start a stopwatch, set/return lap time
-    unsigned long start(char const* event_namee="start");
+    /**
+     * @brief 运行计时器, 如果计时器已运行, 先stop
+     *
+     * @param event_name 打印时显示的事件信息
+     *
+     * @return 返回stop的lap时间或者0
+     */
+    unsigned long start(char const* event_name="start");
 
-    // stop a running stopwatch, set/return lap time
+    /**
+     * @brief 停止计时器
+     *
+     * @param event_name 打印时显示的事件信息
+     *
+     * @return 返回stop时的lap时间
+     */
     unsigned long stop(char const* event_name="stop");
 
 private:    //  members
