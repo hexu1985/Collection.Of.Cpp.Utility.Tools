@@ -10,8 +10,8 @@
  * @see Optimized C++, Chapter 3, TimerBaseChrono \n
  * https://github.com/hexu1985/Optimized.Cpp
  */
-#ifndef MINI_UTILS_TIMER_BASE_CHRONO_H
-#define MINI_UTILS_TIMER_BASE_CHRONO_H
+#ifndef MINI_UTILS_TIMER_BASE_CHRONO_INC
+#define MINI_UTILS_TIMER_BASE_CHRONO_INC
 
 #include <chrono>
 

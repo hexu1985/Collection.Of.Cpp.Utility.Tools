@@ -10,8 +10,8 @@
  * @see Optimized C++, Chapter 3, TimerBaseChrono \n
  * https://github.com/hexu1985/Optimized.Cpp
  */
-#ifndef MINI_UTILS_BASIC_STOPWATCH_H
-#define MINI_UTILS_BASIC_STOPWATCH_H
+#ifndef MINI_UTILS_BASIC_STOPWATCH_INC
+#define MINI_UTILS_BASIC_STOPWATCH_INC
 
 #include <iostream>
 

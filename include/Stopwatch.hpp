@@ -5,8 +5,8 @@
  * @version 1.0
  * @date 2019-06-21
  */
-#ifndef MINI_UTILS_STOPWATCH_H
-#define MINI_UTILS_STOPWATCH_H
+#ifndef MINI_UTILS_STOPWATCH_INC
+#define MINI_UTILS_STOPWATCH_INC
 
 #include "TimerBaseChrono.hpp"
 #include "BasicStopwatch.hpp"
