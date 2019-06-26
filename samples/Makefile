@@ -1,5 +1,5 @@
 
-SUBDIRS = task_queue worker_thread spin_lock
+SUBDIRS = task_queue worker_thread spin_lock heap_functions priority_queue mt_queue stopwatch
 
 all:
 	@$(MAKE) $(MFLAGS) WHAT_TO_MAKE=$@ common
