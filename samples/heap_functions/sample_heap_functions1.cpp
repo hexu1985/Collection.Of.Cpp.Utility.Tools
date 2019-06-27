@@ -1,10 +1,6 @@
-// program illustrates push_heap()/pop_heap() for vectors vA and vB;
-// vA is array-based tree for maximum heap and vB for minimum heap.
-// loop copies 7 elements from arr to vA and vB using push_heap()
-// using objects greater<int>() and less<int>() respectively.
-// calls to pop_heap() remove elements from two heaps creating
-// output in ascending and descending order
-
+/** \example sample_heap_functions1.cpp
+ * This is an example of how to use the heap functions.
+ */
 #include <iostream>
 #include <vector>
 

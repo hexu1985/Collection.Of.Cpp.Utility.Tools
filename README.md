@@ -6,3 +6,4 @@
 4) MTQueue: 一个多线程版本的队列类(MTQueue.hpp)
 5) Stopwatch: 一个计时器类(BasicStopwatch.hpp, TimerBaseChrono.hpp, Stopwatch.hpp)
 6) PriorityQueue: 一个优先级队列类(heap_functions.hpp, PriorityQueue.hpp)
+7) heap_sort: 一个堆排序算法(heap_functions.hpp, heap_sort.hpp)
