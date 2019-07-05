@@ -91,7 +91,7 @@ public:
     {
         T val;
         pop(val);
-        return std::move(val);
+        return val;
     }
 
     /**
