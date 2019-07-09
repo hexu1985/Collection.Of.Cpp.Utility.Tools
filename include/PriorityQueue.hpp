@@ -30,7 +30,7 @@ namespace MiniUtils {
  *       当Compare为std::less(小于)的时候, 数值小的元素优先级高;
  *       这点与std::priority_queue正好相反.
  */
-template <typename T, typename Compare = std::greater<T> > 
+template <typename T, typename Compare = std::greater<T>> 
 class PriorityQueue {                       
 public:
     /**
