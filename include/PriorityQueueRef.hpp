@@ -112,7 +112,7 @@ public:
     {
         assert(key2pqMap_.count(idxOfKeyList) && key2pqMap_[idxOfKeyList] < pqList_.size());
         bubbleUp(key2pqMap_[idxOfKeyList]);
-        siftDown(key2pqMap_[idxOfKeyList]);
+        siftDown(key2pqMap_[idxOfKeyList], pqList_.size());
     }
 };
 

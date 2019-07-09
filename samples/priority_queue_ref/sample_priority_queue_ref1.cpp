@@ -1,5 +1,5 @@
-/** \example sample_priority_queue1.cpp
- * This is an example of how to use the PriorityQueue class.
+/** \example sample_priority_queue_ref1.cpp
+ * This is an example of how to use the PriorityQueueRef class.
  */
 #include <iostream>
 #include "PriorityQueueRef.hpp"
@@ -12,12 +12,11 @@ int main()
     vector<int> keyList = {10,60,50,20};
     PriorityQueueRef<int> q(keyList);
 
-    for (int i = 0; i < keyList.size(); i++)
+    for (size_t i = 0; i < keyList.size(); i++)
         q.push(i);
 
     while (!q.isEmpty()) {
-        cout << keyList[q.top()] << ' ';
-        q.pop();
+        cout << keyList[q.pop()] << ' ';
     }
 
     cout << endl;
