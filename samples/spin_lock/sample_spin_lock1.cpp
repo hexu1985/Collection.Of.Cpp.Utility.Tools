@@ -1,4 +1,4 @@
-/** \example sample_spin_lock1.cpp
+/** \example spin_lock/sample_spin_lock1.cpp
  * This is an example of how to use the SpinLock class.
  */
 #include <iostream>                 // std::cout

@@ -1,4 +1,4 @@
-/** \example sample_task_queue2.cpp
+/** \example task_queue/sample_task_queue2.cpp
  * This is an example of how to use the TaskQueue class.
  */
 #include "TaskQueue.hpp"

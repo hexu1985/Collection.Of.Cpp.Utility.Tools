@@ -1,5 +1,5 @@
-/** \example benchmark_priority_queue1.cpp
- * This is an example of how to use the PriorityQueue class.
+/** \example priority_queue_ref/benchmark_priority_queue1.cpp
+ * This is an example of how to use the std::priority_queue class.
  */
 #include <iostream>
 #include <queue>

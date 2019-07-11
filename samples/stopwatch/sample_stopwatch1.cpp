@@ -1,4 +1,4 @@
-/** \example sample_stopwatch1.cpp
+/** \example stopwatch/sample_stopwatch1.cpp
  * This is an example of how to use the Stopwatch class.
  */
 #include <iostream>

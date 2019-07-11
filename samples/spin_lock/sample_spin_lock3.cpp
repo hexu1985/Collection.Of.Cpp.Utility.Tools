@@ -1,4 +1,4 @@
-/** \example sample_spin_lock3.cpp
+/** \example spin_lock/sample_spin_lock3.cpp
  * This is an example of how to use the SpinLock class's tryLock method.
  */
 #include <iostream>       // std::cout

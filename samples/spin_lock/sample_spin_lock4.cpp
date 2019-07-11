@@ -1,4 +1,4 @@
-/** \example sample_spin_lock4.cpp
+/** \example spin_lock/sample_spin_lock4.cpp
  * This is an example of how to use the SpinLock class's tryLock method.
  */
 #include <chrono>

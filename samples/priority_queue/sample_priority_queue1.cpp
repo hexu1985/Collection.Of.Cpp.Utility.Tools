@@ -1,4 +1,4 @@
-/** \example sample_priority_queue1.cpp
+/** \example priority_queue/sample_priority_queue1.cpp
  * This is an example of how to use the PriorityQueue class.
  */
 #include <iostream>

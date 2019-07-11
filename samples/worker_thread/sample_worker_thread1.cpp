@@ -1,4 +1,4 @@
-/** \example sample_worker_thread1.cpp
+/** \example worker_thread/sample_worker_thread1.cpp
  * This is an example of how to use the WorkerThread class.
  */
 #include <iostream>

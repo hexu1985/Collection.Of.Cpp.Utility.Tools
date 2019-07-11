@@ -1,4 +1,4 @@
-/** \example sample_priority_queue_ref1.cpp
+/** \example priority_queue_ref/sample_priority_queue_ref1.cpp
  * This is an example of how to use the PriorityQueueRef class.
  */
 #include <iostream>

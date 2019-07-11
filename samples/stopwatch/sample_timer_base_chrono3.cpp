@@ -1,4 +1,4 @@
-/** \example sample_timer_base_chrono3.cpp
+/** \example stopwatch/sample_timer_base_chrono3.cpp
  * This is an example of how to use the TimerBaseHighResolution class.
  */
 #include <iostream>
