@@ -2,6 +2,7 @@
 #define MINI_UTILS_INC
 #include "BasicStopwatch.hpp"
 #include "BulkMemoryPool.hpp"
+#include "ByteMemoryPool.hpp"
 #include "heap_functions.hpp"
 #include "heap_sort.hpp"
 #include "MTQueue.hpp"

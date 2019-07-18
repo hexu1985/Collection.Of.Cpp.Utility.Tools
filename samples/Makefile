@@ -1,5 +1,15 @@
 
-SUBDIRS = task_queue worker_thread spin_lock heap_functions priority_queue mt_queue stopwatch
+SUBDIRS = bulk_memory_pool/rational \
+			heap_functions \
+			heap_sort \
+			mt_queue \
+			priority_queue \
+			priority_queue_ref \
+			spin_lock \
+			stopwatch \
+			task_queue \
+			worker_thread
+
 
 all:
 	@$(MAKE) $(MFLAGS) WHAT_TO_MAKE=$@ common
