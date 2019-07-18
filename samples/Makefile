@@ -1,5 +1,5 @@
 
-SUBDIRS = bulk_memory_pool/rational \
+SUBDIRS = bulk_memory_pool \
 			heap_functions \
 			heap_sort \
 			mt_queue \

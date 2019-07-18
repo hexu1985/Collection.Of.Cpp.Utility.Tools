@@ -1,5 +1,7 @@
 #include "BulkMemoryPool.hpp"
 
+namespace MiniUtils {
+
 BulkMemoryPool::BulkMemoryPool(size_t bulk_size, size_t expansion_size): 
 	bulkSize_(bulk_size),
     expansionSize_(expansion_size),
@@ -33,3 +35,4 @@ void BulkMemoryPool::expandTheFreeList(int howMany)
 	runner->next = nullptr;
 }
 
+}   // namespace MiniUtils

@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <new>
 
+namespace MiniUtils {
+
 class ByteMemoryPool {
 public:
     ByteMemoryPool(size_t initSize = DEFAULT_CHUNK_SIZE);
@@ -74,5 +76,7 @@ inline void ByteMemoryPool::free(void *doomed)
 {
     listOfMemoryChunks_->free(doomed);
 }
+
+}   // namespace MiniUtils
 
 #endif

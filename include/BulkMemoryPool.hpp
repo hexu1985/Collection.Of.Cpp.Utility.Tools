@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <new>
 
+namespace MiniUtils {
+
 class BulkMemoryPool {
 public:
 	BulkMemoryPool(size_t bulk_size = BULK_SIZE, size_t expansion_size = EXPANSION_SIZE);
@@ -54,5 +56,7 @@ inline void BulkMemoryPool::free(void *doomed)
 	head->next = chunkList_;
 	chunkList_ = head;
 }
+
+}   // namespace MiniUtils
 
 #endif

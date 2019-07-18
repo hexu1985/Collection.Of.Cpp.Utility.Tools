@@ -14,7 +14,7 @@ public:
 	static void deleteMemPool();
 
 private:
-	static BulkMemoryPool *memPool;
+	static MiniUtils::BulkMemoryPool *memPool;
 
 private:
 	int n;	// 分子
