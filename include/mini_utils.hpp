@@ -5,6 +5,7 @@
 #include "ByteMemoryPool.hpp"
 #include "heap_functions.hpp"
 #include "heap_sort.hpp"
+#include "MemoryPool.hpp"
 #include "MTQueue.hpp"
 #include "PriorityQueue.hpp"
 #include "PriorityQueueRef.hpp"
