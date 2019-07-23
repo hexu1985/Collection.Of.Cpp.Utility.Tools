@@ -1,8 +1,12 @@
+/** \example LCS/sample_LCS2.cpp
+ * This is an example of how to use the LCS class with string.
+ */
 #include <iostream>
 #include <string>
 #include "LCS.hpp"
 
 using namespace std;
+using namespace MiniUtils;
 
 template <typename Seq>
 void printSeq(const Seq &seq)
