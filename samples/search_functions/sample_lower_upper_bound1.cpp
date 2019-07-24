@@ -1,4 +1,6 @@
-// lower_bound/upper_bound example
+/** \example search_functions/sample_lower_upper_bound1.cpp
+ * This is an example of how to use the lower_bound/upper_bound function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::lower_bound, std::upper_bound, std::sort
 #include <vector>       // std::vector

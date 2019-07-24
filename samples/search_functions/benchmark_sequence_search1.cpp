@@ -1,4 +1,6 @@
-// find example
+/** \example search_functions/benchmark_sequence_search1.cpp
+ * This is an example of how to use the std::find function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::find
 #include <vector>       // std::vector

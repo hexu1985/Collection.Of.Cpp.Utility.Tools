@@ -1,4 +1,6 @@
-// find example
+/** \example search_functions/sample_sequence_search1.cpp
+ * This is an example of how to use the sequence_search function.
+ */
 #include <iostream>     // std::cout
 #include <vector>       // std::vector
 #include "search_functions.hpp"

@@ -76,7 +76,7 @@ private:
 }; 
 
 /**
- * @brief 使用cstd::hrono::system_clock实现的计时器
+ * @brief 使用std::chrono::system_clock实现的计时器
  */
 using TimerBaseSystem = TimerBaseChrono<std::chrono::system_clock>;
 
