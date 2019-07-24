@@ -12,7 +12,7 @@ int main()
 	// 此处开始计时
 	auto start = chrono::steady_clock::now();
 
-	for (int j = 0; j < 500; j++) {
+	for (int j = 0; j < 5000; j++) {
 		for (int i = 0; i < 1000; i++) {
 			array[i] = new Rational(i);
 		}

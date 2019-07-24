@@ -1,17 +1,19 @@
 
-SUBDIRS = bulk_memory_pool \
-			heap_functions \
-			heap_sort \
-			mt_queue \
-			priority_queue \
-			priority_queue_ref \
-			spin_lock \
-			stopwatch \
-			task_queue \
-			worker_thread
+#SUBDIRS = bulk_memory_pool \
+#			heap_functions \
+#			heap_sort \
+#			mt_queue \
+#			priority_queue \
+#			priority_queue_ref \
+#			spin_lock \
+#			stopwatch \
+#			task_queue \
+#			worker_thread
 
+SUBDIRS = $(shell ./list_make_dir.sh)
 
 all:
+	@echo $(SUBDIRS)
 	@$(MAKE) $(MFLAGS) WHAT_TO_MAKE=$@ common
 
 clean:
