@@ -1,6 +1,6 @@
 /**
  * @file BulkMemoryPool.hpp
- * @brief 固定长度块的内存池
+ * @brief 固定大小的内存池
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-07-25
@@ -16,7 +16,7 @@
 namespace MiniUtils {
 
 /**
- * @brief 固定长度块的内存池, 每次alloc申请内存的大小固定
+ * @brief 固定大小的内存池, 每次alloc申请内存的大小固定
  */
 class BulkMemoryPool {
 public:
