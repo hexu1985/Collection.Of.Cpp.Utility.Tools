@@ -9,9 +9,9 @@
  *  6) PriorityQueue: 一个优先级队列类(heap_functions.hpp, PriorityQueue.hpp) \n
  *  7) heap_sort: 一个堆排序算法(heap_functions.hpp, heap_sort.hpp) \n
  *  8) PriorityQueueRef: 一个基于索引的优先级队列类(PriorityQueueRef.hpp) \n
- *  9) sequence_search, binary_search, lower_bound, upper_bound: 一些简单的查找算法(search_functions.hpp)
- * 10) MemoryPool: 固定大小对象的内存池(MemoryPool.hpp)
- * 11) BulkMemoryPool: 固定大小的内存池(BulkMemoryPool.hpp)
- * 12) ByteMemoryPool: 可变大小的内存池(ByteMemoryPool.hpp)
- * 13) MTMemoryPool: 一个支持多线程的内存池(MTMemoryPool.hpp)
+ *  9) sequence_search, binary_search, lower_bound, upper_bound: 一些简单的查找算法(search_functions.hpp) \n
+ * 10) MemoryPool: 固定大小对象的内存池(MemoryPool.hpp) \n
+ * 11) BulkMemoryPool: 固定大小的内存池(BulkMemoryPool.hpp) \n
+ * 12) ByteMemoryPool: 可变大小的内存池(ByteMemoryPool.hpp) \n
+ * 13) MTMemoryPool: 一个支持多线程的内存池(MTMemoryPool.hpp) \n
  */
