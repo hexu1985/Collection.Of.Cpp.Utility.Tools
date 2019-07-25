@@ -1,3 +1,12 @@
+/**
+ * @file MemoryPool.hpp
+ * @brief 固定大小对象的内存池
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-07-25
+ *
+ * @see Efficient C++: Performance Programming Techniques, chapter 6.3
+ */
 #ifndef MINI_UTILS_MEMORY_POOL_INC
 #define MINI_UTILS_MEMORY_POOL_INC
 
@@ -6,24 +15,46 @@
 
 namespace MiniUtils {
 
+/**
+ * @brief 固定大小对象的内存池
+ *
+ * @tparam T 元素类型
+ */
 template <class T>
 class MemoryPool {
 public:
+    /**
+     * @brief 创建一个内存池对象
+     *
+     * @param size 每次空闲列表空时, 扩展空闲列表的块个数
+     */
 	MemoryPool(size_t size = EXPANSION_SIZE);
-	~MemoryPool();
 
-	// 从空闲列表中分配T元素
+	virtual ~MemoryPool();
+
+    /**
+     * @brief 从内存池中分配sizeof(T)大小的内存
+     *
+     * @param size 未使用
+     *
+     * @return 返回分配内存的指针
+     */
 	inline void *alloc(size_t size);
 
-	// 返回T元素到空闲列表中
+    /**
+     * @brief 释放先前从内存池中分配的内存
+     *
+     * @param someElement 被释放的指针
+     */
 	inline void free(void *someElement);
 
 private:
+    // 内存块结构
     struct MemoryChunk {
         MemoryChunk *next;
     };
 
-    size_t expansionSize_;
+    size_t expansionSize_;      // 扩展空闲列表的块个数
     MemoryChunk *chunkList_ = nullptr;    // 空闲列表的下一元素
 	
 	// 如果空闲列表为空, 按该大小扩展它

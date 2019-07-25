@@ -1,3 +1,12 @@
+/**
+ * @file ByteMemoryPool.hpp
+ * @brief 可变长度块的内存池
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-07-25
+ *
+ * @see Efficient C++: Performance Programming Techniques, chapter 6.4
+ */
 #ifndef MINI_UTILS_BYTE_MEMORY_POOL_INC
 #define MINI_UTILS_BYTE_MEMORY_POOL_INC
 
@@ -6,16 +15,34 @@
 
 namespace MiniUtils {
 
+/**
+ * @brief 可变长度块的内存池, 每次alloc申请内存的大小可变
+ */
 class ByteMemoryPool {
 public:
+    /**
+     * @brief 创建一个内存池
+     *
+     * @param initSize 内存块大小
+     */
     ByteMemoryPool(size_t initSize = DEFAULT_CHUNK_SIZE);
 
     ~ByteMemoryPool();
 
-    // 从私有内存池分配内存
+    /**
+     * @brief 从内存池中分配size大小的内存
+     *
+     * @param size 申请内存的大小
+     *
+     * @return 返回分配内存的指针
+     */
     inline void *alloc(size_t size);
 
-    // 释放先前从内存池中分配的内存
+    /**
+     * @brief 释放先前从内存池中分配的内存
+     *
+     * @param someElement 被释放的指针
+     */
     inline void free(void *someElement);
 
 private:
