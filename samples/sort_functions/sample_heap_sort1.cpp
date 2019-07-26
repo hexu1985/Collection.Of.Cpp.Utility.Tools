@@ -1,4 +1,4 @@
-/** \example heap_sort/sample_heap_sort2.cpp
+/** \example heap_sort/sample_heap_sort1.cpp
  * This is an example of how to use the heap_sort function.
  */
 #include <iostream>
@@ -6,7 +6,7 @@
 #include <functional>
 #include <random>
 
-#include "heap_sort.hpp"
+#include "sort_functions.hpp"
 
 using namespace std;
 using namespace MiniUtils;
@@ -25,22 +25,17 @@ int main()
 
 	// display the original list
 	cout << "Original vector" << endl << "   ";
-    for (auto item: v)
+    for (auto &item: v) {
         cout << item << " ";
+    }
 	cout << endl;
 
 	// call heapSort() with greater<int>() and display results
-	cout << "Sort in ascending order" << endl << "   ";
-	heap_sort(v,greater<int>());
-    for (auto item: v)
+	cout << "Sorted vector" << endl << "   ";
+	heap_sort(v);
+    for (auto &item: v) {
         cout << item << " ";
-	cout << endl;
-
-	// call heapSort() with less<int>() and display results
-	cout << "Sort in descending order" << endl << "   ";
-	heap_sort(v,less<int>());
-    for (auto item: v)
-        cout << item << " ";
+    }
 	cout << endl;
 
 	return 0;
@@ -52,9 +47,6 @@ Run:
 Original vector
    92  77  88  36  19  34  14  49  61  14  1  52  44  77  79
 
-Sort in ascending order
+Sorted vector
    1  14  14  19  34  36  44  49  52  61  77  77  79  88  92
-
-Sort in descending order
-   92  88  79  77  77  61  52  49  44  36  34  19  14  14  1
 */

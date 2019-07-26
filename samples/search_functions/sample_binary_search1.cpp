@@ -12,7 +12,7 @@ int main () {
   std::vector<int> myvector = { 10, 20, 30, 40 };
 
   // using std::find with vector and iterator:
-  int i;
+  size_t i;
     
   i = binary_search (myvector, 30);
   if (i != myvector.size())

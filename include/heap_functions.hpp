@@ -187,6 +187,16 @@ void make_heap(std::vector<T> &v, Compare comp)
 	}
 }
 
+template <typename T, typename Compare>
+void sort_heap(std::vector<T> &v, Compare comp)
+{
+    // 确定元素v[n-1] ... v[1]的迭代
+    for (int lastPos = v.size(); lastPos > 1; lastPos--) {
+        // 调用pop_heap()将下一个最大结点移到v[n-1]
+        pop_heap(v, lastPos, comp);
+    }
+}
+
 }   // namespace MiniUtils
 
 #endif	// HEAP_FUNCTIONS

@@ -25,10 +25,10 @@ int main(int argc, char *argv[])
 
 	LCS<vector<char>> lcs(seqX, seqY);
 
-    cout << "idx:  "; for (int i = 0; i < seqX.size(); i++) {cout << i << " ";} cout << endl;
+    cout << "idx:  "; for (size_t i = 0; i < seqX.size(); i++) {cout << i << " ";} cout << endl;
     cout << "seqX: "; printSeq(seqX); cout << endl;
     cout << "seqY: "; printSeq(seqY); cout << endl;
-    int lcsLen = lcs.length();
+    size_t lcsLen = lcs.length();
     vector<int> subX;
     vector<int> subY;
     lcs.getLCS(subX, subY);
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     assert(subX.size() == subY.size());
     assert(subX.size() == lcsLen);
     cout << "lcs:  ";
-    for (int i = 0; i < subX.size(); i++) {
+    for (size_t i = 0; i < subX.size(); i++) {
         assert(seqX[subX[i]] == seqY[subY[i]]);
         cout << seqX[subX[i]] << " ";
     }

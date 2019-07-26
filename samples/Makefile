@@ -10,7 +10,10 @@
 #			task_queue \
 #			worker_thread
 
-SUBDIRS = $(shell ./list_make_dir.sh)
+# 在shell中执行: find . -name "Makefile" | awk '{print substr($0, 3, length($0)-2-length("Makefile"))}' | grep -v '^$'
+# 找到所有包含Makefile的路径
+# 由于$在Makefile里有特殊含义, 所以必须用$$转义.
+SUBDIRS = $(shell find . -name 'Makefile' | awk '{print substr($$0, 3, length($$0)-2-length("Makefile"))}' | grep -v '^$$')
 
 all:
 	@echo $(SUBDIRS)
