@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # auto generate mini_utils.hpp
 
-cat <<EOF > mini_utils.hpp
+cp mainpage.md mini_utils.hpp
+
+cat <<EOF >> mini_utils.hpp
 #ifndef MINI_UTILS_INC
 #define MINI_UTILS_INC
 EOF
