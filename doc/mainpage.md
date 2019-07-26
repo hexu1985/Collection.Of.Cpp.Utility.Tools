@@ -1,3 +1,4 @@
+//! \mainpage
 ## 一个简单的C++工具库, 基于C++11标准
 ### 工具类列表:
 - TaskQueue: 一个线程安全的任务队列类(TaskQueue.hpp)
@@ -13,6 +14,3 @@
 - BulkMemoryPool: 固定大小的内存池(BulkMemoryPool.hpp)
 - ByteMemoryPool: 可变大小的内存池(ByteMemoryPool.hpp)
 - MTMemoryPool: 一个支持多线程的内存池(MTMemoryPool.hpp)
----------------------------------------------------------
-[API文档](https://hexu1985.github.io/computer/my_project/mini_utils/index.html)
-

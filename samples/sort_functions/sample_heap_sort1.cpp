@@ -1,4 +1,4 @@
-/** \example heap_sort/sample_heap_sort1.cpp
+/** \example sort_functions/sample_heap_sort1.cpp
  * This is an example of how to use the heap_sort function.
  */
 #include <iostream>
