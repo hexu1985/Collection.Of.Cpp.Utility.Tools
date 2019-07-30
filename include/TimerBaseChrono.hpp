@@ -22,9 +22,9 @@ namespace MiniUtils {
  *
  * @tparam ClockType std:chrono中的clock_type
  */
-template <typename ClockType>
 class TimerBaseChrono {
 public:
+    using ClockType = std::chrono::system_clock;
     using TimePointType = typename ClockType::time_point;
 
     /**
@@ -74,21 +74,6 @@ public:
 private:
 	TimePointType start_;
 }; 
-
-/**
- * @brief 使用std::chrono::system_clock实现的计时器
- */
-using TimerBaseSystem = TimerBaseChrono<std::chrono::system_clock>;
-
-/**
- * @brief 使用std::chrono::steady_clock实现的计时器
- */
-using TimerBaseSteady = TimerBaseChrono<std::chrono::steady_clock>;
-
-/**
- * @brief 使用std::chrono::high_resolution_clock实现的计时器
- */
-using TimerBaseHighResolution = TimerBaseChrono<std::chrono::high_resolution_clock>;
 
 }   // namespace MiniUtils
 

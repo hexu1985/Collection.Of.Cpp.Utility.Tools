@@ -9,7 +9,7 @@ using namespace MiniUtils;
 
 int main ()
 {
-  TimerBaseSystem timer;
+  TimerBaseChrono timer;
   timer.start();
 
   std::this_thread::sleep_for(std::chrono::seconds(3));

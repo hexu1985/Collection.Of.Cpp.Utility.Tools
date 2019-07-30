@@ -13,13 +13,10 @@
 
 namespace MiniUtils {
 
-template <typename ClockType>
-using StopwatchChrono = BasicStopwatch<TimerBaseChrono<ClockType>>;
-
 /**
  * @brief 基于BasicStopwatch和TimerBaseChrono的计时器类的别名
  */
-using Stopwatch = StopwatchChrono<std::chrono::system_clock>;
+using Stopwatch = BasicStopwatch<TimerBaseChrono>;
 
 }   // namespace MiniUtils
 
