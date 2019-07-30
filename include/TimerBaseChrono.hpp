@@ -19,8 +19,6 @@ namespace MiniUtils {
 
 /**
  * @brief 基于std::chrono接口实现的计时器
- *
- * @tparam ClockType std:chrono中的clock_type
  */
 class TimerBaseChrono {
 public:
