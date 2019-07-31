@@ -1,4 +1,7 @@
-// uniform_real_distribution
+/** \example random_number/benchmark_rand_real1.cpp
+ * This is an example of how to use the std::default_random_engine and std::uniform_real_distribution<double> 
+ * to generate random double.
+ */
 #include <iostream>
 #include <random>
 #include <cassert>

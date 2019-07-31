@@ -1,4 +1,7 @@
-/* srand example */
+/** \example random_number/sample_random_seed1.cpp
+ * This is an example of how to use the Random class's random and seed method
+ * to generate random int.
+ */
 #include <stdio.h>      /* printf, NULL */
 #include <time.h>       /* time */
 #include "RandomNumber.hpp"

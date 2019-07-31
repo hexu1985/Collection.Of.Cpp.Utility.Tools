@@ -1,4 +1,7 @@
-// uniform_int_distribution
+/** \example random_number/sample_rand_int1.cpp
+ * This is an example of how to use the RandomNumber class
+ * to generate random int.
+ */
 #include <iostream>
 #include <cassert>
 #include "RandomNumber.hpp"

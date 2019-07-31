@@ -1,4 +1,7 @@
-// uniform_real_distribution
+/** \example random_number/sample_frandom1.cpp
+ * This is an example of how to use the RandomNumber class
+ * to generate random double between 0 and 1 (include 0 and exclude 1).
+ */
 #include <iostream>
 #include <cassert>
 #include "RandomNumber.hpp"

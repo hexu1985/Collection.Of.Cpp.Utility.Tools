@@ -1,4 +1,7 @@
-/* srand example */
+/** \example random_number/benchmark_random_seed1.cpp
+ * This is an example of how to use the rand and srand
+ * to generate random int.
+ */
 #include <stdio.h>      /* printf, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */

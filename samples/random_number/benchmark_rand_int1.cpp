@@ -1,4 +1,7 @@
-// uniform_int_distribution
+/** \example random_number/benchmark_rand_int1.cpp
+ * This is an example of how to use the std::default_random_engine and std::uniform_int_distribution<int> 
+ * to generate random int.
+ */
 #include <iostream>
 #include <random>
 #include <cassert>

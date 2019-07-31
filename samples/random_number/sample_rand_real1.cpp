@@ -1,4 +1,7 @@
-// uniform_real_distribution
+/** \example random_number/sample_rand_real1.cpp
+ * This is an example of how to use the RandomNumber class
+ * to generate random double.
+ */
 #include <iostream>
 #include <cassert>
 #include "RandomNumber.hpp"
