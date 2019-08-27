@@ -5,7 +5,7 @@
 #include <chrono>
 #include "WorkerThread.hpp"
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 void print_int(int i)
 {

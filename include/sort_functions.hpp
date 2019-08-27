@@ -11,7 +11,7 @@
 #include <vector>
 #include "heap_functions.hpp"   // for heap_sort
 
-namespace MiniUtils {
+namespace mini_utils {
 
 template <typename T>
 void selection_sort(std::vector<T> &v)
@@ -63,6 +63,6 @@ void heap_sort(std::vector<T> &v, Compare comp = Compare())
     sort_heap(v, comp);
 }
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

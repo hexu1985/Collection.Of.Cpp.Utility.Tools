@@ -6,7 +6,7 @@
 #include "LCS.hpp"
 
 using namespace std;
-using namespace MiniUtils;
+using namespace mini_utils;
 
 template <typename Seq>
 void printSeq(const Seq &seq)

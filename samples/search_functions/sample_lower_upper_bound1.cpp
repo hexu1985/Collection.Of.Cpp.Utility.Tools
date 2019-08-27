@@ -12,8 +12,8 @@ int main () {
   std::sort (v.begin(), v.end());                // 10 10 10 20 20 20 30 30
 
   int low,up;
-  low=MiniUtils::lower_bound (v, 20);            //          ^
-  up= MiniUtils::upper_bound (v, 20);            //                   ^
+  low=mini_utils::lower_bound (v, 20);            //          ^
+  up= mini_utils::upper_bound (v, 20);            //                   ^
 
   std::cout << "lower_bound at position " << low << '\n';
   std::cout << "upper_bound at position " << up << '\n';

@@ -10,7 +10,7 @@
 
 #include <cstdint>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 随机数生成器
@@ -135,6 +135,6 @@ private:
 	int32_t seed_;
 };
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

@@ -4,7 +4,7 @@
 #include <vector>       // std::vector
 #include "set_functions.hpp"
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 int main () {
   std::vector<int> first = {5,10,15,20,25};

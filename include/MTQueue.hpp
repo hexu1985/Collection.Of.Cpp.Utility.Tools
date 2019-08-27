@@ -15,7 +15,7 @@
 #include <condition_variable>
 #include <queue>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 线程安全队列
@@ -122,6 +122,6 @@ public:
     }
 };
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

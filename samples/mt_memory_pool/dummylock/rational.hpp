@@ -15,11 +15,11 @@ public:
 		memPool->free(doomed);
 	}
 
-	static void newMemPool() { memPool = new MiniUtils::MTMemoryPool<MiniUtils::MemoryPool<Rational>, DummyLock>; }
+	static void newMemPool() { memPool = new mini_utils::MTMemoryPool<mini_utils::MemoryPool<Rational>, DummyLock>; }
 	static void deleteMemPool() { delete memPool; }
 
 private:
-	static MiniUtils::MTMemoryPool<MiniUtils::MemoryPool<Rational>, DummyLock> *memPool;
+	static mini_utils::MTMemoryPool<mini_utils::MemoryPool<Rational>, DummyLock> *memPool;
 
 private:
 	int n;	// 分子

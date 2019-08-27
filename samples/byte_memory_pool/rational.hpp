@@ -13,11 +13,11 @@ public:
 		memPool->free(doomed);
 	}
 
-	static void newMemPool() { memPool = new MiniUtils::ByteMemoryPool; }
+	static void newMemPool() { memPool = new mini_utils::ByteMemoryPool; }
 	static void deleteMemPool() { delete memPool; }
 
 private:
-	static MiniUtils::ByteMemoryPool *memPool;
+	static mini_utils::ByteMemoryPool *memPool;
 
 private:
 	int n;	// 分子

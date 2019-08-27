@@ -10,7 +10,7 @@
 #ifndef MINI_UTILS_MT_MEMORY_POOL_INC
 #define MINI_UTILS_MT_MEMORY_POOL_INC
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 线程安全的内存池
@@ -64,6 +64,6 @@ void MTMemoryPool<M, L>::free(void *doomed)
     theLock_.unlock();
 }
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

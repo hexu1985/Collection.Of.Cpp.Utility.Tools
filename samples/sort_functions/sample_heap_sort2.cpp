@@ -9,7 +9,7 @@
 #include "sort_functions.hpp"
 
 using namespace std;
-using namespace MiniUtils;
+using namespace mini_utils;
 
 int main()
 {

@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 template <typename T>
 std::vector<T> set_intersection(const std::vector<T> &v1, const std::vector<T> &v2)
@@ -131,6 +131,6 @@ std::vector<T> set_symmetric_difference(const std::vector<T> &v1, const std::vec
     return res;
 }
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif	// HEAP_FUNCTIONS

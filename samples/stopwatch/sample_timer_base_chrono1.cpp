@@ -5,7 +5,7 @@
 #include <thread>
 #include "TimerBaseChrono.hpp"
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 int main ()
 {

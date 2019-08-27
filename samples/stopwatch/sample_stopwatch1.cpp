@@ -6,7 +6,7 @@
 #include <thread>
 #include "Stopwatch.hpp"
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 void foo()
 {

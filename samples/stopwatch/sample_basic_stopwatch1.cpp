@@ -7,7 +7,7 @@
 #include "BasicStopwatch.hpp"
 #include "TimerBaseClock.hpp"
 
-using MiniUtils::BasicStopwatch;
+using mini_utils::BasicStopwatch;
 
 using Stopwatch = BasicStopwatch<TimerBaseClock>;
 

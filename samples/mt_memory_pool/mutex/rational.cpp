@@ -1,3 +1,3 @@
 #include "rational.hpp"
 
-MiniUtils::MTMemoryPool<MiniUtils::MemoryPool<Rational>, std::mutex> *Rational::memPool = 0;
+mini_utils::MTMemoryPool<mini_utils::MemoryPool<Rational>, std::mutex> *Rational::memPool = 0;
