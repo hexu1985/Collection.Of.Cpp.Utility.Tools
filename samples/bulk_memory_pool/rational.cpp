@@ -1,6 +1,6 @@
 #include "rational.hpp"
 
-MiniUtils::BulkMemoryPool *Rational::memPool = 0;
+mini_utils::BulkMemoryPool *Rational::memPool = 0;
 
 void *Rational::operator new(size_t size) 
 {
@@ -14,7 +14,7 @@ void Rational::operator delete(void *doomed, size_t size)
 
 void Rational::newMemPool() 
 {
-    memPool = new MiniUtils::BulkMemoryPool(sizeof(Rational), 64); 
+    memPool = new mini_utils::BulkMemoryPool(sizeof(Rational), 64); 
 }
 
 void Rational::deleteMemPool() 

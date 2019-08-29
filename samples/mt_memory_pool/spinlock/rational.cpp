@@ -1,3 +1,3 @@
 #include "rational.hpp"
 
-MiniUtils::MTMemoryPool<MiniUtils::MemoryPool<Rational>, MiniUtils::SpinLock> *Rational::memPool = 0;
+mini_utils::MTMemoryPool<mini_utils::MemoryPool<Rational>, mini_utils::SpinLock> *Rational::memPool = 0;

@@ -15,7 +15,7 @@
 
 #include <chrono>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 基于std::chrono接口实现的计时器
@@ -73,6 +73,6 @@ private:
 	TimePointType start_;
 }; 
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

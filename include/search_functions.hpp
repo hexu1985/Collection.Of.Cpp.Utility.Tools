@@ -8,7 +8,7 @@
 #ifndef MINI_UTILS_SEARCH_FUNCTIONS_INC
 #define MINI_UTILS_SEARCH_FUNCTIONS_INC
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 顺序查找arr的[first, last)中值等于target的元素的下标
@@ -197,7 +197,7 @@ int upper_bound(const std::vector<T> &arr, const T &target)
     return upper_bound(arr, 0, arr.size(), target);
 }
 
-}	// namespace MiniUtils
+}	// namespace mini_utils
 
 #endif
 

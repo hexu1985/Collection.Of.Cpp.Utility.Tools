@@ -15,7 +15,7 @@
 #include <vector>
 #include <functional>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief [0, last-1)范围中的向量元素是一个堆.
@@ -197,6 +197,6 @@ void sort_heap(std::vector<T> &v, Compare comp)
     }
 }
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif	// HEAP_FUNCTIONS

@@ -18,7 +18,7 @@
 #include <functional>
 #include <cassert>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 维护一个包含数据类型T元素的优先级队列,
@@ -169,6 +169,6 @@ public:
     }
 };
 
-}	// namespace MiniUtils
+}	// namespace mini_utils
 
 #endif

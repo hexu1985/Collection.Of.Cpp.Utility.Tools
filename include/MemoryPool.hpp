@@ -13,7 +13,7 @@
 #include <cstddef>
 #include <new>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 固定大小对象的内存池
@@ -123,6 +123,6 @@ void MemoryPool<T>::expandTheFreeList(int howMany)
 	runner->next = nullptr;
 }
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

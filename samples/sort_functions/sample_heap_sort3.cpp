@@ -6,7 +6,7 @@
 
 #include "sort_functions.hpp"
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 int main () {
   std::vector<int> myvector = {32,71,12,45,26,80,53,33};      // 32 71 12 45 26 80 53 33

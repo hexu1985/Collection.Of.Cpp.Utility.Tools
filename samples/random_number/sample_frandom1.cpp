@@ -6,7 +6,7 @@
 #include <cassert>
 #include "RandomNumber.hpp"
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 int main()
 {

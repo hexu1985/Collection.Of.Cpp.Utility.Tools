@@ -5,7 +5,7 @@
 #include <vector>       // std::vector
 #include "search_functions.hpp"
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 int main () {
   // using std::find with array and pointer:

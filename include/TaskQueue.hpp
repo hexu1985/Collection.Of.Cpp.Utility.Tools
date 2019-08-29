@@ -15,7 +15,7 @@
 #include <mutex>
 #include <condition_variable>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 任务类的基类
@@ -153,6 +153,6 @@ public:
     }
 };
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

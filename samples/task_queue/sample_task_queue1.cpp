@@ -6,7 +6,7 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace MiniUtils;
+using namespace mini_utils;
 
 void processor(TaskQueue &task_queue)
 {

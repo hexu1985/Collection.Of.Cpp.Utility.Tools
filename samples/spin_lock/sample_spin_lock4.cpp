@@ -6,7 +6,7 @@
 #include <iostream> // std::cout
 #include "SpinLock.hpp"  // SpinLock
  
-using namespace MiniUtils;
+using namespace mini_utils;
 
 std::chrono::milliseconds interval(100);
  

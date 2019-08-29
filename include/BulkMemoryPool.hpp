@@ -13,7 +13,7 @@
 #include <cstddef>
 #include <new>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 固定大小的内存池, 每次alloc申请内存的大小固定
@@ -86,6 +86,6 @@ inline void BulkMemoryPool::free(void *doomed)
 	chunkList_ = head;
 }
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif

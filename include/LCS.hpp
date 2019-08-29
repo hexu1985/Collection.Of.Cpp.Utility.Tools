@@ -14,7 +14,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 计算最长公共子序列的算法(longest-common-subsequence)
@@ -116,7 +116,7 @@ public:
     }
 };
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif
 

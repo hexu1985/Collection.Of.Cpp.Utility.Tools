@@ -17,7 +17,7 @@
 
 #include "heap_functions.hpp"
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 维护一个包含数据类型T元素的优先级队列,
@@ -132,6 +132,6 @@ const T &PriorityQueue<T,Compare>::top() const
 	return pqList_[0];
 }
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif	// PRIORITY_QUEUE

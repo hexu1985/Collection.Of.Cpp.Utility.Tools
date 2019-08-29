@@ -15,11 +15,11 @@ public:
 		memPool->free(doomed);
 	}
 
-	static void newMemPool() { memPool = new MiniUtils::MTMemoryPool<MiniUtils::MemoryPool<Rational>, std::mutex>; }
+	static void newMemPool() { memPool = new mini_utils::MTMemoryPool<mini_utils::MemoryPool<Rational>, std::mutex>; }
 	static void deleteMemPool() { delete memPool; }
 
 private:
-	static MiniUtils::MTMemoryPool<MiniUtils::MemoryPool<Rational>, std::mutex> *memPool;
+	static mini_utils::MTMemoryPool<mini_utils::MemoryPool<Rational>, std::mutex> *memPool;
 
 private:
 	int n;	// 分子

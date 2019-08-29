@@ -11,14 +11,14 @@
 #include "TimerBaseChrono.hpp"
 #include "BasicStopwatch.hpp"
 
-namespace MiniUtils {
+namespace mini_utils {
 
 /**
  * @brief 基于BasicStopwatch和TimerBaseChrono的计时器类的别名
  */
 using Stopwatch = BasicStopwatch<TimerBaseChrono>;
 
-}   // namespace MiniUtils
+}   // namespace mini_utils
 
 #endif
 
