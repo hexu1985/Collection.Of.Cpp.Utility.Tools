@@ -2,6 +2,7 @@
 #define MINI_UTILS_DUMP_FUNCTIONS_INC
 
 #include <stdio.h>
+#include <stdint.h>
 
 /****************************************************************************
  * helper function: dumps a given block of data, in hex
@@ -13,7 +14,7 @@ static const int DUMP_COLS_PER_ROW = 16;
 static const int DUMP_SPACE_COLS = 8; 
 
 static
-void dump_hex(unsigned char *data, unsigned int datalen, char *margin)
+void dump_hex(const uint8_t *data, unsigned int datalen, const char *margin)
 {
     unsigned int i;
 
@@ -41,7 +42,7 @@ void dump_hex(unsigned char *data, unsigned int datalen, char *margin)
  */
 
 static
-void dump_ascii(unsigned char *data, unsigned int datalen, char *margin)
+void dump_ascii(const uint8_t *data, unsigned int datalen, const char *margin)
 {
     unsigned int i;
 
@@ -69,7 +70,7 @@ void dump_ascii(unsigned char *data, unsigned int datalen, char *margin)
  */
 
 static
-void dump(unsigned char *data, unsigned int datalen, char *margin)
+void dump(const uint8_t *data, unsigned int datalen, const char *margin)
 {
     unsigned int i, icols;
 

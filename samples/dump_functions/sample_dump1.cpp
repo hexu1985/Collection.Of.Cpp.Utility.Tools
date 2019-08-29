@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 using namespace mini_utils;
 
@@ -18,13 +19,29 @@ int main(int argc, char *argv[])
         return -2;
     }
 
-    const int BUF_SIZE = 128;
-    char buf[BUF_SIZE] = {0}; 
+	file.seekg(0, file.end);
+	int length = file.tellg();
+	file.seekg(0, file.beg);
 
-    int n;
-    while ((n = file.readsome(buf, BUF_SIZE)) > 0) {
-        dump((unsigned char *) buf, n, NULL);
-    }
+    const int BUF_SIZE = DUMP_COLS_PER_ROW;
+    uint8_t buf[BUF_SIZE] = {0}; 
+
+	while (length >= BUF_SIZE) {
+		file.read((char *) buf, BUF_SIZE);
+        dump(buf, BUF_SIZE, NULL);
+		length -= BUF_SIZE;
+	}
+
+	file.read((char *) buf, length);
+	int margin_length = 3*(DUMP_COLS_PER_ROW - length);
+	if (length < DUMP_SPACE_COLS)
+		margin_length += 1;
+	margin_length += 2;
+	std::string margin(margin_length, ' '); 
+	dump_hex(buf, length, NULL);
+	dump_ascii(buf, length, margin.c_str());
+
+	printf("\n\n");
 
     fflush(stdout);
 
