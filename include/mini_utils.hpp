@@ -34,6 +34,7 @@
 #include "LCS.hpp"
 #include "search_functions.hpp"
 #include "PriorityQueueRef.hpp"
+#include "dump_functions.hpp"
 #include "WorkerThread.hpp"
 #include "MemoryPool.hpp"
 #endif

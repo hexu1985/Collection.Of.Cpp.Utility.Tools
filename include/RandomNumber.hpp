@@ -4,6 +4,10 @@
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-07-30
+ *
+ * @see Data Structures with C++ Using STL, Chapter 1.7 \n
+ * https://github.com/hexu1985/Data.Structures.With.Cpp.Using.STL
+ *
  */
 #ifndef MINI_UTILS_RANDOM_NUMBER_INC
 #define MINI_UTILS_RANDOM_NUMBER_INC
