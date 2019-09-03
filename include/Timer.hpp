@@ -1,3 +1,14 @@
+/**
+ * @file Timer.hpp
+ * @brief 
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-09-03
+ *
+ * @see 
+ * https://www.fluentcpp.com/2018/12/28/timer-cpp/
+ * https://github.com/99xt/timercpp.git
+ */
 #ifndef MINI_UTILS_TIMER_INC
 #define MINI_UTILS_TIMER_INC
 
@@ -71,6 +82,7 @@ void Timer::setInterval(Callback function, const std::chrono::duration<Rep, Peri
     t.detach();
 }
 
+inline
 void Timer::stop() 
 {
     this->clear_ = true;
