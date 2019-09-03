@@ -6,7 +6,7 @@
  * @date 2019-09-03
  *
  * @see 
- * https://www.fluentcpp.com/2018/12/28/timer-cpp/
+ * https://www.fluentcpp.com/2018/12/28/timer-cpp/ \n
  * https://github.com/99xt/timercpp.git
  */
 #ifndef MINI_UTILS_TIMER_INC
