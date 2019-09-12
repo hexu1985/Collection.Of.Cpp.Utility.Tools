@@ -1,4 +1,6 @@
-// set_difference example
+/** \example set_functions/benchmark_set_difference1.cpp
+ * This is an example of how to use the std::set_difference function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::set_difference, std::sort
 #include <vector>       // std::vector

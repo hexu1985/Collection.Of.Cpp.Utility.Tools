@@ -1,4 +1,6 @@
-// set_union example
+/** \example set_functions/benchmark_set_union1.cpp
+ * This is an example of how to use the std::set_symmetric_union function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::set_union, std::sort
 #include <vector>       // std::vector

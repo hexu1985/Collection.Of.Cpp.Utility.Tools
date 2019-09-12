@@ -1,4 +1,6 @@
-// set_intersection example
+/** \example set_functions/benchmark_set_intersection1.cpp
+ * This is an example of how to use the std::set_intersection function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::set_intersection, std::sort
 #include <vector>       // std::vector

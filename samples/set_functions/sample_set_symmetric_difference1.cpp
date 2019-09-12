@@ -1,4 +1,6 @@
-// set_symmetric_difference example
+/** \example set_functions/sample_set_symmetric_difference1.cpp
+ * This is an example of how to use the set_symmetric_difference function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::sort
 #include <vector>       // std::vector

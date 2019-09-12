@@ -1,4 +1,6 @@
-// set_union example
+/** \example set_functions/sample_set_union1.cpp
+ * This is an example of how to use the set_union function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::sort
 #include <vector>       // std::vector

@@ -1,3 +1,10 @@
+/**
+ * @file set_functions.hpp
+ * @brief 集合相关的函数
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-09-12
+ */
 #ifndef MINI_UTILS_SET_FUNCTIONS_INC
 #define MINI_UTILS_SET_FUNCTIONS_INC
 
@@ -6,6 +13,15 @@
 
 namespace mini_utils {
 
+/**
+ * @brief 计算集合交集
+ *
+ * @tparam T 集合元素类型
+ * @param v1 集合1
+ * @param v2 集合2
+ *
+ * @return 集合1和集合2的交集
+ */
 template <typename T>
 std::vector<T> set_intersection(const std::vector<T> &v1, const std::vector<T> &v2)
 {
@@ -31,6 +47,15 @@ std::vector<T> set_intersection(const std::vector<T> &v1, const std::vector<T> &
     return res;
 }
 
+/**
+ * @brief 计算集合并集
+ *
+ * @tparam T 集合元素类型
+ * @param v1 集合1
+ * @param v2 集合2
+ *
+ * @return 集合1和集合2的并集
+ */
 template <typename T>
 std::vector<T> set_union(const std::vector<T> &v1, const std::vector<T> &v2)
 {
@@ -66,6 +91,15 @@ std::vector<T> set_union(const std::vector<T> &v1, const std::vector<T> &v2)
     return res;
 }
 
+/**
+ * @brief 计算集合差集
+ *
+ * @tparam T 集合元素类型
+ * @param v1 集合1
+ * @param v2 集合2
+ *
+ * @return 集合1和集合2的差集
+ */
 template <typename T>
 std::vector<T> set_difference(const std::vector<T> &v1, const std::vector<T> &v2)
 {
@@ -96,6 +130,15 @@ std::vector<T> set_difference(const std::vector<T> &v1, const std::vector<T> &v2
     return res;
 }
 
+/**
+ * @brief 计算集合对称差集
+ *
+ * @tparam T 集合元素类型
+ * @param v1 集合1
+ * @param v2 集合2
+ *
+ * @return 集合1和集合2的对称差集
+ */
 template <typename T>
 std::vector<T> set_symmetric_difference(const std::vector<T> &v1, const std::vector<T> &v2)
 {

@@ -1,4 +1,6 @@
-// sort algorithm example
+/** \example sort_functions/benchmark_sort.cpp
+ * This is an example of how to use the std::sort function.
+ */
 #include <iostream>     // std::cout
 #include <algorithm>    // std::sort
 #include <vector>       // std::vector
