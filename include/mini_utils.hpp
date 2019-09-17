@@ -18,6 +18,7 @@
 - RandomNumber: 一个随机数生成器类(RandomNumber.hpp)
 - set_difference, set_intersection, set_symmetric_difference, set_union: 集合相关的函数(set_functions.hpp)
 - Timer: 一个基于thread的超简单的定时器类(Timer.hpp)
+- dump, dump_ascii, dump_hex: dump数据的函数(dump_functions.hpp)
 */
 #ifndef MINI_UTILS_INC
 #define MINI_UTILS_INC

@@ -1,3 +1,6 @@
+/** \example timer/sample_timer1.cpp
+ * This is an example of how to use the Timer class. 
+ */
 #include <iostream>
 #include "Timer.hpp"
 

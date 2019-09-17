@@ -1,18 +1,37 @@
+/**
+ * @file dump_functions.hpp
+ * @brief dump数据的函数
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-09-17
+ *
+ * @see sentinel c runtime lib
+ */
 #ifndef MINI_UTILS_DUMP_FUNCTIONS_INC
 #define MINI_UTILS_DUMP_FUNCTIONS_INC
 
 #include <stdio.h>
 #include <stdint.h>
 
-/****************************************************************************
- * helper function: dumps a given block of data, in hex
- */
-
 namespace mini_utils {
 
+/**
+ * @brief 每行打印字符个数
+ */
 static const int DUMP_COLS_PER_ROW = 16; 
+
+/**
+ * @brief 每组打印字符个数
+ */
 static const int DUMP_SPACE_COLS = 8; 
 
+/**
+ * @brief dump指定数据块成十六进制格式
+ *
+ * @param data 数据块地址
+ * @param datalen 数据块长度
+ * @param margin 边界
+ */
 static
 void dump_hex(const uint8_t *data, unsigned int datalen, const char *margin)
 {
@@ -37,10 +56,13 @@ void dump_hex(const uint8_t *data, unsigned int datalen, const char *margin)
     }
 } /* dump_hex */
 
-/****************************************************************************
- * helper function: dumps a given block of data, in ascii
+/**
+ * @brief dump指定数据块成ASCII码格式, 不可打印字符显示为"."
+ *
+ * @param data 数据块地址
+ * @param datalen 数据块长度
+ * @param margin 边界
  */
-
 static
 void dump_ascii(const uint8_t *data, unsigned int datalen, const char *margin)
 {
@@ -65,10 +87,13 @@ void dump_ascii(const uint8_t *data, unsigned int datalen, const char *margin)
     }
 } /* dump_ascii */
 
-/****************************************************************************
- * helper function: dumps a given block of data, in hex and ascii
+/**
+ * @brief dump指定数据块成十六进制和ASCII码格式(不可打印字符显示为".")
+ *
+ * @param data 数据块地址
+ * @param datalen 数据块长度
+ * @param margin 十六进制和ASCII码之间的边界
  */
-
 static
 void dump(const uint8_t *data, unsigned int datalen, const char *margin)
 {
