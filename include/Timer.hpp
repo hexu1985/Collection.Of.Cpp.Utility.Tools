@@ -1,6 +1,6 @@
 /**
  * @file Timer.hpp
- * @brief 
+ * @brief 一个基于thread的超简单的定时器类
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-09-03
@@ -19,19 +19,52 @@
 
 namespace mini_utils {
 
+/**
+ * @brief 一个基于thread的超简单的定时器类
+ */
 class Timer {
 public:
+    /**
+     * @brief 定时器到时回调函数
+     */
 	typedef std::function<void ()> Callback;
 
+    /**
+     * @brief 设置一次性定时器
+     *
+     * @tparam Rep std::duration<Rep, Period>中的Rep(Representation)
+     * @tparam Period std::duration<Rep, Period>中的Period
+     * @param function 定时器到期回调函数
+     * @param delay 定时器到期时间, 相对时间
+     */
 	template <class Rep, class Period>
     void setTimeoutFor(Callback function, const std::chrono::duration<Rep, Period> &delay);
 
+    /**
+     * @brief 设置一次性定时器
+     *
+     * @tparam Rep std::duration<Rep, Period>中的Rep(Representation)
+     * @tparam Period std::duration<Rep, Period>中的Period
+     * @param function 定时器到期回调函数
+     * @param delay 定时器到期时间, 绝对时间
+     */
 	template <class Clock, class Duration>
 	void setTimeoutUntil(Callback function, const std::chrono::time_point<Clock, Duration> &delay);
 
+    /**
+     * @brief 设置周期性定时器
+     *
+     * @tparam Rep std::duration<Rep, Period>中的Rep(Representation)
+     * @tparam Period std::duration<Rep, Period>中的Period
+     * @param function 定时器到期回调函数
+     * @param interval 定时器超时周期
+     */
 	template <class Rep, class Period>
     void setInterval(Callback function, const std::chrono::duration<Rep, Period> &interval);
 
+    /**
+     * @brief 停止定时器
+     */
     void stop();
 
 	Timer() = default; 
