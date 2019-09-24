@@ -32,57 +32,6 @@ namespace mini_utils {
  *       如果Compare为greater<T>, 那么得到的是一个最大堆.
  */
 template <typename T, typename Compare>
-void push_heap(std::vector<T> &v, int last, Compare comp);
-
-/**
- * @brief 在索引范围[first, last)中, 下移向量元素v[first]
- *
- * @tparam T 堆中元素类型
- * @tparam Compare 堆中元素比较的函数对象的类型
- * @param v 存放堆元素的数组
- * @param first 需要下移向量元素的索引
- * @param last 索引范围最后一个元素的下一个位置
- * @param comp 元素比较的函数对象
- *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
- */
-template <typename T, typename Compare>
-void adjust_heap(std::vector<T> &v, int first, int last, Compare comp);
-
-/**
- * @brief [0, last)范围中的向量是堆. 交换堆中的第1个元素和最后一个元素, 然后,
- *        使索引范围[0, last-1)中的元素堆化. 使用函数对象comp进行比较. 
- *
- * @tparam T 堆中元素类型
- * @tparam Compare 堆中元素比较的函数对象的类型
- * @param v 存放堆元素的数组
- * @param last 堆中最后一个元素的下一个位置
- * @param comp 元素比较的函数对象
- *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
- */
-template <typename T, typename Compare>
-void pop_heap(std::vector<T> &v, int last, Compare comp);
-
-/**
- * @brief 将向量元素安排到堆中. 使用函数对象comp进行比较
- *
- * @tparam T 堆中元素类型
- * @tparam Compare 堆中元素比较的函数对象的类型
- * @param v 存放堆元素的数组
- * @param comp 元素比较的函数对象
- *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
- */
-template <typename T, typename Compare>
-void make_heap(std::vector<T> &v, Compare comp);
-
-// implementations
-
-template <typename T, typename Compare>
 void push_heap(std::vector<T> &v, int last, Compare comp)
 {
     // 假设新项的位置为v[last-1], 而且, v[0]到v[last2]的元素以
@@ -117,6 +66,19 @@ void push_heap(std::vector<T> &v, int last, Compare comp)
 	v[currentPos] = target;
 }
 
+/**
+ * @brief 在索引范围[first, last)中, 下移向量元素v[first]
+ *
+ * @tparam T 堆中元素类型
+ * @tparam Compare 堆中元素比较的函数对象的类型
+ * @param v 存放堆元素的数组
+ * @param first 需要下移向量元素的索引
+ * @param last 索引范围最后一个元素的下一个位置
+ * @param comp 元素比较的函数对象
+ *
+ * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
+ *       如果Compare为greater<T>, 那么得到的是一个最大堆.
+ */
 template <typename T, typename Compare>
 void adjust_heap(std::vector<T> &v, int first, int last, Compare comp)
 {
@@ -156,6 +118,19 @@ void adjust_heap(std::vector<T> &v, int first, int last, Compare comp)
 	v[currentPos] = target;
 }
 
+/**
+ * @brief [0, last)范围中的向量是堆. 交换堆中的第1个元素和最后一个元素, 然后,
+ *        使索引范围[0, last-1)中的元素堆化. 使用函数对象comp进行比较. 
+ *
+ * @tparam T 堆中元素类型
+ * @tparam Compare 堆中元素比较的函数对象的类型
+ * @param v 存放堆元素的数组
+ * @param last 堆中最后一个元素的下一个位置
+ * @param comp 元素比较的函数对象
+ *
+ * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
+ *       如果Compare为greater<T>, 那么得到的是一个最大堆.
+ */
 template <typename T, typename Compare>
 void pop_heap(std::vector<T> &v, int last, Compare comp)
 {
@@ -170,6 +145,17 @@ void pop_heap(std::vector<T> &v, int last, Compare comp)
 	adjust_heap(v, 0, last-1, comp);
 }
 
+/**
+ * @brief 将向量元素安排到堆中. 使用函数对象comp进行比较
+ *
+ * @tparam T 堆中元素类型
+ * @tparam Compare 堆中元素比较的函数对象的类型
+ * @param v 存放堆元素的数组
+ * @param comp 元素比较的函数对象
+ *
+ * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
+ *       如果Compare为greater<T>, 那么得到的是一个最大堆.
+ */
 template <typename T, typename Compare>
 void make_heap(std::vector<T> &v, Compare comp)
 {
@@ -187,6 +173,17 @@ void make_heap(std::vector<T> &v, Compare comp)
 	}
 }
 
+/**
+ * @brief 将一个堆转成根据comp排序的序列
+ *
+ * @tparam T 堆中元素类型
+ * @tparam Compare 堆中元素比较的函数对象的类型
+ * @param v 存放堆元素的数组
+ * @param comp 元素比较的函数对象
+ *
+ * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
+ *       如果Compare为greater<T>, 那么得到的是一个最大堆.
+ */
 template <typename T, typename Compare>
 void sort_heap(std::vector<T> &v, Compare comp)
 {
@@ -195,6 +192,24 @@ void sort_heap(std::vector<T> &v, Compare comp)
         // 调用pop_heap()将下一个最大结点移到v[n-1]
         pop_heap(v, lastPos, comp);
     }
+}
+
+/**
+ * @brief 堆排序算法
+ *
+ * @tparam T 被排序元素类型
+ * @tparam Compare 比较函数对象类型
+ * @param v 存放的数组元素数组
+ * @param comp 比较函数对象
+ *
+ * @note 如果Compare为less<T>, 那么得到的降序排列,
+ *       如果Compare为greater<T>, 那么得到的是升序排列.
+ */
+template <typename T, typename Compare = std::greater<T>>
+void heap_sort(std::vector<T> &v, Compare comp = Compare())
+{
+    make_heap(v, comp);
+    sort_heap(v, comp);
 }
 
 }   // namespace mini_utils

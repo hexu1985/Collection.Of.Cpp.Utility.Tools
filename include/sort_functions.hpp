@@ -42,27 +42,6 @@ void selection_sort(std::vector<T> &v)
     }
 }
 
-/**
- * @brief 堆排序算法
- *
- * @tparam T 被排序元素类型
- * @tparam Compare 比较函数对象类型
- * @param v 存放的数组元素数组
- * @param comp 比较函数对象
- *
- * @note 如果Compare为less<T>, 那么得到的降序排列,
- *       如果Compare为greater<T>, 那么得到的是升序排列.
- *
- * @see Data Structures with C++ Using STL, Chapter 14 \n
- * https://github.com/hexu1985/Data.Structures.With.Cpp.Using.STL
- */
-template <typename T, typename Compare = std::greater<T>>
-void heap_sort(std::vector<T> &v, Compare comp = Compare())
-{
-    make_heap(v, comp);
-    sort_heap(v, comp);
-}
-
 }   // namespace mini_utils
 
 #endif
