@@ -30,11 +30,10 @@ namespace mini_utils {
  * @tparam T 元素类型
  * @tparam Compare 比较函数对象的类型
  *
- * @note 当Compare为std::greater(大于)的时候, 数值大的元素优先级高;
- *       当Compare为std::less(小于)的时候, 数值小的元素优先级高;
- *       这点与std::priority_queue正好相反.
+ * @note 当Compare为std::less<T>的时候, 数值大的元素优先级高;
+ *       当Compare为std::greater<T>的时候, 数值小的元素优先级高;
  */
-template <class T, typename Compare = std::greater<T>>
+template <class T, typename Compare = std::less<T>>
 class PriorityQueueRef { 
 private:
     std::vector<int> pqList_;                   // 优先级队列, 存放的元素是keyList_中元素的索引
@@ -59,7 +58,7 @@ private:
     { 
         int parentPos = (currentPos-1)/2;
         while (currentPos > 0) {
-            if (comp_(keyList_[pqList_[currentPos]], keyList_[pqList_[parentPos]])) {
+            if (comp_(keyList_[pqList_[parentPos]], keyList_[pqList_[currentPos]])) {
                 exch(currentPos, parentPos);
                 currentPos = parentPos;
                 parentPos = (currentPos-1)/2;
@@ -74,10 +73,10 @@ private:
     { 
         int childPos = 2*currentPos+1;
         while (childPos < lastPos) {
-            if ((childPos+1 < lastPos) && comp_(keyList_[pqList_[childPos+1]], keyList_[pqList_[childPos]]))
+            if ((childPos+1 < lastPos) && comp_(keyList_[pqList_[childPos]], keyList_[pqList_[childPos+1]]))
                 childPos = childPos + 1;
 
-            if (comp_(keyList_[pqList_[childPos]], keyList_[pqList_[currentPos]])) {
+            if (comp_(keyList_[pqList_[currentPos]], keyList_[pqList_[childPos]])) {
                 exch(currentPos, childPos);
                 currentPos = childPos;
                 childPos = 2*currentPos+1;

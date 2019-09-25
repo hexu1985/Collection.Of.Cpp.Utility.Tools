@@ -28,11 +28,11 @@ namespace mini_utils {
  * @param last 插入堆中元素的下标的下一个位置
  * @param comp 元素比较的函数对象
  *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
+ * @note 如果Compare为less<T>, 那么得到的是一个最大堆.
+ *       如果Compare为greater<T>, 那么得到的是一个最小堆.
  */
-template <typename T, typename Compare>
-void push_heap(std::vector<T> &v, int last, Compare comp)
+template <typename T, typename Compare=std::less<T>>
+void push_heap(std::vector<T> &v, int last, Compare comp=Compare())
 {
     // 假设新项的位置为v[last-1], 而且, v[0]到v[last2]的元素以
     // 堆的顺序排列
@@ -49,7 +49,7 @@ void push_heap(std::vector<T> &v, int last, Compare comp)
 	while (currentPos != 0)
 	{
 		// 比较target和父结点值
-		if (comp(target,v[parentPos]))
+		if (comp(v[parentPos], target))
 		{
             // 将数据从父结点位置移动到当前位置.
             // 将表示当前位置的索引更新为父结点位置,
@@ -59,7 +59,7 @@ void push_heap(std::vector<T> &v, int last, Compare comp)
 			parentPos = (currentPos-1)/2;
 		}
 		else
-			// 如果!comp(target, parentvalue), 则满足堆条件
+			// 如果!comp(parentvalue, target), 则满足堆条件
 			break;
 	}
 	// 正确位置已被发现, 将其赋值为target
@@ -76,11 +76,11 @@ void push_heap(std::vector<T> &v, int last, Compare comp)
  * @param last 索引范围最后一个元素的下一个位置
  * @param comp 元素比较的函数对象
  *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
+ * @note 如果Compare为less<T>, 那么得到的是一个最大堆.
+ *       如果Compare为greater<T>, 那么得到的是一个最小堆.
  */
-template <typename T, typename Compare>
-void adjust_heap(std::vector<T> &v, int first, int last, Compare comp)
+template <typename T, typename Compare=std::less<T>>
+void adjust_heap(std::vector<T> &v, int first, int last, Compare comp=Compare())
 {
 	int currentPos, childPos;
 	T target;
@@ -95,15 +95,15 @@ void adjust_heap(std::vector<T> &v, int first, int last, Compare comp)
 	while (childPos <= last-1)
 	{
         // 右子结点的索引为childPos+1. 比较两个子结点,
-        // 如果comp(v[childPos+1], v[childPos])为真, 则改变childPos
+        // 如果comp(v[childPos], v[childPos+1])为真, 则改变childPos
 		if ((childPos+1 <= last-1) &&
-            comp(v[childPos+1], v[childPos]))
+            comp(v[childPos], v[childPos+1]))
 			childPos = childPos + 1;
 
 		// 将所选子结点与target进行比较
-		if (comp(v[childPos],target))
+		if (comp(target, v[childPos]))
 		{
-            // comp(selected child, target)为真, 将所选子结点移到父结点;
+            // comp(target, selected child)为真, 将所选子结点移到父结点;
             // 现在, 所选子结点的位置空出
 			v[currentPos] = v[childPos];
 
@@ -127,12 +127,9 @@ void adjust_heap(std::vector<T> &v, int first, int last, Compare comp)
  * @param v 存放堆元素的数组
  * @param last 堆中最后一个元素的下一个位置
  * @param comp 元素比较的函数对象
- *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
  */
-template <typename T, typename Compare>
-void pop_heap(std::vector<T> &v, int last, Compare comp)
+template <typename T, typename Compare=std::less<T>>
+void pop_heap(std::vector<T> &v, int last, Compare comp=Compare())
 {
 	T temp;
 
@@ -152,12 +149,9 @@ void pop_heap(std::vector<T> &v, int last, Compare comp)
  * @tparam Compare 堆中元素比较的函数对象的类型
  * @param v 存放堆元素的数组
  * @param comp 元素比较的函数对象
- *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
  */
-template <typename T, typename Compare>
-void make_heap(std::vector<T> &v, Compare comp)
+template <typename T, typename Compare=std::less<T>>
+void make_heap(std::vector<T> &v, Compare comp=Compare())
 {
 	int heapPos, lastPos;
 
@@ -180,12 +174,9 @@ void make_heap(std::vector<T> &v, Compare comp)
  * @tparam Compare 堆中元素比较的函数对象的类型
  * @param v 存放堆元素的数组
  * @param comp 元素比较的函数对象
- *
- * @note 如果Compare为less<T>, 那么得到的是一个最小堆.
- *       如果Compare为greater<T>, 那么得到的是一个最大堆.
  */
-template <typename T, typename Compare>
-void sort_heap(std::vector<T> &v, Compare comp)
+template <typename T, typename Compare=std::less<T>>
+void sort_heap(std::vector<T> &v, Compare comp=Compare())
 {
     // 确定元素v[n-1] ... v[1]的迭代
     for (int lastPos = v.size(); lastPos > 1; lastPos--) {
@@ -202,10 +193,10 @@ void sort_heap(std::vector<T> &v, Compare comp)
  * @param v 存放的数组元素数组
  * @param comp 比较函数对象
  *
- * @note 如果Compare为less<T>, 那么得到的降序排列,
- *       如果Compare为greater<T>, 那么得到的是升序排列.
+ * @note 如果Compare为less<T>, 那么得到的升序排列,
+ *       如果Compare为greater<T>, 那么得到的是降序排列.
  */
-template <typename T, typename Compare = std::greater<T>>
+template <typename T, typename Compare = std::less<T>>
 void heap_sort(std::vector<T> &v, Compare comp = Compare())
 {
     make_heap(v, comp);

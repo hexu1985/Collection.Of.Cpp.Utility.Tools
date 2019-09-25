@@ -3,11 +3,9 @@
  */
 #include <iostream>
 #include <vector>
-
-#include "heap_functions.hpp"
+#include <algorithm>
 
 using namespace std;
-using namespace mini_utils;
 
 int main()
 {
@@ -19,9 +17,9 @@ int main()
 	for (const auto &item: arr)
 	{
 		vA.push_back(item);
-		push_heap(vA, vA.size(), less<int>());
+		push_heap(vA.begin(), vA.end(), less<int>());
 		vB.push_back(item);
-		push_heap(vB, vB.size(), greater<int>());
+		push_heap(vB.begin(), vB.end(), greater<int>());
 	}
 
 	// clear the heaps by popping elements. output the
@@ -29,7 +27,7 @@ int main()
 	cout << "Maximum heap: ";
 	while (!vA.empty())
 	{
-		pop_heap(vA, vA.size(), less<int>());
+		pop_heap(vA.begin(), vA.end(), less<int>());
 		cout << vA.back() << "  ";
 		vA.pop_back();
 	}
@@ -38,7 +36,7 @@ int main()
 	cout << "Minimum heap: ";
 	while (!vB.empty())
 	{
-		pop_heap(vB, vB.size(), greater<int>());
+		pop_heap(vB.begin(), vB.end(), greater<int>());
 		cout << vB.back() << "  ";
 		vB.pop_back();
 	}

@@ -30,17 +30,17 @@ int main()
     }
 	cout << endl;
 
-	// call heapSort() with greater<int>() and display results
+	// call heap_sort() with less<int>() and display results
 	cout << "Sort in ascending order" << endl << "   ";
-	heap_sort(v,greater<int>());
+	heap_sort(v,less<int>());
     for (auto &item: v) {
         cout << item << " ";
     }
 	cout << endl;
 
-	// call heapSort() with less<int>() and display results
+	// call heap_sort() with greater<int>() and display results
 	cout << "Sort in descending order" << endl << "   ";
-	heap_sort(v,less<int>());
+	heap_sort(v,greater<int>());
     for (auto &item: v) {
         cout << item << " ";
     }

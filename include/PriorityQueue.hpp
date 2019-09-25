@@ -26,11 +26,10 @@ namespace mini_utils {
  * @tparam T 元素类型
  * @tparam Compare 比较函数对象的类型
  *
- * @note 当Compare为std::greater(大于)的时候, 数值大的元素优先级高;
- *       当Compare为std::less(小于)的时候, 数值小的元素优先级高;
- *       这点与std::priority_queue正好相反.
+ * @note 当Compare为std::less<T>的时候, 数值大的元素优先级高;
+ *       当Compare为std::greater<T>的时候, 数值小的元素优先级高;
  */
-template <typename T, typename Compare = std::greater<T>> 
+template <typename T, typename Compare = std::less<T>> 
 class PriorityQueue {                       
 public:
     /**
