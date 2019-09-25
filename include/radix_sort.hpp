@@ -14,7 +14,8 @@ namespace mini_utils {
 //   power = 10   ==> 10's digit
 //   power = 100  ==> 100's digit
 //   ...
-void distribute(const std::vector<int>& v, std::queue<int> digitQueue[],
+template <typename Integer>
+void distribute(const std::vector<Integer>& v, std::queue<Integer> digitQueue[],
                 int power)
 {
 	int i;
@@ -27,7 +28,8 @@ void distribute(const std::vector<int>& v, std::queue<int> digitQueue[],
 
 // support function for radix_sort()
 // gather elements from the queues and copy back to the vector
-void collect(std::queue<int> digitQueue[], std::vector<int>& v)
+template <typename Integer>
+void collect(std::queue<Integer> digitQueue[], std::vector<Integer>& v)
 {
 	int i = 0, digit;
 
@@ -43,11 +45,12 @@ void collect(std::queue<int> digitQueue[], std::vector<int>& v)
 		}
 }
 
-void radix_sort(std::vector<int>& v, int d)
+template <typename Integer>
+void radix_sort(std::vector<Integer>& v, int d)
 {
 	int i;
 	int power = 1;
-	std::queue<int> digitQueue[10];
+	std::queue<Integer> digitQueue[10];
 
 	for (i=0;i < d;i++)
 	{
