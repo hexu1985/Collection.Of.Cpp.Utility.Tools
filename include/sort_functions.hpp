@@ -10,31 +10,65 @@
 
 #include <vector>
 #include "heap_functions.hpp"   // for heap_sort
+#include "radix_sort.hpp"       // for radix_sort
 
 namespace mini_utils {
 
 template <typename T>
+void selection_sort(T arr[], int n)
+{
+    int smallIndex; // 子表中最小元素的下标
+    int pass, j;
+    T temp;
+
+    // pass的范围是0 ~ n-2
+    for (pass = 0; pass < n-1; pass++)
+    {
+        // 从下标pass开始扫描子表
+        smallIndex = pass;
+
+        // j遍历子表arr[pass+1]到arr[n-1]
+        for (j = pass+1; j < n; j++) {
+            // 如果找到更小的元素, 则将smallIndex赋值给该位置
+            if (arr[j] < arr[smallIndex]) {
+                smallIndex = j;
+            }
+        }
+
+        // 如果smallIndex和pass不在相同的位置,
+        // 将子表中的最小项与arr[pass]交换
+        if (smallIndex != pass)
+        {
+            temp = arr[pass];
+            arr[pass] = arr[smallIndex];
+            arr[smallIndex] = temp;
+        }
+    }
+}
+
+template <typename T>
 void selection_sort(std::vector<T> &v)
 {
-    // index of smallest item in each pass
-    int smallIndex;
-    // save the vector size in n
+    int smallIndex; // 子表中最小元素的下标
     int pass, j, n = v.size();
     T temp;
 
-    // sort v[0]..v[n-2], and arr[n-1] is in place
+    // pass的范围是0 ~ n-2
     for (pass = 0; pass < n-1; pass++) {
-        // start the scan at index pass; set smallIndex to pass
+        // 从下标pass开始扫描子表
         smallIndex = pass;
-        // j scans the sublist v[pass+1]..v[n-1]
+
+        // j遍历子表v[pass+1]到v[n-1]
         for (j = pass+1; j < n; j++) {
-            // update smallIndex if smaller element is found
+            // 如果找到更小的元素, 则将smallIndex赋值给该位置
             if (v[j] < v[smallIndex]) {
                 smallIndex = j;
             }
         }
-        // when finished, place smallest item in arr[pass]
-        if (smallIndex != pass) {   // swap(v[pass], v[smallIndex])
+
+        // 如果smallIndex和pass不在相同的位置,
+        // 将子表中的最小项与arr[pass]交换
+        if (smallIndex != pass) {
             temp = v[pass];
             v[pass] = v[smallIndex];
             v[smallIndex] = temp;
