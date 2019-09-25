@@ -176,4 +176,4 @@ std::vector<T> set_symmetric_difference(const std::vector<T> &v1, const std::vec
 
 }   // namespace mini_utils
 
-#endif	// HEAP_FUNCTIONS
+#endif
