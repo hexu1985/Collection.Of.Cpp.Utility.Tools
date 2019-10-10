@@ -1,3 +1,6 @@
+/** \example rci_ptr/benchmark_rci_ptr.cpp
+ * This is an example of benchmark to RCIPtr.
+ */
 #include <iostream>
 #include "widget.hpp"
 

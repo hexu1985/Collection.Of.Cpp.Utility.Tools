@@ -1,4 +1,4 @@
-/** \example heap_functions/sample_heap_functions1.cpp
+/** \example heap_functions/benchmark_heap_functions1.cpp
  * This is an example of how to use the heap functions.
  */
 #include <iostream>
