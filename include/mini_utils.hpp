@@ -35,6 +35,7 @@
 #include "PriorityQueueRef.hpp"
 #include "radix_sort.hpp"
 #include "RandomNumber.hpp"
+#include "RCIPtr.hpp"
 #include "RCObject.hpp"
 #include "RCPtr.hpp"
 #include "search_functions.hpp"

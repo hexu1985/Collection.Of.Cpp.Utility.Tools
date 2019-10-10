@@ -12,14 +12,9 @@ public:
 
     void addReference();
     void removeReference();
-    void markUnshareable();
-
-    bool isShareable() const;
-    bool isShared() const;
 
 private:
     int refCount_;
-    bool shareable_;
 };
 
 }   // namespace mini_utils
