@@ -115,7 +115,7 @@ public:
      */
     void push(int idxOfKeyList)
     { 
-        assert(idxOfKeyList >= 0 && idxOfKeyList < keyList_.size());
+        assert(idxOfKeyList >= 0 && idxOfKeyList < (int) keyList_.size());
         pqList_.push_back(idxOfKeyList);
         int i = pqList_.size()-1;
         key2pqMap_[idxOfKeyList] = i;
@@ -162,7 +162,7 @@ public:
      */
     void update(int idxOfKeyList)
     {
-        assert(key2pqMap_.count(idxOfKeyList) && key2pqMap_[idxOfKeyList] < pqList_.size());
+        assert(key2pqMap_.count(idxOfKeyList) && key2pqMap_[idxOfKeyList] < (int) pqList_.size());
         bubbleUp(key2pqMap_[idxOfKeyList]);
         siftDown(key2pqMap_[idxOfKeyList], pqList_.size());
     }
