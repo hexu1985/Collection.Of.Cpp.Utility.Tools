@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     }
 
 	file.seekg(0, file.end);
-	int length = file.tellg();
+	int length = static_cast<int>(file.tellg());
 	file.seekg(0, file.beg);
 
     const int BUF_SIZE = 1024;

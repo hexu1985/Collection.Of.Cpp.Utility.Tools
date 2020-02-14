@@ -3,6 +3,7 @@
  */
 #include "TaskQueue.hpp"
 #include <thread>
+#include <string>
 #include <iostream>
 #include <stdexcept>
 

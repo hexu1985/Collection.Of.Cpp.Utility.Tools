@@ -1,10 +1,13 @@
-aux_source_directory(. SRC_FILE_LIST)
+add_executable(sample_basic_stopwatch1 sample_basic_stopwatch1.cpp)
+target_link_libraries(sample_basic_stopwatch1 mini_utils-static ${LIBS_SYSTEM})
 
-foreach(SRC_FILE ${SRC_FILE_LIST})
-    get_filename_component(EXE_FILE ${SRC_FILE} NAME_WE)
-    if (WIN32)
-        set(EXE_FILE ${EXE_FILE}.exe)
-    endif()
-    add_executable(${EXE_FILE} ${SRC_FILE})
-    target_link_libraries(${EXE_FILE} mini_utils-static ${LIBS_SYSTEM})
-endforeach()
+if (NOT WIN32)
+    add_executable(sample_basic_stopwatch2 sample_basic_stopwatch2.cpp)
+    target_link_libraries(sample_basic_stopwatch2 mini_utils-static ${LIBS_SYSTEM})
+endif()
+
+add_executable(sample_stopwatch1 sample_stopwatch1.cpp)
+target_link_libraries(sample_stopwatch1 mini_utils-static ${LIBS_SYSTEM})
+
+add_executable(sample_timer_base_chrono1 sample_timer_base_chrono1.cpp)
+target_link_libraries(sample_timer_base_chrono1 mini_utils-static ${LIBS_SYSTEM})

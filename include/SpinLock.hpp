@@ -28,7 +28,7 @@ public:
     /**
      * @brief 创建一个自旋锁, 初始化为清除状态
      */
-    SpinLock(): flag_(ATOMIC_FLAG_INIT) {}
+    SpinLock(): flag_{ATOMIC_FLAG_INIT} {}
 
     /**
      * @brief 获取锁
