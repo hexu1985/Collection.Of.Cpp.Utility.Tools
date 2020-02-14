@@ -13,11 +13,12 @@ endif()
 
 if(WIN32)
 	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    #	set(LIBS_SYSTEM)
+    set(LIBS_SYSTEM )
 else()
-    #	set(LIBS_SYSTEM c stdc++ pthread)
+    set(LIBS_SYSTEM pthread)
 endif()
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 add_subdirectory(src)
+add_subdirectory(samples)
