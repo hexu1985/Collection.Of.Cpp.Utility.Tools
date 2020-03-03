@@ -3,7 +3,7 @@
 
 using namespace mini_utils;
 
-class Foo {
+class Foo: public Singleton<Foo> {
 private:
     Foo() {
         std::cerr << "Foo()\n"; 
@@ -30,18 +30,19 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-    Foo &foo = Singleton<Foo>::getInstance();
-    foo.step_1();
-    foo.step_2();
-    foo.step_3();
+    Foo &trace = Foo::getInstance();
+    trace.step_1();
+    trace.step_2();
+    trace.step_3();
 
     // will return the existing instance
-    Foo &foo2 = Singleton<Foo>::getInstance();
-    foo2.step_1();
-    foo2.step_2();
-    foo2.step_3();
+    Foo &trace2 = Foo::getInstance();
+    trace2.step_1();
+    trace2.step_2();
+    trace2.step_3();
 
-    Foo foo3 = foo;
+    // Foo foo;    // compile error
+    // Foo foo3 = foo; // compile error
 
     return 0;
 }
