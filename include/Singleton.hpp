@@ -31,6 +31,9 @@ public:
         return instance;
     }
 
+protected:
+    Singleton() = default;
+
 private:
     Singleton(const Singleton &) = delete;
     Singleton &operator =(const Singleton &) = delete;
