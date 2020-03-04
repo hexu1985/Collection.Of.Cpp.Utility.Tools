@@ -120,6 +120,17 @@ public:
         std::lock_guard<std::mutex> lk(mtx_);
         return queue_.empty();
     }
+
+    /**
+     * @brief 获取队列当前元素个数
+     *
+     * @return 队列当前元素个数
+     */
+    size_t size() const
+    {
+        std::lock_guard<std::mutex> lk(mtx_);
+        return queue_.size();
+    }
 };
 
 }   // namespace mini_utils
