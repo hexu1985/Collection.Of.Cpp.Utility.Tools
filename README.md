@@ -11,7 +11,7 @@
 - [BulkMemoryPool](include/BulkMemoryPool.hpp): 固定大小的内存池
 - [ByteMemoryPool](include/ByteMemoryPool.hpp): 可变大小的内存池
 - [MTMemoryPool](include/MTMemoryPool.hpp): 一个支持多线程的内存池
-- [Timer](Timer.hpp): 一个基于thread的超简单的定时器类
+- [Timer](include/Timer.hpp): 一个基于thread的超简单的定时器类
 - [dump, dump_ascii, dump_hex](include/dump_functions.hpp): dump数据的函数
 - [DumpHelper](include/DumpHelper.hpp): dump数据的帮助类
 - [RCPtr](include/RCPtr.hpp)、[RCObject](include/RCObject.hpp): 侵入式引用计数指针类
