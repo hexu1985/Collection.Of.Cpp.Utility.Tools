@@ -1,7 +1,7 @@
 /** \example task_queue/sample_task_queue2.cpp
- * This is an example of how to use the TaskQueue class.
+ * This is an example of how to use the DelayTaskQueue class.
  */
-#include "TaskQueue.hpp"
+#include "DelayTaskQueue.hpp"
 #include <thread>
 #include <string>
 #include <iostream>
@@ -9,10 +9,10 @@
 
 using namespace mini_utils;
 
-void processor(TaskQueue &task_queue)
+void processor(DelayTaskQueue &task_queue)
 {
     while (true) {
-        TaskPtrList task_list;
+    DelayTaskPtrList task_list;
         task_queue.popTask(task_list);
         while (!task_list.empty()) {
             auto task = task_list.front();
@@ -30,24 +30,21 @@ void processor(TaskQueue &task_queue)
 void print_int(int i)
 {
     std::cout << __func__ << "(" << i << ")" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 
 void print_string(std::string str)
 {
     std::cout << __func__ << "(" << str << ")" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 
 class Foo {
     int n_;
-    public:
+public:
     Foo(int n): n_(n) {}
 
     void print()
     {
         std::cout << "Foo::" << __func__ << "(" << n_++ << ")" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 };
 
@@ -62,16 +59,21 @@ int main()
     Foo foo(1);
     std::shared_ptr<Foo> pfoo(new Foo(101));
 
-    TaskQueue task_queue;
+    DelayTaskQueue task_queue;
     std::thread proc_thread(processor, std::ref(task_queue));
     std::string str = "hello";
     for (int i = 0; i < 10; i++) {
-        task_queue.pushTask(make_task(print_int, i));
-        task_queue.pushTask(make_task(print_string, str));
-        task_queue.pushTask(make_task(&Foo::print, &foo));
-        task_queue.pushTask(make_task(&Foo::print, pfoo));
+        int delay = 1000*(i+1);
+        task_queue.pushDelayTask(make_delay_task(print_int, i), delay+500);
+        task_queue.pushDelayTask(make_delay_task(print_string, str), delay+100);
+        task_queue.pushDelayTask(make_delay_task(&Foo::print, &foo), delay+200);
+        task_queue.pushDelayTask(make_delay_task(&Foo::print, pfoo), delay+300);
     }
-    task_queue.pushTask(make_task(process_exit));
+    task_queue.pushDelayTask(make_delay_task(process_exit), 15000);
+    for (int i = 0; i < 200; i++) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        task_queue.wakeUp();
+    }
     proc_thread.join();
     return 0;
 }

@@ -127,7 +127,7 @@ public:
      *
      * @return 任务指针
      */
-	std::shared_ptr<TaskBase> popTask() 
+    std::shared_ptr<TaskBase> popTask() 
     {
         std::unique_lock<std::mutex> lck(queueMtx_);
         while (this->empty()) {
@@ -136,7 +136,7 @@ public:
         auto task = this->front();
         this->pop_front();
         return task;
-	}
+    }
 
     /**
      * @brief 取出当前队列中的所有任务
