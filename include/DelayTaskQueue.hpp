@@ -1,6 +1,6 @@
 /**
  * @file DelayTaskQueue.hpp
- * @brief 一个线程安全的任务队列类
+ * @brief 一个线程安全的支持延时任务的队列类
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-06-05
@@ -19,7 +19,7 @@
 namespace mini_utils {
 
 /**
- * @brief 任务类的基类
+ * @brief 支持延时任务类的基类
  */
 struct DelayTaskBase {
     std::chrono::system_clock::time_point start_time{};
@@ -33,7 +33,7 @@ struct DelayTaskBase {
 };
 
 /**
- * @brief 任务类
+ * @brief 支持延时任务类
  */
 template <typename Fn>
 struct DelayTask: public DelayTaskBase {
@@ -129,9 +129,10 @@ public:
     }
 
     /**
-     * @brief 往任务队列里放入一个任务
+     * @brief  往任务队列里放入一个任务
      *
      * @param task 任务指针
+     * @param delay_ms 延时执行相对时间，单位ms
      */
     void pushDelayTask(std::shared_ptr<DelayTaskBase> task, int delay_ms = 0) 
     {
@@ -148,6 +149,20 @@ public:
     {
         std::unique_lock<std::mutex> lck(queueMtx_);
         queueCV_.notify_one();
+    }
+
+    /**
+     * @brief 最早到时任务时间, 如果队列为空pair的first为false
+     *
+     * @return 绝对时间
+     */
+    std::pair<bool, std::chrono::system_clock::time_point> firstTimeUp()
+    {
+        std::unique_lock<std::mutex> lck(queueMtx_);
+        if (this->empty()) {
+            return std::make_pair(false, std::chrono::system_clock::time_point{});
+        }
+        return std::make_pair(true, this->top()->start_time);
     }
 
     /**

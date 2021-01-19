@@ -70,8 +70,14 @@ int main()
         task_queue.pushDelayTask(make_delay_task(&Foo::print, pfoo), delay+300);
     }
     task_queue.pushDelayTask(make_delay_task(process_exit), 15000);
-    for (int i = 0; i < 200; i++) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    while (true) {
+        bool has_task = false;
+        std::chrono::system_clock::time_point first_time_up{};
+        std::tie(has_task, first_time_up) = task_queue.firstTimeUp();
+        if (!has_task) {
+            break;
+        } 
+        std::this_thread::sleep_until(first_time_up);
         task_queue.wakeUp();
     }
     proc_thread.join();
