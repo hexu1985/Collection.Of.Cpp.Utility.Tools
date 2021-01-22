@@ -3,7 +3,7 @@
  * @brief 一个线程安全的支持延时任务的队列类
  * @author hexu_1985@sina.com
  * @version 1.0
- * @date 2019-06-05
+ * @date 2021-01-19
  */
 #ifndef MINI_UTILS_DELAY_TASK_QUEUE_INC
 #define MINI_UTILS_DELAY_TASK_QUEUE_INC

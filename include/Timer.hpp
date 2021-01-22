@@ -27,7 +27,7 @@ public:
     /**
      * @brief 定时器到时回调函数
      */
-	typedef std::function<void ()> Callback;
+    typedef std::function<void ()> Callback;
 
     /**
      * @brief 设置一次性定时器
@@ -37,7 +37,7 @@ public:
      * @param function 定时器到期回调函数
      * @param delay 定时器到期时间, 相对时间
      */
-	template <class Rep, class Period>
+    template <class Rep, class Period>
     void setTimeoutFor(Callback function, const std::chrono::duration<Rep, Period> &delay);
 
     /**
@@ -48,8 +48,8 @@ public:
      * @param function 定时器到期回调函数
      * @param delay 定时器到期时间, 绝对时间
      */
-	template <class Clock, class Duration>
-	void setTimeoutUntil(Callback function, const std::chrono::time_point<Clock, Duration> &delay);
+    template <class Clock, class Duration>
+    void setTimeoutUntil(Callback function, const std::chrono::time_point<Clock, Duration> &delay);
 
     /**
      * @brief 设置周期性定时器
@@ -59,7 +59,7 @@ public:
      * @param function 定时器到期回调函数
      * @param interval 定时器超时周期
      */
-	template <class Rep, class Period>
+    template <class Rep, class Period>
     void setInterval(Callback function, const std::chrono::duration<Rep, Period> &interval);
 
     /**
@@ -67,11 +67,11 @@ public:
      */
     void stop();
 
-	Timer() = default; 
-	~Timer() = default; 
+    Timer() = default; 
+    ~Timer() = default; 
 
 private:
-	std::atomic<bool> clear_{false};
+    std::atomic<bool> clear_{false};
 };
 
 template <class Rep, class Period>
@@ -121,6 +121,6 @@ void Timer::stop()
     this->clear_ = true;
 }
 
-}	// namespace mini_utils
+}    // namespace mini_utils
 
 #endif
