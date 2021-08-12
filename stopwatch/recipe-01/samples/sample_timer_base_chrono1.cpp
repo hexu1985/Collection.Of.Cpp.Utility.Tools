@@ -3,7 +3,7 @@
  */
 #include <iostream>
 #include <thread>
-#include "TimerBaseChrono.hpp"
+#include "Stopwatch.hpp"
 
 using namespace mini_utils;
 
