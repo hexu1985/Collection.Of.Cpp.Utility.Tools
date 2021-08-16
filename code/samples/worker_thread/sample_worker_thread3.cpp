@@ -6,7 +6,7 @@
 #include <string>
 #include "WorkerThread.hpp"
 
-using namespace mini_utils;
+using namespace mini_util;
 
 void repush_task(int n)
 {

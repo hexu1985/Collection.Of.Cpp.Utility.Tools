@@ -15,7 +15,7 @@
 #include <iostream>
 #include <iomanip>
 
-namespace mini_utils {
+namespace mini_util {
 
 class DumpHelper {
 private:
@@ -118,6 +118,6 @@ public:
 	} /* dump */
 };
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

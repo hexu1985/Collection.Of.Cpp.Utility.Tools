@@ -77,7 +77,7 @@
         stop("") or stop(nullptr):		sets lap time. Get with getLap()
 */
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 一个带打印功能的计时器的模板类
@@ -285,6 +285,6 @@ inline unsigned long BasicStopwatch<T>::stop(char const* event_name)
     return lap_;
 }
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

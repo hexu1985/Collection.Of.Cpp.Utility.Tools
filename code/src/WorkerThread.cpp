@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace mini_utils {
+namespace mini_util {
 
 namespace {     // details
 
@@ -99,5 +99,5 @@ const std::string &get_name()
 
 }   // namespace this_thread
 
-}   // namespace mini_utils
+}   // namespace mini_util
 

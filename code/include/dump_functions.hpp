@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 每行打印字符个数
@@ -114,6 +114,6 @@ void dump(const uint8_t *data, unsigned int datalen, const char *margin)
     }
 } /* dump */
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

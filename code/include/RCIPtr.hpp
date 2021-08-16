@@ -12,7 +12,7 @@
 
 #include "RCObject.hpp"
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 引用计数指针
@@ -127,6 +127,6 @@ T *RCIPtr<T>::operator ->() const { return counter_->pointee; }
 template<class T>
 T &RCIPtr<T>::operator *() const { return *(counter_->pointee); }
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

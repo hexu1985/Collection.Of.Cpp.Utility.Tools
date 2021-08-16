@@ -10,7 +10,7 @@
 
 #include <mutex>
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 单件类模板
@@ -39,6 +39,6 @@ private:
     Singleton &operator =(const Singleton &) = delete;
 };
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

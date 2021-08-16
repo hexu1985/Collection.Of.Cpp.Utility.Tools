@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <stdexcept>
 
-namespace mini_utils {
+namespace mini_util {
 
 inline void error(const char *format, ...)
 {
@@ -18,6 +18,6 @@ inline void error(const char *format, ...)
     throw std::runtime_error(buf);
 }
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

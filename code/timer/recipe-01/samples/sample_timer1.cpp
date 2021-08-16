@@ -2,7 +2,7 @@
 #include "Timer.hpp"
 
 using namespace std;
-using namespace mini_utils;
+using namespace mini_util;
 
 int main() 
 {

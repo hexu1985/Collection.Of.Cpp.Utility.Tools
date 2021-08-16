@@ -17,7 +17,7 @@
 #include <chrono>
 #include <functional>
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 一个基于thread的超简单的定时器类
@@ -121,6 +121,6 @@ void Timer::stop()
     this->clear_ = true;
 }
 
-}    // namespace mini_utils
+}    // namespace mini_util
 
 #endif

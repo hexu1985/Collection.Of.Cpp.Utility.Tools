@@ -1,6 +1,6 @@
 #include "ByteMemoryPool.hpp"
 
-namespace mini_utils {
+namespace mini_util {
 
 ByteMemoryPool::MemoryChunk::MemoryChunk(MemoryChunk *nextChunk, size_t reqSize)
 {
@@ -34,4 +34,4 @@ void ByteMemoryPool::expandStorage(size_t reqSize)
     listOfMemoryChunks_ = new MemoryChunk(listOfMemoryChunks_, reqSize);
 }
 
-}   // namespace mini_utils
+}   // namespace mini_util

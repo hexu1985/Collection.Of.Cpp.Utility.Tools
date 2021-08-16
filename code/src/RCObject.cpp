@@ -1,6 +1,6 @@
 #include "RCObject.hpp"
 
-namespace mini_utils {
+namespace mini_util {
 
 RCObject::RCObject(): refCount_(0) {}
 
@@ -14,4 +14,4 @@ void RCObject::addReference() { ++refCount_; }
 
 void RCObject::removeReference() { if (--refCount_ == 0) delete this; }
 
-}	// namespace mini_utils
+}	// namespace mini_util

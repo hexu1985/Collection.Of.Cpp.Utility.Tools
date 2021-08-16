@@ -6,7 +6,7 @@
 #include "RCIPtr.hpp"
 #include "widget.hpp"
 
-using namespace mini_utils;
+using namespace mini_util;
 
 class RCWidget {
 public:

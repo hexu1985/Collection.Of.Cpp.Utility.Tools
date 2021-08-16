@@ -7,7 +7,7 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace mini_utils;
+using namespace mini_util;
 
 void processor(DelayTaskQueue &task_queue)
 {

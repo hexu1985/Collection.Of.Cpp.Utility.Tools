@@ -5,7 +5,7 @@ RM = rm -f
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11 -DNDEBUG
 INCLUDES = -I../../include
-LDFLAGS = -lmini_utils -lpthread
+LDFLAGS = -lmini_util -lpthread
 LDPATH = -L../../src
 #VPATH = ../../src
 

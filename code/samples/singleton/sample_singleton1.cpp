@@ -1,7 +1,7 @@
 #include "Singleton.hpp"
 #include <iostream>
 
-using namespace mini_utils;
+using namespace mini_util;
 
 class Foo {
 private:

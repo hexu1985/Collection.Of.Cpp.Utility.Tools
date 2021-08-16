@@ -16,7 +16,7 @@
 #include <condition_variable>
 #include <chrono>
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 支持延时任务类的基类
@@ -207,6 +207,6 @@ public:
     }
 };
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

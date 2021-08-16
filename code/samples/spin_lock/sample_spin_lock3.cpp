@@ -5,7 +5,7 @@
 #include <thread>         // std::thread
 #include "SpinLock.hpp"  // SpinLock
 
-using namespace mini_utils;
+using namespace mini_util;
 
 volatile int counter (0); // non-atomic counter
 SpinLock mtx;           // locks access to counter

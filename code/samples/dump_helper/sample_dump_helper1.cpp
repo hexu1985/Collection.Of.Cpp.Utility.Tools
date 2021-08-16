@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace mini_utils;
+using namespace mini_util;
 
 int main(int argc, char *argv[])
 {

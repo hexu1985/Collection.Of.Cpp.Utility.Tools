@@ -13,7 +13,7 @@
 #include <cstddef>
 #include <new>
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 可变大小的内存池, 每次alloc申请内存的大小可变
@@ -104,6 +104,6 @@ inline void ByteMemoryPool::free(void *doomed)
     listOfMemoryChunks_->free(doomed);
 }
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

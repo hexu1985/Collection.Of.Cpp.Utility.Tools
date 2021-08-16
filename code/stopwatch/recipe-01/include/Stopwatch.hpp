@@ -10,7 +10,7 @@
 
 #include "BasicStopwatch.hpp"
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 基于std::chrono接口实现的计时器
@@ -73,7 +73,7 @@ private:
  */
 using Stopwatch = BasicStopwatch<TimerBaseChrono>;
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif
 

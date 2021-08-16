@@ -5,7 +5,7 @@
 #include <thread>                   // std::thread
 #include "SpinLock.hpp"            // SpinLock
 
-using namespace mini_utils;
+using namespace mini_util;
 
 SpinLock mtx;                       // SpinLock for critical section
 

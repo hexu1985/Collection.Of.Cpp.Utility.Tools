@@ -13,7 +13,7 @@
 
 #include <atomic> 
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 自旋锁
@@ -60,6 +60,6 @@ public:
     }
 };
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif

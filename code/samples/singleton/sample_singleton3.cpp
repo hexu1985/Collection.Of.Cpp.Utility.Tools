@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Singleton.hpp"
 
-using namespace mini_utils;
+using namespace mini_util;
 
 class Foo {
 public:

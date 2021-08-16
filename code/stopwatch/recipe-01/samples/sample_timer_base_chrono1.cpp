@@ -5,7 +5,7 @@
 #include <thread>
 #include "Stopwatch.hpp"
 
-using namespace mini_utils;
+using namespace mini_util;
 
 int main ()
 {

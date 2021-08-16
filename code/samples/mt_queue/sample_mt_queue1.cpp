@@ -7,7 +7,7 @@
 
 #include "MTQueue.hpp"
 
-using namespace mini_utils; 
+using namespace mini_util; 
 
 void push(MTQueue<int>* q)
 {

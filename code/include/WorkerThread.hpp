@@ -13,7 +13,7 @@
 
 #include "TaskQueue.hpp"
 
-namespace mini_utils {
+namespace mini_util {
 
 /**
  * @brief 基于TaskQueue的工作线程类
@@ -93,6 +93,6 @@ const std::string &get_name();
 
 }   // namespace this_thread
 
-}   // namespace mini_utils
+}   // namespace mini_util
 
 #endif 
