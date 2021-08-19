@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Timer.hpp"
+#include "timer.hpp"
 
 using namespace mini_util;
 using namespace std;
