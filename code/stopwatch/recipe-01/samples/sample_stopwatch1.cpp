@@ -28,10 +28,10 @@ int main()
 {
     Stopwatch sw("main");
     foo();
-    sw.show("foo complete at");
+    sw.Show("foo complete at");
 
     bar();
-    sw.show("bar complete at");
+    sw.Show("bar complete at");
 
     return 0;
 }

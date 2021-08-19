@@ -28,7 +28,7 @@ public:
     /**
      * @brief 重置计时器
      */
-	void clear() 
+	void Clear() 
     { 
 		start_ = TimePointType::min(); 
 	}
@@ -38,7 +38,7 @@ public:
      *
      * @return 如果已经运行, 返回true, 否则返回false
      */
-	bool isStarted() const 
+	bool IsStarted() const 
     {
 		return (start_ != TimePointType::min());
 	}
@@ -46,18 +46,18 @@ public:
     /**
      * @brief 运行计时器
      */
-	void start()            { start_ = ClockType::now(); }
+	void Start()            { start_ = ClockType::now(); }
 
     /**
      * @brief 获取计时器开始运行到现在经历的时间ms
      *
      * @return 返回ms时间
      */
-	unsigned long getMs() 
+	unsigned long GetMs() 
     {
         using std::chrono::duration_cast;
         using std::chrono::milliseconds;
-		if (isStarted()) {
+		if (IsStarted()) {
 			auto diff = ClockType::now() - start_;
 			return (unsigned)(duration_cast<milliseconds>(diff).count());
 		}

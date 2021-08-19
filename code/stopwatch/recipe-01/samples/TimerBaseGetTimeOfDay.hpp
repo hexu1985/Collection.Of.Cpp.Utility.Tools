@@ -14,20 +14,20 @@ public:
 	TimerBaseGetTimeOfDay() { start_.tv_sec = start_.tv_usec = 0; }
 
 	//  clears the timer
-	void clear()			{ start_.tv_sec = start_.tv_usec = 0; }
+	void Clear()			{ start_.tv_sec = start_.tv_usec = 0; }
 
 	//	returns true if the timer is running
-	bool isStarted() const  {
+	bool IsStarted() const  {
 		return (start_.tv_sec != 0) || (start_.tv_usec != 0);
 	}
 
 	//	start the timer
-	void start()            { gettimeofday(&start_, NULL); }
+	void Start()            { gettimeofday(&start_, NULL); }
 
 	//	get the number of milliseconds since the timer was started
-	unsigned getMs() {
+	unsigned GetMs() {
 		timeval now;
-		if (isStarted()) {
+		if (IsStarted()) {
 			gettimeofday(&now, NULL);
 			long dt = (now.tv_sec * 1000000 + now.tv_usec) - (start_.tv_sec * 1000000 + start_.tv_usec);
 			return (unsigned long)(dt + 500) / 1000; // round to mSec
