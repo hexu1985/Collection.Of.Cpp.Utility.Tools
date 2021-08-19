@@ -35,8 +35,7 @@ private:
 };
 
 template <class Rep, class Period>
-void Timer::SetTimeout(Callback function, const std::chrono::duration<Rep, Period> &delay) 
-{
+void Timer::SetTimeout(Callback function, const std::chrono::duration<Rep, Period> &delay) {
     this->clear_ = false;
     std::thread t([=]() {
         if(this->clear_) return;
@@ -48,8 +47,7 @@ void Timer::SetTimeout(Callback function, const std::chrono::duration<Rep, Perio
 }
 
 template <class Rep, class Period>
-void Timer::SetInterval(Callback function, const std::chrono::duration<Rep, Period> &interval)
-{
+void Timer::SetInterval(Callback function, const std::chrono::duration<Rep, Period> &interval) {
     this->clear_ = false;
     std::thread t([=]() {
         while(true) {
@@ -63,8 +61,7 @@ void Timer::SetInterval(Callback function, const std::chrono::duration<Rep, Peri
 }
 
 inline
-void Timer::Stop() 
-{
+void Timer::Stop() {
     this->clear_ = true;
 }
 
