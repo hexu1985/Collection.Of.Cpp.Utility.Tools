@@ -7,13 +7,13 @@ using namespace std;
 int main() {
     Timer t;
 
-    t.setInterval([&]() {
+    t.SetInterval([&]() {
         cout << "Hey.. After each 1s..." << endl;
     }, chrono::milliseconds(1000)); 
 
-    t.setTimeout([&]() {
+    t.SetTimeout([&]() {
         cout << "Hey.. After 5.2s. But I will stop the timer!" << endl;
-        t.stop();
+        t.Stop();
     }, chrono::milliseconds(5200)); 
 
     

@@ -24,18 +24,18 @@ public:
     typedef std::function<void ()> Callback;
 
     template <class Rep, class Period>
-    void setTimeout(Callback function, const std::chrono::duration<Rep, Period> &delay);
+    void SetTimeout(Callback function, const std::chrono::duration<Rep, Period> &delay);
 
     template <class Rep, class Period>
-    void setInterval(Callback function, const std::chrono::duration<Rep, Period> &interval);
+    void SetInterval(Callback function, const std::chrono::duration<Rep, Period> &interval);
 
-    void stop();
+    void Stop();
 private:
     std::atomic<bool> clear_{false};
 };
 
 template <class Rep, class Period>
-void Timer::setTimeout(Callback function, const std::chrono::duration<Rep, Period> &delay) 
+void Timer::SetTimeout(Callback function, const std::chrono::duration<Rep, Period> &delay) 
 {
     this->clear_ = false;
     std::thread t([=]() {
@@ -48,7 +48,7 @@ void Timer::setTimeout(Callback function, const std::chrono::duration<Rep, Perio
 }
 
 template <class Rep, class Period>
-void Timer::setInterval(Callback function, const std::chrono::duration<Rep, Period> &interval)
+void Timer::SetInterval(Callback function, const std::chrono::duration<Rep, Period> &interval)
 {
     this->clear_ = false;
     std::thread t([=]() {
@@ -63,7 +63,7 @@ void Timer::setInterval(Callback function, const std::chrono::duration<Rep, Peri
 }
 
 inline
-void Timer::stop() 
+void Timer::Stop() 
 {
     this->clear_ = true;
 }
