@@ -4,15 +4,16 @@
 using namespace std;
 
 int main() {
-    Timer t;
+    Timer t1;
 
-    t.SetInterval([&]() {
+    t1.SetInterval([&]() {
         cout << "Hey.. After each 1s..." << endl;
     }, 1000); 
 
-    t.SetTimeout([&]() {
+    Timer t2;
+    t2.SetTimeout([&]() {
         cout << "Hey.. After 5.2s. But I will stop the timer!" << endl;
-        t.Stop();
+        t1.Stop();
     }, 5200); 
 
     
