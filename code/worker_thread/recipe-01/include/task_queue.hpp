@@ -26,7 +26,7 @@ struct TaskBase {
     /**
      * @brief 运行当前任务, 由子类override
      */
-    virtual void run() = 0;
+    virtual void Run() = 0;
 };
 
 /**
@@ -44,7 +44,7 @@ struct Task: public TaskBase {
     /**
      * @brief 运行当前任务, 调用具体的仿函数对象
      */
-    virtual void run() { f_(); }
+    virtual void Run() { f_(); }
 
     Fn f_;
 };
@@ -63,7 +63,7 @@ typedef std::shared_ptr<TaskBase> TaskPtr;
  * @return 任务类指针
  */
 template <typename Fn>
-std::shared_ptr<Task<Fn>> make_task_aux(Fn&& fn)
+std::shared_ptr<Task<Fn>> MakeTaskAux(Fn&& fn)
 {
     return std::make_shared<Task<Fn>>(std::forward<Fn>(fn));
 }
@@ -77,9 +77,9 @@ std::shared_ptr<Task<Fn>> make_task_aux(Fn&& fn)
  * @return 任务类指针
  */
 template <typename... Args>
-std::shared_ptr<TaskBase> make_task(Args&&... args)
+std::shared_ptr<TaskBase> MakeTask(Args&&... args)
 {
-    return make_task_aux(std::bind(std::forward<Args>(args)...));
+    return MakeTaskAux(std::bind(std::forward<Args>(args)...));
 }
 
 /**
@@ -92,8 +92,8 @@ typedef std::deque<TaskPtr> TaskPtrList;
  */
 class TaskQueue: public std::deque<std::shared_ptr<TaskBase>> {
 private:
-    std::mutex queueMtx_;
-    std::condition_variable queueCV_;
+    std::mutex queue_mtx_;
+    std::condition_variable queue_cv_;
 
 public:
     /**
@@ -105,9 +105,9 @@ public:
      * @note 可以参考std::thread构造函数的用法
      */
     template <typename... Args>
-    void pushTask(Args&&... args)
+    void PushTask(Args&&... args)
     {
-        this->pushTask(make_task(std::forward<Args>(args)...));
+        this->PushTask(MakeTask(std::forward<Args>(args)...));
     }
 
     /**
@@ -115,11 +115,11 @@ public:
      *
      * @param task 任务指针
      */
-    void pushTask(std::shared_ptr<TaskBase> task) 
+    void PushTask(std::shared_ptr<TaskBase> task) 
     {
-        std::lock_guard<std::mutex> lck(queueMtx_);
+        std::lock_guard<std::mutex> lck(queue_mtx_);
         this->push_back(task);
-        queueCV_.notify_one();
+        queue_cv_.notify_one();
     }
 
     /**
@@ -127,11 +127,11 @@ public:
      *
      * @return 任务指针
      */
-    std::shared_ptr<TaskBase> popTask() 
+    std::shared_ptr<TaskBase> PopTask() 
     {
-        std::unique_lock<std::mutex> lck(queueMtx_);
+        std::unique_lock<std::mutex> lck(queue_mtx_);
         while (this->empty()) {
-            queueCV_.wait(lck);
+            queue_cv_.wait(lck);
         }
         auto task = this->front();
         this->pop_front();
@@ -143,11 +143,11 @@ public:
      *
      * @param task_list 任务指针列表
      */
-    void popTask(std::deque<std::shared_ptr<TaskBase>>& task_list)
+    void PopTask(std::deque<std::shared_ptr<TaskBase>>& task_list)
     {
-        std::unique_lock<std::mutex> lck(queueMtx_);
+        std::unique_lock<std::mutex> lck(queue_mtx_);
         while (this->empty()) {
-            queueCV_.wait(lck);
+            queue_cv_.wait(lck);
         }
         this->swap(task_list);
     }

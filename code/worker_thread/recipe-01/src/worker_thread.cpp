@@ -22,18 +22,18 @@ void this_thread_exit()
 
 void task_process(WorkerThread *worker_thread)
 {
-    current_thread_task_queue = worker_thread->getTaskQueue();
-    current_thread_name = worker_thread->getName();
+    current_thread_task_queue = worker_thread->GetTaskQueue();
+    current_thread_name = worker_thread->GetThreadName();
 
     TaskQueue& incoming_queue = *current_thread_task_queue;
 	while (true) {
         TaskPtrList working_list;
-		incoming_queue.popTask(working_list);
+		incoming_queue.PopTask(working_list);
 		while (!working_list.empty()) {
 			auto task = working_list.front();
 			working_list.pop_front();
             try {
-                task->run();
+                task->Run();
             } catch (WorkerThreadInterrupt) {
                 return;
             }
@@ -50,54 +50,50 @@ WorkerThread::WorkerThread(const string& name): name_(name)
 
 WorkerThread::~WorkerThread() 
 {
-    if (isRun()) {
-        stop();
+    if (IsRun()) {
+        Stop();
     }
 }
 
-void WorkerThread::start() 
+void WorkerThread::Start() 
 {
-    assert(!thread_ && !taskQueue_);
-    taskQueue_ = make_shared<TaskQueue>();
+    assert(!thread_ && !task_queue_);
+    task_queue_ = make_shared<TaskQueue>();
     thread_ = make_shared<thread>(&task_process, this);
 }
 
-void WorkerThread::stop() 
+void WorkerThread::Stop() 
 {
-    taskQueue_->pushTask(&this_thread_exit);
+    task_queue_->PushTask(&this_thread_exit);
     thread_->join();
     thread_.reset();
-    taskQueue_.reset();
+    task_queue_.reset();
 }
 
-bool WorkerThread::isRun() 
+bool WorkerThread::IsRun() 
 {
     return (thread_ ? true : false);
 }
 
-shared_ptr<TaskQueue> WorkerThread::getTaskQueue() 
+shared_ptr<TaskQueue> WorkerThread::GetTaskQueue() 
 {
-    return taskQueue_;
+    return task_queue_;
 }
 
-const string& WorkerThread::getName() const
+const string& WorkerThread::GetThreadName() const
 {
     return name_;
 }
 
-namespace current_worker_thread {
-
-std::shared_ptr<TaskQueue> get_task_queue()
+std::shared_ptr<TaskQueue> WorkerThread::GetCurrentTaskQueue()
 {
     return current_thread_task_queue;
 }
 
-const std::string& get_name()
+const std::string& WorkerThread::GetCurrentThreadName()
 {
     return current_thread_name;
 }
-
-}   // namespace this_thread
 
 }   // namespace mini_util
 

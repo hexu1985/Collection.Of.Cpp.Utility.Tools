@@ -35,33 +35,49 @@ public:
     /**
      * @brief 创建一个TaskQueue, 以及一个工作线程处理TaskQueue的任务
      */
-    void start();
+    void Start();
 
     /**
      * @brief 停止工作线程, 会把TaskQueue中已有的任务都处理完, 才返回
      */
-    void stop();
+    void Stop();
 
     /**
      * @brief 工作线程是否运行
      *
      * @return 如果工作线程正在运行, 返回true; 否则返回false
      */
-    bool isRun();
+    bool IsRun();
 
     /**
      * @brief 获取TaskQueue
      *
      * @return TaskQueue的指针
      */
-    std::shared_ptr<TaskQueue> getTaskQueue();
+    std::shared_ptr<TaskQueue> GetTaskQueue();
 
     /**
      * @brief 获取工作线程名
      *
      * @return 线程名
      */
-    const std::string& getName() const;
+    const std::string& GetThreadName() const;
+
+    /**
+     * @brief 获取当前工作线程的TaskQueue
+     *
+     * @return TaskQueue的指针, 如果当前线程没有TaskQueue, 返回空指针
+     */
+    static std::shared_ptr<TaskQueue> GetCurrentTaskQueue();
+
+    /**
+     * @brief 获取当前工作线程的名字
+     *
+     * @return 工作线程名
+     *
+     * @note 如果当前线程不是由WorkerThread创建的, 工作线程名可能为空
+     */
+    static const std::string& GetCurrentThreadName();
 
 private:
     WorkerThread(const WorkerThread&) = delete;
@@ -70,28 +86,8 @@ private:
 private:
     std::string name_;
     std::shared_ptr<std::thread> thread_;
-    std::shared_ptr<TaskQueue> taskQueue_;
+    std::shared_ptr<TaskQueue> task_queue_;
 };
-
-namespace current_worker_thread {
-
-/**
- * @brief 获取当前工作线程的TaskQueue
- *
- * @return TaskQueue的指针, 如果当前线程没有TaskQueue, 返回空指针
- */
-std::shared_ptr<TaskQueue> get_task_queue();
-
-/**
- * @brief 获取当前工作线程的名字
- *
- * @return 工作线程名
- *
- * @note 如果当前线程不是由WorkerThread创建的, 工作线程名可能为空
- */
-const std::string &get_name();
-
-}   // namespace this_thread
 
 }   // namespace mini_util
 

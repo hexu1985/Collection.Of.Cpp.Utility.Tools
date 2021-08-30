@@ -19,12 +19,12 @@ void print_string(std::string str)
 
 void repush_task()
 {
-    auto task_queue = current_worker_thread::get_task_queue();
-    auto name = current_worker_thread::get_name();
-    std::cout << __func__ << " in thread " << name << std::endl;
+    auto task_queue = WorkerThread::GetCurrentTaskQueue();
+    auto thread_name = WorkerThread::GetCurrentThreadName();
+    std::cout << __func__ << " in thread " << thread_name << std::endl;
     if (task_queue) {
-        std::cout << __func__ << " in thread " << name << ", push another task" << std::endl;
-        task_queue->pushTask(&print_string, name);
+        std::cout << __func__ << " in thread " << thread_name << ", push another task" << std::endl;
+        task_queue->PushTask(&print_string, thread_name);
     }
 }
 
@@ -36,17 +36,17 @@ int main(int argc, char *argv[])
     }
 
     WorkerThread mythread("test");
-    mythread.start();
+    mythread.Start();
 
-	auto task_queue = mythread.getTaskQueue();
+	auto task_queue = mythread.GetTaskQueue();
 	for (int i = 0; i < 10; i++) {
-		task_queue->pushTask(print_int, i);
-		task_queue->pushTask(&repush_task);
+		task_queue->PushTask(print_int, i);
+		task_queue->PushTask(&repush_task);
 	}
 
-    std::cout << "main thread with sleep " << nsec << " seconds before stop thread " << mythread.getName() << std::endl;
+    std::cout << "main thread with sleep " << nsec << " seconds before stop thread " << mythread.GetThreadName() << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(nsec));
-    mythread.stop();
+    mythread.Stop();
 	return 0;
 }
 
