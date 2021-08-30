@@ -1,5 +1,5 @@
 /**
- * @file WorkerThread.hpp
+ * @file worker_thread.hpp
  * @brief 一个处理任务队列的工作线程
  * @author hexu_1985@sina.com
  * @version 1.0
@@ -11,7 +11,7 @@
 #include <thread>
 #include <string>
 
-#include "TaskQueue.hpp"
+#include "task_queue.hpp"
 
 namespace mini_util {
 
@@ -25,7 +25,7 @@ public:
      *
      * @param name 线程名
      */
-    WorkerThread(const std::string &name);
+    WorkerThread(const std::string& name);
 
     /**
      * @brief 析构工作线程类对象
@@ -61,11 +61,11 @@ public:
      *
      * @return 线程名
      */
-    const std::string &getName() const;
+    const std::string& getName() const;
 
 private:
-    WorkerThread(const WorkerThread &) = delete;
-    void operator =(const WorkerThread &) = delete;
+    WorkerThread(const WorkerThread&) = delete;
+    void operator= (const WorkerThread&) = delete;
 
 private:
     std::string name_;

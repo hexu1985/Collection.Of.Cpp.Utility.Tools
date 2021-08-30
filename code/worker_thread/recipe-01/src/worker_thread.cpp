@@ -1,4 +1,4 @@
-#include "WorkerThread.hpp"
+#include "worker_thread.hpp"
 
 #include <cassert>
 
@@ -25,7 +25,7 @@ void task_process(WorkerThread *worker_thread)
     current_thread_task_queue = worker_thread->getTaskQueue();
     current_thread_name = worker_thread->getName();
 
-    TaskQueue &incoming_queue = *current_thread_task_queue;
+    TaskQueue& incoming_queue = *current_thread_task_queue;
 	while (true) {
         TaskPtrList working_list;
 		incoming_queue.popTask(working_list);
@@ -44,7 +44,7 @@ void task_process(WorkerThread *worker_thread)
 }   // namespace {
 
 // WorkerThread
-WorkerThread::WorkerThread(const string &name): name_(name) 
+WorkerThread::WorkerThread(const string& name): name_(name) 
 {
 }
 
@@ -80,7 +80,7 @@ shared_ptr<TaskQueue> WorkerThread::getTaskQueue()
     return taskQueue_;
 }
 
-const string &WorkerThread::getName() const
+const string& WorkerThread::getName() const
 {
     return name_;
 }
@@ -92,7 +92,7 @@ std::shared_ptr<TaskQueue> get_task_queue()
     return current_thread_task_queue;
 }
 
-const std::string &get_name()
+const std::string& get_name()
 {
     return current_thread_name;
 }

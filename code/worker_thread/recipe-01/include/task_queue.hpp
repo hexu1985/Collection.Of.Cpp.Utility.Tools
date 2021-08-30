@@ -1,5 +1,5 @@
 /**
- * @file TaskQueue.hpp
+ * @file task_queue.hpp
  * @brief 一个线程安全的任务队列类
  * @author hexu_1985@sina.com
  * @version 1.0
@@ -39,7 +39,7 @@ struct Task: public TaskBase {
      *
      * @param fn 仿函数
      */
-    Task(Fn &&fn): f_(std::forward<Fn>(fn)) {}
+    Task(Fn&& fn): f_(std::forward<Fn>(fn)) {}
 
     /**
      * @brief 运行当前任务, 调用具体的仿函数对象
@@ -63,7 +63,7 @@ typedef std::shared_ptr<TaskBase> TaskPtr;
  * @return 任务类指针
  */
 template <typename Fn>
-std::shared_ptr<Task<Fn>> make_task_aux(Fn &&fn)
+std::shared_ptr<Task<Fn>> make_task_aux(Fn&& fn)
 {
     return std::make_shared<Task<Fn>>(std::forward<Fn>(fn));
 }
@@ -76,8 +76,8 @@ std::shared_ptr<Task<Fn>> make_task_aux(Fn &&fn)
  *
  * @return 任务类指针
  */
-template <typename ...Args>
-std::shared_ptr<TaskBase> make_task(Args &&...args)
+template <typename... Args>
+std::shared_ptr<TaskBase> make_task(Args&&... args)
 {
     return make_task_aux(std::bind(std::forward<Args>(args)...));
 }
@@ -104,8 +104,8 @@ public:
      *
      * @note 可以参考std::thread构造函数的用法
      */
-    template <typename ...Args>
-    void pushTask(Args &&...args)
+    template <typename... Args>
+    void pushTask(Args&&... args)
     {
         this->pushTask(make_task(std::forward<Args>(args)...));
     }
@@ -143,7 +143,7 @@ public:
      *
      * @param task_list 任务指针列表
      */
-    void popTask(std::deque<std::shared_ptr<TaskBase>> &task_list)
+    void popTask(std::deque<std::shared_ptr<TaskBase>>& task_list)
     {
         std::unique_lock<std::mutex> lck(queueMtx_);
         while (this->empty()) {
