@@ -57,7 +57,6 @@ typedef std::shared_ptr<TaskBase> TaskPtr;
 /**
  * @brief 创建任务的辅助函数
  *
- * @tparam Fn 任务类中实际要执行的仿函数的类型
  * @param fn 任务类中实际要执行的仿函数
  *
  * @return 任务类指针
@@ -71,15 +70,15 @@ std::shared_ptr<Task<Fn>> MakeTaskAux(Fn&& fn)
 /**
  * @brief 创建任务的函数
  *
- * @tparam ...Args 可变长度模板类型
- * @param ...args 可变长度模板参数
+ * @param fn 任务类中实际要执行的仿函数
+ * @param ...args 任务类中实际要执行的仿函数的参数
  *
  * @return 任务类指针
  */
-template <typename... Args>
-std::shared_ptr<TaskBase> MakeTask(Args&&... args)
+template <typename Fn, typename... Args>
+std::shared_ptr<TaskBase> MakeTask(Fn&& fn, Args&&... args)
 {
-    return MakeTaskAux(std::bind(std::forward<Args>(args)...));
+    return MakeTaskAux(std::bind(std::forward<Fn>(fn), std::forward<Args>(args)...));
 }
 
 /**
@@ -99,15 +98,15 @@ public:
     /**
      * @brief 往任务队列里放入一个任务
      *
-     * @tparam ...Args 可变长度模板类型
-     * @param ...args 可变长度模板参数
+     * @param fn 任务类中实际要执行的仿函数
+     * @param ...args 任务类中实际要执行的仿函数的参数
      *
      * @note 可以参考std::thread构造函数的用法
      */
-    template <typename... Args>
-    void PushTask(Args&&... args)
+    template <typename Fn, typename... Args>
+    void PushTask(Fn&& fn, Args&&... args)
     {
-        this->PushTask(MakeTask(std::forward<Args>(args)...));
+        this->PushTask(MakeTask(std::forward<Fn>(fn), std::forward<Args>(args)...));
     }
 
     /**
