@@ -5,7 +5,7 @@
  * @version 1.0
  * @date 2019-06-20
  *
- * @note 需要自己实现一个TimerBase类, 具体可参考 TimerBaseChrono.hpp
+ * @note 需要自己实现一个TimerBase类, 具体可参考Stopwathc.hpp
  *
  * @see C++性能优化指南, 3.4节, TimerBaseChrono \n
  * https://github.com/hexu1985/Optimized.Cpp
