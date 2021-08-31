@@ -1,11 +1,8 @@
-/** \example stopwatch/sample_basic_stopwatch1.cpp
- * This is an example of how to use the BasicStopwatch class.
- */
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include "BasicStopwatch.hpp"
-#include "TimerBaseClock.hpp"
+#include "basic_stopwatch.hpp"
+#include "timer_base_clock.hpp"
 
 using mini_util::BasicStopwatch;
 

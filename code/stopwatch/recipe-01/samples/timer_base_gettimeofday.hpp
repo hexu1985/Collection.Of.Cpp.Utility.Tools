@@ -4,14 +4,14 @@
 #include <sys/time.h>
 
 /*
-	TimerBaseGetTimeOfDay: timer base class for C++03 and earlier
+	TimerBaseGettimeofday: timer base class for C++03 and earlier
 	start() sets a start time
 	getMs() returns the delta time in integer milliseconds
 */
-class TimerBaseGetTimeOfDay {
+class TimerBaseGettimeofday {
 public:
 	//	clears the timer
-	TimerBaseGetTimeOfDay() { start_.tv_sec = start_.tv_usec = 0; }
+	TimerBaseGettimeofday() { start_.tv_sec = start_.tv_usec = 0; }
 
 	//  clears the timer
 	void Clear()			{ start_.tv_sec = start_.tv_usec = 0; }

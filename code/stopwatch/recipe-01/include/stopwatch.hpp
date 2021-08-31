@@ -8,7 +8,7 @@
 #ifndef MINI_UTILS_STOPWATCH_INC
 #define MINI_UTILS_STOPWATCH_INC
 
-#include "BasicStopwatch.hpp"
+#include "basic_stopwatch.hpp"
 
 namespace mini_util {
 

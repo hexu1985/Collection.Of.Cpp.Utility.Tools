@@ -1,15 +1,12 @@
-/** \example stopwatch/sample_basic_stopwatch2.cpp
- * This is an example of how to use the BasicStopwatch class.
- */
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include "BasicStopwatch.hpp"
-#include "TimerBaseGetTimeOfDay.hpp"
+#include "basic_stopwatch.hpp"
+#include "timer_base_gettimeofday.hpp"
 
 using mini_util::BasicStopwatch;
 
-using Stopwatch = BasicStopwatch<TimerBaseGetTimeOfDay>;
+using Stopwatch = BasicStopwatch<TimerBaseGettimeofday>;
 
 void foo()
 {

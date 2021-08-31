@@ -4,7 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include "Stopwatch.hpp"
+#include "stopwatch.hpp"
 
 using namespace mini_util;
 
