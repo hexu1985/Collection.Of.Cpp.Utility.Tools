@@ -20,7 +20,7 @@ void this_thread_exit()
     throw WorkerThreadInterrupt();
 }
 
-void task_process(WorkerThread *worker_thread)
+void task_process(WorkerThread* worker_thread)
 {
     current_thread_task_queue = worker_thread->GetTaskQueue();
     current_thread_name = worker_thread->GetThreadName();
