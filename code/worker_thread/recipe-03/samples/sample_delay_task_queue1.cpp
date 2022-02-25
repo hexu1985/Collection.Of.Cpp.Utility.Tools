@@ -65,10 +65,10 @@ int main()
         task_queue.pushTask(make_task(&Foo::print, pfoo), delay+300);
     }
     task_queue.pushTask(make_task(process_exit), 15000);
-    for (int i = 0; i < 200; i++) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        task_queue.wakeUp();
-    }
+//    for (int i = 0; i < 200; i++) {
+//        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+//        task_queue.wakeUp();
+//    }
     proc_thread.join();
     return 0;
 }

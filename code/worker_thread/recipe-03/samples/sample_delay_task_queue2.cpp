@@ -70,16 +70,16 @@ int main()
         task_queue.pushTask(make_task(&Foo::print, pfoo), delay+300);
     }
     task_queue.pushTask(make_task(process_exit), 15000);
-    while (true) {
-        bool has_task = false;
-        std::chrono::system_clock::time_point first_time_up{};
-        std::tie(has_task, first_time_up) = task_queue.firstTimeUp();
-        if (!has_task) {
-            break;
-        } 
-        std::this_thread::sleep_until(first_time_up);
-        task_queue.wakeUp();
-    }
+//    while (true) {
+//        bool has_task = false;
+//        std::chrono::system_clock::time_point first_time_up{};
+//        std::tie(has_task, first_time_up) = task_queue.firstTimeUp();
+//        if (!has_task) {
+//            break;
+//        } 
+//        std::this_thread::sleep_until(first_time_up);
+//        task_queue.wakeUp();
+//    }
     proc_thread.join();
     return 0;
 }

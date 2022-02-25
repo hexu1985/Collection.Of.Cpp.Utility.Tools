@@ -138,8 +138,14 @@ public:
     {
         std::lock_guard<std::mutex> lck(queueMtx_);
         task->start_time = std::chrono::system_clock::now() + std::chrono::milliseconds(delay_ms);
+        bool need_wakeup = false;
+        if (this->empty() || task->start_time < this->top()->start_time) {
+            need_wakeup = true;
+        }
         this->push(task);
-        queueCV_.notify_one();
+        if (need_wakeup) {
+            queueCV_.notify_one();
+        }
     }
 
     /**
@@ -174,7 +180,11 @@ public:
     {
         std::unique_lock<std::mutex> lck(queueMtx_);
         while (this->empty() || this->top()->start_time > std::chrono::system_clock::now()) {
-            queueCV_.wait(lck);
+            if (this->empty()) {
+                queueCV_.wait(lck);
+            } else {
+                queueCV_.wait_until(lck, this->top()->start_time);
+            }
         }
         auto task = this->top();
         this->pop();
@@ -190,7 +200,11 @@ public:
     {
         std::unique_lock<std::mutex> lck(queueMtx_);
         while (this->empty() || this->top()->start_time > std::chrono::system_clock::now()) {
-            queueCV_.wait(lck);
+            if (this->empty()) {
+                queueCV_.wait(lck);
+            } else {
+                queueCV_.wait_until(lck, this->top()->start_time);
+            }
         }
         task_list.clear();
         auto now = std::chrono::system_clock::now();
