@@ -1,5 +1,5 @@
 /**
- * @file RCIPtr.hpp
+ * @file rc_ptr.hpp
  * @brief 引用计数指针, 类似于std::shared_ptr
  * @author hexu_1985@sina.com
  * @version 1.0
@@ -10,7 +10,7 @@
 #ifndef MINI_UTILS_RCI_PTR_INC
 #define MINI_UTILS_RCI_PTR_INC
 
-#include "RCObject.hpp"
+#include "rc_object.hpp"
 
 namespace mini_util {
 
@@ -20,21 +20,21 @@ namespace mini_util {
  * @tparam T 被引用计数对象的类型
  */
 template <class T>
-class RCIPtr {
+class RCPtr {
 public:
     /**
      * @brief 构造函数
      *
      * @param realPtr 被引用计数对象的指针
      */
-    RCIPtr(T *realPtr = 0);
+    RCPtr(T *realPtr = 0);
 
     /**
      * @brief 复制构造
      *
      * @param rhs 增加rhs的引用计数(如果rhs.counter_不为空)
      */
-    RCIPtr(const RCIPtr &rhs);
+    RCPtr(const RCPtr &rhs);
 
     /**
      * @brief 复制赋值
@@ -45,12 +45,12 @@ public:
      *
      * @return *this
      */
-    RCIPtr& operator=(const RCIPtr &rhs);
+    RCPtr& operator=(const RCPtr &rhs);
 
     /**
      * @brief 析构: 减少*this的引用计数
      */
-    ~RCIPtr();
+    ~RCPtr();
 
     /**
      * @brief 重载->运算符, 获取引用计数对象的地址
@@ -77,7 +77,7 @@ private:
 };
 
 template <class T>
-void RCIPtr<T>::init()
+void RCPtr<T>::init()
 {
     if (counter_ == 0) { 
         return;
@@ -86,20 +86,20 @@ void RCIPtr<T>::init()
 }
 
 template <class T>
-RCIPtr<T>::RCIPtr(T *realPtr): counter_(new CountHolder)
+RCPtr<T>::RCPtr(T *realPtr): counter_(new CountHolder)
 {
     counter_->pointee = realPtr;
     init();
 }
 
 template <class T>
-RCIPtr<T>::RCIPtr(const RCIPtr &rhs): counter_(rhs.counter_)
+RCPtr<T>::RCPtr(const RCPtr &rhs): counter_(rhs.counter_)
 {
     init();
 }
 
 template<class T>
-RCIPtr<T> &RCIPtr<T>::operator =(const RCIPtr &rhs)
+RCPtr<T> &RCPtr<T>::operator =(const RCPtr &rhs)
 {
     if (counter_ == rhs.counter_) {
         return *this;
@@ -116,16 +116,16 @@ RCIPtr<T> &RCIPtr<T>::operator =(const RCIPtr &rhs)
 }
 
 template<class T>
-RCIPtr<T>::~RCIPtr()
+RCPtr<T>::~RCPtr()
 {
     if (counter_) counter_->removeReference();
 }
 
 template<class T>
-T *RCIPtr<T>::operator ->() const { return counter_->pointee; }
+T *RCPtr<T>::operator ->() const { return counter_->pointee; }
 
 template<class T>
-T &RCIPtr<T>::operator *() const { return *(counter_->pointee); }
+T &RCPtr<T>::operator *() const { return *(counter_->pointee); }
 
 }   // namespace mini_util
 
