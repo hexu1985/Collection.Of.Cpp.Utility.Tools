@@ -1,5 +1,5 @@
 /**
- * @file RCPtr.hpp
+ * @file rc_ptr.hpp
  * @brief 侵入式引用计数指针, 类似于boost::intrusive_ptr
  * @author hexu_1985@sina.com
  * @version 1.0

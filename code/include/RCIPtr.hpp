@@ -5,7 +5,7 @@
  * @version 1.0
  * @date 2019-10-10
  *
- * @see Efficient C++: Performance Programming Techniques, chapter 12
+ * @see 提高C++性能的编程技术, 第12章
  */
 #ifndef MINI_UTILS_RCI_PTR_INC
 #define MINI_UTILS_RCI_PTR_INC
