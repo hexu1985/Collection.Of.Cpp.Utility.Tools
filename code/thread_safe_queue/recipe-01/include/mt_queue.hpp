@@ -5,7 +5,7 @@
  * @version 1.0
  * @date 2019-06-10
  *
- * @see C++ Concurrency in Action, Chapter 4, queue \n
+ * @see c++并发编程实战, 第4章, queue \n
  * https://github.com/subjam/concurrency-in-action
  */
 #ifndef MINI_UTILS_MT_QUEUE_INC
