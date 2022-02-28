@@ -1,6 +1,3 @@
-/** \example task_queue/sample_task_queue2.cpp
- * This is an example of how to use the TaskQueue class.
- */
 #include "task_queue.hpp"
 #include <thread>
 #include <string>
@@ -12,9 +9,9 @@ using namespace mini_util;
 void processor(TaskQueue &task_queue)
 {
     while (true) {
-        auto task = task_queue.popTask();
+        auto task = task_queue.PopTask();
         try {
-          task->run();
+          task->Run();
         } catch (const std::runtime_error &e) {
           std::cout << e.what() << std::endl;
           return;
@@ -59,16 +56,12 @@ int main()
     std::string str = "hello";
     for (int i = 0; i < 10; i++) {
         int delay = 1000*(i+1);
-        task_queue.pushTask(make_task(print_int, i), delay+500);
-        task_queue.pushTask(make_task(print_string, str), delay+100);
-        task_queue.pushTask(make_task(&Foo::print, &foo), delay+200);
-        task_queue.pushTask(make_task(&Foo::print, pfoo), delay+300);
+        task_queue.PushTask(MakeTask(print_int, i), delay+500);
+        task_queue.PushTask(MakeTask(print_string, str), delay+100);
+        task_queue.PushTask(MakeTask(&Foo::print, &foo), delay+200);
+        task_queue.PushTask(MakeTask(&Foo::print, pfoo), delay+300);
     }
-    task_queue.pushTask(make_task(process_exit), 15000);
-//    for (int i = 0; i < 200; i++) {
-//        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-//        task_queue.wakeUp();
-//    }
+    task_queue.PushTask(MakeTask(process_exit), 15000);
     proc_thread.join();
     return 0;
 }

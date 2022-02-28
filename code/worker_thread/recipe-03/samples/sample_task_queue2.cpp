@@ -1,6 +1,3 @@
-/** \example task_queue/sample_task_queue2.cpp
- * This is an example of how to use the TaskQueue class.
- */
 #include "task_queue.hpp"
 #include <thread>
 #include <string>
@@ -12,13 +9,13 @@ using namespace mini_util;
 void processor(TaskQueue &task_queue)
 {
     while (true) {
-    TaskPtrList task_list;
-        task_queue.popTask(task_list);
+        TaskPtrList task_list;
+        task_queue.PopTask(task_list);
         while (!task_list.empty()) {
             auto task = task_list.front();
             task_list.pop_front();
             try {
-                task->run();
+                task->Run();
             } catch (const std::runtime_error &e) {
                 std::cout << e.what() << std::endl;
                 return;
@@ -41,7 +38,7 @@ void print_string(std::string str)
 
 class Foo {
     int n_;
-public:
+    public:
     Foo(int n): n_(n) {}
 
     void print()
@@ -66,12 +63,12 @@ int main()
     std::thread proc_thread(processor, std::ref(task_queue));
     std::string str = "hello";
     for (int i = 0; i < 10; i++) {
-        task_queue.pushTask(make_task(print_int, i));
-        task_queue.pushTask(make_task(print_string, str));
-        task_queue.pushTask(make_task(&Foo::print, &foo));
-        task_queue.pushTask(make_task(&Foo::print, pfoo));
+        task_queue.PushTask(MakeTask(print_int, i));
+        task_queue.PushTask(MakeTask(print_string, str));
+        task_queue.PushTask(MakeTask(&Foo::print, &foo));
+        task_queue.PushTask(MakeTask(&Foo::print, pfoo));
     }
-    task_queue.pushTask(make_task(process_exit));
+    task_queue.PushTask(MakeTask(process_exit));
     proc_thread.join();
     return 0;
 }

@@ -29,7 +29,7 @@ struct TaskBase {
     /**
      * @brief 运行当前任务, 由子类override
      */
-    virtual void run() = 0;
+    virtual void Run() = 0;
 };
 
 /**
@@ -47,7 +47,7 @@ struct Task: public TaskBase {
     /**
      * @brief 运行当前任务, 调用具体的仿函数对象
      */
-    virtual void run() { f_(); }
+    virtual void Run() { f_(); }
 
     Fn f_;
 };
@@ -66,7 +66,7 @@ typedef std::shared_ptr<TaskBase> TaskPtr;
  * @return 任务类指针
  */
 template <typename Fn>
-std::shared_ptr<Task<Fn>> make_task_aux(Fn &&fn)
+std::shared_ptr<Task<Fn>> MakeTaskAux(Fn &&fn)
 {
     return std::make_shared<Task<Fn>>(std::forward<Fn>(fn));
 }
@@ -80,9 +80,9 @@ std::shared_ptr<Task<Fn>> make_task_aux(Fn &&fn)
  * @return 任务类指针
  */
 template <typename ...Args>
-std::shared_ptr<TaskBase> make_task(Args &&...args)
+std::shared_ptr<TaskBase> MakeTask(Args &&...args)
 {
-    return make_task_aux(std::bind(std::forward<Args>(args)...));
+    return MakeTaskAux(std::bind(std::forward<Args>(args)...));
 }
 
 /**
@@ -110,8 +110,8 @@ class TaskQueue:
     public std::priority_queue<std::shared_ptr<TaskBase>, 
             std::vector<std::shared_ptr<TaskBase>>, TaskPriorityPolicy> {
 private:
-    std::mutex queueMtx_;
-    std::condition_variable queueCV_;
+    std::mutex queue_mtx_;
+    std::condition_variable queue_cv_;
 
 public:
     /**
@@ -123,9 +123,9 @@ public:
      * @note 可以参考std::thread构造函数的用法
      */
     template <typename ...Args>
-    void pushTask(Args &&...args)
+    void PushTask(Args &&...args)
     {
-        this->pushTask(make_task(std::forward<Args>(args)...), 0);
+        this->PushTask(MakeTask(std::forward<Args>(args)...), 0);
     }
 
     /**
@@ -134,41 +134,18 @@ public:
      * @param task 任务指针
      * @param delay_ms 延时执行相对时间，单位ms
      */
-    void pushTask(std::shared_ptr<TaskBase> task, int delay_ms = 0) 
+    void PushTask(std::shared_ptr<TaskBase> task, int delay_ms = 0) 
     {
-        std::lock_guard<std::mutex> lck(queueMtx_);
         task->start_time = std::chrono::system_clock::now() + std::chrono::milliseconds(delay_ms);
+        std::lock_guard<std::mutex> lck(queue_mtx_);
         bool need_wakeup = false;
         if (this->empty() || task->start_time < this->top()->start_time) {
             need_wakeup = true;
         }
         this->push(task);
         if (need_wakeup) {
-            queueCV_.notify_one();
+            queue_cv_.notify_one();
         }
-    }
-
-    /**
-     * @brief 唤醒popTask
-     */
-    void wakeUp()
-    {
-        std::unique_lock<std::mutex> lck(queueMtx_);
-        queueCV_.notify_one();
-    }
-
-    /**
-     * @brief 最早到时任务时间, 如果队列为空pair的first为false
-     *
-     * @return 绝对时间
-     */
-    std::pair<bool, std::chrono::system_clock::time_point> firstTimeUp()
-    {
-        std::unique_lock<std::mutex> lck(queueMtx_);
-        if (this->empty()) {
-            return std::make_pair(false, std::chrono::system_clock::time_point{});
-        }
-        return std::make_pair(true, this->top()->start_time);
     }
 
     /**
@@ -176,14 +153,14 @@ public:
      *
      * @return 任务指针
      */
-    std::shared_ptr<TaskBase> popTask() 
+    std::shared_ptr<TaskBase> PopTask() 
     {
-        std::unique_lock<std::mutex> lck(queueMtx_);
+        std::unique_lock<std::mutex> lck(queue_mtx_);
         while (this->empty() || this->top()->start_time > std::chrono::system_clock::now()) {
             if (this->empty()) {
-                queueCV_.wait(lck);
+                queue_cv_.wait(lck);
             } else {
-                queueCV_.wait_until(lck, this->top()->start_time);
+                queue_cv_.wait_until(lck, this->top()->start_time);
             }
         }
         auto task = this->top();
@@ -196,14 +173,14 @@ public:
      *
      * @param task_list 任务指针列表
      */
-    void popTask(std::deque<std::shared_ptr<TaskBase>> &task_list)
+    void PopTask(std::deque<std::shared_ptr<TaskBase>> &task_list)
     {
-        std::unique_lock<std::mutex> lck(queueMtx_);
+        std::unique_lock<std::mutex> lck(queue_mtx_);
         while (this->empty() || this->top()->start_time > std::chrono::system_clock::now()) {
             if (this->empty()) {
-                queueCV_.wait(lck);
+                queue_cv_.wait(lck);
             } else {
-                queueCV_.wait_until(lck, this->top()->start_time);
+                queue_cv_.wait_until(lck, this->top()->start_time);
             }
         }
         task_list.clear();

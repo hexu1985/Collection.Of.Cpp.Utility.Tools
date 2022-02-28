@@ -1,6 +1,3 @@
-/** \example task_queue/sample_task_queue1.cpp
- * This is an example of how to use the TaskQueue class.
- */
 #include "task_queue.hpp"
 #include <thread>
 #include <string>
@@ -12,9 +9,9 @@ using namespace mini_util;
 void processor(TaskQueue &task_queue)
 {
     while (true) {
-        auto task = task_queue.popTask();
+        auto task = task_queue.PopTask();
         try {
-            task->run();
+            task->Run();
         } catch (const std::runtime_error &e) {
             std::cout << e.what() << std::endl;
             return;
@@ -61,12 +58,12 @@ int main()
     std::thread proc_thread(processor, std::ref(task_queue));
     std::string str = "hello";
     for (int i = 0; i < 10; i++) {
-        task_queue.pushTask(print_int, i);
-        task_queue.pushTask(print_string, str);
-        task_queue.pushTask(&Foo::print, &foo);
-        task_queue.pushTask(&Foo::print, pfoo);
+        task_queue.PushTask(print_int, i);
+        task_queue.PushTask(print_string, str);
+        task_queue.PushTask(&Foo::print, &foo);
+        task_queue.PushTask(&Foo::print, pfoo);
     }
-    task_queue.pushTask(&process_exit);
+    task_queue.PushTask(&process_exit);
     proc_thread.join();
     return 0;
 }
