@@ -2,9 +2,9 @@
 
 RM = rm -f
 CXX = g++
-CXXFLAGS = -Wall -g -std=c++11 -fsanitize=address -fno-omit-frame-pointer
+CXXFLAGS = -Wall -g -std=c++11
 INCLUDE = 
-LDFLAGS = -lasan
+LDFLAGS = 
 LDPATH = 
 VPATH = ..
 

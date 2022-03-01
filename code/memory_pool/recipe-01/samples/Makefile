@@ -3,7 +3,7 @@
 RM = rm -f
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11
-INCLUDE = -I../../include
+INCLUDE =
 LDFLAGS = 
 LDPATH = 
 VPATH =
