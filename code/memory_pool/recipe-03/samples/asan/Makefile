@@ -6,7 +6,7 @@ CXXFLAGS = -Wall -g -std=c++11 -fsanitize=address -fno-omit-frame-pointer
 INCLUDE = -I../../include
 LDFLAGS = -lasan
 LDPATH = 
-VPATH = .. ../../src
+VPATH = ..:../../src
 
 PROGS =	sample_byte_memory_pool1
 

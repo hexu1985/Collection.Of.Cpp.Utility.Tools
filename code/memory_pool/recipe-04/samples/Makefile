@@ -3,12 +3,12 @@
 RM = rm -f
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11
-INCLUDE = -I../../include
-LDFLAGS =
+INCLUDE = -I../include
+LDFLAGS = 
 LDPATH = 
-VPATH = ..:../../src
+VPATH = ../src
 
-PROGS =	sample_byte_memory_pool1
+PROGS =	sample_chunk_memory_pool1
 
 .PHONY: all
 all: $(PROGS)
@@ -21,7 +21,7 @@ clean:
 %.o:%.cpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCLUDE)
 
-sample_byte_memory_pool1: sample_byte_memory_pool1.o rational.o byte_memory_pool.o
+sample_chunk_memory_pool1: sample_chunk_memory_pool1.o rational.o chunk_memory_pool.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDPATH)
 
 

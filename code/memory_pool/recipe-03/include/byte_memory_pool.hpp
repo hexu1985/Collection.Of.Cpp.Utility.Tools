@@ -82,7 +82,7 @@ private:
 
 private:
     // 内存块列表, 它是我们的私有存储空间
-    MemoryChunk *listOfMemoryChunks = nullptr;
+    MemoryChunk *listOfMemoryChunks = NULL;
 
     // 向我们的私有存储空间添加一个内存块
     void expandStorage(size_t reqSize);
