@@ -5,7 +5,7 @@
  * @version 1.0
  * @date 2019-07-25
  *
- * @see Efficient C++: Performance Programming Techniques, chapter 6.3
+ * @see 提高C++性能的编程技术, 第6.3章节
  */
 #ifndef MINI_UTILS_BULK_MEMORY_POOL_INC
 #define MINI_UTILS_BULK_MEMORY_POOL_INC

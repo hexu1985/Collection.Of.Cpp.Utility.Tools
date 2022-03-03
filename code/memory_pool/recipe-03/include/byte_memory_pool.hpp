@@ -5,7 +5,7 @@
  * @version 1.0
  * @date 2019-07-25
  *
- * @see 提高C++性能的编程技术, 第6.3章节
+ * @see 提高C++性能的编程技术, 第6.4章节
  */
 #ifndef MINI_UTILS_BYTE_MEMORY_POOL_INC
 #define MINI_UTILS_BYTE_MEMORY_POOL_INC
