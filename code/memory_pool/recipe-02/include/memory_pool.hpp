@@ -1,5 +1,5 @@
 /**
- * @file MemoryPool.hpp
+ * @file memory_pool.hpp
  * @brief 固定大小对象的内存池
  * @author hexu_1985@sina.com
  * @version 1.0

@@ -1,11 +1,11 @@
 /**
- * @file ByteMemoryPool.hpp
+ * @file byte_memory_pool.hpp
  * @brief 可变大小的内存池
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-07-25
  *
- * @see Efficient C++: Performance Programming Techniques, chapter 6.4
+ * @see 提高C++性能的编程技术, 第6.3章节
  */
 #ifndef MINI_UTILS_BYTE_MEMORY_POOL_INC
 #define MINI_UTILS_BYTE_MEMORY_POOL_INC
@@ -56,9 +56,8 @@ private:
 
         void *alloc(size_t size)
         {
-            void *addr = static_cast<void *>
-                (static_cast<char *>(data_) + bytesAlreadyAllocated_);
-            bytesAlreadyAllocated_ += size;
+            void *addr = static_cast<void *>(static_cast<char *>(mem) + bytesAlreadyAllocated);
+            bytesAlreadyAllocated += size;
 
             return addr;
         }
@@ -66,24 +65,24 @@ private:
         void free(void *someElement) {}
 
         // 指向列表下一内存块的指针
-        MemoryChunk *nextMemoryChunk() { return next_; }
+        MemoryChunk *nextMemoryChunk() { return next; }
 
         // 当前内存块剩余空间大小
         size_t spaceAvailable()
         {
-            return chunkSize_ - bytesAlreadyAllocated_;
+            return chunkSize - bytesAlreadyAllocated;
         }
 
     private:
-        MemoryChunk *next_;             // 自由链表的下一个内存块
-        char *data_;                    // 实际存储内存块的空间
-        size_t chunkSize_;              // 一个内存块的大小
-        size_t bytesAlreadyAllocated_;  // 当前内存块中已分配的字节数
+        MemoryChunk *next;             // 自由链表的下一个内存块
+        char *mem;                     // 实际存储内存块的空间
+        size_t chunkSize;              // 一个内存块的大小
+        size_t bytesAlreadyAllocated;  // 当前内存块中已分配的字节数
     };
 
 private:
     // 内存块列表, 它是我们的私有存储空间
-    MemoryChunk *listOfMemoryChunks_ = nullptr;
+    MemoryChunk *listOfMemoryChunks = nullptr;
 
     // 向我们的私有存储空间添加一个内存块
     void expandStorage(size_t reqSize);
@@ -91,17 +90,17 @@ private:
 
 inline void *ByteMemoryPool::alloc(size_t requestSize)
 {
-    size_t space = listOfMemoryChunks_->spaceAvailable();
+    size_t space = listOfMemoryChunks->spaceAvailable();
     if (space < requestSize) {
         expandStorage(requestSize);
     }
 
-    return listOfMemoryChunks_->alloc(requestSize);
+    return listOfMemoryChunks->alloc(requestSize);
 }
 
 inline void ByteMemoryPool::free(void *doomed)
 {
-    listOfMemoryChunks_->free(doomed);
+    listOfMemoryChunks->free(doomed);
 }
 
 }   // namespace mini_util

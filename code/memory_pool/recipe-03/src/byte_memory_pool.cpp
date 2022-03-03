@@ -1,0 +1,37 @@
+#include "byte_memory_pool.hpp"
+
+namespace mini_util {
+
+ByteMemoryPool::MemoryChunk::MemoryChunk(MemoryChunk *nextChunk, size_t reqSize)
+{
+    chunkSize = (reqSize > DEFAULT_CHUNK_SIZE) ? reqSize : DEFAULT_CHUNK_SIZE;
+    next = nextChunk;
+    bytesAlreadyAllocated = 0;
+    mem = new char [chunkSize];
+}
+
+ByteMemoryPool::MemoryChunk::~MemoryChunk() { delete [] mem; }
+
+// 创建ByteMemoryPool对象, 生成私有存储空间
+ByteMemoryPool::ByteMemoryPool(size_t initSize)
+{
+    expandStorage(initSize);
+}
+
+ByteMemoryPool::~ByteMemoryPool()
+{
+    MemoryChunk *memChunk = listOfMemoryChunks;
+
+    while (memChunk) {
+        listOfMemoryChunks = memChunk->nextMemoryChunk();
+        delete memChunk;
+        memChunk = listOfMemoryChunks;
+    }
+}
+
+void ByteMemoryPool::expandStorage(size_t reqSize)
+{
+    listOfMemoryChunks = new MemoryChunk(listOfMemoryChunks, reqSize);
+}
+
+}   // namespace mini_util
