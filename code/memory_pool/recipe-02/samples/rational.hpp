@@ -1,7 +1,7 @@
 #ifndef RATIONAL_INC
 #define RATIONAL_INC
 
-#include "MemoryPool.hpp"
+#include "memory_pool.hpp"
 
 class Rational {
 public:
