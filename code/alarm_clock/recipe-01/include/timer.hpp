@@ -1,5 +1,5 @@
-#ifndef MINI_UTIL_TIMER_INC
-#define MINI_UTIL_TIMER_INC
+#ifndef TIMER_INC
+#define TIMER_INC
 
 #include <iostream>
 #include <thread>
@@ -11,16 +11,16 @@ class Timer {
 public:
     typedef std::function<void ()> Callback;
 
-    void SetTimeout(Callback function, int delay);
-    void SetInterval(Callback function, int interval);
-    void Stop();
+    void setTimeout(Callback function, int delay);
+    void setInterval(Callback function, int interval);
+    void stop();
 
 private:
     std::atomic<bool> active{true};
 };
 
 inline 
-void Timer::SetTimeout(Callback function, int delay) {
+void Timer::setTimeout(Callback function, int delay) {
     active = true;
     std::thread t([=]() {
         if(!active.load()) return;
@@ -32,7 +32,7 @@ void Timer::SetTimeout(Callback function, int delay) {
 }
 
 inline 
-void Timer::SetInterval(Callback function, int interval) {
+void Timer::setInterval(Callback function, int interval) {
     active = true;
     std::thread t([=]() {
         while(active.load()) {
@@ -45,7 +45,7 @@ void Timer::SetInterval(Callback function, int interval) {
 }
 
 inline 
-void Timer::Stop() {
+void Timer::stop() {
     active = false;
 }
 
