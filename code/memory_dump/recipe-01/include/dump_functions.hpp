@@ -7,13 +7,11 @@
  *
  * @see sentinel c runtime lib
  */
-#ifndef MINI_UTILS_DUMP_FUNCTIONS_INC
-#define MINI_UTILS_DUMP_FUNCTIONS_INC
+#ifndef DUMP_FUNCTIONS_INC
+#define DUMP_FUNCTIONS_INC
 
 #include <stdio.h>
 #include <stdint.h>
-
-namespace mini_util {
 
 /**
  * @brief 每行打印字符个数
@@ -113,7 +111,5 @@ void dump(const uint8_t *data, unsigned int datalen, const char *margin)
         i += icols;
     }
 } /* dump */
-
-}   // namespace mini_util
 
 #endif
