@@ -1,15 +1,11 @@
-#ifndef MINI_UTIL_TIMER_INC
-#define MINI_UTIL_TIMER_INC
+#ifndef TIMER_INC
+#define TIMER_INC
 
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <atomic>
 #include <functional>
-
-namespace mini_util {
-
-class TimerThread;
 
 class Timer {
 public:
@@ -20,19 +16,17 @@ public:
     Timer();
     ~Timer();
 
-    void SetTimeout(Callback function, int delay);
-    void SetInterval(Callback function, int interval);
-    void Stop();
+    void setTimeout(Callback function, int delay_ms);
+    void setInterval(Callback function, int interval_ms);
+    void stop();
 
 private:
     friend class TimerThread;
 
 private:
-    Callback function_;
-    int interval_ = -1;     // > 0是周期性的, <= 0是一次性的, 单位ms
-    TimePoint timeout_;     // 下次超时时间
+    Callback function;      // 超时回调函数
+    int interval = -1;      // > 0是周期性的, <= 0是一次性的, 单位ms
+    TimePoint timeout;      // 下次超时时间
 };
-
-}   // namespace mini_util
 
 #endif
