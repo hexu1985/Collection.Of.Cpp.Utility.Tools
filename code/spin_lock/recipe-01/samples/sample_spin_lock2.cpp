@@ -1,11 +1,6 @@
-/** \example spin_lock/sample_spin_lock2.cpp
- * This is an example of how to use the SpinLock class.
- */
 #include <iostream>                     // std::cout
 #include <thread>                       // std::thread
 #include "spin_lock.hpp"                // SpinLock
-
-using namespace mini_util;
 
 SpinLock mtx;                           // SpinLock for critical section
 

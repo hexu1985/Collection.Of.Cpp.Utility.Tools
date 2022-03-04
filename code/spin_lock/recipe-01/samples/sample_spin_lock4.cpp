@@ -1,13 +1,8 @@
-/** \example spin_lock/sample_spin_lock4.cpp
- * This is an example of how to use the SpinLock class's tryLock method.
- */
 #include <chrono>
 #include <thread>
 #include <iostream> // std::cout
 #include "spin_lock.hpp"  // SpinLock
  
-using namespace mini_util;
-
 std::chrono::milliseconds interval(100);
  
 SpinLock mutex;
@@ -24,7 +19,7 @@ void job_1()
  
     while (true) {
         // try to lock mutex to modify 'job_shared'
-        if (mutex.tryLock()) {
+        if (mutex.try_lock()) {
             std::cout << "job shared (" << job_shared << ")\n";
             mutex.unlock();
             return;

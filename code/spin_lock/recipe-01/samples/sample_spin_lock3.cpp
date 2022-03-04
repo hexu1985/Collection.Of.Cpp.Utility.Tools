@@ -1,18 +1,13 @@
-/** \example spin_lock/sample_spin_lock3.cpp
- * This is an example of how to use the SpinLock class's tryLock method.
- */
 #include <iostream>       // std::cout
 #include <thread>         // std::thread
 #include "spin_lock.hpp"  // SpinLock
-
-using namespace mini_util;
 
 volatile int counter (0); // non-atomic counter
 SpinLock mtx;           // locks access to counter
 
 void attempt_10k_increases () {
   for (int i=0; i<10000; ++i) {
-    if (mtx.tryLock()) {   // only increase if currently not locked:
+    if (mtx.try_lock()) {   // only increase if currently not locked:
       ++counter;
       mtx.unlock();
     }
