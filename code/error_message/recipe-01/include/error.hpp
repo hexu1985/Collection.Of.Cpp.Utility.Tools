@@ -1,10 +1,8 @@
-#ifndef MINI_UTILS_ERROR_INC
-#define MINI_UTILS_ERROR_INC
+#ifndef ERROR_INC
+#define ERROR_INC
 
 #include <stdarg.h>
 #include <stdexcept>
-
-namespace mini_util {
 
 inline void error(const char *format, ...)
 {
@@ -17,7 +15,5 @@ inline void error(const char *format, ...)
     va_end (ap);
     throw std::runtime_error(buf);
 }
-
-}   // namespace mini_util
 
 #endif
