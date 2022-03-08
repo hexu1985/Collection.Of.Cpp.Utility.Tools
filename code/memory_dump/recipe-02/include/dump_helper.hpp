@@ -7,15 +7,13 @@
  *
  * @see dump_functions.hpp
  */
-#ifndef MINI_UTILS_DUMP_HELPER_INC
-#define MINI_UTILS_DUMP_HELPER_INC
+#ifndef DUMP_HELPER_INC
+#define DUMP_HELPER_INC
 
 #include <stdio.h>
 #include <stdint.h>
 #include <iostream>
 #include <iomanip>
-
-namespace mini_util {
 
 class DumpHelper {
 private:
@@ -117,7 +115,5 @@ public:
 		}
 	} /* dump */
 };
-
-}   // namespace mini_util
 
 #endif

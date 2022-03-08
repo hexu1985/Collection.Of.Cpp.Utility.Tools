@@ -17,8 +17,8 @@ public:
 
 	static void newMemPool() 
     {
-        stPool = new mini_util::MemoryPool<Rational>;
-        memPool = new mini_util::MTMemoryPool<mini_util::MemoryPool<Rational>, DummyLock>(*stPool); 
+        stPool = new MemoryPool<Rational>;
+        memPool = new MTMemoryPool<MemoryPool<Rational>, DummyLock>(*stPool); 
     }
 
 	static void deleteMemPool()
@@ -28,8 +28,8 @@ public:
     }
 
 private:
-	static mini_util::MemoryPool<Rational> *stPool;
-	static mini_util::MTMemoryPool<mini_util::MemoryPool<Rational>, DummyLock> *memPool;
+	static MemoryPool<Rational> *stPool;
+	static MTMemoryPool<MemoryPool<Rational>, DummyLock> *memPool;
 
 private:
 	int n;	// 分子

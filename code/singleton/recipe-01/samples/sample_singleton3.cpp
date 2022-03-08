@@ -3,8 +3,6 @@
 #include <iostream>
 #include "singleton.hpp"
 
-using namespace mini_util;
-
 class Foo {
 public:
     Foo() {

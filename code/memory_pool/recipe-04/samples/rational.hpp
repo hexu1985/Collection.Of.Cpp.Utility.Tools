@@ -14,7 +14,7 @@ public:
 	static void deleteMemPool();
 
 private:
-	static mini_util::ChunkMemoryPool *memPool;
+	static ChunkMemoryPool *memPool;
 
 private:
 	int n;	// 分子

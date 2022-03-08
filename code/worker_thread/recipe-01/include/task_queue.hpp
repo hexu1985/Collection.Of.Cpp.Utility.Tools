@@ -5,8 +5,8 @@
  * @version 1.0
  * @date 2019-06-05
  */
-#ifndef MINI_UTILS_TASK_QUEUE_INC
-#define MINI_UTILS_TASK_QUEUE_INC
+#ifndef TASK_QUEUE_INC
+#define TASK_QUEUE_INC
 
 #include <memory>
 #include <deque>
@@ -14,8 +14,6 @@
 #include <utility>
 #include <mutex>
 #include <condition_variable>
-
-namespace mini_util {
 
 /**
  * @brief 任务类的基类
@@ -151,7 +149,5 @@ public:
         this->swap(task_list);
     }
 };
-
-}   // namespace mini_util
 
 #endif

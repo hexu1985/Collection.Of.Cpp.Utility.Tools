@@ -1,12 +1,7 @@
-/** \example rci_ptr/sample_rci_ptr.cpp
- * This is an example of how to use RCPtr.
- */
 #include <iostream>
 
 #include "rc_ptr.hpp"
 #include "widget.hpp"
-
-using namespace mini_util;
 
 class RCWidget {
 public:

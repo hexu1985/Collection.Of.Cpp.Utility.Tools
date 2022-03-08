@@ -4,8 +4,6 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace mini_util;
-
 void processor(TaskQueue &task_queue)
 {
     while (true) {

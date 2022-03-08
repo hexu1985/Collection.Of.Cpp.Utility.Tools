@@ -1,5 +1,5 @@
 /**
- * @file BasicStopwatch.hpp
+ * @file basic_stopwatch.hpp
  * @brief 一个带打印功能的计时器的模板类
  * @author hexu_1985@sina.com
  * @version 1.0
@@ -10,8 +10,8 @@
  * @see C++性能优化指南, 3.4节, TimerBaseChrono \n
  * https://github.com/hexu1985/Optimized.Cpp
  */
-#ifndef MINI_UTILS_BASIC_STOPWATCH_INC
-#define MINI_UTILS_BASIC_STOPWATCH_INC
+#ifndef BASIC_STOPWATCH_INC
+#define BASIC_STOPWATCH_INC
 
 #include <iostream>
 
@@ -76,8 +76,6 @@
         Start("") or Start(nullptr):	prints nothing, sets lap time if running
         Stop("") or Stop(nullptr):		sets lap time. Get with GetLap()
 */
-
-namespace mini_util {
 
 /**
  * @brief 一个带打印功能的计时器的模板类
@@ -284,7 +282,5 @@ inline unsigned long BasicStopwatch<T>::Stop(char const* event_name)
     BaseTimer::Clear();
     return lap_;
 }
-
-}   // namespace mini_util
 
 #endif

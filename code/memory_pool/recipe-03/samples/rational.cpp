@@ -1,3 +1,3 @@
 #include "rational.hpp"
 
-mini_util::ByteMemoryPool *Rational::memPool = 0;
+ByteMemoryPool *Rational::memPool = 0;

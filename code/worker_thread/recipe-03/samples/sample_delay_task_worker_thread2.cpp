@@ -3,8 +3,6 @@
 #include <string>
 #include "worker_thread.hpp"
 
-using namespace mini_util;
-
 void print_int(int i)
 {
 	std::cout << __func__ << "(" << i << ")" << std::endl;

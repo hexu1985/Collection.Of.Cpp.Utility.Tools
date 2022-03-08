@@ -7,10 +7,8 @@
  *
  * @see 提高C++性能的编程技术, 第7章
  */
-#ifndef MINI_UTILS_MT_MEMORY_POOL_INC
-#define MINI_UTILS_MT_MEMORY_POOL_INC
-
-namespace mini_util {
+#ifndef MT_MEMORY_POOL_INC
+#define MT_MEMORY_POOL_INC
 
 /**
  * @brief 线程安全的内存池
@@ -75,7 +73,5 @@ void MTMemoryPool<M, L>::free(void *doomed)
     stPool.free(doomed);
     theLock.unlock();
 }
-
-}   // namespace mini_util
 
 #endif

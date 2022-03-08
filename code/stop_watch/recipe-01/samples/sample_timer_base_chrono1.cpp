@@ -2,8 +2,6 @@
 #include <thread>
 #include "stopwatch.hpp"
 
-using namespace mini_util;
-
 int main ()
 {
   TimerBaseChrono timer;

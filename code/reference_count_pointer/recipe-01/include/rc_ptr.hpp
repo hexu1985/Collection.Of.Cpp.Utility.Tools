@@ -7,10 +7,8 @@
  *
  * @see More Effective C++, item 29
  */
-#ifndef MINI_UTILS_RC_PTR_INC
-#define MINI_UTILS_RC_PTR_INC
-
-namespace mini_util {
+#ifndef RC_PTR_INC
+#define RC_PTR_INC
 
 /**
  * @brief 侵入式引用计数指针
@@ -119,7 +117,5 @@ T *RCPtr<T>::operator ->() const { return pointee_; }
 
 template<class T>
 T &RCPtr<T>::operator *() const { return *pointee_; }
-
-}   // namespace mini_util
 
 #endif

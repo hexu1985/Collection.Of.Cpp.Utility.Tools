@@ -5,12 +5,10 @@
  * @version 1.0
  * @date 2020-03-02
  */
-#ifndef MINI_UTILS_SINGLETON_INC
-#define MINI_UTILS_SINGLETON_INC
+#ifndef SINGLETON_INC
+#define SINGLETON_INC
 
 #include <mutex>
-
-namespace mini_util {
 
 /**
  * @brief 单件类模板
@@ -38,7 +36,5 @@ private:
     Singleton(const Singleton &) = delete;
     Singleton &operator =(const Singleton &) = delete;
 };
-
-}   // namespace mini_util
 
 #endif

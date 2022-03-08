@@ -5,8 +5,8 @@
  * @version 1.0
  * @date 2021-01-19
  */
-#ifndef MINI_UTILS_DELAY_TASK_QUEUE_INC
-#define MINI_UTILS_DELAY_TASK_QUEUE_INC
+#ifndef DELAY_TASK_QUEUE_INC
+#define DELAY_TASK_QUEUE_INC
 
 #include <memory>
 #include <queue>
@@ -15,8 +15,6 @@
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
-
-namespace mini_util {
 
 /**
  * @brief 支持延时任务类的基类
@@ -197,7 +195,5 @@ public:
         return;
     }
 };
-
-}   // namespace mini_util
 
 #endif

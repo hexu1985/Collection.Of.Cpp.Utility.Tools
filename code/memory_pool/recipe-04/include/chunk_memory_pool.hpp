@@ -7,13 +7,11 @@
  *
  * @see 提高C++性能的编程技术, 第6.3章节
  */
-#ifndef MINI_UTILS_BULK_MEMORY_POOL_INC
-#define MINI_UTILS_BULK_MEMORY_POOL_INC
+#ifndef BULK_MEMORY_POOL_INC
+#define BULK_MEMORY_POOL_INC
 
 #include <cstddef>
 #include <new>
-
-namespace mini_util {
 
 /**
  * @brief 固定大小的内存池, 每次alloc申请内存的大小固定
@@ -86,7 +84,5 @@ inline void ChunkMemoryPool::free(void *doomed)
     head->next = listOfMemoryChunks;
     listOfMemoryChunks = head;
 }
-
-}   // namespace mini_util
 
 #endif

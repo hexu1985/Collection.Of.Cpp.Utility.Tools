@@ -3,8 +3,6 @@
 #include <string>
 #include "worker_thread.hpp"
 
-using namespace mini_util;
-
 void repush_task(int n)
 {
     auto task_queue = WorkerThread::GetCurrentTaskQueue();

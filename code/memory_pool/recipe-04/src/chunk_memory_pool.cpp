@@ -1,7 +1,5 @@
 #include "chunk_memory_pool.hpp"
 
-namespace mini_util {
-
 ChunkMemoryPool::ChunkMemoryPool(size_t chunk_size, size_t expansion_size): 
 	chunkSize(chunk_size),
     expansionSize(expansion_size),
@@ -35,4 +33,3 @@ void ChunkMemoryPool::expandTheFreeList(int howMany)
 	runner->next = NULL;
 }
 
-}   // namespace mini_util

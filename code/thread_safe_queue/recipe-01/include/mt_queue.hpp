@@ -1,5 +1,5 @@
 /**
- * @file MTQueue.hpp
+ * @file mt_queue.hpp
  * @brief 一个支持多线程的队列类
  * @author hexu_1985@sina.com
  * @version 1.0
@@ -8,14 +8,12 @@
  * @see c++并发编程实战, 第4章, queue \n
  * https://github.com/subjam/concurrency-in-action
  */
-#ifndef MINI_UTILS_MT_QUEUE_INC
-#define MINI_UTILS_MT_QUEUE_INC
+#ifndef MT_QUEUE_INC
+#define MT_QUEUE_INC
 
 #include <mutex>
 #include <condition_variable>
 #include <queue>
-
-namespace mini_util {
 
 /**
  * @brief 线程安全队列
@@ -132,7 +130,5 @@ public:
         return queue_.size();
     }
 };
-
-}   // namespace mini_util
 
 #endif

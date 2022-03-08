@@ -7,10 +7,8 @@
  *
  * @see More Effective C++, item 29
  */
-#ifndef MINI_UTILS_RC_OBJECT_INC
-#define MINI_UTILS_RC_OBJECT_INC
-
-namespace mini_util {
+#ifndef RC_OBJECT_INC
+#define RC_OBJECT_INC
 
 /**
  * @brief 引用计数对象基类, 管理引用计数
@@ -56,7 +54,5 @@ public:
 private:
     int refCount_;
 };
-
-}   // namespace mini_util
 
 #endif

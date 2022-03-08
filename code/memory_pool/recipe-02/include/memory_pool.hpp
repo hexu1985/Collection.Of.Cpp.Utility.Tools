@@ -7,13 +7,11 @@
  *
  * @see 提高C++性能的编程技术, 第6.3章节
  */
-#ifndef MINI_UTILS_MEMORY_POOL_INC
-#define MINI_UTILS_MEMORY_POOL_INC
+#ifndef MEMORY_POOL_INC
+#define MEMORY_POOL_INC
 
 #include <cstddef>
 #include <new>
-
-namespace mini_util {
 
 /**
  * @brief 固定大小对象的内存池
@@ -119,7 +117,5 @@ void MemoryPool<T>::expandTheFreeList(int howMany)
 	}
 	runner->next = NULL;
 }
-
-}   // namespace mini_util
 
 #endif

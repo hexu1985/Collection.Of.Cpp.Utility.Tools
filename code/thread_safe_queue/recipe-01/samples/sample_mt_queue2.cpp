@@ -1,14 +1,9 @@
-/** \example mt_queue/sample_mt_queue2.cpp
- * This is an example of how to use the MTQueue class.
- */
 #include <iostream>
 #include <cstdio>
 #include <thread>
 #include <chrono>
 
 #include "mt_queue.hpp"
-
-using namespace mini_util; 
 
 void push(MTQueue<int>* q)
 {

@@ -1,8 +1,6 @@
 #include "singleton.hpp"
 #include <iostream>
 
-using namespace mini_util;
-
 class Foo: public Singleton<Foo> {
 private:
     Foo() {

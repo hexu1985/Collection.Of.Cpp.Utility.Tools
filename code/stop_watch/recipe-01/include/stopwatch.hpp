@@ -1,16 +1,14 @@
 /**
- * @file Stopwatch.hpp
+ * @file stopwatch.hpp
  * @brief 一个基于BasicStopwatch和TimerBaseChrono的计时器类的别名
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-06-21
  */
-#ifndef MINI_UTILS_STOPWATCH_INC
-#define MINI_UTILS_STOPWATCH_INC
+#ifndef STOPWATCH_INC
+#define STOPWATCH_INC
 
 #include "basic_stopwatch.hpp"
-
-namespace mini_util {
 
 /**
  * @brief 基于std::chrono接口实现的计时器
@@ -72,8 +70,6 @@ private:
  * @brief 基于BasicStopwatch和TimerBaseChrono的计时器类的别名
  */
 using Stopwatch = BasicStopwatch<TimerBaseChrono>;
-
-}   // namespace mini_util
 
 #endif
 

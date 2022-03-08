@@ -4,8 +4,6 @@
 #include "basic_stopwatch.hpp"
 #include "timer_base_clock.hpp"
 
-using mini_util::BasicStopwatch;
-
 using Stopwatch = BasicStopwatch<TimerBaseClock>;
 
 void foo()

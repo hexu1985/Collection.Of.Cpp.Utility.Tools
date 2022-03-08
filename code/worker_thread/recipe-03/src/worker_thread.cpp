@@ -4,8 +4,6 @@
 
 using namespace std;
 
-namespace mini_util {
-
 namespace {     // details
 
 thread_local shared_ptr<TaskQueue> current_thread_task_queue;
@@ -94,6 +92,4 @@ const std::string& WorkerThread::GetCurrentThreadName()
 {
     return current_thread_name;
 }
-
-}   // namespace mini_util
 

@@ -1,12 +1,7 @@
-/** \example stopwatch/sample_stopwatch1.cpp
- * This is an example of how to use the Stopwatch class.
- */
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include "stopwatch.hpp"
-
-using namespace mini_util;
 
 void foo()
 {

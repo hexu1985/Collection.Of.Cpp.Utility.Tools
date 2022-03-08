@@ -7,13 +7,11 @@
  *
  * @see 提高C++性能的编程技术, 第6.4章节
  */
-#ifndef MINI_UTILS_BYTE_MEMORY_POOL_INC
-#define MINI_UTILS_BYTE_MEMORY_POOL_INC
+#ifndef BYTE_MEMORY_POOL_INC
+#define BYTE_MEMORY_POOL_INC
 
 #include <cstddef>
 #include <new>
-
-namespace mini_util {
 
 /**
  * @brief 可变大小的内存池, 每次alloc申请内存的大小可变
@@ -102,7 +100,5 @@ inline void ByteMemoryPool::free(void *doomed)
 {
     listOfMemoryChunks->free(doomed);
 }
-
-}   // namespace mini_util
 
 #endif

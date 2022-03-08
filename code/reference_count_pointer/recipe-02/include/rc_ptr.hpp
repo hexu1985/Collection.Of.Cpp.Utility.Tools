@@ -7,12 +7,10 @@
  *
  * @see 提高C++性能的编程技术, 第12章
  */
-#ifndef MINI_UTILS_RCI_PTR_INC
-#define MINI_UTILS_RCI_PTR_INC
+#ifndef RCI_PTR_INC
+#define RCI_PTR_INC
 
 #include "rc_object.hpp"
-
-namespace mini_util {
 
 /**
  * @brief 引用计数指针
@@ -126,7 +124,5 @@ T *RCPtr<T>::operator ->() const { return counter_->pointee; }
 
 template<class T>
 T &RCPtr<T>::operator *() const { return *(counter_->pointee); }
-
-}   // namespace mini_util
 
 #endif

@@ -1,8 +1,6 @@
 #include "singleton.hpp"
 #include <iostream>
 
-using namespace mini_util;
-
 template <int N>
 class Foo {
 private:
