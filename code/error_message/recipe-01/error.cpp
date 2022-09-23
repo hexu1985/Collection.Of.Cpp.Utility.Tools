@@ -1,10 +1,9 @@
-#ifndef ERROR_INC
-#define ERROR_INC
+#include "error.hpp"
 
 #include <stdarg.h>
 #include <stdexcept>
 
-inline void error(const char *format, ...)
+void error(const char *format, ...)
 {
     const int buf_size = 1024;
     char    buf[buf_size] = {'\0'};
@@ -16,4 +15,3 @@ inline void error(const char *format, ...)
     throw std::runtime_error(buf);
 }
 
-#endif
