@@ -9,7 +9,7 @@ LDFLAGS = -lpthread
 LDPATH = #-L../src
 VPATH = ../src
 
-PROGS =	benchmark_rc_ptr sample_rc_ptr
+PROGS =	benchmark_rc_ptr sample_rc_ptr sample_rci_ptr
 
 all: $(PROGS)
 	@echo "PROGS = $(PROGS)" 
@@ -25,5 +25,8 @@ benchmark_rc_ptr:	widget.o benchmark_rc_ptr.o rc_object.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
 
 sample_rc_ptr:	widget.o sample_rc_ptr.o rc_object.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
+
+sample_rci_ptr:	widget.o sample_rci_ptr.o rc_object.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
 
