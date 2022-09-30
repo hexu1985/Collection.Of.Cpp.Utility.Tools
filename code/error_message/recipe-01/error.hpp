@@ -1,4 +1,4 @@
 #pragma once
 
-void error(const char *format, ...);
+void error(const char* format, ...);
 

@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <stdexcept>
 
-void error(const char *format, ...)
+void error(const char* format, ...)
 {
     const int buf_size = 1024;
     char    buf[buf_size] = {'\0'};
