@@ -11,11 +11,11 @@
 #define RC_PTR_INC
 
 /**
- * @brief 侵入式引用计数指针
+ * @brief 侵入式引用计数指针, RC: reference count, Ptr: pointer
  *
  * @tparam T 被引用计数对象的类型, 需继承自RCObject或者和RCObject接口相同
  */
-template <class T>
+template <typename T>
 class RCPtr {
 public:
     /**
@@ -23,25 +23,25 @@ public:
      *
      * @param realPtr 被引用计数对象的指针
      */
-    RCPtr(T *realPtr = 0);
+    RCPtr(T* realPtr = 0);
 
     /**
      * @brief 复制构造
      *
-     * @param rhs 增加rhs的引用计数(如果rhs.pointee_不为空)
+     * @param rhs 增加rhs的引用计数(如果rhs.pointee不为空)
      */
-    RCPtr(const RCPtr &rhs);
+    RCPtr(const RCPtr& rhs);
 
     /**
      * @brief 复制赋值
      *
-     * @param rhs 首先减少*this的引用计数(如果pointee_不为空), 
-     *            然后this->pointee_ = rhs.pointee_,
+     * @param rhs 首先减少*this的引用计数(如果pointee不为空), 
+     *            然后this->pointee = rhs.pointee,
      *            然后增加rhs的引用计数(如果rhs不为空)
      *
      * @return *this
      */
-    RCPtr& operator=(const RCPtr &rhs);
+    RCPtr& operator=(const RCPtr& rhs);
 
     /**
      * @brief 析构: 减少*this的引用计数
@@ -53,69 +53,62 @@ public:
      *
      * @return 引用计数对象的地址
      */
-    T *operator ->() const;
+    T* operator->() const;
 
     /**
      * @brief 重载*运算符, 获取引用计数对象的引用
      *
      * @return 引用计数对象的引用
      */
-    T &operator *() const;
+    T& operator*() const;
+
+private: 
+    void addReference() const { if (pointee) pointee->addReference(); }
+    void removeReference() const { if (pointee) pointee->removeReference(); }
+    void init();
 
 private:
-    T *pointee_;
-    void init();
+    T* pointee = nullptr;
 };
 
-template <class T>
+template <typename T>
 void RCPtr<T>::init()
 {
-    if (pointee_ == 0) {
-        return;
-    }
-
-    pointee_->addReference();
+    addReference();
 }
 
-template <class T>
-RCPtr<T>::RCPtr(T *realPtr): pointee_(realPtr)
+template <typename T>
+RCPtr<T>::RCPtr(T* realPtr): pointee(realPtr)
 {
     init();
 }
 
-template <class T>
-RCPtr<T>::RCPtr(const RCPtr &rhs): pointee_(rhs.pointee_)
+template <typename T>
+RCPtr<T>::RCPtr(const RCPtr& rhs): pointee(rhs.pointee)
 {
     init();
 }
 
-template<class T>
-RCPtr<T> &RCPtr<T>::operator =(const RCPtr &rhs)
+template <typename T>
+RCPtr<T>& RCPtr<T>::operator=(const RCPtr& rhs)
 {
-    if (pointee_ == rhs.pointee_) {
-        return *this;
-    }
+    rhs.addReference();
+    this->removeReference();
 
-    if (pointee_) {
-        pointee_->removeReference();
-    }
-
-    pointee_ = rhs.pointee_;
-    init();
-
+    this->pointee = rhs.pointee;
     return *this;
 }
 
-template<class T>
+template<typename T>
 RCPtr<T>::~RCPtr()
 {
-    if (pointee_) pointee_->removeReference();
+    removeReference();
 }
 
-template<class T>
-T *RCPtr<T>::operator ->() const { return pointee_; }
+template<typename T>
+T* RCPtr<T>::operator->() const { return pointee; }
 
-template<class T>
-T &RCPtr<T>::operator *() const { return *pointee_; }
+template<typename T>
+T& RCPtr<T>::operator*() const { return *pointee; }
 
 #endif

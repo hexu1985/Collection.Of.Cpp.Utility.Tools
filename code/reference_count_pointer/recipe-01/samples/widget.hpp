@@ -16,7 +16,7 @@ public:
     const std::string &showThat() const;
 
 private:
-    std::string someThing_;
+    std::string someThing;
 };
 
 #endif

@@ -1,41 +1,41 @@
 #include "widget.hpp"
 #include <iostream>
 
-Widget::Widget(const std::string &someThing): someThing_(someThing) 
+Widget::Widget(const std::string &someThing): someThing(someThing) 
 {
-    std::cout << "[" << someThing_ << "]: " << (void *) this << "->" << __func__ << "(" << someThing << ")" << std::endl;
+    std::cout << "[" << someThing << "]: " << (void *) this << "->" << __func__ << "(" << someThing << ")" << std::endl;
 }
 
-Widget::Widget(const Widget &rhs): someThing_(rhs.someThing_)
+Widget::Widget(const Widget &rhs): someThing(rhs.someThing)
 {
-    std::cout << "[" << someThing_ << "]: " << (void *) this << "->" << __func__ << "(" << (void *) &rhs << ")" << std::endl;
+    std::cout << "[" << someThing << "]: " << (void *) this << "->" << __func__ << "(" << (void *) &rhs << ")" << std::endl;
 }
 
 Widget::~Widget()
 {
-    std::cout << "[" << someThing_ << "]: " << (void *) this << "->" << __func__ << "()" << std::endl;
+    std::cout << "[" << someThing << "]: " << (void *) this << "->" << __func__ << "()" << std::endl;
 }
 
 Widget &Widget::operator =(const Widget &rhs)
 {
-    std::cout << "[" << someThing_ << "]: " << (void *) this << "->" << __func__ << "(" << (void *) &rhs << ")" << std::endl;
-    someThing_ = rhs.someThing_;
+    std::cout << "[" << someThing << "]: " << (void *) this << "->" << __func__ << "(" << (void *) &rhs << ")" << std::endl;
+    someThing = rhs.someThing;
     return *this;
 }
 
 void Widget::setValue(const std::string &value)
 {
-    std::cout << "[" << someThing_ << "]: " << (void *) this << "->" << __func__ << "(" << value << ")" << std::endl;
-    someThing_ = value;
+    std::cout << "[" << someThing << "]: " << (void *) this << "->" << __func__ << "(" << value << ")" << std::endl;
+    someThing = value;
 }
 
 void Widget::doThis()
 {
-    std::cout << "[" << someThing_ << "]: " << (void *) this << "->" << __func__ << "()" << std::endl;
+    std::cout << "[" << someThing << "]: " << (void *) this << "->" << __func__ << "()" << std::endl;
 }
 
 const std::string &Widget::showThat() const
 {
-    std::cout << "[" << someThing_ << "]: " << (void *) this << "->" << __func__ << "()" << std::endl;
-    return someThing_;
+    std::cout << "[" << someThing << "]: " << (void *) this << "->" << __func__ << "()" << std::endl;
+    return someThing;
 }

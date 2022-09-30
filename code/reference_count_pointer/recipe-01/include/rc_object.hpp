@@ -52,7 +52,7 @@ public:
     void removeReference();
 
 private:
-    int refCount_;
+    int refCount;
 };
 
 #endif
