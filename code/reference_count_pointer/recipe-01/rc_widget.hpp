@@ -15,16 +15,16 @@ public:
 	RCWidget(int size)
 		: value(new Widget(size)) {}
 
-	void doThis()
+	void DoThis()
 	{
-		if (value.getRCObject().isShared()) {         // do COW if 
+		if (value.GetRCObject().IsShared()) {         // do COW if 
 			value = new Widget(*value);               // Widget is shared
 		}
-		value->doThis();
+		value->DoThis();
 	}
 
-	int showThat() const
-	{ return value->showThat(); }
+	int ShowThat() const
+	{ return value->ShowThat(); }
 
 private:
 	RCIPtr<Widget> value;

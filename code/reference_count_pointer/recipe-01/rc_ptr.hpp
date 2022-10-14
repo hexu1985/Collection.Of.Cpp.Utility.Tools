@@ -15,39 +15,35 @@ public:                                // must support the RCObject interface
 
 private:
 	T *pointee;
-	void init();
+	void Init();
 };
 
 template<class T>
-void RCPtr<T>::init()
+void RCPtr<T>::Init()
 {
 	if (pointee == 0) return;
 
-	if (pointee->isShareable() == false) {
-		pointee = new T(*pointee);
-	}
-
-	pointee->addReference();
+	pointee->AddReference();
 }
 
 template<class T>
 RCPtr<T>::RCPtr(T* realPtr)
 : pointee(realPtr)
 {
-	init();
+	Init();
 }
 
 template<class T>
 RCPtr<T>::RCPtr(const RCPtr& rhs)
 : pointee(rhs.pointee)
 { 
-	init();
+	Init();
 }
 
 template<class T>
 RCPtr<T>::~RCPtr()
 {
-	if (pointee) pointee->removeReference();
+	if (pointee) pointee->RemoveReference();
 }
 
 template<class T>
@@ -57,9 +53,9 @@ RCPtr<T>& RCPtr<T>::operator=(const RCPtr& rhs)
 		T *oldPointee = pointee;                    // for the book's 10th
 		                                            // printing
 		pointee = rhs.pointee;
-		init(); 
+		Init(); 
 
-		if (oldPointee) oldPointee->removeReference();                
+		if (oldPointee) oldPointee->RemoveReference();                
 	}
 
 	return *this;
