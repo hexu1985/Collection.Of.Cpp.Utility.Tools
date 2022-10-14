@@ -1,0 +1,564 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0050)https://www.aristeia.com/BookErrata/M29Source.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Scott Meyers:  More Effective C++ Item 29 Source Code</title>
+       <meta http-equiv="Reply-to" content="smeyers@aristeia.com">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="Description" content="Scott Meyers is a retired author and consultant on C++ software development.">
+        <meta http-equiv="Window-target" content="_top">
+        <meta name="Keywords" content="Scott Meyers, Software Development Consultant, C++ Training,  Effective C++,  More Effective C++, Effective STL, Effective Modern C++">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta name="Languange" content="en-us">
+        <meta name="Author" content="Scott Meyers">
+        <meta name="Copyright" content="Copyright 2000-2019 - Scott Meyers">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="./Scott Meyers_ More Effective C++ Item 29 Source Code_files/basic.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./Scott Meyers_ More Effective C++ Item 29 Source Code_files/extra.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="./Scott Meyers_ More Effective C++ Item 29 Source Code_files/print.css" media="print">
+	
+        <!--[if IE 5]> 
+            <link href="../ie5.css" rel="stylesheet" type="text/css"> 
+        <![endif]--> 
+
+        <!--[if IE 6]> 
+            <link href="../ie6.css" rel="stylesheet" type="text/css"> 
+        <![endif]--> 
+        
+        <!--[if IE 7]> 
+            <link href="../ie7.css" rel="stylesheet" type="text/css"> 
+        <![endif]--> 
+	<style type="text/css" id="extraClass">.extraClassAspect {-webkit-transform: scaleX(1)!important;}.extraClassCrop {-webkit-transform: scale(1)!important;}  </style>
+    </head>
+    <body> 
+    <!--Mobile Header-->
+    <div id="mobile-header">
+
+                     
+            <!-- NEW MENU: MODAL-->
+            <!-- Trigger/Open The Modal -->
+            <button id="myBtn"><i class="fas fa-bars"></i><span> MENU</span></button>
+                    
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+            
+              <!-- Modal content -->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <span class="close">×</span>
+                  <h2>Menu</h2>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li><a title="Home" href="https://www.aristeia.com/">Home</a></li>
+                        <li><a title="Blog" href="https://scottmeyers.blogspot.com/">Blog</a></li>
+                        <li><a title="Upcoming Talks" href="https://www.aristeia.com/seminars.html">Upcoming Talks</a></li>
+                        <li><a title="Past Talks" href="https://www.aristeia.com/presentations.html">Past Talks</a></li>
+                        <li><a title="Training Services" href="https://www.aristeia.com/training.html">Training Services</a></li>
+                        <li><a title="Books, etc." href="https://www.aristeia.com/books.html">Books, etc.</a></li>
+                        <li><a title="Articles and Interviews" href="https://www.aristeia.com/publications.html">Articles &amp; Interviews</a></li>
+                        <li><a title="Online Videos" href="https://www.aristeia.com/videos.html">Online Videos</a></li>
+                        <li><a title="Materials&#39; Licensing" href="https://www.aristeia.com/Licensing/licensing.html">Materials' Licensing</a></li>
+                        <li><a title="Contact Scott" href="https://www.aristeia.com/contactinfo.html">Contact Info</a></li>
+                    </ul>
+                </div>
+              </div>
+            
+            </div>
+            <!-- / NEW MENU: MODAL-->
+
+    </div>
+    <!--Mobile Header END-->
+ <div id="wrapper">
+        <!-- begin left side navigation bar --> 
+<div id="sidebar"> 
+  <a title="Larger photo of Scott Meyers" href="https://www.aristeia.com/photo.html">
+  <img src="./Scott Meyers_ More Effective C++ Item 29 Source Code_files/sdm-small.jpg" alt="Scott Meyers Photo"></a>
+  <p class="name">
+      Scott Meyers
+  </p>
+  <hr>
+  <p class="caption">
+      <a title="Home" href="https://www.aristeia.com/">Home</a>
+  </p>
+  <p class="caption">
+      <a title="Blog" href="https://scottmeyers.blogspot.com/">Blog</a>
+  </p>
+  <p class="caption">
+      <a title="Upcoming Talks" href="https://www.aristeia.com/seminars.html">Upcoming Talks</a>
+      <br>
+      <a title="Past Talks" href="https://www.aristeia.com/presentations.html">Past Talks</a>
+  </p>
+  <p class="caption">
+      <a title="Training Services" href="https://www.aristeia.com/training.html">Training Services</a>
+  </p>
+  <p class="caption">
+      <a title="Books, etc." href="https://www.aristeia.com/books.html">Books, etc.</a>
+  </p>
+  <p class="caption">
+      <a title="Articles and Interviews" href="https://www.aristeia.com/publications.html">Articles &amp; Interviews</a>
+  </p>
+    <p class="caption">
+      <a title="Online Videos" href="https://www.aristeia.com/videos.html">Online Videos</a>
+  </p>
+  <p class="caption">
+      <a title="Materials&#39; Licensing" href="https://www.aristeia.com/Licensing/licensing.html">Materials' Licensing</a>
+  </p>
+  <p class="caption">
+      <a title="Contact Scott" href="https://www.aristeia.com/contactinfo.html">Contact Info</a>
+  </p>
+  <p><a title="Follow Scott on Twitter" href="https://twitter.com/Scott__Meyers"><img src="./Scott Meyers_ More Effective C++ Item 29 Source Code_files/twitter.png" alt="Follow Scott on Twitter"></a></p>
+</div>
+<!-- end left side navigation bar -->
+        <div id="content"> 
+  <!-- Start Page Content -->
+  <h4>Scott Meyers</h4>
+  <h5><em>More Effective C++</em> Item 29 Source Code</h5>
+  
+  <p>Last Updated October 8, 2003<br>by Scott Meyers</p>
+     <div class="hrlong"></div>
+
+  
+  
+  <pre> /******************************************************************************
+ *                                                                             *
+ *        Code from Item 29 ("Reference Counting") of MORE EFFECTIVE C++       *
+ *                                                                             *
+ *                               Scott Meyers                                  *   
+ *                                                                             *
+ *            Copyright 1996 (c) Addison-Wesley Publishing Company             *
+ *       You are free to use this code for non-commercial purposes only.       *
+ *                                                                             *
+ * This page contains the code for the classes and class templates making up   *
+ * the Reference Counting Item of <em>More Effective C++</em>.  To use this code,       *
+ * either copy this page and paste it into a C++ source file or save the       *
+ * entire page as text into a C++ source file.  Don't save the HTML source     *
+ * and expect that to compile :-)                                              *
+ *                                                                             *
+ * Each class or template in this file follows a block comment that shows the  *
+ * corresponding pages in the book.  This page also contains a main function   *
+ * that performs a VERY limited test of the code in this file.  You can        *
+ * compile the code in this file as a stand-alone program, and you should get  *
+ * this output:                                                                *
+ *                                                                             *
+ *     String with no changes.                                                 *
+ *     String with    changes.                                                 *
+ *     10                                                                      *
+ *     -1                                                                      *
+ *                                                                             *
+ * The code here reflects all changes made to date in response to bug reports  *
+ * from readers of the book.  (To see a complete list of known bugs in <em>More    *
+ * Effective C++</em>, as well as whether they've been fixed yet, visit the         *
+ * <a title="More Effective C++ Errata List" href="https://www.aristeia.com/BookErrata/mec++-errata.html"><em>More Effective C++</em> Errata List</a>.)  If you find any additional bugs, please   *
+ * <a title="email Scott" href="mailto:smeyers@aristeia.com">send them to me</a>.                                                            *
+ ******************************************************************************/
+ #include &lt;iostream&gt;      // The iostream facilities are not used in the classes
+                          // in this file, but they are used in the code that 
+                          // tests the classes.
+ 
+ #include &lt;cstring&gt;       // This includes the C string functions, e.g.,
+                          // strlen, strcpy, etc.  They are used in the
+                          // implementation of class String::StringValue.
+ 
+ // The following is for compilers that don't support bool.  Uncomment these
+ // lines if your compilers lack bool support.  For details on this emulation
+ // of bool, see More Effective C++, pp. 3-4.
+ // typedef int bool;
+ // const bool false = 0;
+ // const bool true = 1;
+ 
+ /******************************************************************************
+ *                       Class RCObject (from pp. 204-205)                     *
+ ******************************************************************************/
+ class RCObject {                       // base class for reference-
+ public:                                // counted objects
+   void addReference();
+   void removeReference();
+   void markUnshareable();
+   bool isShareable() const;
+   bool isShared() const;
+ 
+ protected:
+   RCObject();
+   RCObject(const RCObject&amp; rhs);
+   RCObject&amp; operator=(const RCObject&amp; rhs);
+   virtual ~RCObject() = 0;
+ 
+ private:
+   int refCount;
+   bool shareable;
+ };
+ 
+ RCObject::RCObject()
+ : refCount(0), shareable(true) {}
+ 
+ RCObject::RCObject(const RCObject&amp;)
+ : refCount(0), shareable(true) {}
+ 
+ RCObject&amp; RCObject::operator=(const RCObject&amp;)
+ {
+   return *this;
+ }  
+ 
+ RCObject::~RCObject() {}
+ 
+ void RCObject::addReference() 
+ {
+   ++refCount;
+ }
+ 
+ void RCObject::removeReference()
+ {
+   if (--refCount == 0) delete this;
+ }
+ 
+ void RCObject::markUnshareable()
+ {
+   shareable = false;
+ }
+ 
+ bool RCObject::isShareable() const
+ {
+   return shareable;
+ }
+ 
+ bool RCObject::isShared() const
+ {
+   return refCount &gt; 1;
+ }  
+ 
+ 
+ /******************************************************************************
+ *                 Template Class RCPtr (from pp. 203, 206)                    *
+ ******************************************************************************/
+ template&lt;class T&gt;                      // template class for smart
+ class RCPtr {                          // pointers-to-T objects; T
+ public:                                // must support the RCObject interface
+   RCPtr(T* realPtr = 0);
+   RCPtr(const RCPtr&amp; rhs);
+   ~RCPtr();
+   RCPtr&amp; operator=(const RCPtr&amp; rhs);                     
+   T* operator-&gt;() const;
+   T&amp; operator*() const;
+ 
+ private:
+   T *pointee;
+   void init();
+ };
+ 
+ template&lt;class T&gt;
+ void RCPtr&lt;T&gt;::init()
+ {
+   if (pointee == 0) return;
+   
+   if (pointee-&gt;isShareable() == false) {
+     pointee = new T(*pointee);
+   }
+   
+   pointee-&gt;addReference();
+ }
+ 
+ template&lt;class T&gt;
+ RCPtr&lt;T&gt;::RCPtr(T* realPtr)
+ : pointee(realPtr)
+ {
+   init();
+ }
+ 
+ template&lt;class T&gt;
+ RCPtr&lt;T&gt;::RCPtr(const RCPtr&amp; rhs)
+ : pointee(rhs.pointee)
+ { 
+   init();
+ }
+ 
+ template&lt;class T&gt;
+ RCPtr&lt;T&gt;::~RCPtr()
+ {
+   if (pointee) pointee-&gt;removeReference();
+ }
+ 
+ template&lt;class T&gt;
+ RCPtr&lt;T&gt;&amp; RCPtr&lt;T&gt;::operator=(const RCPtr&amp; rhs)
+ {
+   if (pointee != rhs.pointee) {                   // this code was modified
+     T *oldPointee = pointee;                      // for the book's 10th
+                                                   // printing
+     pointee = rhs.pointee;
+     init(); 
+ 
+     if (oldPointee) oldPointee-&gt;removeReference();                
+   }
+   
+   return *this;
+ }
+ 
+ template&lt;class T&gt;
+ T* RCPtr&lt;T&gt;::operator-&gt;() const 
+ {
+   return pointee;
+ }
+ 
+ template&lt;class T&gt;
+ T&amp; RCPtr&lt;T&gt;::operator*() const
+ {
+   return *pointee;
+ }
+ 
+ 
+ /******************************************************************************
+ *           Classes String and StringValue (from pp. 204, 206-207)            *
+ ******************************************************************************/
+ class String {                          // class to be used by
+ public:                                 // application developers
+   String(const char *value = "");
+ 
+   char operator[](int index) const;       
+   char&amp; operator[](int index);
+ 
+ private:
+   // class representing string values
+   struct StringValue: public RCObject {
+     char *data;
+  
+     StringValue(const char *initValue);
+     StringValue(const StringValue&amp; rhs);
+     void init(const char *initValue);
+     ~StringValue();
+   };
+ 
+   RCPtr&lt;StringValue&gt; value;                       
+ 
+   // This function is not in the book, but it's convenient for testing the
+   // class -- see below.
+   friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; stream, const String&amp; string);
+ };
+ 
+ void String::StringValue::init(const char *initValue)
+ {
+   using namespace std;
+ 
+   data = new char[strlen(initValue) + 1];
+   strcpy(data, initValue);
+ }
+ 
+ String::StringValue::StringValue(const char *initValue)
+ { 
+   init(initValue);
+ }
+ 
+ String::StringValue::StringValue(const StringValue&amp; rhs)
+ {
+   init(rhs.data);
+ }
+ 
+ String::StringValue::~StringValue()
+ {
+   delete [] data;
+ }
+ 
+ 
+ String::String(const char *initValue)
+ : value(new StringValue(initValue)) {}
+ 
+ char String::operator[](int index) const
+ {
+   return value-&gt;data[index];
+ }
+ 
+ char&amp; String::operator[](int index)
+ { 
+   if (value-&gt;isShared()) {      
+     value = new StringValue(value-&gt;data);
+   }
+ 
+   value-&gt;markUnshareable();
+ 
+   return value-&gt;data[index];
+ }
+ 
+ std::ostream&amp; operator&lt;&lt;(std::ostream&amp; stream, const String&amp; string)
+ {
+   return stream &lt;&lt; string.value-&gt;data;
+ }
+ 
+ 
+ /******************************************************************************
+ *                  Template Class RCIPtr (from pp. 209-210)                   *
+ *                                                                             *
+ * The code for RCIPtr has changed over the years in response to errors        *
+ * both in the original source code as well as in the subsequent fixes.  You   *
+ * can find a complete list of changes at <a title="More Effective C++ errata page" href="http://www.aristeia.com/BookErrata/mec++-errata.html">the <em>More Effective C++</em> errata page</a>.  *
+ * The code here is accurate as of the 13th printing of the book.              *
+ ******************************************************************************/
+ template&lt;class T&gt;
+ class RCIPtr {
+ public:
+   RCIPtr(T* realPtr = 0);
+   RCIPtr(const RCIPtr&amp; rhs);
+   ~RCIPtr();
+   RCIPtr&amp; operator=(const RCIPtr&amp; rhs);
+ 
+   T* operator-&gt;() const;
+   T&amp; operator*() const;
+ 
+   RCObject&amp; getRCObject()               // give clients access to
+   { return *counter; }                  // isShared, etc.
+ 
+ private:
+   struct CountHolder: public RCObject {
+     ~CountHolder() { delete pointee; }
+     T *pointee;
+   };
+ 
+   CountHolder *counter;
+   void init();
+ };
+ 
+ template&lt;class T&gt;
+ void RCIPtr&lt;T&gt;::init()
+ {
+   if (counter-&gt;isShareable() == false) {
+     T *oldValue = counter-&gt;pointee;
+     counter = new CountHolder;
+     counter-&gt;pointee = oldValue ? new T(*oldValue) : 0;
+   } 
+ 
+   counter-&gt;addReference();
+ }
+ 
+ template&lt;class T&gt;
+ RCIPtr&lt;T&gt;::RCIPtr(T* realPtr)
+ : counter(new CountHolder)
+ { 
+   counter-&gt;pointee = realPtr;
+   init();
+ }
+ 
+ template&lt;class T&gt;
+ RCIPtr&lt;T&gt;::RCIPtr(const RCIPtr&amp; rhs)
+ : counter(rhs.counter)
+ { init(); }
+ 
+ template&lt;class T&gt;
+ RCIPtr&lt;T&gt;::~RCIPtr()
+ { counter-&gt;removeReference(); }
+ 
+ template&lt;class T&gt;
+ RCIPtr&lt;T&gt;&amp; RCIPtr&lt;T&gt;::operator=(const RCIPtr&amp; rhs)
+ {
+   if (counter != rhs.counter) {         
+     counter-&gt;removeReference();     
+     counter = rhs.counter;
+     init();
+   }
+   return *this;
+ }
+ 
+ template&lt;class T&gt;
+ T* RCIPtr&lt;T&gt;::operator-&gt;() const
+ { return counter-&gt;pointee; }
+ 
+ template&lt;class T&gt;
+ T&amp; RCIPtr&lt;T&gt;::operator*() const
+ { return *(counter-&gt;pointee); }
+ 
+ 
+ /******************************************************************************
+ *                          Class Widget (from p. 210)                         *
+ *                                                                             *
+ * This class is the same as that in the book, but I've added an               *
+ * implementation so that RCIPtr can be tested.                                *
+ ******************************************************************************/
+ class Widget {
+ public:
+   Widget(int size): value(size) {}
+   Widget(const Widget&amp; rhs): value(rhs.value) {}
+   ~Widget() {}
+ 
+   Widget&amp; operator=(const Widget&amp; rhs)
+   {
+     value = rhs.value;
+     return *this; 
+   }
+ 
+   void doThis()
+   { value = -1; }
+ 
+   int showThat() const
+   { return value; }
+   
+ private:
+   int value;
+ };
+ 
+ 
+ /******************************************************************************
+ *                         Class RCWidget (from p. 210)                        *
+ *                                                                             *
+ * I modified this class for the 13th printing of the book.  For details on    *
+ * why, consult the erratum affecting pages 209, 210, and 316 that was fixed   *
+ * on 7/15/02 in <a title="errata list" href="https://www.aristeia.com/BookErrata/mec++-errata.html">the book's errata list</a>.                                       *
+ ******************************************************************************/
+ class RCWidget {
+ public:
+   RCWidget(int size)
+   : value(new Widget(size)) {}
+ 
+   void doThis()
+   {
+     if (value.getRCObject().isShared()) {         // do COW if 
+       value = new Widget(*value);                 // Widget is shared
+     }
+     value-&gt;doThis();
+   }
+ 
+   int showThat() const
+   { return value-&gt;showThat(); }
+ 
+ private:
+   RCIPtr&lt;Widget&gt; value;
+ };
+ 
+ 
+ /******************************************************************************
+ * Functions to perform VERY simple test of the above.                         *
+ ******************************************************************************/  
+ void testRCPtr()
+ {
+   String s1 = "String with no changes.";
+   String s2(s1);
+   
+   s2[12] = s2[13] = ' ';
+   
+   std::cout &lt;&lt; s1 &lt;&lt; '\n';      // prints "String with no changes."
+   std::cout &lt;&lt; s2 &lt;&lt; '\n';      // prints "String with    changes."
+ }
+ 
+ void testRCIPtr()
+ {
+   RCWidget w1(10);
+   RCWidget w2(w1);
+ 
+   w2.doThis();
+   
+   std::cout &lt;&lt; w1.showThat() &lt;&lt; '\n';       // prints 10
+   std::cout &lt;&lt; w2.showThat() &lt;&lt; '\n';       // prints -1
+ }
+ 
+ int main()
+ {
+   testRCPtr();
+   testRCIPtr();
+ 
+   return 0;
+ }
+ </pre>
+
+  <!-- End Page Content -->
+  
+        </div>
+    </div>
+
+<script type="text/javascript" src="./Scott Meyers_ More Effective C++ Item 29 Source Code_files/basic.js"></script>
+    
+</body></html>

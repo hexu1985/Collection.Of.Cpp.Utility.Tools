@@ -1,0 +1,262 @@
+#sidebar {
+    background-color: #366631;
+    border-right-style: solid;
+    border-right-width: 3px; 
+    border-right-color: #e9c985;
+}
+
+
+
+/* ==================== Floating Mobile Menu ======================= */
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 8%;/* 70px; */ /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: relative;
+    background-color: rgba(0,0,0,0.2);
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  
+  /* The Close Button */
+  .close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .modal-header {
+    padding: 2px 16px;
+    background-color: #366631;;
+    color: white;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    border-bottom-color: #e9c985;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .modal-body {padding: 2px 16px;}
+  
+
+/* ================== Regular Mobile menu ===================== */
+
+#mobile-header h2{
+    margin: 4%;
+}
+
+#mobile-header ul, #mobile-header li {
+    padding: 0px;
+    list-style-type: none;
+}
+
+#mobile-header{
+    display: none;
+    background-color: #366631;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    border-bottom-color: #e9c985;
+    padding: 10px;
+}
+
+#mobile-header ul{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    /*margin-left: -40px;*/
+
+}
+
+#mobile-header li{
+    padding: 2%;
+    margin: 8px auto;
+    width: 80%;
+ /*   width: 50%;*/
+    text-align: center;
+    font-size: 1.2rem; /*ADDED*/
+    transition-duration: .5s;
+ 
+    background-color: #3c6640;
+    border-width: 2px;
+    border-color: #e9c985;
+    border-style: solid;
+}    
+
+#mobile-header li:hover{
+    border-color: #e9c985;
+}
+
+#mobile-header a{
+    width: 100%;
+    text-decoration: none;
+    color: #e9c985;
+}
+
+#mobile-header #burger-menu{
+    display: flex;
+    justify-content: center;
+}
+
+#mobile-header button{
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    background: #3c6640;
+    cursor: pointer;
+    display: inline-block;
+    margin: 10px auto;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    box-shadow: 0 0 20px 0px rgba(0,0,0,0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#mobile-header button i, span{
+    color: #e9c985;
+}
+
+/*ADDED*/
+/* RESPONSIVE */
+/* IPAD / TABLET */
+@media only screen and (max-width: 1024px) {
+    #mobile-header, #mobile-header ul {
+        display: block;
+    }
+
+    #sidebar {
+            display: none;
+        }
+    
+    #content {
+
+            margin-left: initial; 
+        }
+
+    #content p { 
+        line-height:1.3em; 
+        color:#000000;
+    /*    padding-top: 15px;*/
+    	 padding-right: 10px;
+    	 padding-left: 10px;
+    	 margin-top: 1em;
+    	 margin-bottom: 0;
+         font-size: 1.2em;
+    }
+
+    #content h2 {
+       font-family:"Trebuchet MS"; 
+    	font-size:2em; 
+    	font-weight:normal; 
+    	text-decoration:none;
+    	padding-left: 10px;
+    	padding-bottom: 10px;
+    	line-height: 35px;
+    }
+
+h3 {
+   font-family:Arial, Helvetica, sans-serif;
+   /* padding-left: 10px;*/
+	font-size:1.3em;
+	font-weight:bold; 
+    line-height: 100%;
+	margin: 25px 0px 10px 10px; 
+}
+
+table.books {
+	margin: 10px auto 10px 20px; 
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:1em; 
+	
+}
+
+    #content ul {
+       font-size:1.2em; 
+    }
+
+
+    /* LANDSCAPE MODE: TABLET */
+    /*@media only screen and (max-height: 780px) {
+        .modal {
+            padding-top: 40px;
+        }
+    }*/
+
+    /* LANDSCAPE MODE: SMARTPHONES */
+    @media only screen and (max-height: 768px) {
+        #mobile-header ul {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: inherit;
+            justify-content: center;
+        }
+
+        #mobile-header li {
+            width: 100%;
+            max-width: 190px;
+            margin: 2px;
+        }
+
+        .modal {
+            padding-top: 3%;
+        }
+
+        #mobile-header h2{
+        margin-block-start: 0.1em;
+        margin-block-end: 0.1em;
+        }
+    }
+
+}
+
+/* IPHONE / SMARTPHONES */
+/*@media only screen and (max-width: 500px) {
+    #mobile-header li {
+        padding: 6px;
+    }
+
+    .modal {
+        padding-top: 40px;
+    }
+}*/

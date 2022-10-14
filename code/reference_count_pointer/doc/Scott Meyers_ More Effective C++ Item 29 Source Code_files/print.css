@@ -1,0 +1,316 @@
+#navbar, #sidebar, #fieldset, .form {
+	display: none !important;
+}
+body, #main, #content, .column, #articletext, #footer {
+	float: none !important;
+	width: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	height: 100%;
+}
+
+#wrapper {
+  	/*color: #000;
+	width: 7in; 
+	padding: 0;
+	margin: 0 auto;
+	float: none !important;*/
+	display: inline ;
+}
+
+html body #main {background: none;}
+
+body  { 
+    height: 100%; 
+    margin: 0px; 
+    padding: 0px; 
+    font-family:Arial, Helvetica, sans-serif;
+    background-color:#FFFFFF;
+
+}
+
+html body pre, html body code {vertical-align: baseline;}
+
+#content p { 
+    line-height:1.25em; 
+    color:#000000;
+	margin-top: 1em;
+	margin-bottom: 0;
+    font-size: 0.8em;
+}
+
+#content p.center {
+	font-family: arial, verdana, helvetica;
+	font-size: .8em;
+	/*margin-left: 5%; 
+	margin-right: 5%;*/
+	text-align: center;
+}
+#content-nm p.center {
+	font-family: arial, verdana, helvetica;
+	font-size: .8em;
+/*	margin-left: 5%; 
+	margin-right: 5%;*/
+	text-align: center;
+}
+
+#content-nm p { 
+    line-height:1.25em; 
+    color:#000000;
+/*    padding-top: 15px;*/
+	 padding-right: 10px;
+	 padding-left: 10px;
+	 margin-top: 1em;
+	 margin-bottom: 0;
+     font-size: 0.8em;
+}
+#content { 
+    margin-left: 130px;
+    padding: 4px 4px 4px 0px ;
+	/*overflow: hidden;
+    height: 1%;*/
+} 
+
+img {
+	border-style: solid;
+	border-color:#000000;
+	border-width: 1px 1px 1px 1px;
+}
+
+h1 {
+   font-family:"Trebuchet MS";
+	font-size:2.5em; 
+	font-weight:normal; 
+	margin: 20px 0px 0px 0px;
+	line-height: 25px;
+}
+
+#content h2 {
+   font-family:"Trebuchet MS"; 
+	font-size:2em; 
+	font-weight:normal; 
+	text-decoration:none;
+	padding-bottom: 10px;
+	line-height: 25px;
+}
+
+#content-tkp h2 {
+   font-family:"Trebuchet MS"; 
+	font-size:2em; 
+	font-weight:normal; 
+	text-decoration:none;
+	padding-bottom: 10px;
+	line-height: 25px;
+	text-align: center;
+}
+
+h3 {
+   font-family:Arial, Helvetica, sans-serif;
+	font-size:1em;
+	font-weight:bold; 
+    line-height: 100%;
+	margin: 25px 0px 10px 0px; 
+}
+h3.t {
+   font-family:Arial, Helvetica, sans-serif;
+	font-size:1.2em;
+	font-weight:bold; 
+	margin: 1px 1px 1px 0px; 
+}
+
+h4 {
+   font-family:Arial, Helvetica, sans-serif;
+	font-size:2.1em; 
+	font-weight:normal; 
+    line-height: 100%;
+	margin: 10px 0px 10px 0px; 
+}
+#content-nm h4 {
+   font-family:Arial, Helvetica, sans-serif;
+	font-size:2.1em; 
+	font-weight:normal; 
+    line-height: 100%;
+/*    line-height: 25px;*/
+	margin: 10px 0px 10px 0px; 
+	text-align:center;
+}
+#content-tkp h4 {
+   font-family:Arial, Helvetica, sans-serif;
+	font-size:2.1em; 
+	font-weight:normal; 
+    line-height: 100%;
+	margin: 10px 0px 10px 0px; 
+	text-align:center;
+}
+
+h5 {
+   font-family:Arial, Helvetica, sans-serif; 
+	font-size:1.5em; 
+	font-weight:normal; 
+    line-height: 100%;
+	margin: 10px 0px 20px 0px; 
+}
+
+#content-nm h5 {
+   font-family:Arial, Helvetica, sans-serif; 
+	font-size:1.5em; 
+	font-weight:normal; 
+	line-height: 25px;
+	margin: 10px 0px 20px 0px; 
+	text-align:center;
+}
+
+h6 {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:1em; 
+	font-weight:bold; 
+    line-height: 100%;
+	margin: 25px 0px 10px 0px; 
+}
+
+h7 {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:1em; 
+	font-weight:normal; 
+    line-height: 25px;
+	margin: 20px 0px 0px 0px;
+}
+.pagetitle { 
+    font-size:2.0em; 
+    line-height:1.667em;
+    color:#000000;
+ }
+ 
+ .subtitle { 
+    font-size:1.5em; 
+    line-height:0.5em;
+    color:#000000;
+}
+ul ul { font-size: 100%; } 
+ul ul ul { font-size: 100%; } 
+ul ul ul ul { font-size: 100%; } 
+/*ul { font-size: 90%; }*/
+ul { font-size: .8em }
+ol { font-size: .8em }
+li li { font-size: 100% }
+li li li { font-size: 100% }
+li { 
+    line-height:1.2em; 
+    color:#000000;
+	margin-right:14px;
+	font-size: 100%;
+	
+}
+
+.spacedlist { 
+ /*   font-size:10pt; 
+	 font-size:80%;*/
+    line-height:1.2em; 
+    margin-top:12px;
+	font-size: 100%;
+
+}
+
+table.beige {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:.8em; 
+/*	padding-left: 15px;*/
+	line-height: 25px;
+/*	margin: 10px 0px 10px 0px; */
+	background-color:#F5F5DC;
+	margin-left:auto; margin-right:auto;
+}
+table.ddj {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size: 65%; 
+	/*	padding-left: 15px;
+	line-height: 25px;*/
+/*	margin: 10px 0px 10px 0px; */
+	background-color:#F5F5DC;
+	margin-left:auto; margin-right:auto;
+}
+table.yellow {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:1em; 
+/*	padding-left: 15px;*/
+	line-height: 25px;
+/*	margin: 10px 0px 10px 0px; */
+	background-color:#ffff9c;
+	margin-left:auto; margin-right:auto;
+}
+table.books {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:.8em; 
+/*	padding-left: 15px;*/
+/*	margin: 10px 0px 10px 0px; */
+	margin: 10px auto 10px 20px; 
+}
+
+table.ddj2 {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:.8em; 
+/*	padding-left: 15px;*/
+	line-height: 25px;
+/*	margin: 10px 0px 10px 0px; */
+	margin: 10px 25px 10px 13px; 
+}
+
+table.nomargin {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:.8em; 
+/*	padding-left: 15px;
+	line-height: 15px;*/
+/*	margin: 10px 0px 10px 0px; */
+	margin: 10px 0px 0px 8px; 
+}
+
+table.tkp {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:.8em; 
+/*	padding-left: 15px;*/
+	line-height: 25px;
+/*	margin: 10px 0px 10px 0px; */
+	margin-left:auto; margin-right:auto; 
+}
+
+table.errata {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:.8em; 
+/*	padding-left: 15px;*/
+	line-height: 25px;
+/*	margin: 10px 0px 10px 0px; */
+	margin: 20px 0px 0px 50px;
+}
+
+table.tr1 {
+    font-family:Arial, Helvetica, sans-serif; 
+	font-size:.8em; 
+/*	padding-left: 15px;*/
+	line-height: 25px;
+/*	margin: 10px 0px 10px 0px; */
+	margin-left:auto; margin-right:auto;
+}
+
+th { font-family: Arial, Helvetica, sans-serif; font-size:1em; }
+.pagetitle { 
+    font-size:2.0em; 
+    line-height:1.667em;
+    color:#000000;
+ }
+#content p.indent {
+	font-family: arial, verdana, helvetica;
+	font-size: .8em;
+/*	margin-left: 5%; 
+	margin-right: 5%;*/
+	margin: 10px 3% 10px 3%;
+}
+
+#content-nm p.indent {
+	font-family: arial, verdana, helvetica;
+	font-size: .8em;
+/*	margin-left: 5%; 
+	margin-right: 5%;*/
+	margin: 10px 3% 10px 3%;
+}
+
+
