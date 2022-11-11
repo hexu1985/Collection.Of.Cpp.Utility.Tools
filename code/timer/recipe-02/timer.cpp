@@ -66,12 +66,14 @@ public:
 
     void Insert(AlarmPtr alarm);
     void Run();
+    void Stop();
 
 private:
     std::list<AlarmPtr> alarm_list;
     TimePoint current_alarm;
     std::mutex alarm_mutex;
     std::condition_variable alarm_cond;
+    std::atomic<bool> stop{false};
 };
 
 /*
@@ -138,6 +140,7 @@ void AlarmLooper::Run() {
      */
     std::unique_lock<std::mutex> lock(alarm_mutex);
     while (true) {
+        if (stop) return;
         /*
          * If the alarm list is empty, wait until an alarm is
          * added. Setting current_alarm to 0 informs the insert
@@ -146,6 +149,7 @@ void AlarmLooper::Run() {
         current_alarm = TimePoint{};
         while (alarm_list.empty()) {
             alarm_cond.wait(lock);
+            if (stop) return;
         }
         alarm = alarm_list.front();
         alarm_list.pop_front();
@@ -179,9 +183,16 @@ void AlarmLooper::Run() {
     }
 }
 
+void AlarmLooper::Stop() {
+    stop = true;
+    alarm_cond.notify_one();
+}
+
 class TimerThread {
 public:
     TimerThread(); 
+    ~TimerThread(); 
+
     void AddTimer(std::shared_ptr<Timer::Impl> timer);
     bool CurrentThreadIsAlarmLooperThread() {
         return std::this_thread::get_id() == looper_thread.get_id();
@@ -199,7 +210,11 @@ private:
 
 TimerThread::TimerThread() {
     looper_thread = std::thread(&AlarmLooper::Run, &alarm_looper);
-    looper_thread.detach();
+}
+
+TimerThread::~TimerThread() {
+    alarm_looper.Stop();
+    looper_thread.join();
 }
 
 void TimerThread::AddTimer(std::shared_ptr<Timer::Impl> timer) {
