@@ -9,6 +9,7 @@
 
 #ifdef DEBUG
 #include <iostream>
+#include <iomanip>
 #endif
 
 using Clock = std::chrono::system_clock;
@@ -21,16 +22,16 @@ namespace {
 
 std::ostream& operator<<(std::ostream& out, const TimePoint& tp) {
     using namespace std::chrono;
-    auto d = duration_cast<seconds>(tp.time_since_epoch());
-    out << d.count();
+    auto us = duration_cast<microseconds>(tp.time_since_epoch());
+    out << std::fixed << static_cast<double>(us.count())/1000000 << std::defaultfloat;
     return out;
 }
 
 template <typename Rep, typename Preiod>
 std::ostream& operator<<(std::ostream& out, const std::chrono::duration<Rep, Preiod>& d) {
     using namespace std::chrono;
-    auto s = duration_cast<seconds>(d);
-    out << s.count();
+    auto us = duration_cast<microseconds>(d);
+    out << std::fixed << static_cast<double>(us.count())/1000000 << std::defaultfloat;
     return out;
 }
 
@@ -39,9 +40,9 @@ std::ostream& operator<<(std::ostream& out, const std::chrono::duration<Rep, Pre
 
 class Timer::Impl {
 public:
-    Impl(int interval_, Callback function_): function(function_) {
+    Impl(double interval, Callback function_): function(function_) {
         auto now = Clock::now();
-        time = now + Seconds(interval_);
+        time = now + std::chrono::microseconds(static_cast<long int>(interval*1000000));
     }
 
     Timer::Callback function;
@@ -167,6 +168,7 @@ void AlarmLooper::Run() {
                     expired = true;
                     break;
                 } 
+                if (stop) return;
             }
             if (!expired) {
                 Insert(alarm);
@@ -225,7 +227,7 @@ void TimerThread::AddTimer(std::shared_ptr<Timer::Impl> timer) {
     }
 }
 
-Timer::Timer(int interval, Callback function) {
+Timer::Timer(double interval, Callback function) {
     pimpl = std::make_shared<Impl>(interval, function);
 }
 

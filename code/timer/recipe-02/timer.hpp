@@ -8,7 +8,7 @@ class Timer {
 public:
     typedef std::function<void ()> Callback;
 
-    Timer(int interval, Callback function); 
+    Timer(double interval, Callback function); 
     void Start();
     void Cancel(); 
 

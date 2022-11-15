@@ -63,6 +63,9 @@ int main()
             auto alarm = std::make_shared<Alarm>(seconds, message);
             std::cout << "start timer [" << *alarm << "] at " << std::chrono::system_clock::now() << std::endl;
             Timer t(seconds, std::bind(callback, alarm));
+#ifdef DEBUG
+            t.SetMessage(message);
+#endif
             t.Start();
         } 
         catch (const std::exception& e) {
