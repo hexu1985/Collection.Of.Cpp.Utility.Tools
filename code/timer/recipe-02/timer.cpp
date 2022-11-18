@@ -40,11 +40,14 @@ std::ostream& operator<<(std::ostream& out, const std::chrono::duration<Rep, Pre
 
 class Timer::Impl {
 public:
-    Impl(double interval, Callback function_): function(function_) {
-        auto now = Clock::now();
-        time = now + std::chrono::microseconds(static_cast<long int>(interval*1000000));
+    Impl(double interval_, Callback function_): interval(interval_), function(function_) {
     }
 
+    void CalculateTime() {
+        time = Clock::now() + std::chrono::microseconds(static_cast<long int>(interval*1000000));
+    }
+
+    double interval;
     Timer::Callback function;
     TimePoint time;
     std::atomic<bool> active{true};
@@ -232,6 +235,7 @@ Timer::Timer(double interval, Callback function) {
 }
 
 void Timer::Start() {
+    pimpl->CalculateTime();
     TimerThread::GetInstance().AddTimer(pimpl);
 }
 
