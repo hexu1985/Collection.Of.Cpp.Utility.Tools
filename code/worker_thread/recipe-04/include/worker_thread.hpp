@@ -75,8 +75,8 @@ public:
     static const std::string& GetCurrentThreadName();
 
 private:
-    std::string name_;
-    std::shared_ptr<std::thread> thread_;
-    std::shared_ptr<TaskQueue> task_queue_;
+    std::string thread_name;
+    std::thread looper_thread;
+    std::shared_ptr<TaskQueue> task_queue;
 };
 
