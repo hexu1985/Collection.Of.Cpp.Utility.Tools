@@ -1,7 +1,7 @@
 
 RM = rm -f
 CXX = g++
-CXXFLAGS = -Wall -g -std=c++11 -DNDEBUG
+CXXFLAGS = -Wall -g -std=c++11 -DNDEBUG -fsanitize=leak -fno-omit-frame-pointer
 INCLUDES = -I../include
 LDFLAGS = -lpthread
 LDPATH = 
