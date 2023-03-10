@@ -2,11 +2,9 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
+#include "ends_with.hpp"
 
-bool ends_with(const std::string& input, const std::string& test) {
-    return input.rfind(test) == (input.length() - test.length());
-}
+using namespace std;
 
 int main(int argc, char *argv[])
 {
