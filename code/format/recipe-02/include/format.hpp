@@ -27,6 +27,7 @@ namespace util
         virtual ~Arg(){}
         virtual void Format(std::ostringstream &ss, const std::string& fmt)
         {
+            (void) fmt;
             ss << m_arg;
         }
     private:
@@ -140,7 +141,7 @@ namespace util
         return ss.str();
     }
 
-    const std::string& Format(const std::string& format)
+    inline const std::string& Format(const std::string& format)
     {
         return format;
     }
