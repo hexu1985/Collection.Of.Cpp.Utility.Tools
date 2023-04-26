@@ -8,17 +8,13 @@ class RandomNumber {
 private:
     std::minstd_rand generator;
 
-    static int get_seed(int s) {
-        if (s <= 0) {
-            return std::chrono::system_clock::now().time_since_epoch().count() & 0x7fffffff;
-        } else {
-            return s;
-        }
-    }
-
 public:
 	// initialize the random number generator
-	RandomNumber(int s = 0): generator(get_seed(s)) {
+	RandomNumber(int s = 0) {
+        if (s <= 0) {
+            s = std::chrono::system_clock::now().time_since_epoch().count() & 0x7fffffff;
+        }
+        generator.seed(s);
     }
 
 	// return a 32-bit random integer m, 1 <= m <= 2^31-2
