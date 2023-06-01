@@ -12,8 +12,7 @@
 #include <queue>			// queue class
 #include <functional>	// less<T>
 
-#include "d_except.h"	// exception classes
-#include "d_pqueue.h"	// miniPQ class
+#include "graph_error.hpp"
 
 // largest positive integer on the machine
 const int INFINITY = (int)((unsigned int)~0 >> 1);
@@ -54,10 +53,10 @@ public:
     enum vertexColor { WHITE, GRAY, BLACK };
 
     // iterator pointing at a pair<T,int> object in the vertex map
-    typename map<T,int>::iterator vtxMapLoc;
+    typename std::map<T,int>::iterator vtxMapLoc;
 
     // set of adjacent (neighbor) objects for the current vertex
-    set<neighbor> edges;
+    std::set<neighbor> edges;
 
     /// maintains the in-degree of the vertex
     int inDegree;
@@ -81,7 +80,7 @@ public:
     {}
 
     // constructor with iterator pointing to the vertex in the map
-    vertexInfo(typename map<T,int>::iterator iter):
+    vertexInfo(typename std::map<T,int>::iterator iter):
         vtxMapLoc(iter), inDegree(0), occupied(true)
     {}
 };
@@ -101,7 +100,7 @@ template <typename T>
 class graph
 {
 public:
-    class const_iterator: public map< T, int >::const_iterator
+    class const_iterator: public std::map< T, int >::const_iterator
     {
     public:
         const_iterator()
@@ -110,7 +109,7 @@ public:
         // converts a map iterator to a graph iterator
         const_iterator(typename std::map<T,int>::const_iterator i)
         {
-            *((typename map< T, int >::const_iterator *)this) = i;
+            *((typename std::map< T, int >::const_iterator *)this) = i;
         }
 
         // return the vertex pointed to by the iterator
@@ -164,7 +163,7 @@ public:
     // Precondition: v is a vertex in the graph. if not,
     // the function throws the graphError exception
 
-    set<T> getNeighbors(const T& v) const;
+    std::set<T> getNeighbors(const T& v) const;
     // return a set containing the neighbors of v.
     // Precondition: v is a vertex in the graph. if not,
     // the function throws the graphError exception
@@ -203,10 +202,7 @@ public:
     const_iterator end() const;
     // iterator functions returns corresponding map iterator
 
-    // "d_galgs.h" implements the graph algorithms using inline code.
-    // this is necessary for the Borland C++ 5.5 compiler
-#include "d_galgs.h"
-
+#include "graph_io.hpp"
     /*
        LISTING OF THE PROTOTYPES FOR THE GRAPH ALGORITHMS
 
@@ -255,26 +251,26 @@ public:
     friend graph<T> transpose(graph<T>& g);
     // return the transpose of the graph
 
-    friend void strongComponents(graph<T>& g, vector<set<T> >& component);
+    friend void strongComponents(graph<T>& g, vector<set<T>>& component);
     // find the strong components of the graph
     */
 
 private:
-    typedef map<T,int> vertexMap;
+    typedef std::map<T,int> vertexMap;
 
     vertexMap vtxMap;
     // store vertex in a map with its name as the key and the index
     // of the corresponding vertexInfo object in the vInfo
     // vector as the value
 
-    vector<vertexInfo<T> > vInfo;
+    std::vector<vertexInfo<T>> vInfo;
     // list of vertexInfo objects corresponding to the vertices
 
     int numVertices;
     int numEdges;
     // current size (vertices and edges) of the graph
 
-    stack<int> availStack;
+    std::stack<int> availStack;
     // availability stack for storing unused indices in vInfo
 
     int getvInfoIndex(const T& v) const;
@@ -304,19 +300,19 @@ int graph<T>::getvInfoIndex(const T& v) const
 }
 
 // constructor. initialize numVertices and numEdges to 0
-    template <typename T>
+template <typename T>
 graph<T>::graph(): numVertices(0), numEdges(0)
 {}
 
 // copy constructor
-    template <typename T>
+template <typename T>
 graph<T>::graph(const graph<T>& g)
 {
     *this = g;	// copy g to current object
 }
 
 // overloaded assignment operator
-    template <typename T>
+template <typename T>
 graph<T>& graph<T>::operator= (const graph<T>& rhs)
 {
     typename vertexMap::iterator mi;
@@ -376,8 +372,8 @@ int graph<T>::getWeight(const T& v1, const T& v2) const
         throw graphError("graph getWeight(): vertex not in the graph");
 
     // construct an alias for the edge list in vInfo[pos1]
-    const set<neighbor>& edgeSet = vInfo[pos1].edges;
-    set<neighbor>::const_iterator setIter;
+    const std::set<neighbor>& edgeSet = vInfo[pos1].edges;
+    std::set<neighbor>::const_iterator setIter;
 
     // search for pos2 in the edge list and return its weight
     // if found; otherwise, return -1 to indicate that the
@@ -400,8 +396,8 @@ void graph<T>::setWeight(const T& v1, const T& v2, int w)
         throw graphError("graph setWeight(): vertex not in the graph");
 
     // construct an alias for the edge list in vInfo[pos1]
-    set<neighbor>& edgeSet = vInfo[pos1].edges;
-    set<neighbor>::iterator setIter;
+    std::set<neighbor>& edgeSet = vInfo[pos1].edges;
+    std::set<neighbor>::iterator setIter;
 
     // search for pos2 in the edge list and update its weight.
     // if the edge does not exist, throw an exception
@@ -443,10 +439,10 @@ int graph<T>::outDegree(const T& v) const
 
 // return the list of all adjacent vertices
 template <typename T>
-set<T> graph<T>::getNeighbors(const T& v) const
+std::set<T> graph<T>::getNeighbors(const T& v) const
 {
     // set returned
-    set<T> adjVertices;
+    std::set<T> adjVertices;
 
     // obtain the position of v from the map
     int pos = getvInfoIndex(v);
@@ -457,9 +453,9 @@ set<T> graph<T>::getNeighbors(const T& v) const
             graphError("graph getNeighbors(): vertex not in the graph");
 
     // construct an alias for the set of edges in vertex pos
-    const set<neighbor>& edgeSet = vInfo[pos].edges;
+    const std::set<neighbor>& edgeSet = vInfo[pos].edges;
     // use setIter to traverse the edge set
-    set<neighbor>::const_iterator setIter;
+    std::set<neighbor>::const_iterator setIter;
 
     // index of vertexInfo object corresponding to an adjacent vertex
     int aPos;
@@ -495,7 +491,7 @@ void graph<T>::insertEdge(const T& v1,
 
 
     // attempt to insert edge (pos2,w) into the edge set of vertex pos1
-    pair<set<neighbor>::iterator, bool> result =
+    std::pair<std::set<neighbor>::iterator, bool> result =
         vInfo[pos1].edges.insert(neighbor(pos2,w));
 
     // make sure edge was not already in the set
@@ -522,7 +518,7 @@ void graph<T>::insertVertex(const T& v)
     // to index and increment numVertices. if the insertion did
     // not take place, the vertex already exists. generate an
     // exception
-    pair<typename vertexMap::iterator, bool> result =
+    std::pair<typename vertexMap::iterator, bool> result =
         vtxMap.insert(typename vertexMap::value_type(v,0));
     if (result.second)
     {
@@ -563,8 +559,8 @@ void graph<T>::eraseEdge(const T& v1, const T& v2)
         throw graphError("graph eraseEdge(): vertex not in the graph");
 
     // construct an alias to the edge set of vInfo[pos1]
-    set<neighbor>& edgeSet = vInfo[pos1].edges;
-    set<neighbor>::iterator setIter;
+    std::set<neighbor>& edgeSet = vInfo[pos1].edges;
+    std::set<neighbor>::iterator setIter;
 
     // search for pos2 in the edge set
     setIter = edgeSet.find(neighbor(pos2));
@@ -589,7 +585,7 @@ void graph<T>::eraseVertex(const T& v)
     // pos is index of v in the vertex list
     int pos, j;
     // used in removal of edges to v
-    set<neighbor>::iterator sIter;
+    std::set<neighbor>::iterator sIter;
 
     // search the map for the key v
     mIter = vtxMap.find(v);
@@ -617,7 +613,7 @@ void graph<T>::eraseVertex(const T& v)
         if (vInfo[j].occupied)
         {
             // construct an alias for the set vInfo[j].edges
-            set<neighbor>& edgeSet = vInfo[j].edges;
+            std::set<neighbor>& edgeSet = vInfo[j].edges;
 
             sIter = edgeSet.begin();
             // cycle through the edge set
@@ -639,7 +635,7 @@ void graph<T>::eraseVertex(const T& v)
     numEdges -= vInfo[pos].edges.size();
 
     // the in-degree for all of v's neighbors must be decreased by 1
-    set<neighbor>& edgesFromv = vInfo[pos].edges;
+    std::set<neighbor>& edgesFromv = vInfo[pos].edges;
     for (sIter=edgesFromv.begin(); sIter != edgesFromv.end(); sIter++)
     {
         j = (*sIter).dest;
@@ -648,7 +644,7 @@ void graph<T>::eraseVertex(const T& v)
 
     // clear the edge set. construct an alias for vInfo[pos].edges
     // and use erase to clear the set
-    set<neighbor>& edgeSet = vInfo[pos].edges;
+    std::set<neighbor>& edgeSet = vInfo[pos].edges;
     edgeSet.erase(edgeSet.begin(), edgeSet.end());
 }
 
