@@ -117,61 +117,61 @@ public:
     Graph<T>& operator= (const Graph<T>& rhs);
     // overloaded assignment operator
 
-    int numberOfVertices() const;
+    int NumberOfVertices() const;
     // return the number of vertices in the graph
 
-    int numberOfEdges() const;
+    int NumberOfEdges() const;
     // return the number of edges in the graph
 
     bool empty() const;
     // is the graph empty?
 
-    int getWeight(const T& v1, const T& v2) const;
+    int GetWeight(const T& v1, const T& v2) const;
     // return the weight of the edge (v1, v2). if the edge.
     // does not exist, return -1
     // Precondition: v1 and v2 are vertices in the graph. if not
     // the function throws the graphError exception
 
-    void setWeight(const T& v1, const T& v2, int w);
+    void SetWeight(const T& v1, const T& v2, int w);
     // update the weight of edge (v1, v2).
     // Precondition: v1 and v2 are vertices in the graph. if not,
     // the function throws the graphError exception
     // Postcondition: the weight of vertex (v1,v2) is w
 
-    int inDegree(const T& v) const;
+    int InDegree(const T& v) const;
     // return the number of edges entering  v.
     // Precondition: v is a vertex in the graph. if not,
     // the function throws the graphError exception
 
-    int outDegree(const T& v) const;
+    int OutDegree(const T& v) const;
     // return the number of edges leaving  v.
     // Precondition: v is a vertex in the graph. if not,
     // the function throws the graphError exception
 
-    std::set<T> getNeighbors(const T& v) const;
+    std::set<T> GetNeighbors(const T& v) const;
     // return a set containing the neighbors of v.
     // Precondition: v is a vertex in the graph. if not,
     // the function throws the graphError exception
 
-    void insertEdge(const T& v1, const T& v2, int w);
+    void InsertEdge(const T& v1, const T& v2, int w);
     // add the edge (v1,v2) with specified weight to the graph.
     // Precondition: v1 and v2 are vertices in the graph. if not,
     // the function throws the graphError exception
     // Postcondition: The number of edges increases by 1
 
-    void insertVertex(const T& v);
+    void InsertVertex(const T& v);
     // insert v into the graph.
     // Precondition: v is a vertex in the graph. if not,
     // the function throws the graphError exception.
     // Postcondition: the number of vertices increases by 1
 
-    void eraseEdge(const T& v1, const T& v2);
+    void EraseEdge(const T& v1, const T& v2);
     // erase edge (v1,v2) from the graph
     // Precondition: v1 and v2 are vertices in the graph. if not,
     // the function throws the graphError exception.
     // Postcondition: The number of edges decreases by 1
 
-    void eraseVertex(const T& v);
+    void EraseVertex(const T& v);
     // erase v from the graph
     // Precondition: v is a vertex in the graph. if not,
     // the function throws the graphError exception.
@@ -207,13 +207,13 @@ private:
     std::stack<int> availStack;
     // availability stack for storing unused indices in vInfo
 
-    int getvInfoIndex(const T& v) const;
+    int GetVertexInfoIndex(const T& v) const;
     // uses vtxMap to obtain the index of v in vInfo
 };
 
 // uses vtxMap to obtain the index of v in vInfo
 template <typename T>
-int Graph<T>::getvInfoIndex(const T& v) const
+int Graph<T>::GetVertexInfoIndex(const T& v) const
 {
     // iter used in map lookup
     typename vertexMap::const_iterator iter;
@@ -273,13 +273,13 @@ Graph<T>& Graph<T>::operator= (const Graph<T>& rhs)
 // ATTRIBUTE TESTING FUNCTIONS
 
 template <typename T>
-int Graph<T>::numberOfVertices() const
+int Graph<T>::NumberOfVertices() const
 {
     return numVertices;
 }
 
 template <typename T>
-int Graph<T>::numberOfEdges() const
+int Graph<T>::NumberOfEdges() const
 {
     return numEdges;
 }
@@ -295,10 +295,10 @@ bool Graph<T>::empty() const
 // return the weight of the edge (v1, v2). if the edge
 // does not exist, return -1
 template <typename T>
-int Graph<T>::getWeight(const T& v1, const T& v2) const
+int Graph<T>::GetWeight(const T& v1, const T& v2) const
 {
     // find the vInfo indices for the two vertices
-    int pos1=getvInfoIndex(v1), pos2=getvInfoIndex(v2);
+    int pos1=GetVertexInfoIndex(v1), pos2=GetVertexInfoIndex(v2);
 
     // check for an error
     if (pos1 == -1 || pos2 == -1)
@@ -319,10 +319,10 @@ int Graph<T>::getWeight(const T& v1, const T& v2) const
 }
 
 template <typename T>
-void Graph<T>::setWeight(const T& v1, const T& v2, int w)
+void Graph<T>::SetWeight(const T& v1, const T& v2, int w)
 {
     // find the vInfo indices for the two vertices
-    int pos1=getvInfoIndex(v1), pos2=getvInfoIndex(v2);
+    int pos1=GetVertexInfoIndex(v1), pos2=GetVertexInfoIndex(v2);
 
     // check for an error
     if (pos1 == -1 || pos2 == -1)
@@ -343,10 +343,10 @@ void Graph<T>::setWeight(const T& v1, const T& v2, int w)
 
 // return the number of edges entering  v
 template <typename T>
-int Graph<T>::inDegree(const T& v) const
+int Graph<T>::InDegree(const T& v) const
 {
     // find the vInfo index for v
-    int pos=getvInfoIndex(v);
+    int pos=GetVertexInfoIndex(v);
 
     if (pos != -1)
         // in-degree is stored in vInfo[pos]
@@ -358,10 +358,10 @@ int Graph<T>::inDegree(const T& v) const
 
 // return the number of edges leaving  v
 template <typename T>
-int Graph<T>::outDegree(const T& v) const
+int Graph<T>::OutDegree(const T& v) const
 {
     // find the vInfo index for v
-    int pos=getvInfoIndex(v);
+    int pos=GetVertexInfoIndex(v);
 
     if (pos != -1)
         // out-degree is number of elements in the edge set
@@ -373,13 +373,13 @@ int Graph<T>::outDegree(const T& v) const
 
 // return the list of all adjacent vertices
 template <typename T>
-std::set<T> Graph<T>::getNeighbors(const T& v) const
+std::set<T> Graph<T>::GetNeighbors(const T& v) const
 {
     // set returned
     std::set<T> adjVertices;
 
     // obtain the position of v from the map
-    int pos = getvInfoIndex(v);
+    int pos = GetVertexInfoIndex(v);
 
     // if v not in list of vertices, throw an exception
     if (pos == -1)
@@ -409,11 +409,11 @@ std::set<T> Graph<T>::getNeighbors(const T& v) const
 
 // add the edge (v1,v2) with specified weight to the graph
 template <typename T>
-void Graph<T>::insertEdge(const T& v1,
+void Graph<T>::InsertEdge(const T& v1,
         const T& v2, int w)
 {
     // obtain the vInfo indices
-    int pos1=getvInfoIndex(v1), pos2=getvInfoIndex(v2);
+    int pos1=GetVertexInfoIndex(v1), pos2=GetVertexInfoIndex(v2);
 
     // check for an error
     if (pos1 == -1 || pos2 == -1)
@@ -440,7 +440,7 @@ void Graph<T>::insertEdge(const T& v1,
 
 // insert v into the graph
 template <typename T>
-void Graph<T>::insertVertex(const T& v)
+void Graph<T>::InsertVertex(const T& v)
 {
     int index;
 
@@ -482,10 +482,10 @@ void Graph<T>::insertVertex(const T& v)
 
 // erase edge (v1,v2) from the graph
 template <typename T>
-void Graph<T>::eraseEdge(const T& v1, const T& v2)
+void Graph<T>::EraseEdge(const T& v1, const T& v2)
 {
     // obtain the indices of v1 and v2 in vInfo
-    int pos1=getvInfoIndex(v1), pos2=getvInfoIndex(v2);
+    int pos1=GetVertexInfoIndex(v1), pos2=GetVertexInfoIndex(v2);
 
     // check for an error
     if (pos1 == -1 || pos2 == -1)
@@ -512,7 +512,7 @@ void Graph<T>::eraseEdge(const T& v1, const T& v2)
 }
 
 template <typename T>
-void Graph<T>::eraseVertex(const T& v)
+void Graph<T>::EraseVertex(const T& v)
 {
     // use to search for and remove v from the map
     typename vertexMap::iterator mIter;

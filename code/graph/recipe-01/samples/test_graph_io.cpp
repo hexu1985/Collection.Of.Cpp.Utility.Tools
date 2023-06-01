@@ -31,7 +31,7 @@ int main()
 	graphIn >> demoGraph;
 
 	// get set of neighbors of A and output with writeContainer
-	edgeSet = demoGraph.getNeighbors('A');
+	edgeSet = demoGraph.GetNeighbors('A');
 
 	cout << "Neighbors of A are ";
     for (auto v : edgeSet) { cout << v << " "; }

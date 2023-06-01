@@ -14,7 +14,7 @@ std::istream& operator>> (std::istream& istr, Graph<T>& g)
 	// edge weight
 	int weight;
 
-	if (g.numberOfVertices() > 0)
+	if (g.NumberOfVertices() > 0)
 		// remove an existing graph
 		g.clear();
 
@@ -25,7 +25,7 @@ std::istream& operator>> (std::istream& istr, Graph<T>& g)
 	for (i = 0; i < nVertices; i++)
 	{
 		istr >> v1;
-		g.insertVertex(v1);
+		g.InsertVertex(v1);
 	}
 
 	// input the number of edges
@@ -38,7 +38,7 @@ std::istream& operator>> (std::istream& istr, Graph<T>& g)
 		istr >> v1;
 		istr >> v2;
 		istr >> weight;
-		g.insertEdge(v1,v2,weight);
+		g.InsertEdge(v1,v2,weight);
 	}
 
 	// return the stream
@@ -62,11 +62,10 @@ std::ostream& operator<< (std::ostream& ostr, const Graph<T>& g)
 				  << "  out-degree " << (vtxInfo.edges).size() << std::endl;
 			ostr << "    Edges: ";
             std::set<Neighbor>& edgeSet = vtxInfo.edges;
-			for (setIter = edgeSet.begin(); setIter != edgeSet.end(); setIter++)
-			{
-				ostr << (*(vInfo[(*setIter).dest].vtxMapLoc)).first << " ("
-					  << (*setIter).weight << ")  ";
-			}
+            for (const auto& neighbor : edgeSet) {
+                ostr << (*(vInfo[neighbor.dest].vtxMapLoc)).first << " ("
+					  << neighbor.weight << ")  ";
+            }
 			ostr << std::endl;
 		}
 	}
