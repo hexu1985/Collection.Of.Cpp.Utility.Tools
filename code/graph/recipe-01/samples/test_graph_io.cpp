@@ -11,6 +11,7 @@
 #include <set>
 
 #include "graph.hpp"	// the graph class
+#include "graph_io.hpp"
 
 using namespace std;
 

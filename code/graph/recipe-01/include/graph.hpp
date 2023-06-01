@@ -1,8 +1,4 @@
-#ifndef GRAPH_CLASS
-#define GRAPH_CLASS
-
-#include <iostream>
-#include <fstream>
+#pragma once
 
 #include <set>				// set class
 #include <map>				// ist classmap class
@@ -191,58 +187,7 @@ public:
     const_iterator end() const;
     // iterator functions returns corresponding map iterator
 
-#include "graph_io.hpp"
-    /*
-       LISTING OF THE PROTOTYPES FOR THE GRAPH ALGORITHMS
-
-       friend istream& operator>> (istream& istr, graph<T>& g);
-    // input a graph
-
-    friend ostream& operator<< (ostream& ostr, const graph<T>& g);
-    // output a graph
-
-    friend set<T> bfs(graph<T>& g, const T& sVertex);
-    // perform the breadth-first traversal from sVertex and
-    // return the set of visited vertices
-
-    friend int shortestPath(graph<T>& g, const T& sVertex,
-    const T& eVertex, list<T>& path);
-    // use the breadth-first traversal algorithm to determine the
-    // minimum number of edges in any path from sVertex to eVertex
-    // or -1 if no path exists. if a path exists, the list path
-    // is the sequence of vertices
-
-    friend int minimumPath(graph<T>& g, const T& sVertex, const T& eVertex,
-    list<T>& path);
-    // find the path with minimum total weight from sVertex to eVertex
-    // and return the minimum weight
-
-    friend int minSpanTree(graph<T>& g, graph<T>& MST);
-    // find the minimum spanning tree for the strongly connected digraph g
-
-    friend bool acyclic(graph<T>& g);
-    // determine if the graph is acyclic
-
-    friend void dfsVisit(graph<T>& g, const T& sVertex, list<T>& dfsList,
-    bool checkForCycle);
-    // depth-first visit assuming a WHITE starting vertex. dfsList
-    // contains the visited vertices in reverse order of finishing time.
-    // when checkForCycle is true, the function throws an exception if
-    // it detects a cycle
-
-    friend void dfs(graph<T>& g, list<T>& dfsList);
-    // depth-first search. dfsList contains all the graph vertices in the
-    // reverse order of their finishing times
-
-    friend void topologicalSort(graph<T>& g, list<T>& tlist);
-    // find a topological sort of an acyclic graph
-
-    friend graph<T> transpose(graph<T>& g);
-    // return the transpose of the graph
-
-    friend void strongComponents(graph<T>& g, vector<set<T>>& component);
-    // find the strong components of the graph
-    */
+    const std::vector<VertexInfo<T>>& InfoOfVertices() const;
 
 private:
     typedef std::map<T,int> vertexMap;
@@ -681,4 +626,8 @@ typename Graph<T>::const_iterator Graph<T>::end() const
     return Graph<T>::iterator(vtxMap.end());
 }
 
-#endif	// GRAPH_CLASS
+template <typename T>
+const std::vector<VertexInfo<T>>& Graph<T>::InfoOfVertices() const
+{
+    return vInfo;
+}
