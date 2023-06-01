@@ -17,7 +17,7 @@
 // largest positive integer on the machine
 const int INFINITY = (int)((unsigned int)~0 >> 1);
 
-class neighbor
+class Neighbor
 {
 public:
     // index of the destination vertex in the vector vInfo of vertex
@@ -27,17 +27,17 @@ public:
     int weight;
 
     // constructor
-    neighbor(int d=0, int c=0): dest(d), weight(c)
+    Neighbor(int d=0, int c=0): dest(d), weight(c)
     {}
 
     // operators for the neighbor class that compare the
     // destination vertices
-    friend bool operator< (const neighbor& lhs, const neighbor& rhs)
+    friend bool operator< (const Neighbor& lhs, const Neighbor& rhs)
     {
         return lhs.dest < rhs.dest;
     }
 
-    friend bool operator== (const neighbor& lhs, const neighbor& rhs)
+    friend bool operator== (const Neighbor& lhs, const Neighbor& rhs)
     {
         return lhs.dest == rhs.dest;
     }
@@ -46,17 +46,17 @@ public:
 // maintains vertex properties, including its set of
 // neighbors
 template <typename T>
-class vertexInfo
+class VertexInfo
 {
 public:
     // used by graph algorithms
-    enum vertexColor { WHITE, GRAY, BLACK };
+    enum VertexColor { WHITE, GRAY, BLACK };
 
     // iterator pointing at a pair<T,int> object in the vertex map
     typename std::map<T,int>::iterator vtxMapLoc;
 
     // set of adjacent (neighbor) objects for the current vertex
-    std::set<neighbor> edges;
+    std::set<Neighbor> edges;
 
     /// maintains the in-degree of the vertex
     int inDegree;
@@ -66,7 +66,7 @@ public:
 
     // indicate if a vertex is marked in an algorithm that traverses
     // the vertices of a graph
-    vertexColor color;
+    VertexColor color;
 
     // available to algorithms for storing relevant data values
     int dataValue;
@@ -76,28 +76,17 @@ public:
     int parent;
 
     // default constructor
-    vertexInfo(): inDegree(0), occupied(true)
+    VertexInfo(): inDegree(0), occupied(true)
     {}
 
     // constructor with iterator pointing to the vertex in the map
-    vertexInfo(typename std::map<T,int>::iterator iter):
+    VertexInfo(typename std::map<T,int>::iterator iter):
         vtxMapLoc(iter), inDegree(0), occupied(true)
     {}
 };
 
-// priority queue data used by minimumPath() and minSpanningTree() algorithms
-class minInfo
-{
-public:
-    int endV;
-    int pathWeight;
-
-    friend bool operator< (minInfo lhs, minInfo rhs)
-    { return lhs.pathWeight < rhs.pathWeight; }
-};
-
 template <typename T>
-class graph
+class Graph
 {
 public:
     class const_iterator: public std::map< T, int >::const_iterator
@@ -123,13 +112,13 @@ public:
 
     typedef const_iterator iterator;
 
-    graph();
+    Graph();
     // constructor. initialize numVertices and numEdges to 0
 
-    graph(const graph<T>& g);
+    Graph(const Graph<T>& g);
     // copy constructor
 
-    graph<T>& operator= (const graph<T>& rhs);
+    Graph<T>& operator= (const Graph<T>& rhs);
     // overloaded assignment operator
 
     int numberOfVertices() const;
@@ -260,11 +249,11 @@ private:
 
     vertexMap vtxMap;
     // store vertex in a map with its name as the key and the index
-    // of the corresponding vertexInfo object in the vInfo
+    // of the corresponding VertexInfo object in the vInfo
     // vector as the value
 
-    std::vector<vertexInfo<T>> vInfo;
-    // list of vertexInfo objects corresponding to the vertices
+    std::vector<VertexInfo<T>> vInfo;
+    // list of VertexInfo objects corresponding to the vertices
 
     int numVertices;
     int numEdges;
@@ -279,7 +268,7 @@ private:
 
 // uses vtxMap to obtain the index of v in vInfo
 template <typename T>
-int graph<T>::getvInfoIndex(const T& v) const
+int Graph<T>::getvInfoIndex(const T& v) const
 {
     // iter used in map lookup
     typename vertexMap::const_iterator iter;
@@ -301,19 +290,19 @@ int graph<T>::getvInfoIndex(const T& v) const
 
 // constructor. initialize numVertices and numEdges to 0
 template <typename T>
-graph<T>::graph(): numVertices(0), numEdges(0)
+Graph<T>::Graph(): numVertices(0), numEdges(0)
 {}
 
 // copy constructor
 template <typename T>
-graph<T>::graph(const graph<T>& g)
+Graph<T>::Graph(const Graph<T>& g)
 {
     *this = g;	// copy g to current object
 }
 
 // overloaded assignment operator
 template <typename T>
-graph<T>& graph<T>::operator= (const graph<T>& rhs)
+Graph<T>& Graph<T>::operator= (const Graph<T>& rhs)
 {
     typename vertexMap::iterator mi;
 
@@ -339,19 +328,19 @@ graph<T>& graph<T>::operator= (const graph<T>& rhs)
 // ATTRIBUTE TESTING FUNCTIONS
 
 template <typename T>
-int graph<T>::numberOfVertices() const
+int Graph<T>::numberOfVertices() const
 {
     return numVertices;
 }
 
 template <typename T>
-int graph<T>::numberOfEdges() const
+int Graph<T>::numberOfEdges() const
 {
     return numEdges;
 }
 
 template <typename T>
-bool graph<T>::empty() const
+bool Graph<T>::empty() const
 {
     return numVertices == 0;
 }
@@ -361,7 +350,7 @@ bool graph<T>::empty() const
 // return the weight of the edge (v1, v2). if the edge
 // does not exist, return -1
 template <typename T>
-int graph<T>::getWeight(const T& v1, const T& v2) const
+int Graph<T>::getWeight(const T& v1, const T& v2) const
 {
     // find the vInfo indices for the two vertices
     int pos1=getvInfoIndex(v1), pos2=getvInfoIndex(v2);
@@ -372,20 +361,20 @@ int graph<T>::getWeight(const T& v1, const T& v2) const
         throw graphError("graph getWeight(): vertex not in the graph");
 
     // construct an alias for the edge list in vInfo[pos1]
-    const std::set<neighbor>& edgeSet = vInfo[pos1].edges;
-    std::set<neighbor>::const_iterator setIter;
+    const std::set<Neighbor>& edgeSet = vInfo[pos1].edges;
+    std::set<Neighbor>::const_iterator setIter;
 
     // search for pos2 in the edge list and return its weight
     // if found; otherwise, return -1 to indicate that the
     // edge does not exist
-    if ((setIter = edgeSet.find(neighbor(pos2))) != edgeSet.end())
+    if ((setIter = edgeSet.find(Neighbor(pos2))) != edgeSet.end())
         return (*setIter).weight;
     else
         return -1;
 }
 
 template <typename T>
-void graph<T>::setWeight(const T& v1, const T& v2, int w)
+void Graph<T>::setWeight(const T& v1, const T& v2, int w)
 {
     // find the vInfo indices for the two vertices
     int pos1=getvInfoIndex(v1), pos2=getvInfoIndex(v2);
@@ -396,12 +385,12 @@ void graph<T>::setWeight(const T& v1, const T& v2, int w)
         throw graphError("graph setWeight(): vertex not in the graph");
 
     // construct an alias for the edge list in vInfo[pos1]
-    std::set<neighbor>& edgeSet = vInfo[pos1].edges;
-    std::set<neighbor>::iterator setIter;
+    std::set<Neighbor>& edgeSet = vInfo[pos1].edges;
+    std::set<Neighbor>::iterator setIter;
 
     // search for pos2 in the edge list and update its weight.
     // if the edge does not exist, throw an exception
-    if ((setIter = edgeSet.find(neighbor(pos2))) != edgeSet.end())
+    if ((setIter = edgeSet.find(Neighbor(pos2))) != edgeSet.end())
         (*setIter).weight = w;
     else
         throw graphError("graph setWeight(): edge not in the graph");
@@ -409,7 +398,7 @@ void graph<T>::setWeight(const T& v1, const T& v2, int w)
 
 // return the number of edges entering  v
 template <typename T>
-int graph<T>::inDegree(const T& v) const
+int Graph<T>::inDegree(const T& v) const
 {
     // find the vInfo index for v
     int pos=getvInfoIndex(v);
@@ -424,7 +413,7 @@ int graph<T>::inDegree(const T& v) const
 
 // return the number of edges leaving  v
 template <typename T>
-int graph<T>::outDegree(const T& v) const
+int Graph<T>::outDegree(const T& v) const
 {
     // find the vInfo index for v
     int pos=getvInfoIndex(v);
@@ -439,7 +428,7 @@ int graph<T>::outDegree(const T& v) const
 
 // return the list of all adjacent vertices
 template <typename T>
-std::set<T> graph<T>::getNeighbors(const T& v) const
+std::set<T> Graph<T>::getNeighbors(const T& v) const
 {
     // set returned
     std::set<T> adjVertices;
@@ -453,11 +442,11 @@ std::set<T> graph<T>::getNeighbors(const T& v) const
             graphError("graph getNeighbors(): vertex not in the graph");
 
     // construct an alias for the set of edges in vertex pos
-    const std::set<neighbor>& edgeSet = vInfo[pos].edges;
+    const std::set<Neighbor>& edgeSet = vInfo[pos].edges;
     // use setIter to traverse the edge set
-    std::set<neighbor>::const_iterator setIter;
+    std::set<Neighbor>::const_iterator setIter;
 
-    // index of vertexInfo object corresponding to an adjacent vertex
+    // index of VertexInfo object corresponding to an adjacent vertex
     int aPos;
 
     for (setIter=edgeSet.begin(); setIter != edgeSet.end(); setIter++)
@@ -475,7 +464,7 @@ std::set<T> graph<T>::getNeighbors(const T& v) const
 
 // add the edge (v1,v2) with specified weight to the graph
 template <typename T>
-void graph<T>::insertEdge(const T& v1,
+void Graph<T>::insertEdge(const T& v1,
         const T& v2, int w)
 {
     // obtain the vInfo indices
@@ -491,8 +480,8 @@ void graph<T>::insertEdge(const T& v1,
 
 
     // attempt to insert edge (pos2,w) into the edge set of vertex pos1
-    std::pair<std::set<neighbor>::iterator, bool> result =
-        vInfo[pos1].edges.insert(neighbor(pos2,w));
+    std::pair<std::set<Neighbor>::iterator, bool> result =
+        vInfo[pos1].edges.insert(Neighbor(pos2,w));
 
     // make sure edge was not already in the set
     if (result.second)
@@ -506,7 +495,7 @@ void graph<T>::insertEdge(const T& v1,
 
 // insert v into the graph
 template <typename T>
-void graph<T>::insertVertex(const T& v)
+void Graph<T>::insertVertex(const T& v)
 {
     int index;
 
@@ -530,12 +519,12 @@ void graph<T>::insertVertex(const T& v)
             index = availStack.top();
             availStack.pop();
             // call to constructor builds a empty edge set
-            vInfo[index] = vertexInfo<T>(result.first);
+            vInfo[index] = VertexInfo<T>(result.first);
         }
         else
         {
             // no. we'll have to increase the size of vInfo
-            vInfo.push_back(vertexInfo<T>(result.first));
+            vInfo.push_back(VertexInfo<T>(result.first));
             index = numVertices;
         }
 
@@ -548,7 +537,7 @@ void graph<T>::insertVertex(const T& v)
 
 // erase edge (v1,v2) from the graph
 template <typename T>
-void graph<T>::eraseEdge(const T& v1, const T& v2)
+void Graph<T>::eraseEdge(const T& v1, const T& v2)
 {
     // obtain the indices of v1 and v2 in vInfo
     int pos1=getvInfoIndex(v1), pos2=getvInfoIndex(v2);
@@ -559,11 +548,11 @@ void graph<T>::eraseEdge(const T& v1, const T& v2)
         throw graphError("graph eraseEdge(): vertex not in the graph");
 
     // construct an alias to the edge set of vInfo[pos1]
-    std::set<neighbor>& edgeSet = vInfo[pos1].edges;
-    std::set<neighbor>::iterator setIter;
+    std::set<Neighbor>& edgeSet = vInfo[pos1].edges;
+    std::set<Neighbor>::iterator setIter;
 
     // search for pos2 in the edge set
-    setIter = edgeSet.find(neighbor(pos2));
+    setIter = edgeSet.find(Neighbor(pos2));
     // if pos2 is in the set, erase it; otherwise, output an
     // error message
     if (setIter != edgeSet.end())
@@ -578,14 +567,14 @@ void graph<T>::eraseEdge(const T& v1, const T& v2)
 }
 
 template <typename T>
-void graph<T>::eraseVertex(const T& v)
+void Graph<T>::eraseVertex(const T& v)
 {
     // use to search for and remove v from the map
     typename vertexMap::iterator mIter;
     // pos is index of v in the vertex list
     int pos, j;
     // used in removal of edges to v
-    std::set<neighbor>::iterator sIter;
+    std::set<Neighbor>::iterator sIter;
 
     // search the map for the key v
     mIter = vtxMap.find(v);
@@ -613,7 +602,7 @@ void graph<T>::eraseVertex(const T& v)
         if (vInfo[j].occupied)
         {
             // construct an alias for the set vInfo[j].edges
-            std::set<neighbor>& edgeSet = vInfo[j].edges;
+            std::set<Neighbor>& edgeSet = vInfo[j].edges;
 
             sIter = edgeSet.begin();
             // cycle through the edge set
@@ -635,7 +624,7 @@ void graph<T>::eraseVertex(const T& v)
     numEdges -= vInfo[pos].edges.size();
 
     // the in-degree for all of v's neighbors must be decreased by 1
-    std::set<neighbor>& edgesFromv = vInfo[pos].edges;
+    std::set<Neighbor>& edgesFromv = vInfo[pos].edges;
     for (sIter=edgesFromv.begin(); sIter != edgesFromv.end(); sIter++)
     {
         j = (*sIter).dest;
@@ -644,13 +633,13 @@ void graph<T>::eraseVertex(const T& v)
 
     // clear the edge set. construct an alias for vInfo[pos].edges
     // and use erase to clear the set
-    std::set<neighbor>& edgeSet = vInfo[pos].edges;
+    std::set<Neighbor>& edgeSet = vInfo[pos].edges;
     edgeSet.erase(edgeSet.begin(), edgeSet.end());
 }
 
 // erase the graph
 template <typename T>
-void graph<T>::clear()
+void Graph<T>::clear()
 {
     // clear the vertex list, vertex map and the
     // availability stack
@@ -669,27 +658,27 @@ void graph<T>::clear()
 // each graph iterator function returns
 // the corresponding map iterator
 template <typename T>
-typename graph<T>::iterator graph<T>::begin()
+typename Graph<T>::iterator Graph<T>::begin()
 {
-    return graph<T>::iterator(vtxMap.begin());
+    return Graph<T>::iterator(vtxMap.begin());
 }
 
 template <typename T>
-typename graph<T>::iterator graph<T>::end()
+typename Graph<T>::iterator Graph<T>::end()
 {
-    return graph<T>::iterator(vtxMap.end());
+    return Graph<T>::iterator(vtxMap.end());
 }
 
 template <typename T>
-typename graph<T>::const_iterator graph<T>::begin() const
+typename Graph<T>::const_iterator Graph<T>::begin() const
 {
-    return graph<T>::iterator(vtxMap.begin());
+    return Graph<T>::iterator(vtxMap.begin());
 }
 
 template <typename T>
-typename graph<T>::const_iterator graph<T>::end() const
+typename Graph<T>::const_iterator Graph<T>::end() const
 {
-    return graph<T>::iterator(vtxMap.end());
+    return Graph<T>::iterator(vtxMap.end());
 }
 
 #endif	// GRAPH_CLASS

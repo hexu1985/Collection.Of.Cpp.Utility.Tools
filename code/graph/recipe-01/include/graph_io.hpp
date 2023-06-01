@@ -1,6 +1,6 @@
 
 // input a graph
-friend std::istream& operator>> (std::istream& istr, graph<T>& g)
+friend std::istream& operator>> (std::istream& istr, Graph<T>& g)
 {
 	// nVertices is number of vertices to read
 	int i, nVertices, nEdges;
@@ -41,14 +41,12 @@ friend std::istream& operator>> (std::istream& istr, graph<T>& g)
 }
 
 // output a graph
-friend std::ostream& operator<< (std::ostream& ostr, const graph<T>& g)
+friend std::ostream& operator<< (std::ostream& ostr, const Graph<T>& g)
 {
-	vertexInfo<T> vtxInfo;
-    std::set<neighbor>::iterator setIter;
+	VertexInfo<T> vtxInfo;
+    std::set<Neighbor>::iterator setIter;
 
-	int i;
-
-	for (i = 0; i < g.vInfo.size(); i++)
+	for (size_t i = 0; i < g.vInfo.size(); i++)
 	{
 		vtxInfo = g.vInfo[i];
 		if (vtxInfo.occupied)
@@ -56,7 +54,7 @@ friend std::ostream& operator<< (std::ostream& ostr, const graph<T>& g)
 			ostr << (*(vtxInfo.vtxMapLoc)).first << ": in-degree " << vtxInfo.inDegree
 				  << "  out-degree " << (vtxInfo.edges).size() << std::endl;
 			ostr << "    Edges: ";
-            std::set<neighbor>& edgeSet = vtxInfo.edges;
+            std::set<Neighbor>& edgeSet = vtxInfo.edges;
 			for (setIter = edgeSet.begin(); setIter != edgeSet.end(); setIter++)
 			{
 				ostr << (*(g.vInfo[(*setIter).dest].vtxMapLoc)).first << " ("

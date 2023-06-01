@@ -17,7 +17,7 @@ using namespace std;
 int main()
 {
 	// graph with vertices of type char
-	graph<char> demoGraph;
+	Graph<char> demoGraph;
 
 	// edge set
 	set<char> edgeSet;
