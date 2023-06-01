@@ -11,7 +11,6 @@
 #include <set>
 
 #include "graph.hpp"	// the graph class
-#include "d_util.h"		// function writeContainer()
 
 using namespace std;
 
@@ -34,7 +33,7 @@ int main()
 	edgeSet = demoGraph.getNeighbors('A');
 
 	cout << "Neighbors of A are ";
-	writeContainer(edgeSet.begin(), edgeSet.end());
+    for (auto v : edgeSet) { cout << v << " "; }
 	cout << endl << endl;
 	
 	// output the graph and its properties
