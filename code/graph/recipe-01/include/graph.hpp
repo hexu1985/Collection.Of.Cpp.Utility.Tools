@@ -212,12 +212,13 @@ public:
     // or -1 if no path exists. if a path exists, the list path
     // is the sequence of vertices
 
-#if 0
-    friend int minimumPath(graph<T>& g, const T& sVertex, const T& eVertex,
-            list<T>& path);
+    template <typename U>
+    friend int minimum_path(Graph<U>& g, const U& sVertex, const U& eVertex,
+            std::list<U>& path);
     // find the path with minimum total weight from sVertex to eVertex
     // and return the minimum weight
 
+#if 0
     friend int minSpanTree(graph<T>& g, graph<T>& MST);
     // find the minimum spanning tree for the strongly connected digraph g
 #endif

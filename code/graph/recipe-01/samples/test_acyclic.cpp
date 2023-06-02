@@ -16,32 +16,32 @@ using namespace std;
 
 int main()
 {
-	Graph<char> g;
-	// the file that defines the graph
-	ifstream graphIn;
+    Graph<char> g;
+    // the file that defines the graph
+    ifstream graphIn;
 
-	graphIn.open("dag.dat");
+    graphIn.open("dag.dat");
 
-	// read the graph
-	graphIn >> g;
+    // read the graph
+    graphIn >> g;
 
-	// determine if the graph is acyclic
-	if (acyclic(g))
-		cout << "Original graph is acyclic" << endl;
-	else
-		cout << "Original graph is not acyclic" << endl;
+    // determine if the graph is acyclic
+    if (acyclic(g))
+        cout << "Original graph is acyclic" << endl;
+    else
+        cout << "Original graph is not acyclic" << endl;
 
-	// add edge (E,A) to create a cycle
-	cout << "   Adding edge (E,A): ";
-	g.InsertEdge('E', 'A', 1);
+    // add edge (E,A) to create a cycle
+    cout << "   Adding edge (E,A): ";
+    g.InsertEdge('E', 'A', 1);
 
-	// retest the graph to see if it is acyclic
-	if (acyclic(g))
-		cout << "New graph is acyclic" << endl;
-	else
-		cout << "New graph is not acyclic" << endl;
+    // retest the graph to see if it is acyclic
+    if (acyclic(g))
+        cout << "New graph is acyclic" << endl;
+    else
+        cout << "New graph is not acyclic" << endl;
 
-	return 0;
+    return 0;
 }
 
 /*

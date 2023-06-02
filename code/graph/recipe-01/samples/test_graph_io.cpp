@@ -17,30 +17,30 @@ using namespace std;
 
 int main()
 {
-	// graph with vertices of type char
-	Graph<char> demoGraph;
+    // graph with vertices of type char
+    Graph<char> demoGraph;
 
-	// edge set
-	set<char> edgeSet;
+    // edge set
+    set<char> edgeSet;
 
-	// input stream for graph data
-	ifstream graphIn;
+    // input stream for graph data
+    ifstream graphIn;
 
-	// open stream and input the graph
-	graphIn.open("graphIO.dat");
-	graphIn >> demoGraph;
+    // open stream and input the graph
+    graphIn.open("graphIO.dat");
+    graphIn >> demoGraph;
 
-	// get set of neighbors of A and output with writeContainer
-	edgeSet = demoGraph.GetNeighbors('A');
+    // get set of neighbors of A and output with writeContainer
+    edgeSet = demoGraph.GetNeighbors('A');
 
-	cout << "Neighbors of A are ";
+    cout << "Neighbors of A are ";
     for (auto v : edgeSet) { cout << v << "  "; }
-	cout << endl << endl;
-	
-	// output the graph and its properties
-	cout << demoGraph << endl;
+    cout << endl << endl;
 
-	return 0;
+    // output the graph and its properties
+    cout << demoGraph << endl;
+
+    return 0;
 }
 
 /*
