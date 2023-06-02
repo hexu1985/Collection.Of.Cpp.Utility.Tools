@@ -235,10 +235,13 @@ public:
     friend void dfs(graph<T>& g, list<T>& dfsList);
     // depth-first search. dfsList contains all the graph vertices in the
     // reverse order of their finishing times
+#endif
 
-    friend void topologicalSort(graph<T>& g, list<T>& tlist);
+    template <typename U>
+    friend void topological_sort(Graph<U>& g, std::list<U>& tlist);
     // find a topological sort of an acyclic graph
 
+#if 0
     friend graph<T> transpose(graph<T>& g);
     // return the transpose of the graph
 
