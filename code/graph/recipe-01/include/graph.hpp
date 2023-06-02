@@ -218,10 +218,9 @@ public:
     // find the path with minimum total weight from sVertex to eVertex
     // and return the minimum weight
 
-#if 0
-    friend int minSpanTree(graph<T>& g, graph<T>& MST);
+    template <typename U>
+    friend int min_span_tree(Graph<U>& g, Graph<U>& MST);
     // find the minimum spanning tree for the strongly connected digraph g
-#endif
 
     template <typename U>
     friend bool acyclic(Graph<U>& g);
