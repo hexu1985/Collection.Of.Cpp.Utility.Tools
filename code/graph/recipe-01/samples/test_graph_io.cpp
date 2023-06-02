@@ -34,7 +34,7 @@ int main()
 	edgeSet = demoGraph.GetNeighbors('A');
 
 	cout << "Neighbors of A are ";
-    for (auto v : edgeSet) { cout << v << " "; }
+    for (auto v : edgeSet) { cout << v << "  "; }
 	cout << endl << endl;
 	
 	// output the graph and its properties

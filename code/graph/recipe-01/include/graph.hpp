@@ -7,6 +7,7 @@
 #include <stack>			// stack class
 #include <queue>			// queue class
 #include <functional>	// less<T>
+#include <iosfwd>
 
 #include "graph_error.hpp"
 
@@ -130,51 +131,51 @@ public:
     // return the weight of the edge (v1, v2). if the edge.
     // does not exist, return -1
     // Precondition: v1 and v2 are vertices in the graph. if not
-    // the function throws the graphError exception
+    // the function throws the GraphError exception
 
     void SetWeight(const T& v1, const T& v2, int w);
     // update the weight of edge (v1, v2).
     // Precondition: v1 and v2 are vertices in the graph. if not,
-    // the function throws the graphError exception
+    // the function throws the GraphError exception
     // Postcondition: the weight of vertex (v1,v2) is w
 
     int InDegree(const T& v) const;
     // return the number of edges entering  v.
     // Precondition: v is a vertex in the graph. if not,
-    // the function throws the graphError exception
+    // the function throws the GraphError exception
 
     int OutDegree(const T& v) const;
     // return the number of edges leaving  v.
     // Precondition: v is a vertex in the graph. if not,
-    // the function throws the graphError exception
+    // the function throws the GraphError exception
 
     std::set<T> GetNeighbors(const T& v) const;
     // return a set containing the neighbors of v.
     // Precondition: v is a vertex in the graph. if not,
-    // the function throws the graphError exception
+    // the function throws the GraphError exception
 
     void InsertEdge(const T& v1, const T& v2, int w);
     // add the edge (v1,v2) with specified weight to the graph.
     // Precondition: v1 and v2 are vertices in the graph. if not,
-    // the function throws the graphError exception
+    // the function throws the GraphError exception
     // Postcondition: The number of edges increases by 1
 
     void InsertVertex(const T& v);
     // insert v into the graph.
     // Precondition: v is a vertex in the graph. if not,
-    // the function throws the graphError exception.
+    // the function throws the GraphError exception.
     // Postcondition: the number of vertices increases by 1
 
     void EraseEdge(const T& v1, const T& v2);
     // erase edge (v1,v2) from the graph
     // Precondition: v1 and v2 are vertices in the graph. if not,
-    // the function throws the graphError exception.
+    // the function throws the GraphError exception.
     // Postcondition: The number of edges decreases by 1
 
     void EraseVertex(const T& v);
     // erase v from the graph
     // Precondition: v is a vertex in the graph. if not,
-    // the function throws the graphError exception.
+    // the function throws the GraphError exception.
     // Postconditions: The number of vertices decreases by 1,
     // and the operation removes all edges to or from v
 
@@ -187,7 +188,63 @@ public:
     const_iterator end() const;
     // iterator functions returns corresponding map iterator
 
-    const std::vector<VertexInfo<T>>& InfoOfVertices() const;
+	// LISTING OF THE PROTOTYPES FOR THE GRAPH ALGORITHMS
+
+    template <typename U>
+    friend std::istream& operator>> (std::istream& istr, Graph<U>& g);
+    // input a graph
+
+    template <typename U>
+    friend std::ostream& operator<< (std::ostream& ostr, const Graph<U>& g);
+    // output a graph
+
+#if 0
+    friend set<T> bfs(graph<T>& g, const T& sVertex);
+    // perform the breadth-first traversal from sVertex and
+    // return the set of visited vertices
+
+    friend int shortestPath(graph<T>& g, const T& sVertex,
+            const T& eVertex, list<T>& path);
+    // use the breadth-first traversal algorithm to determine the
+    // minimum number of edges in any path from sVertex to eVertex
+    // or -1 if no path exists. if a path exists, the list path
+    // is the sequence of vertices
+
+    friend int minimumPath(graph<T>& g, const T& sVertex, const T& eVertex,
+            list<T>& path);
+    // find the path with minimum total weight from sVertex to eVertex
+    // and return the minimum weight
+
+    friend int minSpanTree(graph<T>& g, graph<T>& MST);
+    // find the minimum spanning tree for the strongly connected digraph g
+#endif
+
+    template <typename U>
+    friend bool acyclic(Graph<U>& g);
+    // determine if the graph is acyclic
+
+    template <typename U>
+    friend void dfs_visit(Graph<U>& g, const U& sVertex, std::list<U>& dfsList,
+            bool checkForCycle);
+    // depth-first visit assuming a WHITE starting vertex. dfsList
+    // contains the visited vertices in reverse order of finishing time.
+    // when checkForCycle is true, the function throws an exception if
+    // it detects a cycle
+
+#if 0
+    friend void dfs(graph<T>& g, list<T>& dfsList);
+    // depth-first search. dfsList contains all the graph vertices in the
+    // reverse order of their finishing times
+
+    friend void topologicalSort(graph<T>& g, list<T>& tlist);
+    // find a topological sort of an acyclic graph
+
+    friend graph<T> transpose(graph<T>& g);
+    // return the transpose of the graph
+
+    friend void strongComponents(graph<T>& g, vector<set<T> >& component);
+    // find the strong components of the graph
+#endif
 
 private:
     typedef std::map<T,int> vertexMap;
@@ -303,7 +360,7 @@ int Graph<T>::GetWeight(const T& v1, const T& v2) const
     // check for an error
     if (pos1 == -1 || pos2 == -1)
         // if v1 or v2 not in list of vertices, throw an exception
-        throw graphError("graph getWeight(): vertex not in the graph");
+        throw GraphError("graph GetWeight(): vertex not in the graph");
 
     // construct an alias for the edge list in vInfo[pos1]
     const std::set<Neighbor>& edgeSet = vInfo[pos1].edges;
@@ -327,7 +384,7 @@ void Graph<T>::SetWeight(const T& v1, const T& v2, int w)
     // check for an error
     if (pos1 == -1 || pos2 == -1)
         // if v1 or v2 not in list of vertices, throw an exception
-        throw graphError("graph setWeight(): vertex not in the graph");
+        throw GraphError("graph SetWeight(): vertex not in the graph");
 
     // construct an alias for the edge list in vInfo[pos1]
     std::set<Neighbor>& edgeSet = vInfo[pos1].edges;
@@ -338,7 +395,7 @@ void Graph<T>::SetWeight(const T& v1, const T& v2, int w)
     if ((setIter = edgeSet.find(Neighbor(pos2))) != edgeSet.end())
         (*setIter).weight = w;
     else
-        throw graphError("graph setWeight(): edge not in the graph");
+        throw GraphError("graph SetWeight(): edge not in the graph");
 }
 
 // return the number of edges entering  v
@@ -353,7 +410,7 @@ int Graph<T>::InDegree(const T& v) const
         return vInfo[pos].inDegree;
     else
         // throw an exception
-        throw graphError("graph inDegree(): vertex not in the graph");
+        throw GraphError("graph InDegree(): vertex not in the graph");
 }
 
 // return the number of edges leaving  v
@@ -368,7 +425,7 @@ int Graph<T>::OutDegree(const T& v) const
         return vInfo[pos].edges.size();
     else
         // throw an exception
-        throw graphError("graph outDegree(): vertex not in the graph");
+        throw GraphError("graph OutDegree(): vertex not in the graph");
 }
 
 // return the list of all adjacent vertices
@@ -384,7 +441,7 @@ std::set<T> Graph<T>::GetNeighbors(const T& v) const
     // if v not in list of vertices, throw an exception
     if (pos == -1)
         throw
-            graphError("graph getNeighbors(): vertex not in the graph");
+            GraphError("graph GetNeighbors(): vertex not in the graph");
 
     // construct an alias for the set of edges in vertex pos
     const std::set<Neighbor>& edgeSet = vInfo[pos].edges;
@@ -418,10 +475,10 @@ void Graph<T>::InsertEdge(const T& v1,
     // check for an error
     if (pos1 == -1 || pos2 == -1)
         // if v1 or v2 not in list of vertices, throw an exception
-        throw graphError("graph insertEdge(): vertex not in the graph");
+        throw GraphError("graph InsertEdge(): vertex not in the graph");
     else if (pos1 == pos2)
         // we do not allow self-loops
-        throw graphError("graph insertEdge(): self-loops are not allowed");
+        throw GraphError("graph InsertEdge(): self-loops are not allowed");
 
 
     // attempt to insert edge (pos2,w) into the edge set of vertex pos1
@@ -477,7 +534,7 @@ void Graph<T>::InsertVertex(const T& v)
         numVertices++;
     }
     else
-        throw graphError("graph insertVertex(): vertex already in the graph");
+        throw GraphError("graph InsertVertex(): vertex already in the graph");
 }
 
 // erase edge (v1,v2) from the graph
@@ -490,7 +547,7 @@ void Graph<T>::EraseEdge(const T& v1, const T& v2)
     // check for an error
     if (pos1 == -1 || pos2 == -1)
         // if v1 or v2 not in list of vertices, throw an exception
-        throw graphError("graph eraseEdge(): vertex not in the graph");
+        throw GraphError("graph EraseEdge(): vertex not in the graph");
 
     // construct an alias to the edge set of vInfo[pos1]
     std::set<Neighbor>& edgeSet = vInfo[pos1].edges;
@@ -508,7 +565,7 @@ void Graph<T>::EraseEdge(const T& v1, const T& v2)
         numEdges--;
     }
     else
-        throw graphError("graph eraseEdge(): edge not in the graph");
+        throw GraphError("graph EraseEdge(): edge not in the graph");
 }
 
 template <typename T>
@@ -526,7 +583,7 @@ void Graph<T>::EraseVertex(const T& v)
     // if vertex is not present, terminate the erase
     if (mIter == vtxMap.end())
         // if v not in list of vertices, throw an exception
-        throw graphError("graph eraseVertex(): vertex not in the graph");
+        throw GraphError("graph EraseVertex(): vertex not in the graph");
 
     // obtain the index of v in vInfo
     pos = (*mIter).second;
@@ -626,8 +683,3 @@ typename Graph<T>::const_iterator Graph<T>::end() const
     return Graph<T>::iterator(vtxMap.end());
 }
 
-template <typename T>
-const std::vector<VertexInfo<T>>& Graph<T>::InfoOfVertices() const
-{
-    return vInfo;
-}

@@ -4,10 +4,10 @@
 #include <stdexcept>
 
 // error in graph class
-class graphError: public std::runtime_error
+class GraphError: public std::runtime_error
 {
 public:
-	graphError(const std::string& msg = ""):
+	GraphError(const std::string& msg = ""):
 		std::runtime_error(msg)
 	{}
 };
