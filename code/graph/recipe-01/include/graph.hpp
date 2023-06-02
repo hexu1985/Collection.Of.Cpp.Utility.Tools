@@ -202,14 +202,17 @@ public:
     friend set<T> bfs(graph<T>& g, const T& sVertex);
     // perform the breadth-first traversal from sVertex and
     // return the set of visited vertices
+#endif
 
-    friend int shortestPath(graph<T>& g, const T& sVertex,
-            const T& eVertex, list<T>& path);
+    template <typename U>
+    friend int shortest_path(Graph<U>& g, const U& sVertex,
+            const U& eVertex, std::list<U>& path);
     // use the breadth-first traversal algorithm to determine the
     // minimum number of edges in any path from sVertex to eVertex
     // or -1 if no path exists. if a path exists, the list path
     // is the sequence of vertices
 
+#if 0
     friend int minimumPath(graph<T>& g, const T& sVertex, const T& eVertex,
             list<T>& path);
     // find the path with minimum total weight from sVertex to eVertex

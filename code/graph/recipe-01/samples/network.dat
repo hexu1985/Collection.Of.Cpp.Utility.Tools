@@ -1,0 +1,23 @@
+8
+A B C D E F G H
+20
+A B 50
+B A 50
+A C 25
+C A 25
+B C 46
+C B 46
+B D 25
+D B 25
+D E 35
+E D 35
+B F 23
+F B 23
+C G 67
+G C 67
+E H 98
+H E 98
+F H 32
+H F 32
+F G 55
+G F 55
