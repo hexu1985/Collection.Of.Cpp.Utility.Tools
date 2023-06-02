@@ -198,11 +198,10 @@ public:
     friend std::ostream& operator<< (std::ostream& ostr, const Graph<U>& g);
     // output a graph
 
-#if 0
-    friend set<T> bfs(graph<T>& g, const T& sVertex);
+    template <typename U>
+    friend std::set<U> bfs(Graph<U>& g, const U& sVertex);
     // perform the breadth-first traversal from sVertex and
     // return the set of visited vertices
-#endif
 
     template <typename U>
     friend int shortest_path(Graph<U>& g, const U& sVertex,
