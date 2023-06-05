@@ -233,23 +233,22 @@ public:
     // when checkForCycle is true, the function throws an exception if
     // it detects a cycle
 
-#if 0
-    friend void dfs(graph<T>& g, list<T>& dfsList);
+    template <typename U>
+    friend void dfs(Graph<U>& g, std::list<U>& dfsList);
     // depth-first search. dfsList contains all the graph vertices in the
     // reverse order of their finishing times
-#endif
 
     template <typename U>
     friend void topological_sort(Graph<U>& g, std::list<U>& tlist);
     // find a topological sort of an acyclic graph
 
-#if 0
-    friend graph<T> transpose(graph<T>& g);
+    template <typename U>
+    friend Graph<U> transpose(Graph<U>& g);
     // return the transpose of the graph
 
-    friend void strongComponents(graph<T>& g, vector<set<T> >& component);
+    template <typename U>
+    friend void strong_components(Graph<U>& g, std::vector<std::set<U>>& component);
     // find the strong components of the graph
-#endif
 
 private:
     typedef std::map<T,int> vertexMap;
