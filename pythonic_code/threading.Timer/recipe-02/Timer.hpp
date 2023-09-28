@@ -14,7 +14,7 @@ public:
     void cancel(); 
 
 #ifdef DEBUG
-    void SetMessage(const std::string& message);
+    void set_message(const std::string& message);
 #endif
 
 public:
