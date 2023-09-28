@@ -16,6 +16,7 @@ private:
 
 public:
     MyThreadClass(const std::string& name, int duration);
+    MyThreadClass(MyThreadClass&&) = default;
     ~MyThreadClass();
     void run() override;
 };
@@ -39,16 +40,16 @@ int main(int argc, char* argv[]) {
     auto start_time = std::chrono::system_clock::now();
 
     // Thread Creation
-    Random random;
-    MyThreadClass thread1("Thread#1 ", random.randomInt(1,10));
-    MyThreadClass thread2("Thread#2 ", random.randomInt(1,10));
-    MyThreadClass thread3("Thread#3 ", random.randomInt(1,10));
-    MyThreadClass thread4("Thread#4 ", random.randomInt(1,10));
-    MyThreadClass thread5("Thread#5 ", random.randomInt(1,10));
-    MyThreadClass thread6("Thread#6 ", random.randomInt(1,10));
-    MyThreadClass thread7("Thread#7 ", random.randomInt(1,10));
-    MyThreadClass thread8("Thread#8 ", random.randomInt(1,10));
-    MyThreadClass thread9("Thread#9 ", random.randomInt(1,10));
+    auto random = Random();
+    auto thread1 = MyThreadClass("Thread#1 ", random.randomInt(1,10));
+    auto thread2 = MyThreadClass("Thread#2 ", random.randomInt(1,10));
+    auto thread3 = MyThreadClass("Thread#3 ", random.randomInt(1,10));
+    auto thread4 = MyThreadClass("Thread#4 ", random.randomInt(1,10));
+    auto thread5 = MyThreadClass("Thread#5 ", random.randomInt(1,10));
+    auto thread6 = MyThreadClass("Thread#6 ", random.randomInt(1,10));
+    auto thread7 = MyThreadClass("Thread#7 ", random.randomInt(1,10));
+    auto thread8 = MyThreadClass("Thread#8 ", random.randomInt(1,10));
+    auto thread9 = MyThreadClass("Thread#9 ", random.randomInt(1,10));
 
     // Thread Running
     thread1.start();

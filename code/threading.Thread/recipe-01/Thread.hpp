@@ -5,10 +5,12 @@
 
 class Thread {
 private:
-    std::thread thread_;
+    std::thread thread;
 
 public:
     Thread(); 
+    Thread(Thread&& x); 
+
     virtual ~Thread();
 
     void start();
