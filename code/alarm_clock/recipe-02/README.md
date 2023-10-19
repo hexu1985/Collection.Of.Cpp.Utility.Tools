@@ -1,6 +1,3 @@
-### timer定时器类: 接口改成C++11的chrono版本
+### timer定时器类: 基于条件变量实现的版本
 
-原始链接参考:
-<https://www.fluentcpp.com/2018/12/28/timer-cpp/> 
-<https://github.com/99xt/timercpp.git>
-
+参考: POSIX多线程程序设计, 3.3.4节

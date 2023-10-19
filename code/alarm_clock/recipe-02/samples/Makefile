@@ -16,4 +16,4 @@ clean:
 	$(RM) $(PROGS)
 
 %: %.cpp
-	$(CXX) -o $@ $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH)
+	$(CXX) -o $@ $(CXXFLAGS) $(INCLUDES) ../src/timer.cpp $^ $(LDFLAGS) $(LDPATH)
