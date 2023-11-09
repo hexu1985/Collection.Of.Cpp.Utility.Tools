@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>C++11 bind函数实现原理图</title>
+</head>
+<body class="nodata " style="">
+<div class="blog-content-box">
+    <div class="article-header-box">
+        <div class="article-header">
+            <div class="article-title-box">
+                <h1 class="title-article" id="articleContentId">C++11 bind函数实现原理图</h1>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div id="csdn-shop-window-top" class="csdn-shop-window-common" style="margin-top:18px;padding:0"></div>
+    <article class="baidu_pl">
+        <div id="article_content" class="article_content clearfix">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-b5506197d8.css">
+                <div id="content_views" class="htmledit_views">
+                    <p><span style="font-size:18px">本文内容来自http://blog.think-async.com/2010/04/bind-illustrated.html, 基本上是对该篇博文的翻译.<br /> </span></p> 
+<p><span style="font-size:18px">bind函数的返回值是一个函数对象/仿函数&#xff0c; <span style="color:#FF0000"> 统一的一致性</span>语法。<br /> </span></p> 
+<p><span style="font-size:18px">1、bind函数&#xff08;包装器/适配器&#xff09;能够将用户提供的需要一个参数的函数调整为不需要参数的函数对象。需要的时候&#xff0c;绑定的值&#xff08;这个例子中是123&#xff09;存储在函数对象中&#xff0c;自动地传递给用户指定的函数。</span></p> 
+<p><span style="font-size:18px">f &#61; bind(my_handler, 123)<br /> </span></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20150516200703216?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /><br /> </span></p> 
+<p><span style="font-size:18px">一个匿名类&#xff08;即这里的binder类&#xff09;的成员变量捕获了函数指针的值和绑定的参数的值&#xff0c;匿名类重载了operator&#xff08;&#xff09;运算符&#xff0c;从而其对象为仿函数/函数对象。在operator函数体内&#xff0c;使用捕获的函数指针和参数&#xff0c;回调函数指针指向的函数。匿名类只会捕获提前绑定的参数。</span></p> 
+<p><span style="font-size:18px">当用户调用该函数对象时&#xff0c;实现延迟调用。</span></p> 
+<p><span style="font-size:18px">2、绑定一个参数也可以将类的成员函数调整为不需要参数的函数对象。正如你所知&#xff0c;非静态的成员函数都有一个隐式的this指针参数。这就意味着在函数指针内部需要绑定一个指向该类的一个对象的指针&#xff1a;</span></p> 
+<p><span style="font-size:18px">f &#61; bind(&amp;session::handler, this)<br /> </span></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20150516200759926?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /><br /> </span></p> 
+<p><span style="font-size:18px">匿名类捕获一个指向session的对象的指针作为其成员变量的值。</span></p> 
+<p><span style="font-size:18px">3、或者&#xff0c;隐式的this指针可以通过给函数对象传入一个显示的参数&#xff1a;</span></p> 
+<p><span style="font-size:18px"><span style="font-size:18px">f &#61; bind(&amp;session::handler, _1)</span><br /> </span></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20150516200732638?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /><br /> </span></p> 
+<p><span style="font-size:18px">4、函数对象通常同时使用提前绑定的参数和调用时提供的参数。这个过程可以通过给成员函数绑定参数来实现&#xff1a;</span></p> 
+<p><span style="font-size:18px"><span style="font-size:18px"><span style="font-size:18px">f &#61; bind(&amp;session::handler, ec, _1)</span></span><br /> </span></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20170503231355799?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /><br /> </span></p> 
+<p><span style="font-size:18px">这里的_1是std::placeholders命名空间里的占位符&#xff0c;在调用函数对象的时候&#xff0c;参数按对应的顺序传递给占位符。</span></p> 
+<p><span style="font-size:18px">5、当然也可以使用非成员函数&#xff1a;</span></p> 
+<p><font size="4"><span style="font-size:18px"><span style="font-size:18px"><span style="font-size:18px">f &#61; bind(&amp;session::handler, 123, _1, _2)</span></span></span><br /> </font></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20150516200843060?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /><br /> </span></p> 
+<p><span style="font-size:18px">6、有的时候&#xff0c;函数对象调用时会提供一些不会被目标函数使用到的参数&#xff0c;bind&#xff08;) 函数会自动的忽略这些多余的参数&#xff1a;</span></p> 
+<p><font size="4"><font size="4"><span style="font-size:18px"><span style="font-size:18px"><span style="font-size:18px">f &#61; bind(&amp;session::handler, 123, _1)</span></span></span></font><br /> </font></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20150516201138249?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /></span></p> 
+<p><span style="font-size:18px">7、多余的参数不需要在函数签名的最后边&#xff1a;</span></p> 
+<p><font size="4"><font size="4"><font size="4"><span style="font-size:18px"><span style="font-size:18px"><span style="font-size:18px">f &#61; bind(&amp;session::handler, 123, _2)</span></span></span></font></font><br /> </font></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20150516201943488?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /></span></p> 
+<p><span style="font-size:18px"><br /> </span></p> 
+<p><span style="font-size:18px">也就是说&#xff0c;提前绑定的参数会使调用时又提供的参数无效而丢弃。</span></p> 
+<p><span style="font-size:18px">8、bind() 函数允许改变参数的顺序让目标函数能够适应函数对象的函数签名&#xff1a;</span></p> 
+<p><font size="4"><font size="4"><font size="4"><font size="4"><span style="font-size:18px"><span style="font-size:18px"><span style="font-size:18px">f &#61; bind(&amp;session::handler, _2, 123, _1)</span></span></span></font></font></font><br /> </font></p> 
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20150516203027379?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvdWd1b3Fpb25naGFp/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70/gravity/Center" alt="" /></span></p> 
+<p><span style="font-size:18px">从上边的图中可以看出&#xff0c;bind() 函数的原理和lambda函数的原理是类似的&#xff0c;都是通过捕获变量来生成一个匿名的类&#xff0c;在类中重载operator() &#xff0c;从而其对象是能够调用的函数对象/仿函数。<br /> </span></p> 
+<p><br /> </p> 
+<p><br /> </p> 
+<p><br /> </p> 
+<p><br /> </p>
+                </div>
+        </div>
+    </article>
+</div>
+</body>
