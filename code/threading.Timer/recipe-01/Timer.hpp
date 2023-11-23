@@ -42,4 +42,4 @@ private:
     std::shared_ptr<Impl> pimpl;
 };
 
-}   // namespace
+}   // namespace threading

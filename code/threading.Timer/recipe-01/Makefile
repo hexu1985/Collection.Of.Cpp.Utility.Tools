@@ -4,7 +4,7 @@ INCLUDE =
 LDFLAGS = 
 LDLIBS = -lpthread
 
-PROGS =	alarm_start alarm_cancel alarm_cancel2 alarm_repeat
+PROGS =	alarm_start timer_cancel timer_cancel2 timer_repeat timer_once
 
 .PHONY: all
 all: $(PROGS)
@@ -17,12 +17,15 @@ clean:
 alarm_start: alarm_start.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-alarm_cancel: alarm_cancel.o
+timer_cancel: timer_cancel.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-alarm_cancel2: alarm_cancel2.o
+timer_cancel2: timer_cancel2.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-alarm_repeat: alarm_repeat.o
+timer_repeat: timer_repeat.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+timer_once: timer_once.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

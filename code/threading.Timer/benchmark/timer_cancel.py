@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # python program to explain the
 # use of cancel() method in Timer class
 
