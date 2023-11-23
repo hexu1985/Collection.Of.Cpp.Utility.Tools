@@ -4,7 +4,7 @@ INCLUDE =
 LDFLAGS = 
 LDLIBS = -lpthread
 
-PROGS =	alarm_start alarm_cancel alarm_cancel2
+PROGS =	alarm_start alarm_cancel alarm_cancel2 alarm_repeat
 
 .PHONY: all
 all: $(PROGS)
@@ -21,5 +21,8 @@ alarm_cancel: alarm_cancel.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 alarm_cancel2: alarm_cancel2.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+alarm_repeat: alarm_repeat.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
