@@ -9,29 +9,29 @@ class Timer {
 public:
     typedef std::function<void ()> Callback;
 
-    Timer(double interval, Callback function) {
+    Timer(int interval, Callback function) {
         pimpl = std::make_shared<Impl>(interval, function);
     }
 
-    void Start() {
+    void start() {
         std::thread t([pimpl=pimpl]() {
             if(!pimpl->active.load()) return;
-            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<long int>(pimpl->interval*1000000)));
+            std::this_thread::sleep_for(std::chrono::seconds(pimpl->interval));
             if(!pimpl->active.load()) return;
             pimpl->function();
         });
         t.detach();
     }
 
-    void Cancel() {
+    void cancel() {
         pimpl->active.store(false);
     }
 
 private:
     struct Impl {
-        Impl(double interval_, Callback function_): interval(interval_), function(function_) {}
+        Impl(int interval_, Callback function_): interval(interval_), function(function_) {}
 
-        double interval;
+        int interval;
         Callback function;
         std::atomic<bool> active{true};
     };
