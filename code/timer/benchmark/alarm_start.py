@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
 from threading import Timer
-from datetime import datetime
 
 class Alarm:
-    def __init__(self, seconds:float, message:str):
+    def __init__(self, seconds:int, message:str):
         self.seconds = seconds
         self.message = message
 
 def callback(alarm:Alarm):
-    print("\nalarm timer [({}) {}] at {}".format(alarm.seconds, alarm.message, datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")))
+    print("({}) {}\n".format(alarm.seconds, alarm.message))
 
 if __name__ == "__main__":
     while True:
@@ -18,10 +17,9 @@ if __name__ == "__main__":
             continue
 
         try:
-            seconds, *messages = line.split(' ')
-            alarm = Alarm(float(seconds), ' '.join(messages))
-            print("start timer [({}) {}] at {}".format(alarm.seconds, alarm.message, datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")))
-            t = Timer(interval=float(seconds), function=callback, args=(alarm, ))
+            seconds, *message = line.split(' ')
+            alarm = Alarm(int(seconds), ' '.join(message))
+            t = Timer(interval=int(seconds), function=callback, args=(alarm, ))
             t.start()
         except:
             print("Bad command")

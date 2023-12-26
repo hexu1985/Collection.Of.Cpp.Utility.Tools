@@ -151,6 +151,7 @@ void AlarmLooper::run() {
         while (alarm_list.empty()) {
             alarm_cond.wait(lock);
         }
+
         alarm = alarm_list.front();
         alarm_list.pop_front();
         now = Clock::now();

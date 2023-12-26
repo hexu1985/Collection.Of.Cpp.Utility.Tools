@@ -6,11 +6,13 @@
 例如：
 
 ```
+from threading import  Timer
+
 def hello():
     print("hello, world")
 
-t = Timer(30.0, hello)
-t.start()  # after 30 seconds, "hello, world" will be printed
+t = Timer(3.0, hello)
+t.start()  # after 3 seconds, "hello, world" will be printed
 ```
 
 class threading.Timer(interval, function, args=None, kwargs=None)
