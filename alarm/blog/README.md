@@ -27,6 +27,9 @@ t.start()  # after 30 seconds, "hello, world" will be printed
     创建一个定时器，在经过 interval 秒的间隔事件后，将会用参数 args 和关键字参数 kwargs 调用 function。  
     如果 args 为 None （默认值），则会使用一个空列表。如果 kwargs 为 None （默认值），则会使用一个空字典。
 
+**start()**
+    启动定时器。
+
 **cancel()**
     停止定时器并取消执行计时器将要执行的操作。仅当计时器仍处于等待状态时有效。
 
@@ -46,15 +49,15 @@ public:
     typedef std::function<void ()> Callback;
 
     Timer(int interval, Callback function); 
-    void Start();
-    void Cancel(); 
+    void start();
+    void cancel(); 
 };
 ```
 
 - Callback：类型为std::function<void ()>，即返回类型为void的“函数”，当然在C++里可以是普通函数，函数对象，lambda等。
-- Timer(interval, function)：构造函数，创建一个Timer，interval秒后到期（相对于调用Start函数时的时间点），回调函数为function。
-- Start()：启动定时器
-- Cancel()：停止定时器并取消执行计时器将要执行的操作。
+- Timer(interval, function)：构造函数，创建一个Timer，interval秒后到期（相对于调用start函数时的时间点），回调函数为function。
+- start()：启动定时器。
+- cancel()：停止定时器并取消执行计时器将要执行的操作。
 
 在给出C++的实现前，我们先给出测试驱动程序。测试驱动程序来源于《Posix多线程程序设计》（英文原版书名为Programming with POSIX Threads）里的闹钟实例程序。  
 而我接下来的介绍顺序源于我的编码实现顺序，如下：
@@ -130,7 +133,7 @@ int main (int argc, char *argv[])
 ```
 代码的完整说明参见《Posix多线程程序设计》 1.5.3章节，这里就不再搬运原文了。
 
-接下来是移殖成python版本的代码：
+接下来是移植成python版本的代码：
 ```python
 #!/usr/bin/env python3
 
@@ -206,7 +209,7 @@ int main()
             std::tie(seconds, message) = parse_command(line);
             auto alarm = std::make_shared<Alarm>(seconds, message);
             Timer t(seconds, std::bind(callback, alarm));
-            t.Start();
+            t.start();
         } 
         catch (const std::exception& e) {
             std::cout << "Bad command" << std::endl;
@@ -216,7 +219,7 @@ int main()
 ```
 这样我们就有了C++版本Timer类的测试驱动程序，并且可以跟C和python版本的代码对比运行。
 
-接下来给出C++版本的Timer实现：
+接下来给出C++版本的基于创建线程的Timer实现：
 ```cpp
 #pragma once
 
@@ -233,7 +236,7 @@ public:
         pimpl = std::make_shared<Impl>(interval, function);
     }
 
-    void Start() {
+    void start() {
         std::thread t([pimpl=pimpl]() {
             if(!pimpl->active.load()) return;
             std::this_thread::sleep_for(std::chrono::seconds(pimpl->interval));
@@ -243,7 +246,7 @@ public:
         t.detach();
     }
 
-    void Cancel() {
+    void cancel() {
         pimpl->active.store(false);
     }
 
@@ -263,7 +266,7 @@ private:
 C++实现部分，基本上是C版本的代码抽离和封装，并把相关函数替换成C++标准库的实现而已。不过Timer类麻雀虽小，但五脏俱全，其中用到的C++标准库组件有：
 - std::function：用于抽象到期回调函数
 - std::shared_ptr：用于管理Timer::Impl的生命周期
-- std::atomic：用于Cancel Timer的flag，保证线程安全
+- std::atomic：用于cancel Timer的flag，保证线程安全
 - std::thread：用于Timer线程，sleep指定时间，然后调用回调函数
 - std::chrono：C++标准库中时间相关的实现都在其中
 - C++ lambda：Timer线程的target函数，捕获了this->pimpl，保证了Timerl::Impl对象不会因为Timer对象的析构而析构
@@ -527,9 +530,9 @@ int main()
             auto alarm = std::make_shared<Alarm>(seconds, message);
             Timer t(seconds, std::bind(callback, alarm));
 #ifdef DEBUG
-            t.SetMessage(message);
+            t.set_message(message);
 #endif
-            t.Start();
+            t.start();
         } 
         catch (const std::exception& e) {
             std::cout << "Bad command" << std::endl;
@@ -552,11 +555,11 @@ public:
     typedef std::function<void ()> Callback;
 
     Timer(int interval, Callback function); 
-    void Start();
-    void Cancel(); 
+    void start();
+    void cancel(); 
 
 #ifdef DEBUG
-    void SetMessage(const std::string& message);
+    void set_message(const std::string& message);
 #endif
 
 public:
@@ -567,7 +570,7 @@ private:
 };
 ```
 首先来看Timer的头文件，这里就看出Pimpl惯用法的优势了，头文件里完全剥离了对`<chrono>、<thread>、<atomic>`的依赖。
-另外，增加了SetMessage接口，用于实现C版本中DEBUG宏中的调试信息打印
+另外，增加了set_message接口，用于实现C版本中DEBUG宏中的调试信息打印
 
 下面是Timer的源文件，代码和C版本的一样，有点儿长：
 ```cpp
@@ -615,7 +618,7 @@ public:
     Impl(int interval_, Callback function_): interval(interval_), function(function_) {
     }
 
-    void CalculateTime() {
+    void set_alarm() {
         time = Clock::now() + Seconds(interval);
     }
 
@@ -635,13 +638,13 @@ public:
     AlarmLooper(const AlarmLooper&) = delete;
     void operator=(const AlarmLooper&) = delete;
 
-    void ThreadSafetyInsert(AlarmPtr alarm) {
+    void thread_safety_insert(AlarmPtr alarm) {
         std::unique_lock<std::mutex> lock(alarm_mutex);
-        Insert(alarm);
+        insert(alarm);
     }
 
-    void Insert(AlarmPtr alarm);
-    void Run();
+    void insert(AlarmPtr alarm);
+    void run();
 
 private:
     std::list<AlarmPtr> alarm_list;
@@ -653,7 +656,7 @@ private:
 /*
  * Insert alarm entry on list, in order.
  */
-void AlarmLooper::Insert(AlarmPtr alarm) {
+void AlarmLooper::insert(AlarmPtr alarm) {
     auto first = alarm_list.begin();
     auto last = alarm_list.end();
 
@@ -670,9 +673,7 @@ void AlarmLooper::Insert(AlarmPtr alarm) {
         }
     }
     /*
-     * If we reached the end of the list, insert the new alarm
-     * there.  ("next" is NULL, and "last" points to the link
-     * field of the last item, or to the list header.)
+     * If we reached the end of the list, insert the new alarm there. 
      */
     if (first == last) {
         alarm_list.push_back(alarm);
@@ -700,7 +701,7 @@ void AlarmLooper::Insert(AlarmPtr alarm) {
 /*
  * The alarm thread's start routine.
  */
-void AlarmLooper::Run() {
+void AlarmLooper::run() {
     AlarmPtr alarm;
     TimePoint now;
     bool expired;
@@ -741,7 +742,7 @@ void AlarmLooper::Run() {
                 } 
             }
             if (!expired) {
-                Insert(alarm);
+                insert(alarm);
             }
         } else {
             expired = true;
@@ -758,12 +759,12 @@ void AlarmLooper::Run() {
 class TimerThread {
 public:
     TimerThread(); 
-    void AddTimer(std::shared_ptr<Timer::Impl> timer);
-    bool CurrentThreadIsAlarmLooperThread() {
+    void insert_alarm(std::shared_ptr<Timer::Impl> timer);
+    bool is_in_looper_thread() {
         return std::this_thread::get_id() == looper_thread.get_id();
     }
 
-    static TimerThread& GetInstance() {
+    static TimerThread& get_instance() {
         static TimerThread timer_thread;
         return timer_thread;
     }
@@ -774,15 +775,15 @@ private:
 };
 
 TimerThread::TimerThread() {
-    looper_thread = std::thread(&AlarmLooper::Run, &alarm_looper);
+    looper_thread = std::thread(&AlarmLooper::run, &alarm_looper);
     looper_thread.detach();
 }
 
-void TimerThread::AddTimer(std::shared_ptr<Timer::Impl> timer) {
-    if (CurrentThreadIsAlarmLooperThread()) {
-        alarm_looper.Insert(timer);
+void TimerThread::insert_alarm(std::shared_ptr<Timer::Impl> pimpl) {
+    if (is_in_looper_thread()) {
+        alarm_looper.insert(pimpl);
     } else {
-        alarm_looper.ThreadSafetyInsert(timer);
+        alarm_looper.thread_safety_insert(pimpl);
     }
 }
 
@@ -790,24 +791,25 @@ Timer::Timer(int interval, Callback function) {
     pimpl = std::make_shared<Impl>(interval, function);
 }
 
-void Timer::Start() {
-    pimpl->CalculateTime();
-    TimerThread::GetInstance().AddTimer(pimpl);
+void Timer::start() {
+    pimpl->set_alarm();
+    TimerThread::get_instance().insert_alarm(pimpl);
 }
 
-void Timer::Cancel() {
+void Timer::cancel() {
     pimpl->active = false;
 }
 
 #ifdef DEBUG
-void Timer::SetMessage(const std::string& message) {
+void Timer::set_message(const std::string& message) {
     pimpl->message = message;
 }
 #endif
 ```
+
 实现原理和C版本的一致（要不说是“直译”呢;），具体的映射关系如下：
-- AlarmLooper类：封装了C版本的函数alarm_thread、alarm_insert逻辑，AlarmLooper::Run对应alarm_thread，AlarmLooper::Insert对应alarm_insert
-- TimerThread类：作为单例类，管理运行AlarmLooper::Run的线程
+- AlarmLooper类：封装了C版本的函数alarm_thread、alarm_insert逻辑，AlarmLooper::run对应alarm_thread，AlarmLooper::insert对应alarm_insert
+- TimerThread类：作为单例类，管理运行AlarmLooper::run的线程
 - 然后就是std::list替代了C手写的链表
 - std::mutex和std::conditon_variable替代了pthread_mutex_t和pthread_cond_t结构体和函数。
 
@@ -815,7 +817,7 @@ void Timer::SetMessage(const std::string& message) {
 价值方面：
 
 - C版本的代码很优秀，用C++的面向对象方式实现，可以在C++工程中以组件的方式复用（主要是指条件变量版本，多线程版本过于简陋，不过好处是head only）
-- C++版本依赖于C++标准库，而C++标准库是跨平台的，所以Timer类也是跨平台的（当然，如果把C版本的pthread函数替换成C11标准库的线程函数也能达到同样目的，但据我所知各编译器厂商对C11的多线程支持的不是很积极）
+- C++版本依赖于C++标准库，而C++标准库是跨平台的，所以Timer类也是跨平台的（当然，如果把C版本的pthread函数替换成C11标准库的线程函数也能达到同样目的）
 
 改进方面：
 
@@ -825,7 +827,7 @@ void Timer::SetMessage(const std::string& message) {
 
 最后的最后，给出文章中提到的所有代码的完整实现链接：
 - 秒级的实现，包括C版本的原始代码，python版本的实例代码，C++的两个版本的代码，链接如下：<https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/alarm>
-- 微秒级的实现，包括python版本的实例代码，C++的两个版本的代码，链接如下：<https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer>
+- 微秒级的实现，包括python版本的实例代码，C++的两个版本的代码，链接如下：<https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/threading.Timer>
 
 
 ### 参考文档：

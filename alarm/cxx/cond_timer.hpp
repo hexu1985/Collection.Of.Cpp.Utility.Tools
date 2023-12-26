@@ -8,11 +8,11 @@ public:
     typedef std::function<void ()> Callback;
 
     Timer(int interval, Callback function); 
-    void Start();
-    void Cancel(); 
+    void start();
+    void cancel(); 
 
 #ifdef DEBUG
-    void SetMessage(const std::string& message);
+    void set_message(const std::string& message);
 #endif
 
 public:

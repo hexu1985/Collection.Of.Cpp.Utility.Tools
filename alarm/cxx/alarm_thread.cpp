@@ -41,7 +41,7 @@ int main()
             std::tie(seconds, message) = parse_command(line);
             auto alarm = std::make_shared<Alarm>(seconds, message);
             Timer t(seconds, std::bind(callback, alarm));
-            t.Start();
+            t.start();
         } 
         catch (const std::exception& e) {
             std::cout << "Bad command" << std::endl;

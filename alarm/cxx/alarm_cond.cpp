@@ -42,9 +42,9 @@ int main()
             auto alarm = std::make_shared<Alarm>(seconds, message);
             Timer t(seconds, std::bind(callback, alarm));
 #ifdef DEBUG
-            t.SetMessage(message);
+            t.set_message(message);
 #endif
-            t.Start();
+            t.start();
         } 
         catch (const std::exception& e) {
             std::cout << "Bad command" << std::endl;

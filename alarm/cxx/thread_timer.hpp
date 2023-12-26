@@ -13,7 +13,7 @@ public:
         pimpl = std::make_shared<Impl>(interval, function);
     }
 
-    void Start() {
+    void start() {
         std::thread t([pimpl=pimpl]() {
             if(!pimpl->active.load()) return;
             std::this_thread::sleep_for(std::chrono::seconds(pimpl->interval));
@@ -23,7 +23,7 @@ public:
         t.detach();
     }
 
-    void Cancel() {
+    void cancel() {
         pimpl->active.store(false);
     }
 

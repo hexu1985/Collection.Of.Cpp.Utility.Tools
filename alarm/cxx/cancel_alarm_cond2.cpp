@@ -18,13 +18,13 @@ int main()
     std::cout << std::endl;
 
     // Starting the function after 3 seconds
-    timer1.Start();
+    timer1.start();
 
     // Sleeping this thread for 5 seconds
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
     // This will not cancel the thread as 3 seconds have passed
-    timer1.Cancel();
+    timer1.cancel();
     std::cout << "This time thread is not cancelled as 3 seconds have passed when cancel() method is called\n";
 
     quick_exit(0);

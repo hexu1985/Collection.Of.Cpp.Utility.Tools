@@ -61,9 +61,9 @@ int main()
             std::cout << "start timer [" << *alarm << "] at " << std::chrono::system_clock::now() << std::endl;
             Timer t(seconds, std::bind(callback, alarm));
 #ifdef DEBUG
-            t.SetMessage(message);
+            t.set_message(message);
 #endif
-            t.Start();
+            t.start();
         } 
         catch (const std::exception& e) {
             std::cout << "Bad command" << std::endl;

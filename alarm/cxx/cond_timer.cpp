@@ -42,7 +42,7 @@ public:
     Impl(int interval_, Callback function_): interval(interval_), function(function_) {
     }
 
-    void CalculateTime() {
+    void set_alarm() {
         time = Clock::now() + Seconds(interval);
     }
 
@@ -62,13 +62,13 @@ public:
     AlarmLooper(const AlarmLooper&) = delete;
     void operator=(const AlarmLooper&) = delete;
 
-    void ThreadSafetyInsert(AlarmPtr alarm) {
+    void thread_safety_insert(AlarmPtr alarm) {
         std::unique_lock<std::mutex> lock(alarm_mutex);
-        Insert(alarm);
+        insert(alarm);
     }
 
-    void Insert(AlarmPtr alarm);
-    void Run();
+    void insert(AlarmPtr alarm);
+    void run();
 
 private:
     std::list<AlarmPtr> alarm_list;
@@ -80,7 +80,7 @@ private:
 /*
  * Insert alarm entry on list, in order.
  */
-void AlarmLooper::Insert(AlarmPtr alarm) {
+void AlarmLooper::insert(AlarmPtr alarm) {
     auto first = alarm_list.begin();
     auto last = alarm_list.end();
 
@@ -97,9 +97,7 @@ void AlarmLooper::Insert(AlarmPtr alarm) {
         }
     }
     /*
-     * If we reached the end of the list, insert the new alarm
-     * there.  ("next" is NULL, and "last" points to the link
-     * field of the last item, or to the list header.)
+     * If we reached the end of the list, insert the new alarm there. 
      */
     if (first == last) {
         alarm_list.push_back(alarm);
@@ -127,7 +125,7 @@ void AlarmLooper::Insert(AlarmPtr alarm) {
 /*
  * The alarm thread's start routine.
  */
-void AlarmLooper::Run() {
+void AlarmLooper::run() {
     AlarmPtr alarm;
     TimePoint now;
     bool expired;
@@ -168,7 +166,7 @@ void AlarmLooper::Run() {
                 } 
             }
             if (!expired) {
-                Insert(alarm);
+                insert(alarm);
             }
         } else {
             expired = true;
@@ -185,12 +183,12 @@ void AlarmLooper::Run() {
 class TimerThread {
 public:
     TimerThread(); 
-    void AddTimer(std::shared_ptr<Timer::Impl> timer);
-    bool CurrentThreadIsAlarmLooperThread() {
+    void insert_alarm(std::shared_ptr<Timer::Impl> timer);
+    bool is_in_looper_thread() {
         return std::this_thread::get_id() == looper_thread.get_id();
     }
 
-    static TimerThread& GetInstance() {
+    static TimerThread& get_instance() {
         static TimerThread timer_thread;
         return timer_thread;
     }
@@ -201,15 +199,15 @@ private:
 };
 
 TimerThread::TimerThread() {
-    looper_thread = std::thread(&AlarmLooper::Run, &alarm_looper);
+    looper_thread = std::thread(&AlarmLooper::run, &alarm_looper);
     looper_thread.detach();
 }
 
-void TimerThread::AddTimer(std::shared_ptr<Timer::Impl> timer) {
-    if (CurrentThreadIsAlarmLooperThread()) {
-        alarm_looper.Insert(timer);
+void TimerThread::insert_alarm(std::shared_ptr<Timer::Impl> pimpl) {
+    if (is_in_looper_thread()) {
+        alarm_looper.insert(pimpl);
     } else {
-        alarm_looper.ThreadSafetyInsert(timer);
+        alarm_looper.thread_safety_insert(pimpl);
     }
 }
 
@@ -217,17 +215,17 @@ Timer::Timer(int interval, Callback function) {
     pimpl = std::make_shared<Impl>(interval, function);
 }
 
-void Timer::Start() {
-    pimpl->CalculateTime();
-    TimerThread::GetInstance().AddTimer(pimpl);
+void Timer::start() {
+    pimpl->set_alarm();
+    TimerThread::get_instance().insert_alarm(pimpl);
 }
 
-void Timer::Cancel() {
+void Timer::cancel() {
     pimpl->active = false;
 }
 
 #ifdef DEBUG
-void Timer::SetMessage(const std::string& message) {
+void Timer::set_message(const std::string& message) {
     pimpl->message = message;
 }
 #endif
