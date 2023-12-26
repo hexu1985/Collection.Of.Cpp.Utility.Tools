@@ -1,7 +1,7 @@
 // c++ program to explain the
 // use of cancel() method in Timer class
 
-#include "cond_timer.hpp"
+#include "timer.hpp"
 #include <functional>
 #include <iostream>
 #include <thread>

@@ -1,4 +1,4 @@
-#include "cond_timer.hpp"
+#include "timer.hpp"
 #include <cstdlib>
 #include <string>
 #include <memory>

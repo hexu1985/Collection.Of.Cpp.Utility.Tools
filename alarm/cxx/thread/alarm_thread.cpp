@@ -1,4 +1,4 @@
-#include "cond_timer.hpp"
+#include "timer.hpp"
 #include <cstdlib>
 #include <string>
 #include <memory>
@@ -34,16 +34,13 @@ int main()
     std::string message;
     while (true) {
         std::cout << "Alarm> ";
-        if (!std::getline(std::cin, line)) quick_exit(0);
+        if (!std::getline(std::cin, line)) exit(0);
         if (line.length() <= 1) continue;
 
         try {
             std::tie(seconds, message) = parse_command(line);
             auto alarm = std::make_shared<Alarm>(seconds, message);
             Timer t(seconds, std::bind(callback, alarm));
-#ifdef DEBUG
-            t.set_message(message);
-#endif
             t.start();
         } 
         catch (const std::exception& e) {
