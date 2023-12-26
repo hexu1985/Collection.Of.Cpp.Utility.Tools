@@ -7,54 +7,24 @@
 #include <condition_variable>
 #include <thread>
 
-#ifdef DEBUG
-#include <iostream>
-#include <iomanip>
-#endif
-
 using Clock = std::chrono::system_clock;
 using TimePoint = Clock::time_point; 
 using Seconds = std::chrono::seconds;
 using AlarmPtr = std::shared_ptr<Timer::Impl>;
 
-#ifdef DEBUG
-namespace {
-
-std::ostream& operator<<(std::ostream& out, const TimePoint& tp) {
-    using namespace std::chrono;
-    auto us = duration_cast<microseconds>(tp.time_since_epoch());
-    out << std::fixed << static_cast<double>(us.count())/1000000 << std::defaultfloat;
-    return out;
-}
-
-template <typename Rep, typename Preiod>
-std::ostream& operator<<(std::ostream& out, const std::chrono::duration<Rep, Preiod>& d) {
-    using namespace std::chrono;
-    auto us = duration_cast<microseconds>(d);
-    out << std::fixed << static_cast<double>(us.count())/1000000 << std::defaultfloat;
-    return out;
-}
-
-}   // namespace
-#endif
-
 class Timer::Impl {
 public:
-    Impl(double interval_, Callback function_): interval(interval_), function(function_) {
+    Impl(int interval_, Callback function_): interval(interval_), function(function_) {
     }
 
-    void CalculateTime() {
-        time = Clock::now() + std::chrono::microseconds(static_cast<long int>(interval*1000000));
+    void set_alarm() {
+        time = Clock::now() + Seconds(interval);
     }
 
-    double interval;
+    int interval;
     Timer::Callback function;
     TimePoint time;
     std::atomic<bool> active{true};
-
-#ifdef DEBUG
-    std::string message;
-#endif
 };
 
 class AlarmLooper {
@@ -63,27 +33,25 @@ public:
     AlarmLooper(const AlarmLooper&) = delete;
     void operator=(const AlarmLooper&) = delete;
 
-    void ThreadSafetyInsert(AlarmPtr alarm) {
+    void thread_safety_insert(AlarmPtr alarm) {
         std::unique_lock<std::mutex> lock(alarm_mutex);
-        Insert(alarm);
+        insert(alarm);
     }
 
-    void Insert(AlarmPtr alarm);
-    void Run();
-    void Stop();
+    void insert(AlarmPtr alarm);
+    void run();
 
 private:
     std::list<AlarmPtr> alarm_list;
     TimePoint current_alarm;
     std::mutex alarm_mutex;
     std::condition_variable alarm_cond;
-    std::atomic<bool> stop{false};
 };
 
 /*
  * Insert alarm entry on list, in order.
  */
-void AlarmLooper::Insert(AlarmPtr alarm) {
+void AlarmLooper::insert(AlarmPtr alarm) {
     auto first = alarm_list.begin();
     auto last = alarm_list.end();
 
@@ -100,21 +68,11 @@ void AlarmLooper::Insert(AlarmPtr alarm) {
         }
     }
     /*
-     * If we reached the end of the list, insert the new alarm
-     * there.  ("next" is NULL, and "last" points to the link
-     * field of the last item, or to the list header.)
+     * If we reached the end of the list, insert the new alarm there. 
      */
     if (first == last) {
         alarm_list.push_back(alarm);
     }
-#ifdef DEBUG
-    std::cout << "[list:";
-    for (auto item : alarm_list) {
-        std::cout << item->time << "(" << (item->time - Clock::now()) << ")[\""
-                << item->message << "\"] ";
-    }
-    std::cout << "]\n" << std::flush;
-#endif
     /*
      * Wake the alarm thread if it is not busy (that is, if
      * current_alarm is 0, signifying that it's waiting for
@@ -130,7 +88,7 @@ void AlarmLooper::Insert(AlarmPtr alarm) {
 /*
  * The alarm thread's start routine.
  */
-void AlarmLooper::Run() {
+void AlarmLooper::run() {
     AlarmPtr alarm;
     TimePoint now;
     bool expired;
@@ -144,7 +102,6 @@ void AlarmLooper::Run() {
      */
     std::unique_lock<std::mutex> lock(alarm_mutex);
     while (true) {
-        if (stop) return;
         /*
          * If the alarm list is empty, wait until an alarm is
          * added. Setting current_alarm to 0 informs the insert
@@ -153,17 +110,12 @@ void AlarmLooper::Run() {
         current_alarm = TimePoint{};
         while (alarm_list.empty()) {
             alarm_cond.wait(lock);
-            if (stop) return;
         }
         alarm = alarm_list.front();
         alarm_list.pop_front();
         now = Clock::now();
         expired = false;
         if (alarm->time > now) {
-#ifdef DEBUG
-            std::cout << "[waiting: " << alarm->time << "(" << (alarm->time - Clock::now()) << ")\""
-                << alarm->message << "\"\n" << std::flush; 
-#endif
             current_alarm = alarm->time;
             while (current_alarm == alarm->time) {
                 status = alarm_cond.wait_until(lock, alarm->time);
@@ -171,10 +123,9 @@ void AlarmLooper::Run() {
                     expired = true;
                     break;
                 } 
-                if (stop) return;
             }
             if (!expired) {
-                Insert(alarm);
+                insert(alarm);
             }
         } else {
             expired = true;
@@ -188,22 +139,15 @@ void AlarmLooper::Run() {
     }
 }
 
-void AlarmLooper::Stop() {
-    stop = true;
-    alarm_cond.notify_one();
-}
-
 class TimerThread {
 public:
     TimerThread(); 
-    ~TimerThread(); 
-
-    void AddTimer(std::shared_ptr<Timer::Impl> timer);
-    bool CurrentThreadIsAlarmLooperThread() {
+    void insert_alarm(std::shared_ptr<Timer::Impl> timer);
+    bool is_in_looper_thread() {
         return std::this_thread::get_id() == looper_thread.get_id();
     }
 
-    static TimerThread& GetInstance() {
+    static TimerThread& get_instance() {
         static TimerThread timer_thread;
         return timer_thread;
     }
@@ -214,38 +158,28 @@ private:
 };
 
 TimerThread::TimerThread() {
-    looper_thread = std::thread(&AlarmLooper::Run, &alarm_looper);
+    looper_thread = std::thread(&AlarmLooper::run, &alarm_looper);
+    looper_thread.detach();
 }
 
-TimerThread::~TimerThread() {
-    alarm_looper.Stop();
-    looper_thread.join();
-}
-
-void TimerThread::AddTimer(std::shared_ptr<Timer::Impl> timer) {
-    if (CurrentThreadIsAlarmLooperThread()) {
-        alarm_looper.Insert(timer);
+void TimerThread::insert_alarm(std::shared_ptr<Timer::Impl> pimpl) {
+    if (is_in_looper_thread()) {
+        alarm_looper.insert(pimpl);
     } else {
-        alarm_looper.ThreadSafetyInsert(timer);
+        alarm_looper.thread_safety_insert(pimpl);
     }
 }
 
-Timer::Timer(double interval, Callback function) {
+Timer::Timer(int interval, Callback function) {
     pimpl = std::make_shared<Impl>(interval, function);
 }
 
-void Timer::Start() {
-    pimpl->CalculateTime();
-    TimerThread::GetInstance().AddTimer(pimpl);
+void Timer::start() {
+    pimpl->set_alarm();
+    TimerThread::get_instance().insert_alarm(pimpl);
 }
 
-void Timer::Cancel() {
+void Timer::cancel() {
     pimpl->active = false;
 }
-
-#ifdef DEBUG
-void Timer::SetMessage(const std::string& message) {
-    pimpl->message = message;
-}
-#endif
 

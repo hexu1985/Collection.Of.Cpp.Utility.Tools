@@ -7,13 +7,9 @@ class Timer {
 public:
     typedef std::function<void ()> Callback;
 
-    Timer(double interval, Callback function); 
-    void Start();
-    void Cancel(); 
-
-#ifdef DEBUG
-    void SetMessage(const std::string& message);
-#endif
+    Timer(int interval, Callback function); 
+    void start();
+    void cancel(); 
 
 public:
     struct Impl; 
