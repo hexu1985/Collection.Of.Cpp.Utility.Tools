@@ -42,7 +42,7 @@ public:
     Impl(int interval_, Callback function_): interval(interval_), function(function_) {
     }
 
-    void set_alarm() {
+    void setup_alarm() {
         time = Clock::now() + Seconds(interval);
     }
 
@@ -96,12 +96,14 @@ void AlarmLooper::insert(AlarmPtr alarm) {
             break;
         }
     }
+
     /*
      * If we reached the end of the list, insert the new alarm there. 
      */
     if (first == last) {
         alarm_list.push_back(alarm);
     }
+	
 #ifdef DEBUG
     std::cout << "[list:";
     for (auto item : alarm_list) {
@@ -110,6 +112,7 @@ void AlarmLooper::insert(AlarmPtr alarm) {
     }
     std::cout << "]\n" << std::flush;
 #endif
+
     /*
      * Wake the alarm thread if it is not busy (that is, if
      * current_alarm is 0, signifying that it's waiting for
@@ -216,7 +219,7 @@ Timer::Timer(int interval, Callback function) {
 }
 
 void Timer::start() {
-    pimpl->set_alarm();
+    pimpl->setup_alarm();
     TimerThread::get_instance().insert_alarm(pimpl);
 }
 
