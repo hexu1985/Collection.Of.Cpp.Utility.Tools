@@ -541,9 +541,13 @@ int main()
 }
 ```
 其实修改就只有两处：
+    - 将exit改成了quick_exit（因为下面的C++实现里，对应于C版本的alarm_thread线程是detach的，exit时会挂起在cond的wait上）
+    - 增加t.set_message调用，用来打印debug信息
+
 ![alarm_cond](png/alarm_cond.png)
 
-接下来给出C++的实现，如果C版本的代码看得懂，那C++版本的代码就可以说是一目了然，毕竟C++的版本是“直译”过来的。
+接下来给出条件变量版本的C++的Timer类实现，如果C版本的代码看得懂，那C++版本的代码就可以说是一目了然，毕竟C++的版本是“直译”过来的。
+
 ```cpp
 #pragma once
 
@@ -588,7 +592,7 @@ private:
 #endif
 
 using Clock = std::chrono::system_clock;
-using TimePoint = Clock::time_point;
+using TimePoint = Clock::time_point; 
 using Seconds = std::chrono::seconds;
 using AlarmPtr = std::shared_ptr<Timer::Impl>;
 
@@ -634,7 +638,7 @@ public:
 
 class AlarmLooper {
 public:
-    AlarmLooper() = default;
+    AlarmLooper() = default; 
     AlarmLooper(const AlarmLooper&) = delete;
     void operator=(const AlarmLooper&) = delete;
 
@@ -662,7 +666,7 @@ void AlarmLooper::insert(AlarmPtr alarm) {
 
     /*
      * LOCKING PROTOCOL:
-     *
+     * 
      * This routine requires that the caller have locked the
      * alarm_mutex!
      */
@@ -674,12 +678,12 @@ void AlarmLooper::insert(AlarmPtr alarm) {
     }
 
     /*
-     * If we reached the end of the list, insert the new alarm there.
+     * If we reached the end of the list, insert the new alarm there. 
      */
     if (first == last) {
         alarm_list.push_back(alarm);
     }
-
+	
 #ifdef DEBUG
     std::cout << "[list:";
     for (auto item : alarm_list) {
@@ -727,6 +731,7 @@ void AlarmLooper::run() {
         while (alarm_list.empty()) {
             alarm_cond.wait(lock);
         }
+
         alarm = alarm_list.front();
         alarm_list.pop_front();
         now = Clock::now();
@@ -734,7 +739,7 @@ void AlarmLooper::run() {
         if (alarm->time > now) {
 #ifdef DEBUG
             std::cout << "[waiting: " << alarm->time << "(" << (alarm->time - Clock::now()) << ")\""
-                << alarm->message << "\"\n" << std::flush;
+                << alarm->message << "\"\n" << std::flush; 
 #endif
             current_alarm = alarm->time;
             while (current_alarm == alarm->time) {
@@ -742,7 +747,7 @@ void AlarmLooper::run() {
                 if (status == std::cv_status::timeout) {
                     expired = true;
                     break;
-                }
+                } 
             }
             if (!expired) {
                 insert(alarm);
@@ -761,7 +766,7 @@ void AlarmLooper::run() {
 
 class TimerThread {
 public:
-    TimerThread();
+    TimerThread(); 
     void insert_alarm(std::shared_ptr<Timer::Impl> timer);
     bool is_in_looper_thread() {
         return std::this_thread::get_id() == looper_thread.get_id();
@@ -816,21 +821,29 @@ void Timer::set_message(const std::string& message) {
 - 然后就是std::list替代了C手写的链表
 - std::mutex和std::conditon_variable替代了pthread_mutex_t和pthread_cond_t结构体和函数。
 
-最后，我来“吹一吹”实现C++版本Timer类的价值，以及可以改进优化的方向。  
-价值方面：
+最后，我来简单说明一下我为什么实现C++版本Timer类，以及可以改进优化的方向。  
 
-- C版本的代码很优秀，用C++的面向对象方式实现，可以在C++工程中以组件的方式复用（主要是指条件变量版本，多线程版本过于简陋，不过好处是head only）
+理由方面：
+
+- C版本的代码很优秀，通过将C版本的代码移植并封装成C++版本，可以提高我对timer实现的算法理解，封装过程也是对C++的OOP的一次实践
+- 实现为Python的threading.Timer接口，则是认识到python接口的简洁性
+- Timer类具备一定的通用性，可以在其他项目中复用，考虑到目前C++标准库（截至C++20）中还没有类似的timer类，以及其他第三方库（例如boost，libuv等）都相对比较重
 - C++版本依赖于C++标准库，而C++标准库是跨平台的，所以Timer类也是跨平台的（当然，如果把C版本的pthread函数替换成C11标准库的线程函数也能达到同样目的）
 
 改进方面：
 
-- 到期时间的精度是秒级的，后面会给出微秒级精度的实现链接（和目前的实现原理一致）
-- std::list可以替换成std::multi_set以提高性能，依据是用红黑树的性能要好于链表的插入排序。
-- TimerThread类管理的thread是detach的，造成在linux上，进程退出时，有可能在std::condition_variable的析构函数上把进程hang住，这个也在微秒级的实现版本中做了改进。
+- 条件变量版本的C++实现中，alarm_looper的线程是detach的，造成主线程exit时，alarm_looper的线程会因为cond的wait，把整个进程挂起，
+  所以需要在AlarmLooper增加stop()接口及实现，使得可以通知AlarmLooper::run结束循环并返回（从而使alarm_looper的线程退出），然后，
+  TimerThread类里，alarm_looper的线程不是detach的，而是在TimerThread类的析构函数里通知alarm_looper的线程stop，并join它。
+- 到期时间的精度是秒级的，实际应用中往往需要更高精度的timer
+- std::list可以替换某些已序的数据结构（比如std::multi_set）以提高性能，list的平均插入时间（保证有序的前提下）时O(n)的
 
 最后的最后，给出文章中提到的所有代码的完整实现链接：
-- 秒级的实现，包括C版本的原始代码，python版本的实例代码，C++的两个版本的代码，链接如下：<https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/alarm>
-- 微秒级的实现，包括python版本的实例代码，C++的两个版本的代码，链接如下：<https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/threading.Timer>
+- 基于thread的C++的Timer类实现，精度秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/alarm/cxx/thread)
+- 基于thread的C++的Timer类实现，精度微秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer/recipe-03)
+- 基于条件变量的C++的Timer类实现，精度秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/alarm/cxx/cond)
+- 基于条件变量的C++的Timer类实现，精度秒级，并增加了AlarmLooper的stop接口，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer/recipe-02)
+- 基于条件变量的C++的Timer类实现，精度微秒级，并增加了AlarmLooper的stop接口，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer/recipe-04)
 
 
 ### 参考文档：
