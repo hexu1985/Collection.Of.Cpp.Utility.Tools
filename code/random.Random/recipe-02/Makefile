@@ -14,12 +14,12 @@ clean:
 	@$(RM) $(PROGS) *.o
 	@echo "clean OK!"
 
-random_random_class: random_random_class.o Random.o
+random_random_class: random_random_class.o random.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-random_randint: random_randint.o Random.o
+random_randint: random_randint.o random.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-random_seed: random_seed.o Random.o
+random_seed: random_seed.o random.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

@@ -2,8 +2,6 @@
 
 #include <random>
 
-namespace random_ {
-
 // Random class
 // This code assumes 32-bit ints,
 // which are standard on modern compilers.
@@ -19,13 +17,16 @@ namespace random_ {
 
 class Random {
 public:
+    using GeneratorType = std::minstd_rand;
+    using SeedType = GeneratorType::result_type;
+
     Random(): Random(std::random_device{}()) {
     }
 
     /**
      * Construct with x for the state.
      */
-    explicit Random(int x): generator(x) {
+    explicit Random(SeedType x): generator(x) {
     }
 
     /**
@@ -54,8 +55,16 @@ public:
         return static_cast<int>(randint() / partition_size) + low;
     }
 
+    void seed(SeedType x) {
+        generator.seed(x);
+    }
+
 private:
-    std::minstd_rand generator;
+    GeneratorType generator;
 };
 
-}   // namespace random_
+int randint();
+int randint(int low, int high);
+void seed(Random::SeedType x);
+double random_();
+

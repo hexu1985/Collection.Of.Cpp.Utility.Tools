@@ -14,6 +14,6 @@ clean:
 	@$(RM) $(PROGS) *.o
 	@echo "clean OK!"
 
-random_random_class: random_random_class.o Random.o
+random_random_class: random_random_class.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

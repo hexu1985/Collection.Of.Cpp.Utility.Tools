@@ -1,6 +1,4 @@
-#include "Random.hpp"
-
-namespace random_ {
+#include "random.hpp"
 
 static Random& get_instance() {
     static Random random;
@@ -22,9 +20,8 @@ void seed(Random::SeedType x) {
     random.seed(x);
 }
 
-double random() {
+double random_() {
     auto& random = get_instance();
     return random.random();
 }
 
-}   // namespace random
