@@ -13,9 +13,9 @@ clean:
 	@$(RM) $(PROGS) *.o
 	@echo "clean OK!"
 
-MyThreadClass: MyThreadClass.o Thread.o Random.o
+MyThreadClass: MyThreadClass.o thread.o random.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-MyThreadClass_lock: MyThreadClass_lock.o Thread.o Random.o
+MyThreadClass_lock: MyThreadClass_lock.o thread.o random.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

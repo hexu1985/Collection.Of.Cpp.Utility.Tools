@@ -1,4 +1,4 @@
-#include "Thread.hpp"
+#include "thread.hpp"
 
 Thread::Thread() {
 }

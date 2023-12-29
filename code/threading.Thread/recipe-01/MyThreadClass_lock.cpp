@@ -1,5 +1,5 @@
-#include "Thread.hpp"
-#include "Random.hpp"
+#include "thread.hpp"
+#include "random.hpp"
 
 #include <string>
 #include <iostream>
@@ -45,16 +45,15 @@ int main(int argc, char* argv[]) {
     auto start_time = std::chrono::system_clock::now();
 
     // Thread Creation
-    auto random = Random();
-    auto thread1 = MyThreadClass("Thread#1 ", random.randomInt(1,10));
-    auto thread2 = MyThreadClass("Thread#2 ", random.randomInt(1,10));
-    auto thread3 = MyThreadClass("Thread#3 ", random.randomInt(1,10));
-    auto thread4 = MyThreadClass("Thread#4 ", random.randomInt(1,10));
-    auto thread5 = MyThreadClass("Thread#5 ", random.randomInt(1,10));
-    auto thread6 = MyThreadClass("Thread#6 ", random.randomInt(1,10));
-    auto thread7 = MyThreadClass("Thread#7 ", random.randomInt(1,10));
-    auto thread8 = MyThreadClass("Thread#8 ", random.randomInt(1,10));
-    auto thread9 = MyThreadClass("Thread#9 ", random.randomInt(1,10));
+    auto thread1 = MyThreadClass("Thread#1 ", randint(1,10));
+    auto thread2 = MyThreadClass("Thread#2 ", randint(1,10));
+    auto thread3 = MyThreadClass("Thread#3 ", randint(1,10));
+    auto thread4 = MyThreadClass("Thread#4 ", randint(1,10));
+    auto thread5 = MyThreadClass("Thread#5 ", randint(1,10));
+    auto thread6 = MyThreadClass("Thread#6 ", randint(1,10));
+    auto thread7 = MyThreadClass("Thread#7 ", randint(1,10));
+    auto thread8 = MyThreadClass("Thread#8 ", randint(1,10));
+    auto thread9 = MyThreadClass("Thread#9 ", randint(1,10));
 
     // Thread Running
     thread1.start();
