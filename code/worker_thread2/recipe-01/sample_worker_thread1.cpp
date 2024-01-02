@@ -54,12 +54,25 @@ public:
     }
 };
 
+class Functor {
+	int n_;
+public:
+	Functor(int n): n_(n) {}
+
+	void operator()()
+	{
+		std::cout << "Functor::" << __func__ << "(" << n_++ << ")" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+};
+
 int main()
 {
 	Foo foo(1);
     worker_thread mythread;
 
 	for (int i = 0; i < 10; i++) {
+        mythread.submit(Functor{i});
         mythread.submit(std::bind(print_int, i));
         mythread.submit(std::bind(print_string, std::string("hello")));
         mythread.submit(std::bind(&Foo::print, &foo));
