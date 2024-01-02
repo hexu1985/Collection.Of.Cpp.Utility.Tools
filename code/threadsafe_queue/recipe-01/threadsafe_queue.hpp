@@ -13,7 +13,7 @@ private:
 
 public:
     threadsafe_queue() {}
-    threadsafe_queue(const threadsafe_queue&);
+    threadsafe_queue(const threadsafe_queue&) = delete;
     threadsafe_queue& operator=(const threadsafe_queue&) = delete;
 
     void push(T new_value)

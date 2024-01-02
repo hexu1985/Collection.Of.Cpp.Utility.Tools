@@ -1,6 +1,8 @@
 CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra
 CC = g++	# for link
+LDFLAGS = 
+LDLIBS = -lpthread
 
 SOURCES = $(shell ls *.cpp)
 TARGETS = $(subst .cpp,,$(SOURCES))
