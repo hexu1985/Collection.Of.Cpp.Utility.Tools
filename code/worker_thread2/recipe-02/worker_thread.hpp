@@ -2,6 +2,7 @@
 
 #include <thread>
 #include <atomic>
+#include <functional>
 
 #include "threadsafe_queue.hpp"
 
@@ -11,34 +12,38 @@ private:
     threadsafe_queue<std::function<void()>> work_queue;
     std::thread work_thread;
 
-    struct interrupt_thread_exception {};
-
-    static void interrupt_thread()
-    {
-        throw interrupt_thread_exception{};
-    }
-
     void work_loop()
     {
-        while (true)
+        while(!done)
         {
             std::function<void()> task;
             work_queue.wait_and_pop(task);
-            try 
-            {
-                task();
-            }
-            catch (interrupt_thread_exception)
-            {
-                return;
-            }
+            task();
         }
     }
 
-public:
-    worker_thread()
+    void stop()
     {
-        work_thread = std::thread(&worker_thread::work_loop, this);
+        done = true;
+        std::function<void()> stop_task =
+            [this]() {
+                this->done = true;
+            };
+        work_queue.push(stop_task);
+    }
+
+public:
+    worker_thread(): done(false)
+    {
+        try
+        {
+            work_thread = std::thread(&worker_thread::work_loop, this);
+        }
+        catch(...)
+        {
+            stop();
+            throw;
+        }
     }
 
     ~worker_thread()
@@ -51,11 +56,5 @@ public:
     void submit(FunctionType f)
     {
         work_queue.push(std::function<void()>(f));
-    }
-
-    void stop()
-    {
-        work_queue.push(std::function<void()>(
-                    &worker_thread::interrupt_thread));
     }
 };
