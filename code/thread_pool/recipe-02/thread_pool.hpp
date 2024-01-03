@@ -46,11 +46,11 @@ class thread_pool
     void stop()
     {
         done = true;
+        std::function<void()> stop_task =
+            [this]() {
+                this->done = true;
+            };
         for (unsigned i=0; i<joiner.thread_count(); i++) {
-            std::function<void()> stop_task =
-                [this]() {
-                    this->done = true;
-                };
             work_queue.push(stop_task);
         }
     }
