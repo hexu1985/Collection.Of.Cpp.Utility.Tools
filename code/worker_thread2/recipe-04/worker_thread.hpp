@@ -58,14 +58,8 @@ private:
         while(!done)
         {
             function_wrapper task;
-            if(work_queue.try_pop(task))
-            {
-                task();
-            }
-            else
-            {
-                std::this_thread::yield();
-            }
+            work_queue.wait_and_pop(task);
+            task();
         }
     }
 
