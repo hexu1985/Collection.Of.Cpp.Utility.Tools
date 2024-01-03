@@ -35,15 +35,7 @@ private:
 public:
     worker_thread(): done(false)
     {
-        try
-        {
-            work_thread = std::thread(&worker_thread::work_loop, this);
-        }
-        catch(...)
-        {
-            stop();
-            throw;
-        }
+        work_thread = std::thread(&worker_thread::work_loop, this);
     }
 
     ~worker_thread()
