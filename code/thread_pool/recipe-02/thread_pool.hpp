@@ -22,6 +22,8 @@ public:
                 threads[i].join();
         }
     }
+
+    size_t thread_count() { return threads.size(); }
 };
 
 class thread_pool
@@ -36,14 +38,20 @@ class thread_pool
         while(!done)
         {
             std::function<void()> task;
-            if(work_queue.try_pop(task))
-            {
-                task();
-            }
-            else
-            {
-                std::this_thread::yield();
-            }
+            work_queue.wait_and_pop(task);
+            task();
+        }
+    }
+
+    void stop()
+    {
+        done = true;
+        for (unsigned i=0; i<joiner.thread_count(); i++) {
+            std::function<void()> stop_task =
+                [this]() {
+                    this->done = true;
+                };
+            work_queue.push(stop_task);
         }
     }
 
@@ -61,14 +69,14 @@ public:
         }
         catch(...)
         {
-            done=true;
+            stop();
             throw;
         }
     }
 
     ~thread_pool()
     {
-        done=true;
+        stop();
     }
 
     template<typename FunctionType>
