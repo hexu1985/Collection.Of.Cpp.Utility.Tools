@@ -140,7 +140,7 @@ public:
     }
 
     template <typename F, typename... Args>
-    auto submit(F&& f, Args&&... args) -> std::future<typename std::result_of<F(Args...)>::type> 
+    std::future<typename std::result_of<F(Args...)>::type> submit(F&& f, Args&&... args)
     {
         return submit_aux(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
     }
