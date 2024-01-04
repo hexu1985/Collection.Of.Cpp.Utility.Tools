@@ -10,6 +10,12 @@ int spider(int page) {
     return page;
 }
 
+template <typename T>
+bool is_done(std::future<T>& f) {
+    return f.wait_until(std::chrono::system_clock::now()) == std::future_status::ready;
+}
+
+
 int main() {
     thread_pool t{5};
 
@@ -18,14 +24,14 @@ int main() {
     auto task3 = t.submit(std::bind(spider, 3));
 
     std::cout << std::boolalpha;
-    std::cout << "task1: " << (task1.wait_until(std::chrono::system_clock::now()) == std::future_status::ready) << std::endl;
-    std::cout << "task2: " << (task2.wait_until(std::chrono::system_clock::now()) == std::future_status::ready) << std::endl;
-    std::cout << "task3: " << (task3.wait_until(std::chrono::system_clock::now()) == std::future_status::ready) << std::endl;
+    std::cout << "task1: " << is_done(task1) << std::endl;
+    std::cout << "task2: " << is_done(task2) << std::endl;
+    std::cout << "task3: " << is_done(task3) << std::endl;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(2500));
-    std::cout << "task1: " << (task1.wait_until(std::chrono::system_clock::now()) == std::future_status::ready) << std::endl;
-    std::cout << "task2: " << (task2.wait_until(std::chrono::system_clock::now()) == std::future_status::ready) << std::endl;
-    std::cout << "task3: " << (task3.wait_until(std::chrono::system_clock::now()) == std::future_status::ready) << std::endl;
+    std::cout << "task1: " << is_done(task1) << std::endl;
+    std::cout << "task2: " << is_done(task2) << std::endl;
+    std::cout << "task3: " << is_done(task3) << std::endl;
 
     std::cout << task1.get() << std::endl;
 
