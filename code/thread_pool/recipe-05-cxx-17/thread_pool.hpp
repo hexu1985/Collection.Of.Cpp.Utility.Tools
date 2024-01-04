@@ -97,10 +97,10 @@ class thread_pool
     }
 
     template<typename FunctionType>
-    std::future<typename std::result_of<FunctionType()>::type>
+    std::future<typename std::invoke_result<FunctionType>::type>
     submit_aux(FunctionType f)
     {
-        typedef typename std::result_of<FunctionType()>::type result_type;
+        typedef typename std::invoke_result<FunctionType>::type result_type;
         
         std::packaged_task<result_type()> task(std::move(f));
         std::future<result_type> res(task.get_future());
@@ -133,14 +133,14 @@ public:
     }
 
     template<typename FunctionType>
-    std::future<typename std::result_of<FunctionType()>::type>
+    std::future<typename std::invoke_result<FunctionType>::type>
     submit(FunctionType f)
     {
         return submit_aux(std::move(f));
     }
 
     template <typename F, typename... Args>
-    std::future<typename std::result_of<F(Args...)>::type> 
+    std::future<typename std::invoke_result<F, Args...>::type> 
     submit(F&& f, Args&&... args)
     {
         return submit_aux(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
