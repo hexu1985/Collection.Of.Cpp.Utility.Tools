@@ -5,6 +5,7 @@
 - [一个简单的线程池类，解决worker_thread忙等现象](recipe-02)
 - [支持等待任务的线程池类，worker_thread会有忙等现象](recipe-03)
 - [支持等待任务的线程池类，解决worker_thread忙等现象](recipe-04)
+- [支持等待任务的线程池类，submit接口调整，内部调用std::bind](recipe-05)
 
 ### 参考代码
 C++并发编程实战, Chapter 9
