@@ -96,18 +96,6 @@ class thread_pool
         }
     }
 
-    template<typename FunctionType>
-    std::future<typename std::result_of<FunctionType()>::type>
-    submit_aux(FunctionType f)
-    {
-        typedef typename std::result_of<FunctionType()>::type result_type;
-        
-        std::packaged_task<result_type()> task(std::move(f));
-        std::future<result_type> res(task.get_future());
-        work_queue.push(std::move(task));
-        return res;
-    }
-
 public:
     thread_pool(unsigned const thread_count=std::thread::hardware_concurrency()):
         done(false),joiner(threads)
@@ -136,13 +124,23 @@ public:
     std::future<typename std::result_of<FunctionType()>::type>
     submit(FunctionType f)
     {
-        return submit_aux(std::move(f));
+        typedef typename std::result_of<FunctionType()>::type result_type;
+        
+        std::packaged_task<result_type()> task(std::move(f));
+        std::future<result_type> res(task.get_future());
+        work_queue.push(std::move(task));
+        return res;
     }
 
     template <typename F, typename... Args>
     std::future<typename std::result_of<F(Args...)>::type> 
     submit(F&& f, Args&&... args)
     {
-        return submit_aux(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        typedef typename std::result_of<F(Args...)>::type result_type;
+        
+        std::packaged_task<result_type()> task(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        std::future<result_type> res(task.get_future());
+        work_queue.push(std::move(task));
+        return res;
     }
 };
