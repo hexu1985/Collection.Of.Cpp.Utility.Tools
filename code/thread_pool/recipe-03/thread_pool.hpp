@@ -4,6 +4,7 @@
 #include <vector>
 #include <atomic>
 #include <future>
+#include <type_traits>
 #include "threadsafe_queue.hpp"
 
 class function_wrapper
