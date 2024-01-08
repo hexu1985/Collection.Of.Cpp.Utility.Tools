@@ -191,7 +191,66 @@ done标志（注释4）。如果任务队列上没有任务，函数会调用 st
 - work_thread中while循环中try_pop+yield替换成wai_and_pop
 - 增加stop接口来替代简单的将done置为true
 
+[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-02)
 
+主线程通常是等待新线程在返回调用之后结束，确保所有任务都完成。
+使用线程池就需要等待任务提交到线程池中，而非直接提交给单个线程。
+接下来，我们看看怎么支持等待线程池中的任务：
+
+通过增加线程池的复杂度，可以直接等待任务完成。使用submit()函数返回对任务描述的句柄，可用来等待任
+务的完成。任务句柄会用条件变量或future进行包装，从而简化线程池的实现。
+
+下面代码展示了对简单线程池的修改，通过修改就能等待任务完成，以及在工作线程完成后，返回一个结果到等待线程中去，
+不过 `std::packaged_task<>` 实例是不可拷贝的，仅可移动，所以不能再使用 `std::function<>` 来实现任务队列，
+因为 `std::function<>` 需要存储可复制构造的函数对象。
+因此，必须使用一个定制的函数，用来处理可移动的类型，就是一个带有函数操作符的类型擦除类。
+只需要处理没有入参的函数和无返回的函数即可，所以这只是一个简单的虚函数调用。
+
+function_wrapper的代码实现如下：
+
+```cpp
+class function_wrapper
+{
+    struct impl_base {
+        virtual void call()=0;
+        virtual ~impl_base() {}
+    };
+    std::unique_ptr<impl_base> impl;
+    template<typename F>
+    struct impl_type: impl_base
+    {
+        F f;
+        impl_type(F&& f_): f(std::move(f_)) {}
+        void call() { f(); }
+    };
+
+public:
+    function_wrapper() {}
+
+    template<typename F>
+    function_wrapper(F&& f):
+        impl(new impl_type<F>(std::move(f)))
+    {}
+
+    void operator()() { impl->call(); }
+
+    function_wrapper(function_wrapper&& other):
+        impl(std::move(other.impl))
+    {}
+
+    function_wrapper& operator=(function_wrapper&& other)
+    {
+        impl=std::move(other.impl);
+        return *this;
+    }
+
+    function_wrapper(const function_wrapper&)=delete;
+    function_wrapper(function_wrapper&)=delete;
+    function_wrapper& operator=(const function_wrapper&)=delete;
+};
+```
+
+然后我们再来看thread_pool::submit函数实现的修改。
 
 
 
