@@ -33,6 +33,7 @@ public:
 
 这个thread_pool类接口就一个：submit，用来提交任务，具体的，
 调度可调用对象 f，以 f() 方式执行。
+而且在第一个版本里，是没有办法来等待一个任务完成。
 
 我们给出调用thread_pool::submit接口的示例代码，让大家有个直观的认识：
 
@@ -168,7 +169,29 @@ public:
 这种情况下，用户不用等待任务，并且任务不需要返回任何值，所以可以使用 std::function<void()> 对任务进行封装。
 submit()会将函数或可调用对象包装成一个 std::function<void()> 实例，将其推入队列中（注释12）。
 
-线程始于构造函数：使用 std::thread::hardware_concurrency() 来获取硬件支持多少个并发线程⑧，这些线程会
-在worker_thread()成员函数中执行⑨。
+线程始于构造函数：这些线程会在worker_thread()成员函数中执行（注释9）
+
+worker_thread函数很简单：从任务队列上获取任务（注释5），以及同时执行这些任务（注释6），执行一个循环直到设置
+done标志（注释4）。如果任务队列上没有任务，函数会调用 std::this_thread::yield() 让线程休息（注释7），并且给予其他
+线程向任务队列推送任务的机会。
+
+这样简单的线程池就完成了，特别是任务没有返回值，或需要执行阻塞操作的任务。[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-01)
+
+这个简单的线程池还有一个问题，如果任务队列上没有任务，虽然函数会调用 std::this_thread::yield() 让线程休息，
+但系统空闲时，线程池还是类似于忙等的循环。我们可以通过把work_thread里的try_pop改成wait_and_pop，去除忙等的情况，
+但是又会引入一个新的问题，当work_thread在wait_and_pop上挂起时，如果没有新任务加入到任务队列，那工作线程永远不会被唤醒，
+所以修改版本的线程池，除了将done置为true，还得向任务队列里塞入足够（线程池中工作线程的个数）的空任务，来唤醒挂起的工作线程。
+
+具体的修改如下图：
+
+![优化忙等1-1](optimize1-1.png)
+![优化忙等1-2](optimize1-2.png)
+
+代码修改就两点：
+- work_thread中while循环中try_pop+yield替换成wai_and_pop
+- 增加stop接口来替代简单的将done置为true
+
+
+
 
 
