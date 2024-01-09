@@ -1,18 +1,21 @@
 基于C++标准库实现线程池thread_pool类
 ====================================
 
-线程池类是多线程编程中经常设计到的工具类，
-许多编程语言都内置了类似的类库，比如python里的ThreadPoolExecutor（在concurrent.futures 模块中）
+线程池类是多线程编程中经常涉及到的工具类，
+许多编程语言都内置了类似的类库，比如python里的ThreadPoolExecutor（在concurrent.futures 模块中）。
 今天我就来介绍一下，如何基于C++标准库实现一个简单的线程池类。
 
 我们先给出线程池里的基本数据结构和类对象的角色。如下图：
 
 ![线程池](thread_pool.png)
 
-这张图大概的意思就是，一个线程池大概由三部分组成：
+从图中可看出，右边最大的绿色框中（标着Executor Service）就是一个线程池的组成部分，
+大概由三部分组成：
 - Task类
 - 一个可以存放Task对象的FIFO的线程安全的队列--TaskQueue
 - 一组可以从TaskQueue中取任务，去异步执行任务的线程组
+
+图中左侧的部分就是线程池的用户部分。用户通过线程池类对外暴露的接口，向线程池里添加异步任务。
 
 接下来我们就开始介绍C++里的线程池的实现，并且从最简单版本入手，
 逐步扩充完善，最终给出一个在实际项目中可用的简单线程池。
@@ -34,8 +37,8 @@ public:
 ```
 
 这个thread_pool类接口就一个：submit，用来提交任务，具体的，
-调度可调用对象 f，以 f() 方式执行。
-而且在第一个版本里，是没有办法来等待一个任务完成。
+线程池调度可调用对象 f，以 f() 方式执行。
+而且在第一个版本里，是没有办法来等待一个任务完成的。
 
 我们给出调用thread_pool::submit接口的示例代码，让大家有个直观的认识：
 
@@ -84,7 +87,7 @@ with ThreadPoolExecutor(max_workers=5) as t:  # 创建一个最大容纳数量�
 
 接下来，我们给出thread_pool的完整实现，并且给出代码讲解：
 
-```
+```cpp
 #pragma once
 
 #include <thread>
@@ -166,10 +169,10 @@ public:
 };
 ```
 
-这段代码的出处来自《C++ 并发编程实战》的第9.1节线程池，这里摘抄书中关键部分：
+这段代码的出处来自《C++ 并发编程实战》的第9.1节线程池，代码的实现原理大概为：
 实现中有一组工作线程（注释2），并且使用线程安全队列（注释1）来管理任务队列。
-这种情况下，用户不用等待任务，并且任务不需要返回任何值，所以可以使用 std::function<void()> 对任务进行封装。
-submit()会将函数或可调用对象包装成一个 std::function<void()> 实例，将其推入队列中（注释12）。
+这种情况下，用户不用等待任务，并且任务不需要返回任何值，所以可以使用 `std::function<void()>` 对任务进行封装。
+submit()会将函数或可调用对象包装成一个 `std::function<void()>` 实例，将其推入队列中（注释12）。
 
 线程始于构造函数：这些线程会在worker_thread()成员函数中执行（注释9）
 
@@ -181,7 +184,7 @@ done标志（注释4）。如果任务队列上没有任务，函数会调用 st
 
 **STEP2**
 
-这个简单的线程池还有一个问题，如果任务队列上没有任务，虽然函数会调用 std::this_thread::yield() 让线程休息，
+这个简单的线程池有一个问题，如果任务队列上没有任务，虽然函数会调用 std::this_thread::yield() 让线程休息，
 但系统空闲时，线程池还是类似于忙等的循环。我们可以通过把work_thread里的try_pop改成wait_and_pop，去除忙等的情况，
 但是又会引入一个新的问题，当work_thread在wait_and_pop上挂起时，如果没有新任务加入到任务队列，那工作线程永远不会被唤醒，
 所以修改版本的线程池，除了将done置为true，还得向任务队列里塞入足够（线程池中工作线程的个数）的空任务，来唤醒挂起的工作线程。
@@ -199,8 +202,8 @@ done标志（注释4）。如果任务队列上没有任务，函数会调用 st
 
 **STEP3**
 
-主线程通常是等待新线程在返回调用之后结束，确保所有任务都完成。
-使用线程池就需要等待任务提交到线程池中，而非直接提交给单个线程。
+主线程通常是等待创建的线程结束，来保证在返回给调用者之前，所有任务都已经完成了。
+使用线程池之后，就需要等待提交到线程池中的任务结束，而不是等待工作线程。
 接下来，我们看看怎么支持等待线程池中的任务：
 
 通过增加线程池的复杂度，可以直接等待任务完成。使用submit()函数返回对任务描述的句柄，可用来等待任
@@ -363,7 +366,7 @@ with ThreadPoolExecutor(max_workers=5) as t:  # 创建一个最大容纳数量�
 **STEP4**
 
 仔细看C++和Python版本的示例代码，大家可能会发现，
-C++版本的submit调用往往带着std::bind，因为C++版本的submit函数签名中，
+C++版本的submit调用往往伴随着std::bind调用，因为C++版本的submit函数签名中，
 可调用对象f是不接受参数的，所有带参数的函数调用需要通过std::bind封装一下，
 接下来，我们就把submit接口向std::thread看齐，支持可变长度的参数，
 实现也很简单，重载thread_pool::submit，只不过是把std::bind封到重载的submit实现中，
@@ -396,7 +399,7 @@ C++版本的submit调用往往带着std::bind，因为C++版本的submit函数�
 
 ### 参考文档：
 
-- 《C++ 并发编程实战（第二版）》
+- 《C++ 并发编程实战》（C++ Concurrency in Action: PRACTICAL MULTITHREADING）
 - [3.12.1 Documentation » The Python Standard Library » Concurrent Execution » concurrent.futures — Launching parallel tasks](https://docs.python.org/zh-cn/3/library/concurrent.futures.html)
 
 
