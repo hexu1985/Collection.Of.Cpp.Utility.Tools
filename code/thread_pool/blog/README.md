@@ -17,6 +17,8 @@
 接下来我们就开始介绍C++里的线程池的实现，并且从最简单版本入手，
 逐步扩充完善，最终给出一个在实际项目中可用的简单线程池。
 
+**STEP1**
+
 首先给出第一版线程池的接口和说明：
 
 ```cpp
@@ -164,7 +166,7 @@ public:
 };
 ```
 
-这段代码的出处来自《C++ 并发编程实战（第二版）》的第9.1节线程池，这里摘抄书中关键部分：
+这段代码的出处来自《C++ 并发编程实战》的第9.1节线程池，这里摘抄书中关键部分：
 实现中有一组工作线程（注释2），并且使用线程安全队列（注释1）来管理任务队列。
 这种情况下，用户不用等待任务，并且任务不需要返回任何值，所以可以使用 std::function<void()> 对任务进行封装。
 submit()会将函数或可调用对象包装成一个 std::function<void()> 实例，将其推入队列中（注释12）。
@@ -176,6 +178,8 @@ done标志（注释4）。如果任务队列上没有任务，函数会调用 st
 线程向任务队列推送任务的机会。
 
 这样简单的线程池就完成了，特别是任务没有返回值，或需要执行阻塞操作的任务。[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-01)
+
+**STEP2**
 
 这个简单的线程池还有一个问题，如果任务队列上没有任务，虽然函数会调用 std::this_thread::yield() 让线程休息，
 但系统空闲时，线程池还是类似于忙等的循环。我们可以通过把work_thread里的try_pop改成wait_and_pop，去除忙等的情况，
@@ -192,6 +196,8 @@ done标志（注释4）。如果任务队列上没有任务，函数会调用 st
 - 增加stop接口来替代简单的将done置为true
 
 [完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-02)
+
+**STEP3**
 
 主线程通常是等待新线程在返回调用之后结束，确保所有任务都完成。
 使用线程池就需要等待任务提交到线程池中，而非直接提交给单个线程。
@@ -279,7 +285,7 @@ public:
 注意，要将任务推送到任务队列中时，只能使用 std::move() ，因为 `std::packaged_task<>` 不可拷贝。
 为了对任务进行处理，队列里面存的就是function_wrapper对象，而非 `std::function<void()>` 对象。
 
-[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-03)
+[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-04)
 
 下面我跟就给出一个等待线程池任务的示例代码：
 
@@ -354,10 +360,41 @@ with ThreadPoolExecutor(max_workers=5) as t:  # 创建一个最大容纳数量�
     print(task1.result())  # 通过result来获取返回值
 ```
 
+**STEP4**
+
 仔细看C++和Python版本的示例代码，大家可能会发现，
 C++版本的submit调用往往带着std::bind，因为C++版本的submit函数签名中，
 可调用对象f是不接受参数的，所有带参数的函数调用需要通过std::bind封装一下，
 接下来，我们就把submit接口向std::thread看齐，支持可变长度的参数，
 实现也很简单，重载thread_pool::submit，只不过是把std::bind封到重载的submit实现中，
 具体的：
+
+```cpp
+    template <typename F, typename... Args>
+    std::future<typename std::result_of<F(Args...)>::type> 
+    submit(F&& f, Args&&... args)
+    {
+        typedef typename std::result_of<F(Args...)>::type result_type;
+        
+        std::packaged_task<result_type()> task(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        std::future<result_type> res(task.get_future());
+        work_queue.push(std::move(task));
+        return res;
+    }
+```
+
+增加这层语法糖后，调用submit时就不用在外面显式调用std::bind，原先的示例代码就可以写成：
+
+![submit语法糖](optimize3.png)
+
+到目前为止，一个简单的但在项目中可用的线程池的实现就介绍完了。
+
+这个实现的版本还有很多改进空间，比如，当任务队列中的任务有依赖关系时，就会遇到麻烦了。
+至于如何解决这个问题以及其他更高级的优化主题，大家可以去看《C++ 并发编程实战》的第9.1节剩下的部分。
+
+### 参考文档：
+
+- 《C++ 并发编程实战（第二版）》
+- [3.12.1 Documentation » The Python Standard Library » Concurrent Execution » concurrent.futures — Launching parallel tasks](https://docs.python.org/zh-cn/3/library/concurrent.futures.html)
+
 
