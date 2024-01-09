@@ -252,5 +252,112 @@ public:
 
 然后我们再来看thread_pool::submit函数实现的修改。
 
+![支持等待任务完成](optimize2.png)
 
+我们逐行解释一下：
+
+```cpp
+    template<typename FunctionType>
+    std::future<typename std::result_of<FunctionType()>::type>  // 1
+    submit(FunctionType f)
+    {
+        typedef typename std::result_of<FunctionType()>::type result_type;  // 2
+        
+        std::packaged_task<result_type()> task(std::move(f));   // 3
+        std::future<result_type> res(task.get_future());    // 4
+        work_queue.push(std::move(task));       // 5
+        return res;     // 6
+    }
+```
+
+首先，修改的是submit()函数签名（注释1），返回 `std::future<>` 保存任务的返回值，并且允许调用者等待任务完全结束。
+因为需要提供函数f的返回类型，所以使用 `std::result_of<> ： std::result_of<FunctionType()>::type` 来获得。
+同样，函数中的result_type（注释2）是使用 typedef 对 `std::result_of<>` 表达式的简写。
+
+然后，将f包装入 `std::packaged_task<result_type()>` （注释3）。
+向任务队列添加任务（注释5）和返回future（注释6）前，需要先从 `std::packaged_task<>` 中获取 `future`（注释4）。
+注意，要将任务推送到任务队列中时，只能使用 std::move() ，因为 `std::packaged_task<>` 不可拷贝。
+为了对任务进行处理，队列里面存的就是function_wrapper对象，而非 `std::function<void()>` 对象。
+
+[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-03)
+
+下面我跟就给出一个等待线程池任务的示例代码：
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <functional>
+#include <thread>
+#include "thread_pool.hpp"
+
+int spider(int page) {
+    std::this_thread::sleep_for(std::chrono::seconds(page));
+    std::cout << "crawl task" << page << " finished" << std::endl;
+    return page;
+}
+
+template <typename T>
+bool is_done(std::future<T>& f) {
+    return f.wait_until(std::chrono::system_clock::now()) == std::future_status::ready;
+}
+
+
+int main() {
+    thread_pool t{5};
+
+    auto task1 = t.submit(std::bind(spider, 1));
+    auto task2 = t.submit(std::bind(spider, 2));
+    auto task3 = t.submit(std::bind(spider, 3));
+
+    std::cout << std::boolalpha;
+    std::cout << "task1: " << is_done(task1) << std::endl;
+    std::cout << "task2: " << is_done(task2) << std::endl;
+    std::cout << "task3: " << is_done(task3) << std::endl;
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(2500));
+    std::cout << "task1: " << is_done(task1) << std::endl;
+    std::cout << "task2: " << is_done(task2) << std::endl;
+    std::cout << "task3: " << is_done(task3) << std::endl;
+
+    std::cout << task1.get() << std::endl;
+
+    char c;
+    std::cin >> c;
+    return 0;
+}
+```
+
+示例代码相对简单，就不分析了，惯例的，同时给出Python版本的等价代码作为对比：
+
+```cpp
+from concurrent.futures import ThreadPoolExecutor
+import time
+
+def spider(page):
+    time.sleep(page)
+    print(f"crawl task{page} finished")
+    return page
+
+with ThreadPoolExecutor(max_workers=5) as t:  # 创建一个最大容纳数量为5的线程池
+    task1 = t.submit(spider, 1)
+    task2 = t.submit(spider, 2)  # 通过submit提交执行的函数到线程池中
+    task3 = t.submit(spider, 3)
+
+    print(f"task1: {task1.done()}")  # 通过done来判断线程是否完成
+    print(f"task2: {task2.done()}")
+    print(f"task3: {task3.done()}")
+
+    time.sleep(2.5)
+    print(f"task1: {task1.done()}")
+    print(f"task2: {task2.done()}")
+    print(f"task3: {task3.done()}")
+    print(task1.result())  # 通过result来获取返回值
+```
+
+仔细看C++和Python版本的示例代码，大家可能会发现，
+C++版本的submit调用往往带着std::bind，因为C++版本的submit函数签名中，
+可调用对象f是不接受参数的，所有带参数的函数调用需要通过std::bind封装一下，
+接下来，我们就把submit接口向std::thread看齐，支持可变长度的参数，
+实现也很简单，重载thread_pool::submit，只不过是把std::bind封到重载的submit实现中，
+具体的：
 
