@@ -335,7 +335,7 @@ int main() {
 
 示例代码相对简单，就不分析了，惯例的，同时给出Python版本的等价代码作为对比：
 
-```cpp
+```py
 from concurrent.futures import ThreadPoolExecutor
 import time
 
@@ -384,6 +384,8 @@ C++版本的submit调用往往带着std::bind，因为C++版本的submit函数�
 ```
 
 增加这层语法糖后，调用submit时就不用在外面显式调用std::bind，原先的示例代码就可以写成：
+
+[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/thread_pool/recipe-05)
 
 ![submit语法糖](optimize3.png)
 
