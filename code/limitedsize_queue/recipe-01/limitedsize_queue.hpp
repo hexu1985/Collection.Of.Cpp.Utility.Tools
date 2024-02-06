@@ -2,6 +2,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <queue>
+#include <limits>
 
 template<typename T>
 class limitedsize_queue {
@@ -10,14 +11,10 @@ private:
     std::queue<T> data_queue;
     std::condition_variable not_empty_cond;
     std::condition_variable not_full_cond;
-    size_t maxsize;
-
-    enum {
-        default_maxsize = 50
-    };
+    size_t max_size;
 
 public:
-    limitedsize_queue(size_t maxsize_=default_maxsize): maxsize(maxsize_)
+    limitedsize_queue(size_t max_size_=std::numeric_limits<size_t>::max()): max_size(max_size_)
     {}
 
     void push(T new_value)
@@ -80,10 +77,10 @@ public:
         return data_queue.size();
     }
 
-    size_t max_size() const
+    size_t capacity() const
     {
         std::lock_guard<std::mutex> lk(mut);
-        return maxsize;
+        return max_size;
     }
 
 private:
@@ -94,7 +91,7 @@ private:
 
     bool is_full() const
     {
-        return data_queue.size() >= maxsize;
+        return data_queue.size() >= max_size;
     }
 };
 
