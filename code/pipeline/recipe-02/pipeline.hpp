@@ -1,0 +1,109 @@
+#pragma once
+
+#include <memory>
+#include <vector>
+#include "limitedsize_queue.hpp"
+
+template <typename T>
+using Pipe = std::shared_ptr<limitedsize_queue<T>>;
+
+template <typename T>
+Pipe<T> make_pipe()
+{
+    return Pipe<T>(new limitedsize_queue<T>{});
+}
+
+template <typename T>
+Pipe<T> make_pipe(size_t max_size)
+{
+    return Pipe<T>(new limitedsize_queue<T>(max_size));
+}
+
+class ProcessNode {
+public:
+    ProcessNode();
+    virtual ~ProcessNode();
+
+    virtual void start() = 0;
+    virtual void stop() = 0;
+};
+
+template <typename T>
+class DataSource: public ProcessNode {
+public:
+    DataSource(Pipe<T> pipe_): pipe(pipe_) {}
+    virtual ~DataSource() {}
+
+protected:
+    void put(T value)
+    {
+        pipe->push(std::move(value));
+    }
+
+private:
+    Pipe<T> pipe;
+};
+
+template <typename IT, typename OT>
+class DataFilter: public ProcessNode {
+public:
+    DataFilter(Pipe<IT> in_pipe_, Pipe<OT> out_pipe_):
+        in_pipe(in_pipe_), out_pipe(out_pipe_)
+    {}
+
+    virtual ~DataFilter() {}
+
+protected:
+    void get(IT& value)
+    {
+        in_pipe->pop(value);
+    }
+
+    void put(OT value)
+    {
+        out_pipe->push(std::move(value));
+    }
+
+private:
+    Pipe<IT> in_pipe;
+    Pipe<OT> out_pipe;
+};
+
+template <typename T>
+class DataSink: public ProcessNode {
+public:
+    DataSink(Pipe<T> pipe_): pipe(pipe_) {}
+    virtual ~DataSink() {}
+
+protected:
+    void get(T& value)
+    {
+        pipe->pop(value);
+    }
+
+private:
+    Pipe<T> pipe;
+};
+
+class Pipeline {
+public:
+    Pipeline();
+    virtual ~Pipeline();
+
+    void start();
+    void stop();
+
+protected:
+    void add_data_source(std::shared_ptr<ProcessNode> source);
+    void add_data_filter(std::shared_ptr<ProcessNode> filter);
+    void add_data_sink(std::shared_ptr<ProcessNode> sink);
+
+    void clear();
+
+protected:
+    std::vector<std::shared_ptr<ProcessNode>> data_sources;
+    std::vector<std::shared_ptr<ProcessNode>> data_filters;
+    std::vector<std::shared_ptr<ProcessNode>> data_sinks;
+};
+
+
