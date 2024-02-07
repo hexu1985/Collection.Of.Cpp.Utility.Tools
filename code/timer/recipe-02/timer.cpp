@@ -14,19 +14,33 @@ using AlarmPtr = std::shared_ptr<Timer::Impl>;
 
 class Timer::Impl {
 public:
-    Impl(double interval_, bool is_period_, Callback function_)
-        : interval(interval_), is_period(is_period_), function(function_), time(Clock::now()) {
+    Impl() {
     }
 
-    void setup_alarm() {
+    ~Impl() {
+    }
+
+    bool is_valid() {
+        return !(time == TimePoint{});
+    }
+
+    void setup_alarm(double interval_, bool is_period_, Callback function_) {
+        interval = interval_;
+        is_period = is_period_;
+        function = function_;
+        time = Clock::now() + Microseconds(static_cast<long int>(interval*1000000));
+        active = true;
+    }
+
+    void update_alarm() {
         time = time + Microseconds(static_cast<long int>(interval*1000000));
     }
 
-    double interval;            // unit second
-    bool is_period;             // is period
+    double interval{0.0};       // unit second
+    bool is_period{false};     // is period
     Timer::Callback function;   // callback function
     TimePoint time;             // expiration time
-    std::atomic<bool> active{true};
+    std::atomic<bool> active{false};
 };
 
 class AlarmLooper {
@@ -148,7 +162,7 @@ void AlarmLooper::run() {
             if (alarm->active) {
                 alarm->function();
                 if (alarm->is_period) {
-                    alarm->setup_alarm();
+                    alarm->update_alarm();
                     insert(alarm);
                 }
             }
@@ -199,35 +213,29 @@ void TimerThread::insert_alarm(std::shared_ptr<Timer::Impl> pimpl) {
 }
 
 Timer::Timer() {
+    pimpl = std::make_shared<Impl>();
 }
 
 Timer::~Timer() {
 }
 
 void Timer::setTimeout(Callback function, int delay) {
-    if (pimpl != nullptr) {
+    if (pimpl->is_valid()) {
         return;
     }
-
-    pimpl = std::make_shared<Impl>(static_cast<double>(delay)/1000, false, function);
-    pimpl->setup_alarm();
+    pimpl->setup_alarm(static_cast<double>(delay)/1000, false, function);
     TimerThread::get_instance().insert_alarm(pimpl);
 }
 
 void Timer::setInterval(Callback function, int interval) {
-    if (pimpl != nullptr) {
+    if (pimpl->is_valid()) {
         return;
     }
-
-    pimpl = std::make_shared<Impl>(static_cast<double>(interval)/1000, true, function);
-    pimpl->setup_alarm();
+    pimpl->setup_alarm(static_cast<double>(interval)/1000, true, function);
     TimerThread::get_instance().insert_alarm(pimpl);
 }
 
 void Timer::stop() {
-    if (pimpl == nullptr) {
-        return;
-    }
     pimpl->active = false;
 }
 
