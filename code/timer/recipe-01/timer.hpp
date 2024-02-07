@@ -1,16 +1,4 @@
-/**
- * @file timer.hpp
- * @brief 一个基于thread的超简单的定时器类
- * @author hexu_1985@sina.com
- * @version 1.0
- * @date 2019-09-03
- *
- * @see 
- * https://www.fluentcpp.com/2018/12/28/timer-cpp/ \n
- * https://github.com/99xt/timercpp.git
- */
-#ifndef TIMER_INC
-#define TIMER_INC
+#pragma once
 
 #include <atomic>
 #include <thread>
@@ -63,4 +51,3 @@ void Timer::stop() {
     active = false;
 }
 
-#endif
