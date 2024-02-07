@@ -1,5 +1,4 @@
-#ifndef TIMER_INC
-#define TIMER_INC
+#pragma once
 
 #include <iostream>
 #include <thread>
@@ -16,17 +15,14 @@ public:
     Timer();
     ~Timer();
 
-    void setTimeout(Callback function, int delay_ms);
-    void setInterval(Callback function, int interval_ms);
+    void setTimeout(Callback function, int delay);      // unit millisecond
+    void setInterval(Callback function, int interval);  // unit millisecond
     void stop();
 
-private:
-    friend class TimerThread;
+public:
+    struct Impl; 
 
 private:
-    Callback function;      // 超时回调函数
-    int interval = -1;      // > 0是周期性的, <= 0是一次性的, 单位ms
-    TimePoint timeout;      // 下次超时时间
+    std::shared_ptr<Impl> pimpl;
 };
 
-#endif
