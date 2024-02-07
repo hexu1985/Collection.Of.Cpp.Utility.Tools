@@ -71,7 +71,7 @@ public:
         return is_full();
     }
 
-    size_t qsize() const
+    size_t size() const
     {
         std::lock_guard<std::mutex> lk(mut);
         return data_queue.size();
