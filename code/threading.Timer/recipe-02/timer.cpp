@@ -64,6 +64,9 @@ void AlarmLooper::insert(AlarmPtr alarm) {
      * alarm_mutex!
      */
     for ( ; first != last; ++first) {
+        if ((*first) == alarm) {    // already in alarm list
+            return;
+        }
         if ((*first)->time >= alarm->time) {
             alarm_list.insert(first, alarm);
             break;
@@ -194,6 +197,9 @@ Timer::Timer(int interval, Callback function) {
 }
 
 void Timer::start() {
+    if (pimpl->active == false) {   // already cancel
+        return;
+    }
     pimpl->setup_alarm();
     TimerThread::get_instance().insert_alarm(pimpl);
 }
