@@ -4,22 +4,20 @@
 using namespace std;
 
 int main() {
-    Timer t1;
+    Timer t;
 
-    t1.setInterval([&]() {
+    t.setInterval([&]() {
         cout << "Hey.. After each 1s..." << endl;
-    }, 1000); 
+    }, chrono::milliseconds(1000)); 
 
-    Timer t2;
-    t2.setTimeout([&]() {
+    t.setTimeout([&]() {
         cout << "Hey.. After 5.2s. But I will stop the timer!" << endl;
-        t1.stop();
-        cout << "I stoped the timer!" << endl;
-    }, 5200); 
+        t.stop();
+    }, chrono::milliseconds(5200)); 
 
     
 
-    cout << "I am Timer" << endl;
+    cout << "I am Timer" <<endl;
 
 
     while(true); // Keep mail thread active
