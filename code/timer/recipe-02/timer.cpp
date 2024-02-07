@@ -202,7 +202,6 @@ Timer::Timer() {
 }
 
 Timer::~Timer() {
-    stop();
 }
 
 void Timer::setTimeout(Callback function, int delay) {
