@@ -845,6 +845,16 @@ void Timer::set_message(const std::string& message) {
 - 基于条件变量的C++的Timer类实现，精度秒级，并增加了AlarmLooper的stop接口，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/threading.Timer/recipe-02)
 - 基于条件变量的C++的Timer类实现，精度微秒级，并增加了AlarmLooper的stop接口，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/threading.Timer/recipe-04)
 
+**2024/02/08日追加内容：**  
+一般的Timer的接口都是支持一次性(alarm once)和周期性(alarm period)两种模式的，python的threading.Timer接口显然只支持alarm once模式，
+虽然也可以通过在alarm once回调函数里再次创建timer的方式等价的实现alarm period模式，
+不过我最近参考[A Simple Timer in C++](https://www.fluentcpp.com/2018/12/28/timer-cpp/)的接口，实现了支持alarm period模式的Timer，
+这里也一并分享出来
+- [A Simple Timer in C++](https://github.com/99xt/timercpp.git)原始版本：基于thread实现，接口为精度毫秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer/origin)
+- 我的版本-1：基于thread实现，接口参数改成C++11的chrono::duration类型，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer/recipe-01)
+- 我的版本-2：基于条件变量实现，接口同A Simple Timer in C++，也为精度毫秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer/recipe-02)
+- 我的版本-3：基于条件变量实现，接口同版本-1，接口参数改成C++11的chrono::duration类型，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/timer/recipe-03)
+
 
 ### 参考文档：
 
