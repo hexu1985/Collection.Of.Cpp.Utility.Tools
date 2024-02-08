@@ -17,12 +17,12 @@ public:
 
     void setTimeout(Callback function, int delay_ms)    // unit millisecond
     {
-        set_timeout_aux(std::move(function), static_cast<double>(delay_ms/1000));
+        start_timer(std::move(function), static_cast<double>(delay_ms/1000), false);
     }
 
     void setInterval(Callback function, int interval_ms)  // unit millisecond
     {
-        set_timeout_aux(std::move(function), static_cast<double>(interval_ms/1000));
+        start_timer(std::move(function), static_cast<double>(interval_ms/1000), true);
     }
 
     void stop();
@@ -31,8 +31,7 @@ public:
     struct Impl; 
 
 private:
-    void set_timeout_aux(Callback function, double delay_sec);      // unit second
-    void set_interval_aux(Callback function, double interval_sec);  // unit second
+    void start_timer(Callback function, double interval, bool is_period); // unit second
 
 private:
     std::shared_ptr<Impl> pimpl;
