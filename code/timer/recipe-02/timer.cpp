@@ -219,19 +219,19 @@ Timer::Timer() {
 Timer::~Timer() {
 }
 
-void Timer::setTimeout(Callback function, int delay) {
+void Timer::set_timeout_aux(Callback function, double delay_sec) {
     if (pimpl->is_valid()) {
         return;
     }
-    pimpl->setup_alarm(static_cast<double>(delay)/1000, false, function);
+    pimpl->setup_alarm(delay_sec, false, function);
     TimerThread::get_instance().insert_alarm(pimpl);
 }
 
-void Timer::setInterval(Callback function, int interval) {
+void Timer::set_interval_aux(Callback function, double interval_sec) {
     if (pimpl->is_valid()) {
         return;
     }
-    pimpl->setup_alarm(static_cast<double>(interval)/1000, true, function);
+    pimpl->setup_alarm(interval_sec, true, function);
     TimerThread::get_instance().insert_alarm(pimpl);
 }
 

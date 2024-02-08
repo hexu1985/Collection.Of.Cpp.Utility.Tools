@@ -15,12 +15,24 @@ public:
     Timer();
     ~Timer();
 
-    void setTimeout(Callback function, int delay);      // unit millisecond
-    void setInterval(Callback function, int interval);  // unit millisecond
+    void setTimeout(Callback function, int delay_ms)    // unit millisecond
+    {
+        set_timeout_aux(std::move(function), static_cast<double>(delay_ms/1000));
+    }
+
+    void setInterval(Callback function, int interval_ms)  // unit millisecond
+    {
+        set_timeout_aux(std::move(function), static_cast<double>(interval_ms/1000));
+    }
+
     void stop();
 
 public:
     struct Impl; 
+
+private:
+    void set_timeout_aux(Callback function, double delay_sec);      // unit second
+    void set_interval_aux(Callback function, double interval_sec);  // unit second
 
 private:
     std::shared_ptr<Impl> pimpl;
