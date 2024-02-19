@@ -17,7 +17,16 @@ public:
     limitedsize_queue(size_t max_size_=std::numeric_limits<size_t>::max()): max_size(max_size_)
     {}
 
-    void push(T new_value)
+    void push(const T& new_value)
+    {
+        std::unique_lock<std::mutex> lk(mut);
+        not_full_cond.wait(lk,[this]{return !is_full();});
+
+        data_queue.push(new_value);
+        not_empty_cond.notify_one();
+    }
+
+    void push(T&& new_value)
     {
         std::unique_lock<std::mutex> lk(mut);
         not_full_cond.wait(lk,[this]{return !is_full();});
@@ -36,14 +45,14 @@ public:
         not_full_cond.notify_one();
     }
 
-    bool try_push(T new_value)
+    bool try_push(const T& new_value)
     {
         std::lock_guard<std::mutex> lk(mut);
         if (is_full()) {
             return false;
         }
 
-        data_queue.push(std::move(new_value));
+        data_queue.push(new_value);
         not_empty_cond.notify_one();
     }
 
