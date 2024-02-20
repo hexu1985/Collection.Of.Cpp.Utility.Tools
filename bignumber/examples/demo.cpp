@@ -5,7 +5,7 @@
 #endif
 ////////////////////////////
 
-#include "src/bignumber.h"
+#include "bignumber.h"
 #include <assert.h>
 
 int main() {

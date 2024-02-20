@@ -2,7 +2,7 @@
 RM = rm -f
 CXX = g++
 CXXFLAGS = -Wall 
-INCLUDES = -IBigNumber/src -IBigNumber
+INCLUDES = -IBigNumber/src
 LDFLAGS = -lpthread
 LDPATH =
 
