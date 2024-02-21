@@ -94,16 +94,11 @@ public:
     void stop();
 
 protected:
-    void add_data_source(std::shared_ptr<ProcessNode> source);
-    void add_data_filter(std::shared_ptr<ProcessNode> filter);
-    void add_data_sink(std::shared_ptr<ProcessNode> sink);
-
+    void add_process_node(std::shared_ptr<ProcessNode> process_node);
     void clear();
 
 protected:
-    std::vector<std::shared_ptr<ProcessNode>> data_sources;
-    std::vector<std::shared_ptr<ProcessNode>> data_filters;
-    std::vector<std::shared_ptr<ProcessNode>> data_sinks;
+    std::vector<std::shared_ptr<ProcessNode>> process_nodes;
 };
 
 

@@ -163,12 +163,12 @@ public:
 
         auto source = std::shared_ptr<ProcessNode>(
                 new SimpleDataSource<T>(product_func, queues[0]));
-        this->add_data_source(source);
+        this->add_process_node(source);
 
         for (int i = 0; i < filter_funcs.size(); i++) {
             auto filter = std::shared_ptr<ProcessNode>(
                     new SimpleDataFilter<T,T>(filter_funcs[i], queues[i], queues[i+1]));
-           this->add_data_filter(filter); 
+           this->add_process_node(filter); 
         }
     }
 
