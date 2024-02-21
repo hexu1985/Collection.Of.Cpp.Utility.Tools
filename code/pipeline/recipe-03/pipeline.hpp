@@ -93,7 +93,6 @@ public:
     void start();
     void stop();
 
-protected:
     void add_process_node(std::shared_ptr<ProcessNode> process_node);
     void clear();
 

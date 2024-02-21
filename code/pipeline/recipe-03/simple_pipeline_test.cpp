@@ -46,9 +46,9 @@ int main() {
             .add_data_filter(std::function<int(int)>{plus_one})
             .add_data_filter(std::function<int(int)>{mul_two})
             .add_data_filter(std::function<std::string(int)>{print});
-    pipeline.start();
     cout << fixed << setprecision(1);
     std::string output;
+    pipeline.start();
     while (true) {
         auto start_time = system_clock::now();
         pipeline.get(output);

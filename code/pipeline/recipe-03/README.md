@@ -2,3 +2,4 @@
 
 Pipeline相关基类和SimplePipeline子类实现
 
+SimplePipeline子类支持多类型的Pipe

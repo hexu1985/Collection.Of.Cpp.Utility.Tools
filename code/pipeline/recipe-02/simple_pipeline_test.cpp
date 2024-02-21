@@ -41,9 +41,9 @@ int main() {
     funcs.push_back(mul_two);
 
     SimplePipeline<int> pipeline(data_provider{}, funcs);
-    pipeline.start();
     cout << fixed << setprecision(1);
     int output;
+    pipeline.start();
     while (true) {
         auto start_time = system_clock::now();
         pipeline.get(output);
