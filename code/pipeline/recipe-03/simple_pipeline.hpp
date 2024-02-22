@@ -11,7 +11,7 @@ template <typename T>
 class SimpleDataSource: public DataSource<T> {
 public:
     SimpleDataSource(std::function<bool(T&)> product_func_, Pipe<T> pipe_)
-        : DataSource<T>(pipe_), product_func(product_func_)
+        : done(false), DataSource<T>(pipe_), product_func(product_func_)
     {}
 
     void start()
@@ -27,7 +27,7 @@ public:
         if (!worker.joinable()) {
             return;
         }
-        done = false;
+        done = true;
         worker.join();
     }
 
@@ -60,7 +60,7 @@ template <typename IT, typename OT>
 class SimpleDataFilter: public DataFilter<IT,OT> {
 public:
     SimpleDataFilter(std::function<OT(IT)> filter_func_, Pipe<IT> in_pipe_, Pipe<OT> out_pipe_)
-        : DataFilter<IT,OT>(in_pipe_, out_pipe_), filter_func(filter_func_)
+        : done(false), DataFilter<IT,OT>(in_pipe_, out_pipe_), filter_func(filter_func_)
     {}
 
     void start()
@@ -76,7 +76,7 @@ public:
         if (!worker.joinable()) {
             return;
         }
-        done = false;
+        done = true;
         worker.join();
     }
 
@@ -109,7 +109,7 @@ template <typename T>
 class SimpleDataSink: public DataSink<T> {
 public:
     SimpleDataSink(std::function<void(T&)> consume_func_, Pipe<T> pipe_)
-        : DataSink<T>(pipe_), consume_func(consume_func_)
+        : done(false), DataSink<T>(pipe_), consume_func(consume_func_)
     {}
 
     void start()
@@ -125,7 +125,7 @@ public:
         if (!worker.joinable()) {
             return;
         }
-        done = false;
+        done = true;
         worker.join();
     }
 
