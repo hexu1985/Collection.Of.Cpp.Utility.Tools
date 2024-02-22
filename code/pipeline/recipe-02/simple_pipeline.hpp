@@ -9,10 +9,10 @@ template <typename T>
 class SimpleDataSource: public DataSource<T> {
 public:
     SimpleDataSource(std::function<bool(T&)> product_func_, Pipe<T> pipe_)
-        : done(false), DataSource<T>(pipe_), product_func(product_func_)
+        : DataSource<T>(pipe_), done(false), product_func(product_func_)
     {}
 
-    void start()
+    void start() override
     {
         if (worker.joinable()) {
             return;
@@ -20,7 +20,7 @@ public:
         worker = std::thread(&SimpleDataSource::worker_thread,this);
     }
 
-    void stop()
+    void stop() override
     {
         if (!worker.joinable()) {
             return;
@@ -29,7 +29,7 @@ public:
         worker.join();
     }
 
-    virtual ~SimpleDataSource()
+    ~SimpleDataSource() override
     {
         stop();
     }
@@ -58,10 +58,10 @@ template <typename IT, typename OT>
 class SimpleDataFilter: public DataFilter<IT,OT> {
 public:
     SimpleDataFilter(std::function<OT(IT)> filter_func_, Pipe<IT> in_pipe_, Pipe<OT> out_pipe_)
-        : done(false), DataFilter<IT,OT>(in_pipe_, out_pipe_), filter_func(filter_func_)
+        : DataFilter<IT,OT>(in_pipe_, out_pipe_), done(false), filter_func(filter_func_)
     {}
 
-    void start()
+    void start() override
     {
         if (worker.joinable()) {
             return;
@@ -69,7 +69,7 @@ public:
         worker = std::thread(&SimpleDataFilter::worker_thread,this);
     }
 
-    void stop()
+    void stop() override
     {
         if (!worker.joinable()) {
             return;
@@ -78,7 +78,7 @@ public:
         worker.join();
     }
 
-    virtual ~SimpleDataFilter()
+    ~SimpleDataFilter() override
     {
         stop();
     }
@@ -107,10 +107,10 @@ template <typename T>
 class SimpleDataSink: public DataSink<T> {
 public:
     SimpleDataSink(std::function<void(T&)> consume_func_, Pipe<T> pipe_)
-        : done(false), DataSink<T>(pipe_), consume_func(consume_func_)
+        : DataSink<T>(pipe_), done(false), consume_func(consume_func_)
     {}
 
-    void start()
+    void start() override
     {
         if (worker.joinable()) {
             return;
@@ -118,7 +118,7 @@ public:
         worker = std::thread(&SimpleDataSink::worker_thread,this);
     }
 
-    void stop()
+    void stop() override
     {
         if (!worker.joinable()) {
             return;
@@ -127,7 +127,7 @@ public:
         worker.join();
     }
 
-    virtual ~SimpleDataSink()
+    ~SimpleDataSink() override
     {
         stop();
     }
@@ -155,7 +155,7 @@ public:
     SimplePipeline(std::function<bool(T&)> product_func, 
             std::vector<std::function<T(T)>> filter_funcs)
     {
-        for (int i = 0; i < filter_funcs.size()+1; i++) {
+        for (size_t i = 0; i < filter_funcs.size()+1; i++) {
             queues.push_back(make_pipe<T>());
         }
 
@@ -163,7 +163,7 @@ public:
                 new SimpleDataSource<T>(product_func, queues[0]));
         this->add_process_node(source);
 
-        for (int i = 0; i < filter_funcs.size(); i++) {
+        for (size_t i = 0; i < filter_funcs.size(); i++) {
             auto filter = std::shared_ptr<ProcessNode>(
                     new SimpleDataFilter<T,T>(filter_funcs[i], queues[i], queues[i+1]));
            this->add_process_node(filter); 

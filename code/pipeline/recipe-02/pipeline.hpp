@@ -32,7 +32,7 @@ template <typename T>
 class DataSource: public ProcessNode {
 public:
     DataSource(Pipe<T> pipe_): pipe(pipe_) {}
-    virtual ~DataSource() {}
+    ~DataSource() override {}
 
 protected:
     void put(T value)
@@ -51,7 +51,7 @@ public:
         in_pipe(in_pipe_), out_pipe(out_pipe_)
     {}
 
-    virtual ~DataFilter() {}
+    ~DataFilter() override {}
 
 protected:
     void get(IT& value)
@@ -73,7 +73,7 @@ template <typename T>
 class DataSink: public ProcessNode {
 public:
     DataSink(Pipe<T> pipe_): pipe(pipe_) {}
-    virtual ~DataSink() {}
+    ~DataSink() override {}
 
 protected:
     void get(T& value)
