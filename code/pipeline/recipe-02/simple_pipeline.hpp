@@ -139,9 +139,7 @@ private:
         while(!done)
         {
             this->get(value);
-            if (!consume_func(value)) {
-                break;
-            }
+            consume_func(value);
         }
     }
 
