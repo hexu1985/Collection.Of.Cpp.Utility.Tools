@@ -11,10 +11,10 @@ template <typename T>
 class SimpleDataSource: public DataSource<T> {
 public:
     SimpleDataSource(std::function<bool(T&)> product_func_, Pipe<T> pipe_)
-        : done(false), DataSource<T>(pipe_), product_func(product_func_)
+        : DataSource<T>(pipe_), done(false), product_func(product_func_)
     {}
 
-    void start()
+    void start() override
     {
         if (worker.joinable()) {
             return;
@@ -22,7 +22,7 @@ public:
         worker = std::thread(&SimpleDataSource::worker_thread,this);
     }
 
-    void stop()
+    void stop() override
     {
         if (!worker.joinable()) {
             return;
@@ -31,7 +31,7 @@ public:
         worker.join();
     }
 
-    virtual ~SimpleDataSource()
+    ~SimpleDataSource() override
     {
         stop();
     }
@@ -60,10 +60,10 @@ template <typename IT, typename OT>
 class SimpleDataFilter: public DataFilter<IT,OT> {
 public:
     SimpleDataFilter(std::function<OT(IT)> filter_func_, Pipe<IT> in_pipe_, Pipe<OT> out_pipe_)
-        : done(false), DataFilter<IT,OT>(in_pipe_, out_pipe_), filter_func(filter_func_)
+        : DataFilter<IT,OT>(in_pipe_, out_pipe_), done(false), filter_func(filter_func_)
     {}
 
-    void start()
+    void start() override
     {
         if (worker.joinable()) {
             return;
@@ -71,7 +71,7 @@ public:
         worker = std::thread(&SimpleDataFilter::worker_thread,this);
     }
 
-    void stop()
+    void stop() override
     {
         if (!worker.joinable()) {
             return;
@@ -80,7 +80,7 @@ public:
         worker.join();
     }
 
-    virtual ~SimpleDataFilter()
+    ~SimpleDataFilter() override
     {
         stop();
     }
@@ -109,10 +109,10 @@ template <typename T>
 class SimpleDataSink: public DataSink<T> {
 public:
     SimpleDataSink(std::function<void(T&)> consume_func_, Pipe<T> pipe_)
-        : done(false), DataSink<T>(pipe_), consume_func(consume_func_)
+        : DataSink<T>(pipe_), done(false), consume_func(consume_func_)
     {}
 
-    void start()
+    void start() override
     {
         if (worker.joinable()) {
             return;
@@ -120,7 +120,7 @@ public:
         worker = std::thread(&SimpleDataSink::worker_thread,this);
     }
 
-    void stop()
+    void stop() override
     {
         if (!worker.joinable()) {
             return;
@@ -129,7 +129,7 @@ public:
         worker.join();
     }
 
-    virtual ~SimpleDataSink()
+    ~SimpleDataSink() override
     {
         stop();
     }
@@ -154,11 +154,13 @@ private:
 template <typename SourceDataType, typename SinkDataType>
 class SimplePipeline: public Pipeline {
 public:
-    SimplePipeline() {
+    SimplePipeline()
+    {
         pipes.push_back(make_pipe<SourceDataType>());
     }
 
-    SimplePipeline& add_data_source(std::function<bool(SourceDataType&)> product_func) {
+    SimplePipeline& add_data_source(std::function<bool(SourceDataType&)> product_func)
+    {
         auto source_data_pipe = boost::any_cast<Pipe<SourceDataType>>(pipes.front());
         auto data_source = std::shared_ptr<ProcessNode>(
                 new SimpleDataSource<SourceDataType>(product_func, source_data_pipe));
@@ -167,7 +169,8 @@ public:
     }
 
     template <typename IT, typename OT>
-    SimplePipeline& add_data_filter(std::function<OT(IT)> filter_func) {
+    SimplePipeline& add_data_filter(std::function<OT(IT)> filter_func)
+    {
         auto in_pipe = boost::any_cast<Pipe<IT>>(pipes.back());
 
         auto out_pipe = make_pipe<OT>();
@@ -179,7 +182,8 @@ public:
         return *this;
     }
 
-    SimplePipeline& add_data_sink(std::function<void(SinkDataType&)> consume_func) {
+    SimplePipeline& add_data_sink(std::function<void(SinkDataType&)> consume_func)
+    {
         auto sink_data_pipe = boost::any_cast<Pipe<SinkDataType>>(pipes.back());
         auto data_sink = std::shared_ptr<ProcessNode>(
                 new SimpleDataSink<SinkDataType>(consume_func, sink_data_pipe));
@@ -187,12 +191,14 @@ public:
         return *this;
     }
 
-    void get(SinkDataType& value) {
+    void get(SinkDataType& value)
+    {
         auto sink_data_pipe = boost::any_cast<Pipe<SinkDataType>>(pipes.back());
         sink_data_pipe->pop(value);
     }
 
-    void put(const SourceDataType& value) {
+    void put(const SourceDataType& value)
+    {
         auto source_data_pipe = boost::any_cast<Pipe<SourceDataType>>(pipes.front());
         source_data_pipe->push(value);
     }
