@@ -71,7 +71,9 @@ Pipeline类可以在一个vector里统一管理数据源、过滤器和数据接
 - 逻辑等价的基于函数调用的示例代码更容易理解，从而可以更好的理解“流水线”方式的逻辑
 - 对比“流水线”方式的实现，可以看出性能的提升
 
+示例代码源文件为no_pipeline.cpp
 ```cpp
+// no_pipeline.cpp
 #include <chrono>
 #include <iostream>
 #include <iomanip>
@@ -430,5 +432,309 @@ DataSource、DataFilter和DataSink都还是抽象类（为什么？），
 还是需要进一步继承或扩展。
 
 
+**STEP5**
+
+为了以“流水线”方式实现no_pipeline.cpp示例代码的等价逻辑，
+我们给出一组Simple开头的具体类，分别从DataSource、DataFilter、DataSink和Pipeline类
+继承扩展而来，话不多说，直接show code
+
+实现代码都是模板代码，所以只有头文件，在simple_pipeline.hpp中
+
+```cpp
+#pragma once
+
+#include <thread>
+#include <functional>
+#include <atomic>
+#include <vector>
+#include <boost/any.hpp>
+#include "pipeline.hpp"
+
+template <typename T>
+class SimpleDataSource: public DataSource<T> {
+public:
+    SimpleDataSource(std::function<bool(T&)> product_func_, Pipe<T> pipe_)
+        : DataSource<T>(pipe_), done(false), product_func(product_func_)
+    {}
+
+    void start() override
+    {
+        if (worker.joinable()) {
+            return;
+        }
+        worker = std::thread(&SimpleDataSource::worker_thread,this);
+    }
+
+    void stop() override
+    {
+        if (!worker.joinable()) {
+            return;
+        }
+        done = true;
+        worker.join();
+    }
+
+    ~SimpleDataSource() override
+    {
+        stop();
+    }
+
+private:
+    void worker_thread()
+    {
+        T value;
+        while(!done)
+        {
+            if (!product_func(value)) {
+                break;
+            }
+            this->put(value);
+        }
+    }
+
+private:
+    std::atomic_bool done;
+    std::function<bool(T&)> product_func;
+    std::thread worker;
+};
 
 
+template <typename IT, typename OT>
+class SimpleDataFilter: public DataFilter<IT,OT> {
+public:
+    SimpleDataFilter(std::function<OT(IT)> filter_func_, Pipe<IT> in_pipe_, Pipe<OT> out_pipe_)
+        : DataFilter<IT,OT>(in_pipe_, out_pipe_), done(false), filter_func(filter_func_)
+    {}
+
+    void start() override
+    {
+        if (worker.joinable()) {
+            return;
+        }
+        worker = std::thread(&SimpleDataFilter::worker_thread,this);
+    }
+
+    void stop() override
+    {
+        if (!worker.joinable()) {
+            return;
+        }
+        done = true;
+        worker.join();
+    }
+
+    ~SimpleDataFilter() override
+    {
+        stop();
+    }
+
+private:
+    void worker_thread()
+    {
+        IT arg;
+        OT res;
+        while(!done)
+        {
+            this->get(arg);
+            res = filter_func(std::move(arg));
+            this->put(res);
+        }
+    }
+
+private:
+    std::atomic_bool done;
+    std::function<OT(IT)> filter_func;
+    std::thread worker;
+};
+
+
+template <typename T>
+class SimpleDataSink: public DataSink<T> {
+public:
+    SimpleDataSink(std::function<void(T&)> consume_func_, Pipe<T> pipe_)
+        : DataSink<T>(pipe_), done(false), consume_func(consume_func_)
+    {}
+
+    void start() override
+    {
+        if (worker.joinable()) {
+            return;
+        }
+        worker = std::thread(&SimpleDataSink::worker_thread,this);
+    }
+
+    void stop() override
+    {
+        if (!worker.joinable()) {
+            return;
+        }
+        done = true;
+        worker.join();
+    }
+
+    ~SimpleDataSink() override
+    {
+        stop();
+    }
+
+private:
+    void worker_thread()
+    {
+        T value;
+        while(!done)
+        {
+            this->get(value);
+            consume_func(value);
+        }
+    }
+
+private:
+    std::atomic_bool done;
+    std::function<void(T&)> consume_func;
+    std::thread worker;
+};
+
+template <typename SourceDataType, typename SinkDataType>
+class SimplePipeline: public Pipeline {
+public:
+    SimplePipeline()
+    {
+        pipes.push_back(make_pipe<SourceDataType>());
+    }
+
+    SimplePipeline& add_data_source(std::function<bool(SourceDataType&)> product_func)
+    {
+        auto source_data_pipe = boost::any_cast<Pipe<SourceDataType>>(pipes.front());
+        auto data_source = std::shared_ptr<ProcessNode>(
+                new SimpleDataSource<SourceDataType>(product_func, source_data_pipe));
+        add_process_node(data_source);
+        return *this;
+    }
+
+    template <typename IT, typename OT>
+    SimplePipeline& add_data_filter(std::function<OT(IT)> filter_func)
+    {
+        auto in_pipe = boost::any_cast<Pipe<IT>>(pipes.back());
+
+        auto out_pipe = make_pipe<OT>();
+        pipes.push_back(out_pipe);
+
+        auto data_filter = std::shared_ptr<ProcessNode>(
+                new SimpleDataFilter<IT, OT>(filter_func, in_pipe, out_pipe));
+        add_process_node(data_filter);
+        return *this;
+    }
+
+    SimplePipeline& add_data_sink(std::function<void(SinkDataType&)> consume_func)
+    {
+        auto sink_data_pipe = boost::any_cast<Pipe<SinkDataType>>(pipes.back());
+        auto data_sink = std::shared_ptr<ProcessNode>(
+                new SimpleDataSink<SinkDataType>(consume_func, sink_data_pipe));
+        add_process_node(data_sink);
+        return *this;
+    }
+
+    void get(SinkDataType& value)
+    {
+        auto sink_data_pipe = boost::any_cast<Pipe<SinkDataType>>(pipes.back());
+        sink_data_pipe->pop(value);
+    }
+
+    void put(const SourceDataType& value)
+    {
+        auto source_data_pipe = boost::any_cast<Pipe<SourceDataType>>(pipes.front());
+        source_data_pipe->push(value);
+    }
+
+private:
+    std::vector<boost::any> pipes;
+};
+```
+
+接下来我们分别介绍一个每个类的接口和实现：
+
+- SimpleDataSource
+    SimpleDataSource<T>接收bool(T&)类型的函数或函数对象（通过std::function<bool(T&)>擦除类型），
+    另外接收一个Pipe<T>作为数据源的输出Pipe（但是从整个流水线而言，看作输入Pipe），
+    start时会启动一个独立线程，循环调用函数，并将获取到的数据塞入管道中
+
+- SimpleDataFilter
+    SimpleDataFilter<IT, OT>接收OT(IT)类型的函数或函数对象（通过std::function<OT(IT)>擦除类型），
+    另外接收两个Pipe<IT>和Pipe<OT>作为过滤器的输入和输出Pipe，
+    start时会启动一个独立线程，每次从输入Pipe读取一个数据作为参数调用函数，在将函数结果写入输出Pipe
+
+- SimpleDataSink
+    SimpleDataSink<T>接收void(T&)类型的函数或函数对象（通过std::function<void(T&)>擦除类型），
+    另外接收一个Pipe<T>作为数据源的输入Pipe（但是从整个流水线而言，看作输出Pipe），
+    start时会启动一个独立线程，每次从管道中读取一个数据作为参数调用函数
+
+- SimplePipeline
+    SimplePipeline<SourceDataType, SinkDataType>支持一个数据源，然后依次接多个过滤器的方式构建流水线，
+    最后的数据接收函数是可选的。
+
+**STEP6**
+
+最后给出simple_pipeline_test.cpp：将no_pipeline.cpp的代码改成用SimplePipeline类实现。
+
+```cpp
+#include <chrono>
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include "simple_pipeline.hpp"
+
+using namespace std;
+using namespace std::chrono;
+
+class data_provider {
+public:
+    data_provider(): i(0) {}
+
+    bool operator() (int& value)
+    {
+        if (i >= 5) {
+            return false;
+        }
+        value = i;
+        i += 1;
+        return true;
+    }
+
+private:
+    int i;
+};
+
+int plus_one(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return x + 1;
+}
+
+int mul_two(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return x * 2;
+}
+
+std::string print(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return std::to_string(x);
+}
+
+int main() {
+    SimplePipeline<int, std::string> pipeline;
+    pipeline.add_data_source(std::function<bool(int&)>{data_provider{}})
+            .add_data_filter(std::function<int(int)>{plus_one})
+            .add_data_filter(std::function<int(int)>{mul_two})
+            .add_data_filter(std::function<std::string(int)>{print});
+    cout << fixed << setprecision(1);
+    std::string output;
+    pipeline.start();
+    while (true) {
+        auto start_time = system_clock::now();
+        pipeline.get(output);
+        auto end_time = system_clock::now();
+        cout << output << ": " << duration<double>(end_time-start_time).count() << "s" << endl;
+    }
+}
+```
+
+我们可以看出
