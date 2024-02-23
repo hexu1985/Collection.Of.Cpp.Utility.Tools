@@ -654,22 +654,22 @@ private:
 接下来我们分别介绍一个每个类的接口和实现：
 
 - SimpleDataSource
-    SimpleDataSource<T>接收bool(T&)类型的函数或函数对象（通过std::function<bool(T&)>擦除类型），
-    另外接收一个Pipe<T>作为数据源的输出Pipe（但是从整个流水线而言，看作输入Pipe），
+    `SimpleDataSource<T>`接收`bool(T&)`类型的函数或函数对象（通过`std::function<bool(T&)>`擦除类型），
+    另外接收一个`Pipe<T>`作为数据源的输出Pipe（但是从整个流水线而言，看作输入Pipe），
     start时会启动一个独立线程，循环调用函数，并将获取到的数据塞入管道中
 
 - SimpleDataFilter
-    SimpleDataFilter<IT, OT>接收OT(IT)类型的函数或函数对象（通过std::function<OT(IT)>擦除类型），
-    另外接收两个Pipe<IT>和Pipe<OT>作为过滤器的输入和输出Pipe，
+    `SimpleDataFilter<IT, OT>`接收`OT(IT)`类型的函数或函数对象（通过`std::function<OT(IT)>`擦除类型），
+    另外接收两个`Pipe<IT>`和`Pipe<OT>`作为过滤器的输入和输出Pipe，
     start时会启动一个独立线程，每次从输入Pipe读取一个数据作为参数调用函数，在将函数结果写入输出Pipe
 
 - SimpleDataSink
-    SimpleDataSink<T>接收void(T&)类型的函数或函数对象（通过std::function<void(T&)>擦除类型），
-    另外接收一个Pipe<T>作为数据源的输入Pipe（但是从整个流水线而言，看作输出Pipe），
+    `SimpleDataSink<T>`接收`void(T&)`类型的函数或函数对象（通过`std::function<void(T&)>`擦除类型），
+    另外接收一个`Pipe<T>`作为数据源的输入Pipe（但是从整个流水线而言，看作输出Pipe），
     start时会启动一个独立线程，每次从管道中读取一个数据作为参数调用函数
 
 - SimplePipeline
-    SimplePipeline<SourceDataType, SinkDataType>支持一个数据源，然后依次接多个过滤器的方式构建流水线，
+    `SimplePipeline<SourceDataType, SinkDataType>`支持一个数据源，然后依次接多个过滤器的方式构建流水线，
     最后的数据接收函数是可选的。
 
 **STEP6**
@@ -737,4 +737,32 @@ int main() {
 }
 ```
 
-我们可以看出
+我们可以看出通过beyond compare工具，对比no_pipeline.cpp和simple_pipeline_test.cpp代码，
+直观的看出代码做了那些修改：
+
+![代码比较](bcompare_cpp.png)
+
+然后我们编译simple_pipeline_test.cpp并运行，可以得到如下运行结果：
+
+```
+2: 1.5s
+4: 1.5s
+6: 1.5s
+8: 1.5s
+10: 1.5s
+```
+
+原因是为啥呢？答案就出在下图：
+
+![运行比较](no_pipeline_vs_pipeline.png)
+
+至此，基于C++标准库实现流水线模式的完整介绍结束，惯例，最后给出完整的项目示例代码。
+
+[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/pipeline/recipe-03)
+
+
+### 参考文档：
+
+- 《Posix多线程程序设计（Programming with POSIX Threads）》
+- 《软件架构与模式（Joachim Goll）》
+- [Python 流水线示例 - 知乎](https://zhuanlan.zhihu.com/p/675873139)
