@@ -3,7 +3,7 @@
 
 本文将介绍一个C++实现的流水线模式，包括相关的接口和类框架：
 
-**流水线的原理**
+### 流水线的原理
 
 首先，我们给出流水线模式的定义，这里引用《Programming with POSIX® Threads》（David R. Butenhof）里
 的原话给出解释：
@@ -34,7 +34,7 @@
 
 ![流水线标注](pipeline_threads_annotate.png)
 
-用数据源这套命名重述的“流水线”的工作模式就是：
+用“管道和过滤器”这组对象重述的“流水线”工作模式就是：
 
 > 系统整体的任务可以根据不同的处理阶段分解成单一的小任务。
 > 每一个加工步骤都可以通过一个过滤器实现。
@@ -42,15 +42,14 @@
 > 过滤器读取数据并按照顺序加工数据。
 > 过滤器读入数据经过转换，变成输出的数据。
 
-而数据源、过滤器和数据接收之间的连接关系也就重新表示成下图：
+而数据源、过滤器和数据接收之间的通过管道连接的方式，也将“流水线”方式重新表示成下图：
 
 ![流水线通信图](pipeline_communication.png)
 
-这张图（图5-15）相比前面的图(Figure 4.1)，做了简化，把三个过滤器简化成了一个，
-实际应用中，过滤器的个数应该是没有限制的。
+当然这张图（图5-15）相比前面的图(Figure 4.1)，做了简化，把原先的三个过滤器简化成了一个，
+在实际应用中，过滤器的个数应该是没有限制的。
 
-
-**C++语言实现**
+### C++语言实现
 
 接下来，我们逐步给出C++语言实现的流水线模式
 
@@ -62,7 +61,7 @@
 
 类图中的类名称几乎和“流水线”模式里的对象命名一一对应，
 除了一个ProcessNode（工作节点）接口类，这个类是为了便于
-Pipeline类可以在一个vector里统一管理数据源、过滤器和数据接收对象。
+Pipeline类可以在一个vector里统一管理数据源、过滤器和数据接收对象而抽出的接口基类。
 
 **STEP2**
 
@@ -110,7 +109,7 @@ int main() {
 ```
 
 代码很简单，从0到4的整数，每个数据分别经历3个步骤：分别是+1、$\times 2$、转成字符串类型。
-循环中记录每个数据的处理时延，每个处理函数中增加了sleep 0.5秒，以模拟实际代码中的时间消耗。
+循环中记录每个数据的处理时延，每个处理函数中增加了一行sleep 0.5秒语句，以模拟实际代码中的时间消耗。
 
 如果我们编译并运行示例代码，会得到如下输出：
 
@@ -151,8 +150,8 @@ Pipe<T> make_pipe(size_t max_size)
 }
 ```
 
-这里Pipe是个模板别名，是个limitedsize_queue<T>的共享指针。
-limitedsize_queue<T>的完整实现在limitedsize_queue.hpp中
+这里Pipe是个模板别名，是个指向`limitedsize_queue<T>`的共享指针。
+`limitedsize_queue<T>`的完整实现在limitedsize_queue.hpp中
 
 ```cpp
 // limitedsize_queue.hpp
@@ -263,8 +262,8 @@ private:
 };
 ```
 
-没耐心的读者可以跳过limitedsize_queue<T>的实现，只要知道
-limitedsize_queue<T>是一个指定最大长度的线程安全队列即可。
+没耐心的读者可以跳过`limitedsize_queue<T>`的实现，只要知道
+`limitedsize_queue<T>`是一个指定最大长度的线程安全队列即可。
 
 **STEP4**
 
@@ -436,7 +435,7 @@ DataSource、DataFilter和DataSink都还是抽象类（为什么？），
 
 为了以“流水线”方式实现no_pipeline.cpp示例代码的等价逻辑，
 我们给出一组Simple开头的具体类，分别从DataSource、DataFilter、DataSink和Pipeline类
-继承扩展而来，话不多说，直接show code
+继承扩展而来，话不多说，直接show code：
 
 实现代码都是模板代码，所以只有头文件，在simple_pipeline.hpp中
 
@@ -746,17 +745,17 @@ int main() {
 
 ```
 2: 1.5s
-4: 1.5s
-6: 1.5s
-8: 1.5s
-10: 1.5s
+4: 0.5s
+6: 0.5s
+8: 0.5s
+10: 0.5s
 ```
 
 原因是为啥呢？答案就出在下图：
 
 ![运行比较](no_pipeline_vs_pipeline.png)
 
-至此，基于C++标准库实现流水线模式的完整介绍结束，惯例，最后给出完整的项目示例代码。
+至此，基于C++标准库实现流水线模式的完整介绍结束，按照惯例，最后给出完整的项目示例代码。
 
 [完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/pipeline/recipe-03)
 
