@@ -22,8 +22,8 @@ public:
     }
 
     SimplePipeline& addDataSink(std::function<void(SinkDataType&)> func) {
-        std::shared_ptr<DataSink<SourceDataType>> data_sink{
-            new SimpleDataSource<SourceDataType>(func)
+        std::shared_ptr<DataSink<SinkDataType>> data_sink{
+            new SimpleDataSink<SinkDataType>(func)
         };
         this->Base::addDataSink(data_sink);
         return *this;
