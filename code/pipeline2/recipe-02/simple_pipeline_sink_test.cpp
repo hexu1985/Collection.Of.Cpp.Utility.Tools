@@ -7,39 +7,6 @@
 using namespace std;
 using namespace std::chrono;
 
-class data_provider {
-public:
-    data_provider(): i(0) {}
-
-    bool operator() (int& value)
-    {
-        if (i >= 5) {
-            return false;
-        }
-        value = i;
-        i += 1;
-        return true;
-    }
-
-private:
-    int i;
-};
-
-int plus_one(int x) {
-    this_thread::sleep_for(milliseconds(500));
-    return x + 1;
-}
-
-int mul_two(int x) {
-    this_thread::sleep_for(milliseconds(500));
-    return x * 2;
-}
-
-std::string print(int x) {
-    this_thread::sleep_for(milliseconds(500));
-    return std::to_string(x);
-}
-
 std::string strftime(const char* format, const std::chrono::time_point<std::chrono::system_clock>& tp) {
     time_t rawtime = std::chrono::system_clock::to_time_t(tp);
     char mbstr[100];
@@ -51,6 +18,43 @@ std::ostream& operator<<(std::ostream& out, const std::chrono::time_point<std::c
     auto cs = std::chrono::duration_cast<std::chrono::microseconds>(tp.time_since_epoch()).count() % 1000000;
     out << strftime("%Y-%m-%d %H:%M:%S", tp) << '.' << std::setfill('0') << std::setw(6) << cs << std::setfill(' ');
     return out;
+}
+
+class data_provider {
+public:
+    data_provider(): i(0) {}
+
+    bool operator() (int& value)
+    {
+        if (i >= 5) {
+            return false;
+        }
+        value = i;
+        i += 1;
+        std::cout << std::chrono::system_clock::now() << ": provide data: " << value << std::endl;
+        return true;
+    }
+
+private:
+    int i;
+};
+
+int plus_one(int x) {
+    std::cout << std::chrono::system_clock::now() << ": plus_one(" << x << ")" << std::endl;
+    this_thread::sleep_for(milliseconds(500));
+    return x + 1;
+}
+
+int mul_two(int x) {
+    std::cout << std::chrono::system_clock::now() << ": mul_two(" << x << ")" << std::endl;
+    this_thread::sleep_for(milliseconds(500));
+    return x * 2;
+}
+
+std::string print(int x) {
+    std::cout << std::chrono::system_clock::now() << ": print(" << x << ")" << std::endl;
+    this_thread::sleep_for(milliseconds(500));
+    return std::to_string(x);
 }
 
 void data_receiver(std::string& data) {

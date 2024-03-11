@@ -14,11 +14,6 @@
 template <typename SourceDataType, typename SinkDataType>
 class Pipeline: public ProcessNode {
 public:
-    Pipeline() {
-        source_pipe = make_pipe<SourceDataType>();
-        pipes.push_back(source_pipe);
-    }
-
     Pipeline(Pipe<SourceDataType> source_pipe_): source_pipe(source_pipe_) {
         pipes.push_back(source_pipe);
     }
@@ -46,13 +41,11 @@ public:
         return *this;
     }
 
-    template <typename OT>
-    Pipeline& addDataFilterAny(std::shared_ptr<DataFilterAny> data_filter, OT* pot) {
-        (void)pot;
+    Pipeline& addDataFilterAny(std::shared_ptr<DataFilterAny> data_filter, boost::any next_pipe) {
         assert(sink_pipe == nullptr);
         auto in_pipe = pipes.back();
         data_filter->setInPipeAny(in_pipe);
-        auto out_pipe = make_pipe<OT>();
+        auto out_pipe = next_pipe;
         data_filter->setOutPipeAny(out_pipe);
         pipes.push_back(out_pipe);
         process_nodes.push_back(data_filter);

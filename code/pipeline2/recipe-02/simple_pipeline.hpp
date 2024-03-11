@@ -10,12 +10,14 @@ class SimplePipeline: public Pipeline<SourceDataType, SinkDataType> {
 public:
     using Base = Pipeline<SourceDataType, SinkDataType>;
 
-    SimplePipeline() = default;
-    ~SimplePipeline() = default;
+    SimplePipeline(): SimplePipeline(make_pipe<SourceDataType>()) {
+    }
 
     SimplePipeline(Pipe<SourceDataType> source_pipe_)
         : Pipeline<SourceDataType, SinkDataType>(source_pipe_) {
     }
+
+    ~SimplePipeline() = default;
 
     SimplePipeline& addDataSource(std::function<bool(SourceDataType&)> func) {
         std::shared_ptr<DataSource<SourceDataType>> data_source{
@@ -38,7 +40,8 @@ public:
         std::shared_ptr<DataFilterAny> data_filter{
             new SimpleDataFilter<IT, OT>(func)
         };
-        this->Base::addDataFilterAny(data_filter, (OT*)nullptr);
+        auto next_pipe = make_pipe<OT>();
+        this->Base::addDataFilterAny(data_filter, next_pipe);
         return *this;
     }
 };
