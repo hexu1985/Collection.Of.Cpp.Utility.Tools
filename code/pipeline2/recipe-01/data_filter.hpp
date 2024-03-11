@@ -9,19 +9,19 @@ public:
     DataFilter() = default;
     ~DataFilter() = default;
 
-    virtual void setInPipe(Pipe<IT> pipe) {
+    void setInPipe(Pipe<IT> pipe) {
         in_pipe = pipe;
     }
 
-    virtual void setOutPipe(Pipe<OT> pipe) {
+    void setOutPipe(Pipe<OT> pipe) {
         out_pipe = pipe;
     }
 
-    virtual Pipe<IT> getInPipe() {
+    Pipe<IT> getInPipe() {
         return in_pipe;
     }
 
-    virtual Pipe<OT> getOutPipe() {
+    Pipe<OT> getOutPipe() {
         return out_pipe;
     }
 
