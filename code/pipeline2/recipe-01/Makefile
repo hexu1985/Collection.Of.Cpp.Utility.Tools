@@ -4,8 +4,8 @@ INCLUDES =
 LDFLAGS = 
 LDLIBS = -lpthread
 
-PROGS =	no_pipeline manual_pipeline simple_pipeline_test simple_pipeline_sink_test 
-		#simple_composite_data_filter_test
+PROGS =	no_pipeline manual_pipeline simple_pipeline_test \
+		simple_pipeline_sink_test simple_composite_data_filter_test
 
 .PHONY: all
 all: $(PROGS)

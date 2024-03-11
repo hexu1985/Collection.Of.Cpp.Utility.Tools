@@ -13,6 +13,10 @@ public:
     SimplePipeline() = default;
     ~SimplePipeline() = default;
 
+    SimplePipeline(Pipe<SourceDataType> source_pipe_)
+        : Pipeline<SourceDataType, SinkDataType>(source_pipe_) {
+    }
+
     SimplePipeline& addDataSource(std::function<bool(SourceDataType&)> func) {
         std::shared_ptr<DataSource<SourceDataType>> data_source{
             new SimpleDataSource<SourceDataType>(func)

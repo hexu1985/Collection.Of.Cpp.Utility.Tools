@@ -41,15 +41,20 @@ std::string print(int x) {
 }
 
 int main() {
-    SimplePipeline<int, std::string> pipeline;
-    pipeline.addDataSource(std::function<bool(int&)>{data_provider{}})
-            .addDataFilter(std::function<int(int)>{plus_one})
+    Pipe<int> in_pipe = make_pipe<int>();
+    SimpleDataSource<int> data_source(data_provider{});
+    data_source.setOutput(in_pipe);
+
+    SimplePipeline<int, std::string> pipeline(in_pipe);
+    pipeline.addDataFilter(std::function<int(int)>{plus_one})
             .addDataFilter(std::function<int(int)>{mul_two})
-            .addDataFilter(std::function<std::string(int)>{print});
+            .addDataFilter(std::function<std::string(int)>(print));
+
     cout << fixed << setprecision(1);
     auto out_pipe = pipeline.getSinkPipe();
     std::string output;
     pipeline.start();
+    data_source.start();
     while (true) {
         auto start_time = system_clock::now();
         out_pipe->pop(output);

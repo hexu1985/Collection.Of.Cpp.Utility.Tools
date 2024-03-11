@@ -19,6 +19,10 @@ public:
         pipes.push_back(source_pipe);
     }
 
+    Pipeline(Pipe<SourceDataType> source_pipe_): source_pipe(source_pipe_) {
+        pipes.push_back(source_pipe);
+    }
+
     ~Pipeline() override {
         stop();
         clear();
@@ -69,18 +73,18 @@ public:
         pipes.clear();
         pipes.push_back(source_pipe);
     }
-    
-    void getData(SinkDataType& data) {
+
+    Pipe<SourceDataType> getSourcePipe() {
+        return source_pipe;
+    }
+
+    Pipe<SinkDataType> getSinkPipe() {
         if (sink_pipe == nullptr) {
             sink_pipe = boost::any_cast<Pipe<SinkDataType>>(pipes.back());
         }
-        sink_pipe->pop(data);
+        return sink_pipe;
     }
-
-    void putData(const SourceDataType& data) {
-        source_pipe->push(data);
-    }
-
+    
 protected:
     std::vector<std::shared_ptr<ProcessNode>> process_nodes;
     Pipe<SourceDataType> source_pipe;
