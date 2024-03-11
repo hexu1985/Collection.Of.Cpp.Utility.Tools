@@ -4,7 +4,7 @@ INCLUDES =
 LDFLAGS = 
 LDLIBS = -lpthread
 
-PROGS =	no_pipeline manual_pipeline simple_pipeline_test
+PROGS =	no_pipeline manual_pipeline simple_pipeline_test simple_pipeline_sink_test
 
 .PHONY: all
 all: $(PROGS)
@@ -21,4 +21,7 @@ manual_pipeline: manual_pipeline.cpp
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
 
 simple_pipeline_test: simple_pipeline_test.cpp pipeline.cpp
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
+
+simple_pipeline_sink_test: simple_pipeline_sink_test.cpp pipeline.cpp
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
