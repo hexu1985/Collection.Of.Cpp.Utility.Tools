@@ -10,20 +10,20 @@ public:
     ~DataFilter() = default;
 
     void setInPipe(Pipe<IT> pipe) {
-        this->setInPipeAny(pipe);
+        setInPipeAny(pipe);
     }
 
     void setOutPipe(Pipe<OT> pipe) {
-        this->setOutPipeAny(pipe);
+        setOutPipeAny(pipe);
     }
 
     Pipe<IT> getInPipe() {
-        auto pipe_any = this->getInPipeAny();
+        auto pipe_any = getInPipeAny();
         return boost::any_cast<Pipe<IT>>(pipe_any);
     }
 
     Pipe<OT> getOutPipe() {
-        auto pipe_any = this->getOutPipeAny();
+        auto pipe_any = getOutPipeAny();
         return boost::any_cast<Pipe<OT>>(pipe_any);
     }
 };
