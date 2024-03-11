@@ -9,17 +9,15 @@ public:
     DataSink() = default;
     ~DataSink() = default;
 
-    void setInPipe(Pipe<T> pipe) {
-        input = pipe;
+    virtual void setInPipe(Pipe<T> pipe) {
+        in_pipe = pipe;
     }
 
-protected:
-    void getData(T& value)
-    {
-        input->pop(value);
+    virtual Pipe<T> getInPipe() {
+        return in_pipe;
     }
 
 private:
-    Pipe<T> input;
+    Pipe<T> in_pipe;
 };
 

@@ -33,11 +33,12 @@ public:
 private:
     void worker_routine() {
         T data;
+        auto out_pipe = this->getOutPipe();
         while(!done) {
             if (!product_func(data)) {
                 break;
             }
-            this->putData(data);
+            out_pipe->push(std::move(data));
         }
     }
 

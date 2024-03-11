@@ -49,11 +49,11 @@ public:
     template <typename IT, typename OT>
     Pipeline& addDataFilter(std::shared_ptr<DataFilter<IT, OT>> data_filter) {
         assert(sink_pipe == nullptr);
-        auto input = boost::any_cast<Pipe<IT>>(pipes.back());
-        data_filter->setInPipe(input);
-        auto output = make_pipe<OT>();
-        data_filter->setOutPipe(output);
-        pipes.push_back(output);
+        auto in_pipe = boost::any_cast<Pipe<IT>>(pipes.back());
+        data_filter->setInPipe(in_pipe);
+        auto out_pipe = make_pipe<OT>();
+        data_filter->setOutPipe(out_pipe);
+        pipes.push_back(out_pipe);
         process_nodes.push_back(data_filter);
         return *this;
     }

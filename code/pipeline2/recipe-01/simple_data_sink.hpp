@@ -32,8 +32,9 @@ public:
 private:
     void worker_routine() {
         T data;
+        auto in_pipe = this->getInPipe();
         while(!done) {
-            this->getData(data);
+            in_pipe->pop(data);
             consume_func(data);
         }
     }

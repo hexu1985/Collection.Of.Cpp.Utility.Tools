@@ -33,10 +33,12 @@ private:
     void worker_routine() {
         IT input_data;
         OT output_data;
+        auto in_pipe = this->getInPipe();
+        auto out_pipe = this->getOutPipe();
         while(!done) {
-            this->getData(input_data);
+            in_pipe->pop(input_data);
             output_data = filter_func(std::move(input_data));
-            this->putData(output_data);
+            out_pipe->push(std::move(output_data));
         }
     }
 

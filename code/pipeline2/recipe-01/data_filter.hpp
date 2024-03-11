@@ -9,26 +9,23 @@ public:
     DataFilter() = default;
     ~DataFilter() = default;
 
-    void setInPipe(Pipe<IT> pipe) {
-        input = pipe;
+    virtual void setInPipe(Pipe<IT> pipe) {
+        in_pipe = pipe;
     }
 
-    void setOutPipe(Pipe<OT> pipe) {
-        output = pipe;
+    virtual void setOutPipe(Pipe<OT> pipe) {
+        out_pipe = pipe;
     }
 
-protected:
-    void getData(IT& value)
-    {
-        input->pop(value);
+    virtual Pipe<IT> getInPipe() {
+        return in_pipe;
     }
 
-    void putData(OT value)
-    {
-        output->push(std::move(value));
+    virtual Pipe<OT> getOutPipe() {
+        return out_pipe;
     }
 
 private:
-    Pipe<IT> input;
-    Pipe<OT> output;
+    Pipe<IT> in_pipe;
+    Pipe<OT> out_pipe;
 };

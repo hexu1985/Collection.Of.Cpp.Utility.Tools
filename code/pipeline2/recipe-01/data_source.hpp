@@ -9,17 +9,15 @@ public:
     DataSource() = default;
     ~DataSource() = default;
 
-    void setOutPipe(Pipe<T> pipe) {
-        output = pipe;
+    virtual void setOutPipe(Pipe<T> pipe) {
+        out_pipe = pipe;
     }
 
-protected:
-    void putData(T value) {
-        assert(output);
-        output->push(std::move(value));
+    virtual Pipe<T> getOutPipe() {
+        return out_pipe;
     }
 
 private:
-    Pipe<T> output;
+    Pipe<T> out_pipe;
 };
 
