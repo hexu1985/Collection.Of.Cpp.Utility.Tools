@@ -9,7 +9,7 @@ public:
     DataSink() = default;
     ~DataSink() = default;
 
-    void setInput(Pipe<T> pipe) {
+    void setInPipe(Pipe<T> pipe) {
         input = pipe;
     }
 

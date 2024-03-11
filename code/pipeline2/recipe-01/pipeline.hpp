@@ -41,7 +41,7 @@ public:
     }
 
     Pipeline& addDataSource(std::shared_ptr<DataSource<SourceDataType>> data_source) {
-        data_source->setOutput(source_pipe);
+        data_source->setOutPipe(source_pipe);
         process_nodes.push_back(data_source);
         return *this;
     }
@@ -50,9 +50,9 @@ public:
     Pipeline& addDataFilter(std::shared_ptr<DataFilter<IT, OT>> data_filter) {
         assert(sink_pipe == nullptr);
         auto input = boost::any_cast<Pipe<IT>>(pipes.back());
-        data_filter->setInput(input);
+        data_filter->setInPipe(input);
         auto output = make_pipe<OT>();
-        data_filter->setOutput(output);
+        data_filter->setOutPipe(output);
         pipes.push_back(output);
         process_nodes.push_back(data_filter);
         return *this;
@@ -62,7 +62,7 @@ public:
         if (sink_pipe == nullptr) {
             sink_pipe = boost::any_cast<Pipe<SinkDataType>>(pipes.back());
         }
-        data_sink->setInput(sink_pipe);
+        data_sink->setInPipe(sink_pipe);
         process_nodes.push_back(data_sink);
         return *this;
     }

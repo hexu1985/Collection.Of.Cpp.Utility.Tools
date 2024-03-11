@@ -9,7 +9,7 @@ public:
     DataSource() = default;
     ~DataSource() = default;
 
-    void setOutput(Pipe<T> pipe) {
+    void setOutPipe(Pipe<T> pipe) {
         output = pipe;
     }
 

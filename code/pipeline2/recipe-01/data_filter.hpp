@@ -9,11 +9,11 @@ public:
     DataFilter() = default;
     ~DataFilter() = default;
 
-    void setInput(Pipe<IT> pipe) {
+    void setInPipe(Pipe<IT> pipe) {
         input = pipe;
     }
 
-    void setOutput(Pipe<OT> pipe) {
+    void setOutPipe(Pipe<OT> pipe) {
         output = pipe;
     }
 

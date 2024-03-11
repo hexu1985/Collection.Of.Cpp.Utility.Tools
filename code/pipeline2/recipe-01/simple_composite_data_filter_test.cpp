@@ -43,7 +43,7 @@ std::string print(int x) {
 int main() {
     Pipe<int> in_pipe = make_pipe<int>();
     SimpleDataSource<int> data_source(data_provider{});
-    data_source.setOutput(in_pipe);
+    data_source.setOutPipe(in_pipe);
 
     SimplePipeline<int, std::string> pipeline(in_pipe);
     pipeline.addDataFilter(std::function<int(int)>{plus_one})
