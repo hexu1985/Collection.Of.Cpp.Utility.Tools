@@ -5,6 +5,7 @@
 #include <boost/any.hpp>
 
 #include "data_filter_any.hpp"
+#include "data_filter.hpp"
 #include "pipe.hpp"
 
 template <typename IT, typename OT>
@@ -39,6 +40,18 @@ public:
         }
         data_filter->setOutPipeAny(next_pipe);
         data_filters.push_back(data_filter);
+        return *this;
+    }
+
+    template <typename IT2, typename OT2>
+    CompositeDataFilter& addDataFilter(std::shared_ptr<DataFilter<IT2, OT2>> data_filter) {
+        addDataFilterAny(data_filter, make_pipe<OT2>());
+        return *this;
+    }
+
+    template <typename IT2, typename OT2>
+    CompositeDataFilter& addDataFilter(std::shared_ptr<CompositeDataFilter<IT2, OT2>> data_filter) {
+        addDataFilterAny(data_filter, make_pipe<OT2>());
         return *this;
     }
 

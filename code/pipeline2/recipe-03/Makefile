@@ -4,7 +4,7 @@ INCLUDES =
 LDFLAGS = 
 LDLIBS = -lpthread
 
-PROGS =	no_pipeline manual_pipeline simple_pipeline_test pipeline_test \
+PROGS =	no_pipeline manual_pipeline simple_pipeline_test pipeline_test composite_data_filter_test \
 		simple_pipeline_sink_test pipeline_add_source_test simple_composite_data_filter_test 
 #		pipeline_composite_filter_test
 
@@ -26,6 +26,9 @@ pipeline_test: pipeline_test.cpp process_node.cpp data_filter_any.cpp
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
 
 pipeline_composite_filter_test: pipeline_composite_filter_test.cpp process_node.cpp data_filter_any.cpp
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
+
+composite_data_filter_test: composite_data_filter_test.cpp process_node.cpp data_filter_any.cpp
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
 
 simple_pipeline_test: simple_pipeline_test.cpp process_node.cpp data_filter_any.cpp
