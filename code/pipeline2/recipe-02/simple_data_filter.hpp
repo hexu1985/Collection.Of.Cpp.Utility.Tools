@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <thread>
 #include <functional>
 #include <atomic>
@@ -47,3 +48,8 @@ private:
     std::function<OT(IT)> filter_func;
     std::thread worker_thread;
 };
+
+template <typename IT, typename OT>
+std::shared_ptr<DataFilter<IT, OT>> make_simple_data_filter(std::function<OT(IT)> func) {
+    return std::make_shared<SimpleDataFilter<IT, OT>>(func);
+}

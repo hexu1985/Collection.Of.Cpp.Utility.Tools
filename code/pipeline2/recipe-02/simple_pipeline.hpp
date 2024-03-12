@@ -11,6 +11,7 @@ public:
     using Base = Pipeline<SourceDataType, SinkDataType>;
 
     using Base::addDataSource;
+    using Base::addDataFilter;
     using Base::addDataSink;
 
     SimplePipeline(): SimplePipeline(make_pipe<SourceDataType>()) {
