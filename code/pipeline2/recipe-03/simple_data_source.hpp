@@ -1,9 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <thread>
 #include <functional>
 #include <atomic>
-#include <memory>
 #include "data_source.hpp"
 
 template <typename T>
@@ -48,3 +48,7 @@ private:
     std::thread worker_thread;
 };
 
+template <typename T>
+std::shared_ptr<DataSource<T>> make_simple_data_source(std::function<bool(T&)> func) {
+    return std::make_shared<SimpleDataSource<T>>(func);
+}

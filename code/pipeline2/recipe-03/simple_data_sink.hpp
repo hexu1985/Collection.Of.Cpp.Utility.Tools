@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <thread>
 #include <functional>
 #include <atomic>
@@ -45,3 +46,7 @@ private:
     std::thread worker_thread;
 };
 
+template <typename T>
+std::shared_ptr<DataSink<T>> make_simple_data_sink(std::function<void(T&)> func) {
+    return std::make_shared<SimpleDataSink<T>>(func);
+}

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+#include <functional>
 #include "composite_data_filter.hpp"
 #include "simple_data_filter.hpp"
 
@@ -22,3 +24,13 @@ public:
     }
 
 };
+
+template <typename IT, typename OT>
+std::shared_ptr<SimpleCompositeDataFilter<IT, OT>> make_simple_composite_data_filter() {
+    return std::make_shared<SimpleCompositeDataFilter<IT, OT>>();
+}
+
+template <typename IT, typename OT>
+std::shared_ptr<CompositeDataFilter<IT, OT>> to_composite_data_filter(std::shared_ptr<SimpleCompositeDataFilter<IT, OT>> composite_data_filter) {
+    return std::static_pointer_cast<CompositeDataFilter<IT, OT>>(composite_data_filter);
+}

@@ -2,8 +2,11 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include "simple_data_source.hpp"
 #include "simple_composite_data_filter.hpp"
+#include "simple_data_source.hpp"
+#include "simple_data_filter.hpp"
+#include "simple_data_sink.hpp"
+#include "pipeline.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -41,27 +44,23 @@ std::string print(int x) {
     return std::to_string(x);
 }
 
+void data_receiver(std::string& data) {
+    std::cout << "receive data: " << data << std::endl;
+}
+
 int main() {
-    Pipe<int> in_pipe = make_pipe<int>();
-    Pipe<std::string> out_pipe = make_pipe<std::string>();
-    SimpleDataSource<int> data_source(data_provider{});
-    data_source.setOutPipe(in_pipe);
+    auto composite_data_filter = make_simple_composite_data_filter<int, std::string>();
+    composite_data_filter->addDataFilter(std::function<int(int)>{plus_one});
+    composite_data_filter->addDataFilter(std::function<int(int)>{mul_two});
+    composite_data_filter->addDataFilter(std::function<std::string(int)>(print));
 
-    SimpleCompositeDataFilter<int, std::string> composite_data_filter;
-    composite_data_filter.addDataFilter(std::function<int(int)>{plus_one})
-            .addDataFilter(std::function<int(int)>{mul_two})
-            .addDataFilter(std::function<std::string(int)>(print));
-    composite_data_filter.setInPipeAny(in_pipe);
-    composite_data_filter.setOutPipeAny(out_pipe);
-
+    Pipeline<int, std::string> pipeline(make_pipe<int>());
+    pipeline.addDataSource(make_simple_data_source<int>(data_provider{}))
+            .addDataFilter(to_composite_data_filter(composite_data_filter))
+            .addDataSink(make_simple_data_sink<std::string>(data_receiver));
     cout << fixed << setprecision(1);
     std::string output;
-    composite_data_filter.start();
-    data_source.start();
-    while (true) {
-        auto start_time = system_clock::now();
-        out_pipe->pop(output);
-        auto end_time = system_clock::now();
-        cout << output << ": " << duration<double>(end_time-start_time).count() << "s" << endl;
-    }
+    pipeline.start();
+    std::cin.get();
+    pipeline.stop();
 }

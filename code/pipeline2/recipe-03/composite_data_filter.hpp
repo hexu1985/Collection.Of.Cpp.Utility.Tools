@@ -87,3 +87,8 @@ public:
 protected:
     std::vector<std::shared_ptr<DataFilterAny>> data_filters;
 };
+
+template <typename IT, typename OT>
+std::shared_ptr<CompositeDataFilter<IT, OT>> make_composite_data_filter() {
+    return std::make_shared<CompositeDataFilter<IT, OT>>();
+}

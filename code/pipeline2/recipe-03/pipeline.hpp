@@ -10,6 +10,8 @@
 #include "data_source.hpp"
 #include "data_sink.hpp"
 #include "data_filter_any.hpp"
+#include "data_filter.hpp"
+#include "composite_data_filter.hpp"
 
 template <typename SourceDataType, typename SinkDataType>
 class Pipeline: public ProcessNode {
@@ -49,6 +51,18 @@ public:
         data_filter->setOutPipeAny(out_pipe);
         pipes.push_back(out_pipe);
         process_nodes.push_back(data_filter);
+        return *this;
+    }
+
+    template <typename IT, typename OT>
+    Pipeline& addDataFilter(std::shared_ptr<DataFilter<IT, OT>> data_filter) {
+        addDataFilterAny(data_filter, make_pipe<OT>());
+        return *this;
+    }
+
+    template <typename IT, typename OT>
+    Pipeline& addDataFilter(std::shared_ptr<CompositeDataFilter<IT, OT>> data_filter) {
+        addDataFilterAny(data_filter, make_pipe<OT>());
         return *this;
     }
 
