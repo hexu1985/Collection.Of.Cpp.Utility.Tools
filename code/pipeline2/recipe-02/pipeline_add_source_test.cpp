@@ -42,10 +42,10 @@ std::string print(int x) {
 
 int main() {
     Pipe<int> in_pipe = make_pipe<int>();
-    SimpleDataSource<int> data_source(data_provider{});
-    data_source.setOutPipe(in_pipe);
+    auto data_source = std::make_shared<SimpleDataSource<int>>(data_provider{});
 
     SimplePipeline<int, std::string> pipeline(in_pipe);
+    pipeline.addDataSource(data_source);
     pipeline.addDataFilter(std::function<int(int)>{plus_one})
             .addDataFilter(std::function<int(int)>{mul_two})
             .addDataFilter(std::function<std::string(int)>(print));
@@ -54,7 +54,6 @@ int main() {
     auto out_pipe = pipeline.getSinkPipe();
     std::string output;
     pipeline.start();
-    data_source.start();
     while (true) {
         auto start_time = system_clock::now();
         out_pipe->pop(output);
