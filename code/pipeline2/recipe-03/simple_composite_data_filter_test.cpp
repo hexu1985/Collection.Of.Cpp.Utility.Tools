@@ -2,7 +2,8 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include "simple_pipeline.hpp"
+#include "simple_data_source.hpp"
+#include "simple_composite_data_filter.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -42,18 +43,20 @@ std::string print(int x) {
 
 int main() {
     Pipe<int> in_pipe = make_pipe<int>();
+    Pipe<std::string> out_pipe = make_pipe<std::string>();
     SimpleDataSource<int> data_source(data_provider{});
     data_source.setOutPipe(in_pipe);
 
-    SimplePipeline<int, std::string> pipeline(in_pipe);
-    pipeline.addDataFilter(std::function<int(int)>{plus_one})
+    SimpleCompositeDataFilter<int, std::string> composite_data_filter;
+    composite_data_filter.addDataFilter(std::function<int(int)>{plus_one})
             .addDataFilter(std::function<int(int)>{mul_two})
             .addDataFilter(std::function<std::string(int)>(print));
+    composite_data_filter.setInPipeAny(in_pipe);
+    composite_data_filter.setOutPipeAny(out_pipe);
 
     cout << fixed << setprecision(1);
-    auto out_pipe = pipeline.getSinkPipe();
     std::string output;
-    pipeline.start();
+    composite_data_filter.start();
     data_source.start();
     while (true) {
         auto start_time = system_clock::now();

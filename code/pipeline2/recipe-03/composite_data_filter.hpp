@@ -1,14 +1,36 @@
 #pragma once
 
+#include <vector>
+#include <memory>
+#include <boost/any.hpp>
+
+#include "data_filter_any.hpp"
+#include "pipe.hpp"
+
 template <typename IT, typename OT>
 class CompositeDataFilter: public DataFilterAny {
 public:
     using Base = DataFilterAny;
 
     CompositeDataFilter() = default;
-    ~CompositeDataFilter() = default;
 
-    Pipeline& addDataFilter(std::shared_ptr<DataFilterAny> data_filter, boost::any next_pipe) {
+    ~CompositeDataFilter() override {
+        stop();
+    }
+
+    void start() override {
+        for (auto data_filter : data_filters) {
+            data_filter->start();
+        }
+    }
+
+    void stop() override {
+        for (auto data_filter : data_filters) {
+            data_filter->stop();
+        }
+    }
+
+    CompositeDataFilter& addDataFilterAny(std::shared_ptr<DataFilterAny> data_filter, boost::any next_pipe) {
         assert(!isSetOutPipe());
         if (data_filters.empty()) {     // the first sub filter
             data_filter->setInPipeAny(getInPipeAny());
@@ -17,6 +39,7 @@ public:
         }
         data_filter->setOutPipeAny(next_pipe);
         data_filters.push_back(data_filter);
+        return *this;
     }
 
     void setInPipeAny(boost::any pipe) override {
@@ -54,11 +77,11 @@ public:
     }
 
     bool isSetInPipe() const {
-        return in_pipe.has_value();
+        return !in_pipe.empty();
     }
 
     bool isSetOutPipe() const {
-        return out_pipe.has_value();
+        return !out_pipe.empty();
     }
 
 protected:
