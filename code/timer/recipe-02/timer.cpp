@@ -41,6 +41,7 @@ public:
     Timer::Callback function;   // callback function
     TimePoint time;             // expiration time
     std::atomic<bool> active{false};
+    std::atomic<bool> is_executing{false};
 };
 
 class AlarmLooper {
@@ -159,8 +160,10 @@ void AlarmLooper::run() {
         }
 
         if (expired) {
-            if (alarm->active) {
+            if (alarm->active && !alarm->is_executing) {
+                alarm->is_executing = true;
                 alarm->function();
+                alarm->is_executing = false;
                 if (alarm->is_period) {
                     alarm->update_alarm();
                     insert(alarm);
