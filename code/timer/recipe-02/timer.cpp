@@ -28,12 +28,12 @@ public:
         interval = interval_;
         is_period = is_period_;
         function = function_;
-        time = Clock::now() + Microseconds(static_cast<long int>(interval*1000000));
+        time = Clock::now() + Microseconds(static_cast<long int>(interval*1000));
         active = true;
     }
 
     void update_alarm() {
-        time = time + Microseconds(static_cast<long int>(interval*1000000));
+        time = time + Microseconds(static_cast<long int>(interval*1000));
     }
 
     double interval{0.0};       // unit second
@@ -227,7 +227,7 @@ void Timer::start_timer(Callback function, double interval, bool is_period) {
         return;
     }
     pimpl->setup_alarm(interval, is_period, function);
-    TimerThread::get_instance().insert_alarm(pimpl);
+    std::thread([this](){TimerThread::get_instance().insert_alarm(pimpl);}).detach();
 }
 
 void Timer::stop() {

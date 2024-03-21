@@ -17,12 +17,12 @@ public:
 
     void setTimeout(Callback function, int delay_ms)    // unit millisecond
     {
-        start_timer(std::move(function), static_cast<double>(delay_ms/1000), false);
+        start_timer(std::move(function), static_cast<double>(delay_ms), false);
     }
 
     void setInterval(Callback function, int interval_ms)  // unit millisecond
     {
-        start_timer(std::move(function), static_cast<double>(interval_ms/1000), true);
+        start_timer(std::move(function), static_cast<double>(interval_ms), true);
     }
 
     void stop();
