@@ -1,14 +1,4 @@
 #include "timer.hpp"
-#include <list>
-#include <memory>
-#include <chrono>
-#include <atomic>
-#include <mutex>
-#include <condition_variable>
-#include <thread>
-
-using Clock = std::chrono::system_clock;
-using TimePoint = Clock::time_point; 
 using Microseconds = std::chrono::microseconds;
 using AlarmPtr = std::shared_ptr<Timer::Impl>;
 
@@ -41,31 +31,10 @@ public:
     Timer::Callback function;   // callback function
     TimePoint time;             // expiration time
     std::atomic<bool> active{false};
-    std::atomic<bool> is_executing{false};
+    bool is_executing{false};
 };
 
-class AlarmLooper {
-public:
-    AlarmLooper() = default; 
-    AlarmLooper(const AlarmLooper&) = delete;
-    void operator=(const AlarmLooper&) = delete;
 
-    void thread_safety_insert(AlarmPtr alarm) {
-        std::unique_lock<std::mutex> lock(alarm_mutex);
-        insert(alarm);
-    }
-
-    void insert(AlarmPtr alarm);
-    void run();
-    void stop();
-
-private:
-    std::list<AlarmPtr> alarm_list;
-    TimePoint current_alarm;
-    std::mutex alarm_mutex;
-    std::condition_variable alarm_cond;
-    std::atomic<bool> stopped{false};
-};
 
 /*
  * Insert alarm entry on list, in order.
@@ -178,34 +147,8 @@ void AlarmLooper::stop() {
     alarm_cond.notify_one();
 }
 
-class TimerThread {
-public:
-    TimerThread(); 
-    ~TimerThread(); 
 
-    void insert_alarm(std::shared_ptr<Timer::Impl> timer);
-    bool is_in_looper_thread() {
-        return std::this_thread::get_id() == looper_thread.get_id();
-    }
 
-    static TimerThread& get_instance() {
-        static TimerThread timer_thread;
-        return timer_thread;
-    }
-
-private:
-    AlarmLooper alarm_looper;
-    std::thread looper_thread;
-};
-
-TimerThread::TimerThread() {
-    looper_thread = std::thread(&AlarmLooper::run, &alarm_looper);
-}
-
-TimerThread::~TimerThread() {
-    alarm_looper.stop();
-    looper_thread.join();
-}
 
 void TimerThread::insert_alarm(std::shared_ptr<Timer::Impl> pimpl) {
     if (is_in_looper_thread()) {
@@ -227,7 +170,11 @@ void Timer::start_timer(Callback function, double interval, bool is_period) {
         return;
     }
     pimpl->setup_alarm(interval, is_period, function);
-    std::thread([this](){TimerThread::get_instance().insert_alarm(pimpl);}).detach();
+    if (!timer_thread) {
+        timer_thread = std::make_shared<TimerThread>(); // 创建 TimerThread 对象
+    }
+    timer_thread->insert_alarm(pimpl);
+
 }
 
 void Timer::stop() {

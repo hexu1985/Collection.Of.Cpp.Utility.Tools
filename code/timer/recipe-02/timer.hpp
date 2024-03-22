@@ -1,10 +1,18 @@
 #pragma once
 
 #include <iostream>
-#include <thread>
 #include <chrono>
 #include <atomic>
 #include <functional>
+#include <list>
+#include <memory>
+#include <mutex>
+#include <condition_variable>
+#include <thread>
+using Clock = std::chrono::system_clock;
+using TimePoint = Clock::time_point; 
+
+class TimerThread;
 
 class Timer {
 public:
@@ -35,5 +43,53 @@ private:
 
 private:
     std::shared_ptr<Impl> pimpl;
+    std::shared_ptr<TimerThread> timer_thread; 
 };
+
+class AlarmLooper {
+public:
+    AlarmLooper() = default; 
+    AlarmLooper(const AlarmLooper&) = delete;
+    void operator=(const AlarmLooper&) = delete;
+
+    void thread_safety_insert(std::shared_ptr<Timer::Impl> alarm) {
+        std::unique_lock<std::mutex> lock(alarm_mutex);
+        insert(alarm);
+    }
+
+    void insert(std::shared_ptr<Timer::Impl> alarm);
+    void run();
+    void stop();
+
+private:
+    std::list<std::shared_ptr<Timer::Impl>> alarm_list;
+    TimePoint current_alarm;
+    std::mutex alarm_mutex;
+    std::condition_variable alarm_cond;
+    std::atomic<bool> stopped{false};
+};
+
+class TimerThread {
+public:
+    TimerThread()
+    {
+        looper_thread = std::thread(&AlarmLooper::run, &alarm_looper);
+    }
+    ~TimerThread()
+    {
+        alarm_looper.stop();
+        looper_thread.join();
+    }
+
+    void insert_alarm(std::shared_ptr<Timer::Impl> timer);
+    bool is_in_looper_thread() {
+        return std::this_thread::get_id() == looper_thread.get_id();
+    }
+
+
+private:
+    AlarmLooper alarm_looper;
+    std::thread looper_thread;
+};
+
 
