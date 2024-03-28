@@ -41,10 +41,11 @@ std::string print(int x) {
 }
 
 int main() {
-    Pipe<int> in_pipe = make_pipe<int>();
+    const size_t capacity_per_pipe = 1;
+    Pipe<int> in_pipe = make_pipe<int>(capacity_per_pipe);
     auto data_source = std::make_shared<SimpleDataSource<int>>(data_provider{});
 
-    SimplePipeline<int, std::string> pipeline(in_pipe);
+    SimplePipeline<int, std::string> pipeline(in_pipe, capacity_per_pipe);
     pipeline.addDataSource(data_source);
     pipeline.addDataFilter(std::function<int(int)>{plus_one})
             .addDataFilter(std::function<int(int)>{mul_two})

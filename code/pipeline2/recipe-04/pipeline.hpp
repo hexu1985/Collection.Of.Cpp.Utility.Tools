@@ -16,7 +16,8 @@
 template <typename SourceDataType, typename SinkDataType>
 class Pipeline: public ProcessNode {
 public:
-    Pipeline(Pipe<SourceDataType> source_pipe_): source_pipe(source_pipe_) {
+    Pipeline(Pipe<SourceDataType> source_pipe_, size_t capacity_per_pipe_): 
+        source_pipe(source_pipe_), capacity_per_pipe(capacity_per_pipe_) {
         pipes.push_back(source_pipe);
     }
 
@@ -56,13 +57,13 @@ public:
 
     template <typename IT, typename OT>
     Pipeline& addDataFilter(std::shared_ptr<DataFilter<IT, OT>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT>());
+        addDataFilterAny(data_filter, make_pipe<OT>(capacity_per_pipe));
         return *this;
     }
 
     template <typename IT, typename OT>
     Pipeline& addDataFilter(std::shared_ptr<CompositeDataFilter<IT, OT>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT>());
+        addDataFilterAny(data_filter, make_pipe<OT>(capacity_per_pipe));
         return *this;
     }
 
@@ -98,5 +99,6 @@ protected:
     Pipe<SourceDataType> source_pipe;
     Pipe<SinkDataType> sink_pipe;
     std::vector<boost::any> pipes;
+    size_t capacity_per_pipe;
 };
 

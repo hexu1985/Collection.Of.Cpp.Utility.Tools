@@ -10,7 +10,9 @@ class SimpleCompositeDataFilter: public CompositeDataFilter<InputType, OutputTyp
 public:
     using Base = CompositeDataFilter<InputType, OutputType>;
 
-    SimpleCompositeDataFilter() = default;
+    SimpleCompositeDataFilter(size_t capacity_per_pipe_): CompositeDataFilter<InputType, OutputType>(capacity_per_pipe_) {
+    }
+
     ~SimpleCompositeDataFilter() = default;
 
     template <typename IT, typename OT>
@@ -18,7 +20,7 @@ public:
         std::shared_ptr<DataFilterAny> data_filter{
             new SimpleDataFilter<IT, OT>(func)
         };
-        auto next_pipe = make_pipe<OT>();
+        auto next_pipe = make_pipe<OT>(this->capacity_per_pipe);
         this->Base::addDataFilterAny(data_filter, next_pipe);
         return *this;
     }
@@ -26,8 +28,8 @@ public:
 };
 
 template <typename IT, typename OT>
-std::shared_ptr<SimpleCompositeDataFilter<IT, OT>> make_simple_composite_data_filter() {
-    return std::make_shared<SimpleCompositeDataFilter<IT, OT>>();
+std::shared_ptr<SimpleCompositeDataFilter<IT, OT>> make_simple_composite_data_filter(size_t capacity_per_pipe) {
+    return std::make_shared<SimpleCompositeDataFilter<IT, OT>>(capacity_per_pipe);
 }
 
 template <typename IT, typename OT>

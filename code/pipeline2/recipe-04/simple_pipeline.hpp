@@ -14,11 +14,11 @@ public:
     using Base::addDataFilter;
     using Base::addDataSink;
 
-    SimplePipeline(): SimplePipeline(make_pipe<SourceDataType>()) {
+    explicit SimplePipeline(size_t capacity_per_pipe_): SimplePipeline(make_pipe<SourceDataType>(capacity_per_pipe_), capacity_per_pipe_) {
     }
 
-    SimplePipeline(Pipe<SourceDataType> source_pipe_)
-        : Pipeline<SourceDataType, SinkDataType>(source_pipe_) {
+    SimplePipeline(Pipe<SourceDataType> source_pipe_, size_t capacity_per_pipe_)
+        : Pipeline<SourceDataType, SinkDataType>(source_pipe_, capacity_per_pipe_) {
     }
 
     ~SimplePipeline() = default;
@@ -44,7 +44,7 @@ public:
         std::shared_ptr<DataFilterAny> data_filter{
             new SimpleDataFilter<IT, OT>(func)
         };
-        auto next_pipe = make_pipe<OT>();
+        auto next_pipe = make_pipe<OT>(this->capacity_per_pipe);
         this->Base::addDataFilterAny(data_filter, next_pipe);
         return *this;
     }

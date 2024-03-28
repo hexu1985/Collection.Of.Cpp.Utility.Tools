@@ -49,12 +49,13 @@ void data_receiver(std::string& data) {
 }
 
 int main() {
-    auto composite_data_filter = make_simple_composite_data_filter<int, std::string>();
+    const size_t capacity_per_pipe = 1;
+    auto composite_data_filter = make_simple_composite_data_filter<int, std::string>(capacity_per_pipe);
     composite_data_filter->addDataFilter(std::function<int(int)>{plus_one});
     composite_data_filter->addDataFilter(std::function<int(int)>{mul_two});
     composite_data_filter->addDataFilter(std::function<std::string(int)>(print));
 
-    Pipeline<int, std::string> pipeline(make_pipe<int>());
+    Pipeline<int, std::string> pipeline(make_pipe<int>(capacity_per_pipe), capacity_per_pipe);
     pipeline.addDataSource(make_simple_data_source<int>(data_provider{}))
             .addDataFilter(to_composite_data_filter(composite_data_filter))
             .addDataSink(make_simple_data_sink<std::string>(data_receiver));

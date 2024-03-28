@@ -62,7 +62,8 @@ void data_receiver(std::string& data) {
 }
 
 int main() {
-    SimplePipeline<int, std::string> pipeline;
+    const size_t capacity_per_pipe = 1;
+    SimplePipeline<int, std::string> pipeline{capacity_per_pipe};
     pipeline.addDataSource(std::function<bool(int&)>{data_provider{}})
             .addDataFilter(std::function<int(int)>{plus_one})
             .addDataFilter(std::function<int(int)>{mul_two})

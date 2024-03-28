@@ -13,7 +13,8 @@ class CompositeDataFilter: public DataFilterAny {
 public:
     using Base = DataFilterAny;
 
-    CompositeDataFilter() = default;
+    CompositeDataFilter(size_t capacity_per_pipe_): capacity_per_pipe(capacity_per_pipe_) {
+    }
 
     ~CompositeDataFilter() override {
         stop();
@@ -45,13 +46,13 @@ public:
 
     template <typename IT2, typename OT2>
     CompositeDataFilter& addDataFilter(std::shared_ptr<DataFilter<IT2, OT2>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT2>());
+        addDataFilterAny(data_filter, make_pipe<OT2>(capacity_per_pipe));
         return *this;
     }
 
     template <typename IT2, typename OT2>
     CompositeDataFilter& addDataFilter(std::shared_ptr<CompositeDataFilter<IT2, OT2>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT2>());
+        addDataFilterAny(data_filter, make_pipe<OT2>(capacity_per_pipe));
         return *this;
     }
 
@@ -99,9 +100,10 @@ public:
 
 protected:
     std::vector<std::shared_ptr<DataFilterAny>> data_filters;
+    size_t capacity_per_pipe;
 };
 
 template <typename IT, typename OT>
-std::shared_ptr<CompositeDataFilter<IT, OT>> make_composite_data_filter() {
-    return std::make_shared<CompositeDataFilter<IT, OT>>();
+std::shared_ptr<CompositeDataFilter<IT, OT>> make_composite_data_filter(size_t capacity_per_pipe) {
+    return std::make_shared<CompositeDataFilter<IT, OT>>(capacity_per_pipe);
 }
