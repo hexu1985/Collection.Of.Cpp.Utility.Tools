@@ -44,11 +44,12 @@ public:
         return *this;
     }
 
-    Pipeline& addDataFilterAny(std::shared_ptr<DataFilterAny> data_filter, boost::any next_pipe) {
+    template <typename T>
+    Pipeline& addDataFilterAny(std::shared_ptr<DataFilterAny> data_filter) {
         assert(sink_pipe == nullptr);
         auto in_pipe = pipes.back();
         data_filter->setInPipeAny(in_pipe);
-        auto out_pipe = next_pipe;
+        auto out_pipe = make_pipe<T>(capacity_per_pipe);
         data_filter->setOutPipeAny(out_pipe);
         pipes.push_back(out_pipe);
         process_nodes.push_back(data_filter);
@@ -57,13 +58,13 @@ public:
 
     template <typename IT, typename OT>
     Pipeline& addDataFilter(std::shared_ptr<DataFilter<IT, OT>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT>(capacity_per_pipe));
+        addDataFilterAny<OT>(data_filter);
         return *this;
     }
 
     template <typename IT, typename OT>
     Pipeline& addDataFilter(std::shared_ptr<CompositeDataFilter<IT, OT>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT>(capacity_per_pipe));
+        addDataFilterAny<OT>(data_filter);
         return *this;
     }
 

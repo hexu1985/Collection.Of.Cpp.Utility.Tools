@@ -32,13 +32,15 @@ public:
         }
     }
 
-    CompositeDataFilter& addDataFilterAny(std::shared_ptr<DataFilterAny> data_filter, boost::any next_pipe) {
+    template <typename T>
+    CompositeDataFilter& addDataFilterAny(std::shared_ptr<DataFilterAny> data_filter) {
         assert(!isSetOutPipe());
         if (data_filters.empty()) {     // the first sub filter
             data_filter->setInPipeAny(getInPipeAny());
         } else {
             data_filter->setInPipeAny(data_filters.back()->getOutPipeAny());
         }
+        auto next_pipe = make_pipe<T>(capacity_per_pipe);
         data_filter->setOutPipeAny(next_pipe);
         data_filters.push_back(data_filter);
         return *this;
@@ -46,13 +48,13 @@ public:
 
     template <typename IT2, typename OT2>
     CompositeDataFilter& addDataFilter(std::shared_ptr<DataFilter<IT2, OT2>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT2>(capacity_per_pipe));
+        addDataFilterAny<OT2>(data_filter);
         return *this;
     }
 
     template <typename IT2, typename OT2>
     CompositeDataFilter& addDataFilter(std::shared_ptr<CompositeDataFilter<IT2, OT2>> data_filter) {
-        addDataFilterAny(data_filter, make_pipe<OT2>(capacity_per_pipe));
+        addDataFilterAny<OT2>(data_filter);
         return *this;
     }
 

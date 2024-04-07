@@ -44,8 +44,7 @@ public:
         std::shared_ptr<DataFilterAny> data_filter{
             new SimpleDataFilter<IT, OT>(func)
         };
-        auto next_pipe = make_pipe<OT>(this->capacity_per_pipe);
-        this->Base::addDataFilterAny(data_filter, next_pipe);
+        this->Base::template addDataFilterAny<OT>(data_filter);
         return *this;
     }
 };
