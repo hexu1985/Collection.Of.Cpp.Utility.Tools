@@ -1,0 +1,46 @@
+#include <stddef.h>
+#include <iostream>
+#include <functional>
+#include <sstream>
+
+#include <gflags/gflags.h>
+
+#include "Socket.hpp"
+
+DEFINE_string(host, "127.0.0.1", "IP address the client sends to");
+DEFINE_uint32(port, 1060, "TCP port number");
+DEFINE_bool(client, false, "run as the client");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--help] [--client] [--host HOST] [--port PORT]\n\n"
+        << "Transmit & receive a data stream\n";
+    return os.str();
+}
+
+void server(const char* host, uint16_t port) {
+    Socket sock(AF_INET, SOCK_STREAM);
+    std::cout << "Run this script in another window with '--client' to connect\n";
+    std::cout << "Listening at";
+}
+
+void client(const char* host, uint16_t port) {
+    Socket sock(AF_INET, SOCK_STREAM);
+    sock.Connect(host, port);
+}
+
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    std::function<void(const char*, uint16_t)> function;
+    if (FLAGS_client) {
+        function = &client;
+    } else {
+        function = &server;
+    }
+    function(FLAGS_host.c_str(), FLAGS_port);
+
+    return 0;
+}
