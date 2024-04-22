@@ -15,7 +15,7 @@ public:
 
     void Close();
 
-    void Shutdown(int);
+    void Shutdown(int how);
 
 private:
     int sockfd_;

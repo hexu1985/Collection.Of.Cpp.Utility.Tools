@@ -27,8 +27,12 @@ void server(const char* host, uint16_t port) {
 void client(const char* host, uint16_t port) {
     Socket sock(AF_INET, SOCK_STREAM);
     sock.Connect(host, port);
+    sock.Shutdown(SHUT_RD);
+    sock.Sendall("Beautiful is better than ugly.\n");
+    sock.Sendall("Explicit is better than implicit.\n");
+    sock.Sendall("Simple is better than complex.\n");
+    sock.Close();
 }
-
 
 int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));

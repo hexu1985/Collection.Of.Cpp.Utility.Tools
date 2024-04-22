@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <unistd.h>
 #include <errno.h>
 
 #include <memory>
@@ -29,6 +30,30 @@ std::shared_ptr<addrinfo> Getaddrinfo(
     return std::shared_ptr<struct addrinfo>(res, deleter);
 }
 
+ssize_t                     /* Write "n" bytes to a descriptor. */
+writen(int fd, const void *vptr, size_t n)
+{
+    size_t      nleft;
+    ssize_t     nwritten;
+    const char  *ptr;
+
+    ptr = (const char *) vptr;
+    nleft = n;
+    while (nleft > 0) {
+        if ( (nwritten = write(fd, ptr, nleft)) <= 0) {
+            if (nwritten < 0 && errno == EINTR)
+                nwritten = 0;       /* and call write() again */
+            else
+                return(-1);         /* error */
+        }
+
+        nleft -= nwritten;
+        ptr   += nwritten;
+    }
+    return(n);
+}
+/* end writen */
+
 }   // namespace
 
 Socket::Socket(int family, int type, int protocol): family_(family) {
@@ -50,3 +75,22 @@ void Socket::Connect(const char* host, uint16_t port) {
         throw SocketError(errno, format("Connect({}, {}) error", host, port));
     }
 }
+
+void Socket::Sendall(std::string_view data) {
+    if (writen(sockfd_, data.data(), data.size()) != data.size()) {
+        throw SocketError(errno, "Sendall() error");
+    }
+}
+
+void Socket::Shutdown(int how) {
+    if (shutdown(sockfd_, how) < 0) {
+        throw SocketError(errno, format("Shutdown({}) error", how));
+    }
+}
+
+void Socket::Close() {
+    if (close(sockfd_) < 0) {
+        throw SocketError(errno, "Close() error");
+    }
+}
+
