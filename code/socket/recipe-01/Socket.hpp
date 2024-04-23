@@ -12,6 +12,13 @@ class Socket {
 public:
     Socket(int family, int type, int protocol=0);
 
+    Socket(const Socket&) = delete;
+    Socket& operator= (const Socket&) = delete;
+
+    Socket(Socket&& other);
+
+    ~Socket();
+
     void Connect(const char* host, uint16_t port);
 
     void Sendall(std::string_view data);
@@ -26,9 +33,16 @@ public:
 
     std::tuple<std::string, uint16_t> Getsockname();
 
+    Socket Accept(std::tuple<std::string, uint16_t>* peername=nullptr);
+
+    std::string Recv(size_t len);
+
 private:
-    int sockfd_;
-    int family_;
+    Socket() = default;
+
+private:
+    int sockfd_=-1;
+    int family_=-1;
 };
 
 

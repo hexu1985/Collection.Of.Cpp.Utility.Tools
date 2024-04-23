@@ -75,6 +75,30 @@ std::string Inet_ntop(int family, const void *addrptr) {
     return ptr;
 }
 
+std::tuple<std::string, uint16_t> Sock_ntop(const struct sockaddr *sa, socklen_t salen) {
+    std::string host;
+    uint16_t port;
+    switch (sa->sa_family) {
+    case AF_INET: {
+        struct sockaddr_in *sin = (struct sockaddr_in *) sa;
+        host = Inet_ntop(AF_INET, &sin->sin_addr);
+        port = ntohs(sin->sin_port);
+        break;
+    }
+
+    case AF_INET6: {
+        struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *) sa;
+        host = Inet_ntop(AF_INET6, &sin6->sin6_addr);
+        port = ntohs(sin6->sin6_port); 
+        break;
+    }
+
+    default:
+        throw std::runtime_error(format("sock_ntop: unknown AF_xxx: {}, len {}", sa->sa_family, salen));
+    }
+    return std::make_tuple(std::move(host), port);
+}
+
 }   // namespace
 
 Socket::Socket(int family, int type, int protocol): family_(family) {
@@ -82,6 +106,17 @@ Socket::Socket(int family, int type, int protocol): family_(family) {
     if (sockfd_ < 0) {
         throw SocketError(errno, 
                 format("Socket({}, {}, {}) error", family, type, protocol));
+    }
+}
+
+Socket::Socket(Socket&& other): sockfd_(other.sockfd_), family_(other.family_) {
+    other.sockfd_ = -1;
+    other.family_ = -1;
+}
+
+Socket::~Socket() {
+    if (sockfd_ >= 0) {
+        Close();
     }
 }
 
@@ -113,6 +148,7 @@ void Socket::Close() {
     if (close(sockfd_) < 0) {
         throw SocketError(errno, "Close() error");
     }
+    sockfd_ = -1;
 }
 
 void Socket::Bind(const char* host, uint16_t port) {
@@ -154,15 +190,41 @@ std::tuple<std::string, uint16_t> Socket::Getsockname() {
         throw SocketError(errno, "Getsockname() error");
     }
 
-    std::string host;
-    uint16_t port;
-    if (family_ == AF_INET) {
-        struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(&address);
-        host = Inet_ntop(family_, &sin->sin_addr);
-        port = ntohs(sin->sin_port);
-    } else {
-        throw std::runtime_error("Getsockname() error: unsupport family type");
+    return Sock_ntop(sa, salen);
+}
+
+Socket Socket::Accept(std::tuple<std::string, uint16_t>* peername) {
+    struct sockaddr_storage address;
+    memset(&address, 0, sizeof(address));
+
+    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&address);
+    socklen_t salen = sizeof(address);
+
+    int n;
+again:
+    if ((n = accept(sockfd_, sa, &salen)) < 0) {
+        if (errno == EPROTO || errno == ECONNABORTED)
+            goto again;
+        else
+            throw SocketError(errno, "Accept() error");
     }
 
-    return std::make_tuple(std::move(host), port);
+    Socket sock;
+    sock.sockfd_ = n;
+    sock.family_ = family_;
+
+    if (peername) {
+        *peername = Sock_ntop(sa, salen);
+    }
+
+    return sock;
+}
+
+std::string Socket::Recv(size_t len) {
+    std::unique_ptr<char[]> buf(new char[len]);
+    auto n = read(sockfd_, buf.get(), len);
+    if (n < 0) {
+        throw SocketError(errno, "Recv error()");
+    } 
+    return std::string(buf.get(), n);
 }

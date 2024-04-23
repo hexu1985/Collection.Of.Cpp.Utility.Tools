@@ -31,6 +31,24 @@ void server(const char* host, uint16_t port) {
     sock.Listen(1);
     std::cout << "Run this script in another window with '--client' to connect\n";
     std::cout << "Listening at " << sock.Getsockname() << "\n";
+    std::tuple<std::string, uint16_t> sockname;
+    Socket sc = sock.Accept(&sockname);
+    std::cout << "Accepted connection from " << sockname << "\n";
+    sc.Shutdown(SHUT_WR);
+    std::string message;
+    while (true) {
+        std::string more = sc.Recv(8192);
+        if (more.empty()) {
+            std::cout << "Received zero bytes - end of file\n";
+            break;
+        }
+        std::cout << "Received " << more.length() << " bytes\n";
+        message += more;
+    }
+    std::cout << "Message:\n";
+    std::cout << message << std::endl;
+    sc.Close();
+    sock.Close();
 }
 
 void client(const char* host, uint16_t port) {
