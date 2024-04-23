@@ -2,6 +2,7 @@
 #include <iostream>
 #include <functional>
 #include <sstream>
+#include <tuple>
 
 #include <gflags/gflags.h>
 
@@ -10,6 +11,12 @@
 DEFINE_string(host, "127.0.0.1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
 DEFINE_bool(client, false, "run as the client");
+
+std::ostream& operator <<(std::ostream& out, const std::tuple<std::string, uint16_t>& address)
+{
+    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
+    return out;
+}
 
 std::string usage(const char* prog) {
     std::ostringstream os;
@@ -20,8 +27,10 @@ std::string usage(const char* prog) {
 
 void server(const char* host, uint16_t port) {
     Socket sock(AF_INET, SOCK_STREAM);
+    sock.Bind(host, port);
+    sock.Listen(1);
     std::cout << "Run this script in another window with '--client' to connect\n";
-    std::cout << "Listening at";
+    std::cout << "Listening at " << sock.Getsockname() << "\n";
 }
 
 void client(const char* host, uint16_t port) {

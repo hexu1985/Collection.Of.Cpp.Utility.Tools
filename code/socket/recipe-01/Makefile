@@ -4,7 +4,7 @@ LDFLAGS =
 LDLIBS = -lgflags
 
 PROGS =	streamer
-LIBOBJS = SocketError.o Socket.o
+LIBOBJS = SocketException.o Socket.o
 
 .PHONY: all
 all: $(PROGS)

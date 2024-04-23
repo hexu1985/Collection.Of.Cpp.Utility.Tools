@@ -54,6 +54,27 @@ writen(int fd, const void *vptr, size_t n)
 }
 /* end writen */
 
+void Inet_pton(int family, const char *strptr, void *addrptr) {
+    int		n;
+
+	if ( (n = inet_pton(family, strptr, addrptr)) < 0) {
+        throw SocketError(errno, format("inet_pton error for {}", strptr));     /* errno set */
+    } else if (n == 0) {
+        throw std::runtime_error(format("inet_pton error for {}", strptr));     /* errno not set */
+    }
+
+	/* nothing to return */
+}
+
+std::string Inet_ntop(int family, const void *addrptr) {
+    char buf[INET6_ADDRSTRLEN] = {0};
+    const char* ptr;
+    if ((ptr = inet_ntop(family, addrptr, buf, sizeof(buf))) == NULL) {
+        throw SocketError(errno, "Inet_ntop() error");
+    }
+    return ptr;
+}
+
 }   // namespace
 
 Socket::Socket(int family, int type, int protocol): family_(family) {
@@ -94,3 +115,54 @@ void Socket::Close() {
     }
 }
 
+void Socket::Bind(const char* host, uint16_t port) {
+    struct sockaddr_storage address;
+    memset(&address, 0, sizeof(address));
+
+    struct sockaddr* sa = nullptr;
+    socklen_t salen = 0;
+    if (family_ == AF_INET) {
+        struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(&address);
+        sin->sin_family = family_;
+        sin->sin_port = htons(port);
+        Inet_pton(family_, host, &sin->sin_addr);
+        sa = reinterpret_cast<struct sockaddr*>(sin);
+        salen = sizeof(struct sockaddr_in);
+    } else {
+        throw std::runtime_error(format("Bind({}, {}) error: unsupport family type", host, port));
+    }
+
+    if (bind(sockfd_, sa, salen) < 0) {
+        throw SocketError(errno, format("Bind({}, {})", host, port));
+    }
+}
+
+void Socket::Listen(int backlog) {
+    if (listen(sockfd_, backlog) < 0) {
+        throw SocketError(errno, format("Listen({}) error", backlog));
+    }
+}
+
+std::tuple<std::string, uint16_t> Socket::Getsockname() {
+    struct sockaddr_storage address;
+    memset(&address, 0, sizeof(address));
+
+    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&address);
+    socklen_t salen = sizeof(address);
+
+    if (getsockname(sockfd_, sa, &salen) < 0) {
+        throw SocketError(errno, "Getsockname() error");
+    }
+
+    std::string host;
+    uint16_t port;
+    if (family_ == AF_INET) {
+        struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(&address);
+        host = Inet_ntop(family_, &sin->sin_addr);
+        port = ntohs(sin->sin_port);
+    } else {
+        throw std::runtime_error("Getsockname() error: unsupport family type");
+    }
+
+    return std::make_tuple(std::move(host), port);
+}

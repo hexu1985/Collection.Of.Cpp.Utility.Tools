@@ -1,9 +1,12 @@
 #pragma once
 
-#include "SocketError.hpp"
+#include "SocketException.hpp"
 
 #include <sys/types.h>
 #include <arpa/inet.h>
+
+#include <tuple>
+#include <string>
 
 class Socket {
 public:
@@ -16,6 +19,12 @@ public:
     void Close();
 
     void Shutdown(int how);
+
+    void Bind(const char* host, uint16_t port);
+
+    void Listen(int backlog);
+
+    std::tuple<std::string, uint16_t> Getsockname();
 
 private:
     int sockfd_;
