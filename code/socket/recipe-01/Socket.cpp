@@ -164,6 +164,13 @@ void Socket::Bind(const char* host, uint16_t port) {
         Inet_pton(family_, host, &sin->sin_addr);
         sa = reinterpret_cast<struct sockaddr*>(sin);
         salen = sizeof(struct sockaddr_in);
+    } else if (family_ == AF_INET6) {
+        struct sockaddr_in6* sin6 = reinterpret_cast<struct sockaddr_in6*>(&address);
+        sin6->sin6_family = family_;
+        sin6->sin6_port = htons(port);
+        Inet_pton(family_, host, &sin6->sin6_addr);
+        sa = reinterpret_cast<struct sockaddr*>(sin6);
+        salen = sizeof(struct sockaddr_in6);
     } else {
         throw std::runtime_error(format("Bind({}, {}) error: unsupport family type", host, port));
     }

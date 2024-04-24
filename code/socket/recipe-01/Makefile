@@ -3,7 +3,7 @@ CXXFLAGS = -g3 -Wall -Wextra -std=c++17
 LDFLAGS = 
 LDLIBS = -lgflags
 
-PROGS =	streamer
+PROGS =	streamer streamer6
 LIBOBJS = SocketException.o Socket.o
 
 .PHONY: all
@@ -15,5 +15,8 @@ clean:
 	@echo "clean OK!"
 
 streamer: streamer.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+streamer6: streamer6.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
