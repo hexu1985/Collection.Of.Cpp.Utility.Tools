@@ -37,6 +37,8 @@ public:
 
     std::string Recv(size_t len);
 
+    void Setsockopt(int level, int optname, int value);
+
 private:
     Socket() = default;
 

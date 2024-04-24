@@ -235,3 +235,9 @@ std::string Socket::Recv(size_t len) {
     } 
     return std::string(buf.get(), n);
 }
+
+void Socket::Setsockopt(int level, int optname, int optval) {
+    if (setsockopt(sockfd_, level, optname, &optval, sizeof(optval)) < 0) {
+        throw SocketError(errno, format("Setsockopt({}, {}, {})", level, optname, optval));
+    }
+}

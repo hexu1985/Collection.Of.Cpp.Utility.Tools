@@ -27,6 +27,7 @@ std::string usage(const char* prog) {
 
 void server(const char* host, uint16_t port) {
     Socket sock(AF_INET6, SOCK_STREAM);
+    sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
     sock.Bind(host, port);
     sock.Listen(1);
     std::cout << "Run this script in another window with '--client' to connect\n";
