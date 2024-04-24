@@ -39,6 +39,8 @@ public:
 
     void Setsockopt(int level, int optname, int value);
 
+    size_t Send(std::string_view data, int flags=0);
+
 private:
     Socket() = default;
 

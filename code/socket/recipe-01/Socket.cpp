@@ -241,3 +241,12 @@ void Socket::Setsockopt(int level, int optname, int optval) {
         throw SocketError(errno, format("Setsockopt({}, {}, {})", level, optname, optval));
     }
 }
+
+size_t Socket::Send(std::string_view data, int flags) {
+    auto n = send(sockfd_, data.data(), data.size(), flags);
+    if (n < 0) {
+        throw SocketError(errno, "Send error()");
+    }
+    return n;
+}
+

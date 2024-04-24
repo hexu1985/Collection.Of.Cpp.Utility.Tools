@@ -3,7 +3,7 @@ CXXFLAGS = -g3 -Wall -Wextra -std=c++17
 LDFLAGS = 
 LDLIBS = -lgflags
 
-PROGS =	streamer streamer6
+PROGS =	streamer streamer6 blocks
 LIBOBJS = SocketException.o Socket.o
 
 .PHONY: all
@@ -18,5 +18,8 @@ streamer: streamer.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 streamer6: streamer6.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+blocks: blocks.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
