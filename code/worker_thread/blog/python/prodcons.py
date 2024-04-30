@@ -17,21 +17,21 @@ def readQ(queue):
 def mul_two(i):
     print('mul_two({}) is {}'.format(i, i*2))
 
-def writer(queue, loops):
+def producer(queue, loops):
     for i in range(loops):
         writeQ(queue, i)
         sleep(randint(1, 3))
 
     writeQ(queue, -1)
 
-def reader(queue, loops):
+def consumer(queue, loops):
     while True:
         i = readQ(queue)
         if i < 0: break
         mul_two(i)
         sleep(randint(2, 5))
 
-funcs = [writer, reader]
+funcs = [producer, consumer]
 nfuncs = range(len(funcs))
 
 def main():
