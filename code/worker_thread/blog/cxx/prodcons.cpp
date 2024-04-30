@@ -31,6 +31,7 @@ int main() {
     myproducer.join();
 
     myworker.Stop();
+    std::cout << "all DONE" << std::endl;
 
     return 0;
 }

@@ -2,52 +2,34 @@
 
 from random import randint
 from time import sleep
-from queue import Queue
+from functools import partial
 from threading import Thread
-
-def writeQ(queue, val):
-    print('producing object for Q...:', val)
-    queue.put(val)
-
-def readQ(queue):
-    val = queue.get(1)
-    print('consumed object from Q...:', val)
-    return val
+from worker_thread import WorkerThread
 
 def mul_two(i):
     print('mul_two({}) is {}'.format(i, i*2))
 
-def producer(queue, loops):
+def consume(i):
+    mul_two(i)
+    sleep(randint(2, 5))
+
+def producer(worker_thread, loops):
     for i in range(loops):
-        writeQ(queue, i)
+        worker_thread.putTask(partial(consume, i))
         sleep(randint(1, 3))
-
-    writeQ(queue, -1)
-
-def consumer(queue, loops):
-    while True:
-        i = readQ(queue)
-        if i < 0: break
-        mul_two(i)
-        sleep(randint(2, 5))
-
-funcs = [producer, consumer]
-nfuncs = range(len(funcs))
 
 def main():
     nloops = randint(2, 5)
-    q = Queue(32)
 
-    threads = []
-    for i in nfuncs:
-        t = Thread(target=funcs[i], args=(q, nloops))
-        threads.append(t)
+    myworker = WorkerThread("worker")
+    myworker.start()
 
-    for i in nfuncs:
-        threads[i].start()
+    myproducer = Thread(target=producer, args=(myworker, nloops))
+    myproducer.start()
+    myproducer.join()
 
-    for i in nfuncs:
-        threads[i].join()
+    myworker.stop()
+    myworker.join()
 
     print('all DONE')
 
