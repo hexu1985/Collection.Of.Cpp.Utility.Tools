@@ -24,7 +24,7 @@
 
 **实现**
 
-下面我们通过一个具体多线程例子，来说明工作线程类的实现原理。
+下面我们通过一个具体的多线程例子，来说明工作线程类的实现原理。
 
 我们的原始实例代码是这样的，有两个线程： producer和consumer，
 以及一个数据队列连接着两个进程。
@@ -115,8 +115,8 @@ all DONE
 如果你在本地运行的结果和我这里的不一样，也不用担心，
 代码中是有随机数的，所以数据量可能不同，两个线程的sleep时间也可能不同（造成某些时序不太一样）。
 
-理解了原始示例代码里的代码逻辑，我们来看看如果改成用WorkerThread来实现，
-代码又会长成什么样，这里给出C++版本的（是不是感觉跳跃有点儿大；）)
+理解了原始示例代码里的代码逻辑，我们来看看如果改成用工作线程类（WorkerThread）来实现，
+代码又会长成什么样，这里给出C++版本的代码（是不是感觉跳跃有点儿大；）)
 
 prodcons.cpp
 
@@ -163,24 +163,23 @@ int main() {
 ```
 
 有没有很惊奇的感觉？因为相同功能的C++代码竟然比Python的代码还要短；）
-我们简单的分析一下，首先C++代码里没有显式的数据队列（因为这里被WorkerThread的任务队列替代了），
-另外，也看不到显式的consumer线程了，取而代之的是在producer线程里，把数据和consume函数一起打包
-成一个个Task，直接丢到WorkerThread的TaskQueue里了，而从TaskQueue里取出任务并执行的代码逻辑
+我们简单的分析一下，首先C++代码里没有显式的数据队列（因为这里被WorkerThread类的任务队列替代了），
+另外，也看不到显式的consumer线程了，取而代之的是在producer线程里，把每个数据和consume函数一起打包成一个Task对象，直接丢到WorkerThread的TaskQueue里了，而从TaskQueue里取出任务并执行的代码逻辑
 被封装到了WorkerThread的实现里，并且TaskQueue也是线程安全的。
 
-虽然WorkerThread的代码实现很简单，但我们还是先给出类图，来给出类的接口列表和类之间的依赖关系：
+虽然工作队列类（WorkerThread）的代码实现很简单，但我们还是先给出类图，来给出类的接口列表和类之间的依赖关系：
 
 ![工作线程类图](worker_thread_class.png)
 
 我们按照类图从左到右分别介绍，
 
-首先是Task类，Task就是一个std::function<void()>的别名，可以接收任何void()兼容的函数指针、函数对象或lambda函数。
+首先是Task类，Task类就是一个std::function<void()>的别名，可以接收任何void()兼容的函数指针、函数对象或lambda函数。
 
-然后是TaskQueue类，一个存放Task的线程安全队列，支持的接口如下：
+然后是TaskQueue类，一个存放Task类对象的线程安全队列，支持的接口如下：
 - PushTask：向任务队列里放入一个Task对象，并且重载了类似std::thread构造函数的接口，可以减少调用者的代码量。
 - PopTask：从任务队列里获取任务，这里也重载了两种，一种是一次获取一个任务，一种是一次获取队列中当前的所有任务。
 
-PushTask接口是给任务提交者（也就是WorkerThread的使用者）用的，而PopTask则是WorkerThread的process task loop线程里用的。
+PushTask接口是给任务提交者（也就是WorkerThread的使用者）用的，而PopTask则是在WorkerThread的process task loop线程里用的。
 
 最后是WorkerThread类，一个WorkerThread类对象持有一个TaskQueue类对象，支持的接口如下：
 - Start：启动工作线程。
@@ -248,7 +247,7 @@ public:
 };
 ```
 
-一个相对标准基于互斥量和条件变量实现的线程安全队列，没啥好说的。
+一个相对标准的基于互斥量和条件变量实现的线程安全队列，没啥好说的。
 
 worker_thread.hpp
 
@@ -286,8 +285,7 @@ private:
 };
 ```
 
-GetThreadName()、GetCurrentTaskQueue()和GetCurrentThreadName()这三个接口在类图里没有体现，
-主要是觉得这块不算我想介绍的WorkerThread类的主要部分。
+GetThreadName()、GetCurrentTaskQueue()和GetCurrentThreadName()这三个接口在前面的类图里没有体现，主要是这块我不打算介绍；）。
 
 worker_thread.cpp
 
@@ -385,12 +383,11 @@ const std::string& WorkerThread::GetCurrentThreadName() {
 }
 ```
 
-这块代码其是也没太多可说的，有一点点巧妙的地方的有三点：
-- process_task_loop线程循环里，每次都获取当前TaskQueue里的所有任务，以减少调用TaskQueue::PopTask的次数从而减少获取和释放锁的次数
-- process_task_loop线程是通过catch特定的异常类型（WorkerThreadInterrupt）来退出线程的
+这块代码其是也没太多可说的，有一点点巧妙的地方有三处：
+- process_task_loop线程循环里，每次都获取当前TaskQueue里的所有任务，以减少调用TaskQueue::PopTask的次数（从而减少获取和释放锁的次数）
+- process_task_loop线程是通过catch特定的异常类型（WorkerThreadInterrupt）来实现退出线程的
 - GetCurrentTaskQueue()和GetCurrentThreadName()这两个接口使用了thread_local关键字
 
-完整的工程项目代码：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/blog/cxx)
-当然，WorkerThread类最初是我仿照Google的Chrome源码中base库的MessageLoop类实现的超超简化版，所以WorkerThread类也经历了好几次演化，
-所有的WorkerThread类实现的版本都在：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/)
+最后，照例给出完整的工程项目代码：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/blog/cxx)
+当然，WorkerThread类最初是我仿照Google的Chrome源码中base库的MessageLoop类实现的超超简化版，所以WorkerThread类也经历了好几次演化，所有的WorkerThread类实现的版本都在：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/)
 
