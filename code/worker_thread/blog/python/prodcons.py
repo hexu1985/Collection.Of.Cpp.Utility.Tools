@@ -10,11 +10,13 @@ def mul_two(i):
     print('mul_two({}) is {}'.format(i, i*2))
 
 def consume(i):
+    print('consume with data: {}'.format(i))
     mul_two(i)
     sleep(randint(2, 5))
 
 def producer(worker_thread, loops):
     for i in range(loops):
+        print('pushTask with data: {}'.format(i))
         worker_thread.putTask(partial(consume, i))
         sleep(randint(1, 3))
 

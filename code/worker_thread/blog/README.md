@@ -391,3 +391,110 @@ const std::string& WorkerThread::GetCurrentThreadName() {
 最后，照例给出完整的工程项目代码：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/blog/cxx)
 当然，WorkerThread类最初是我仿照Google的Chrome源码中base库的MessageLoop类实现的超超简化版，所以WorkerThread类也经历了好几次演化，所有的WorkerThread类实现的版本都在：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/)
 
+**后记**
+
+这里给出一个彩蛋；）
+就是：WorkerThread类的Python实现，虽然接口不是和C++版本完全一致，就算是C++版本的一个简化版吧。
+
+worker_thread.py
+
+```python
+import threading
+import logging
+import queue
+import time
+import sys
+import traceback
+
+LOGGER = logging.getLogger()
+
+class StopWorkerThreadException(Exception):
+    def __init__(self):
+        pass
+
+    def __repr__(self):
+        return "StopWorkerThreadException"
+
+    def __str__(self):
+        return "StopWorkerThreadException"
+
+class WorkerThread(threading.Thread):
+    def __init__(self, name=""):
+        super().__init__()
+        self.task_queue = queue.Queue()
+        self.name = name
+
+    def fetch_and_exectue_task_once(self):
+        task = self.task_queue.get()
+        if callable(task):
+            task()
+
+    def run(self):
+        LOGGER.info("worker {} is running".format(self.name))
+        while True:
+            try:
+                self.fetch_and_exectue_task_once()
+            except StopWorkerThreadException as e:
+                LOGGER.info("get stoptask and exit workthread")
+                break
+            except:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                error_list = traceback.format_exception(exc_type, exc_value, exc_traceback)
+                LOGGER.error("task execute error: \n{}".format(''.join(error_list)))
+
+    def putTask(self, task):
+        self.task_queue.put(task)
+
+    def stop(self):
+        def StopTask():
+            raise StopWorkerThreadException
+    
+        self.putTask(StopTask)
+```
+
+prodcons.py
+
+```python
+#!/usr/bin/env python
+
+from random import randint
+from time import sleep
+from functools import partial
+from threading import Thread
+from worker_thread import WorkerThread
+
+def mul_two(i):
+    print('mul_two({}) is {}'.format(i, i*2))
+
+def consume(i):
+    print('consume with data: {}'.format(i))
+    mul_two(i)
+    sleep(randint(2, 5))
+
+def producer(worker_thread, loops):
+    for i in range(loops):
+        print('pushTask with data: {}'.format(i))
+        worker_thread.putTask(partial(consume, i))
+        sleep(randint(1, 3))
+
+def main():
+    nloops = randint(2, 5)
+
+    myworker = WorkerThread("worker")
+    myworker.start()
+
+    myproducer = Thread(target=producer, args=(myworker, nloops))
+    myproducer.start()
+    myproducer.join()
+
+    myworker.stop()
+    myworker.join()
+
+    print('all DONE')
+
+if __name__ == '__main__':
+    main()
+```
+
+完整的工程项目代码：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/blog/python)
+
