@@ -2,19 +2,19 @@
 
 **简介**
 
-这篇文章将介绍如何基于C++标准库来实现工作线程类。
-首先给出我们要实现的工作线程的定义：
+这篇文章将介绍如何基于C++标准库来实现工作线程类（WorkerThread）。
+首先给出我们要实现的工作线程类的定义：
 我们可以将工作线程类简单的理解为简化的线程池类：只有一个工作线程的线程池类。
 或者也可以类比于GUI编程里的eventloop线程。
 
-我们先给出工作线程的基本数据结构和类对象的角色。如下图：
+我们先给出工作线程类的基本数据结构和类对象的角色。如下图：
 
 ![工作线程](worker_thread.png)
 
 可能有人会问既然工作线程类可以由线程池类简化而成，为啥还要
 单独实现工作线程类，我给出的答案很简单：简单，工作线程类的实现更简单；）
 在简单的场景中，可以用工作线程类来简化程序的实现时，
-单独的工作线程类实现更简单（相比线程池类），并给到更好的可读性（因为类名更具体化）。
+单独的工作线程类实现更简单（相比线程池类），并给到更好的可读性（因为类名更具体化）和可维护性（实现更简单）。
 
 其次，由于任务队列和工作线程是1对1的，也就是，工作队列里的任务是串行的（不用加锁），
 这时可能有人会说这样一来不就失去并发性了么？其实不然，以GUI编程为例，mainloop里
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
 代码运行的结果如下：
 
-```python
+```shell
 producing object for Q...: 0
 consumed object from Q...: 0
 mul_two(0) is 0
@@ -163,6 +163,7 @@ int main() {
 ```
 
 有没有很惊奇的感觉？因为相同功能的C++代码竟然比Python的代码还要短；）
+
 我们简单的分析一下，首先C++代码里没有显式的数据队列（因为这里被WorkerThread类的任务队列替代了），
 另外，也看不到显式的consumer线程了，取而代之的是在producer线程里，把每个数据和consume函数一起打包成一个Task对象，直接丢到WorkerThread的TaskQueue里了，而从TaskQueue里取出任务并执行的代码逻辑
 被封装到了WorkerThread的实现里，并且TaskQueue也是线程安全的。
@@ -389,11 +390,13 @@ const std::string& WorkerThread::GetCurrentThreadName() {
 - GetCurrentTaskQueue()和GetCurrentThreadName()这两个接口使用了thread_local关键字
 
 最后，照例给出完整的工程项目代码：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/blog/cxx)
+
 当然，WorkerThread类最初是我仿照Google的Chrome源码中base库的MessageLoop类实现的超超简化版，所以WorkerThread类也经历了好几次演化，所有的WorkerThread类实现的版本都在：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/)
 
 **后记**
 
 这里给出一个彩蛋；）
+
 就是：WorkerThread类的Python实现，虽然接口不是和C++版本完全一致，就算是C++版本的一个简化版吧。
 
 worker_thread.py
