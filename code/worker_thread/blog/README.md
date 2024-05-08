@@ -130,12 +130,14 @@ void mul_two(int i) {
 }
 
 void consume(int i) {
+    std::cout << "consume with data: " << i << std::endl;
     mul_two(i);
     std::this_thread::sleep_for(std::chrono::seconds(randint(2, 5)));
 }
 
 void producer(std::shared_ptr<TaskQueue> queue, int loops) {
     for (int i = 0; i < loops; i++) {
+        std::cout << "pushTask with data: " << i << std::endl;
         queue->PushTask(&consume, i);
         std::this_thread::sleep_for(std::chrono::seconds(randint(1, 3)));
     }
