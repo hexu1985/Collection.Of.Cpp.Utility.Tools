@@ -35,6 +35,7 @@
 代码中引入自己实现的线程安全队列，而分心读者，这里就给出了
 python版本的原始示例代码，如下：
 
+prodcons.py
 
 ```python
 #!/usr/bin/env python
@@ -117,6 +118,8 @@ all DONE
 理解了原始示例代码里的代码逻辑，我们来看看如果改成用WorkerThread来实现，
 代码又会长成什么样，这里给出C++版本的（是不是感觉跳跃有点儿大；）)
 
+prodcons.cpp
+
 ```cpp
 #include <iostream>
 #include <thread>
@@ -162,5 +165,232 @@ int main() {
 有没有很惊奇的感觉？因为相同功能的C++代码竟然比Python的代码还要短；）
 我们简单的分析一下，首先C++代码里没有显式的数据队列（因为这里被WorkerThread的任务队列替代了），
 另外，也看不到显式的consumer线程了，取而代之的是在producer线程里，把数据和consume函数一起打包
-成一个个task，直接丢到WorkerThread的TaskQueue里了，而从TaskQueue里取出任务并执行的代码逻辑
+成一个个Task，直接丢到WorkerThread的TaskQueue里了，而从TaskQueue里取出任务并执行的代码逻辑
 被封装到了WorkerThread的实现里，并且TaskQueue也是线程安全的。
+
+虽然WorkerThread的代码实现很简单，但我们还是先给出类图，来给出类的接口列表和类之间的依赖关系：
+
+![工作线程类图](worker_thread_class.png)
+
+我们按照类图从左到右分别介绍，
+
+首先是Task类，Task就是一个std::function<void()>的别名，可以接收任何void()兼容的函数指针、函数对象或lambda函数。
+
+然后是TaskQueue类，一个存放Task的线程安全队列，支持的接口如下：
+- PushTask：向任务队列里放入一个Task对象，并且重载了类似std::thread构造函数的接口，可以减少调用者的代码量。
+- PopTask：从任务队列里获取任务，这里也重载了两种，一种是一次获取一个任务，一种是一次获取队列中当前的所有任务。
+
+PushTask接口是给任务提交者（也就是WorkerThread的使用者）用的，而PopTask则是WorkerThread的process task loop线程里用的。
+
+最后是WorkerThread类，一个WorkerThread类对象持有一个TaskQueue类对象，支持的接口如下：
+- Start：启动工作线程。
+- Stop：停止工作线程。
+- IsRunning：判断当前工作线程是否正在运行。
+- GetTaskQueue：获取任务队列。
+
+下面给出完整的实现：
+
+task_queue.hpp
+
+```cpp
+#pragma once
+
+#include <deque>
+#include <functional>
+#include <mutex>
+#include <condition_variable>
+
+using Task = std::function<void()>;
+
+class TaskQueue {
+public:
+    using InternalQueueType = std::deque<Task>;
+
+private:
+    InternalQueueType queue;
+    std::mutex queue_mtx;
+    std::condition_variable queue_cv;
+
+public:
+    template <typename Fn, typename... Args>
+    void PushTask(Fn&& fn, Args&&... args)
+    {
+        PushTask(Task(std::bind<void>(std::forward<Fn>(fn), std::forward<Args>(args)...)));
+    }
+
+    void PushTask(Task&& task) 
+    {
+        std::lock_guard<std::mutex> lck(queue_mtx);
+        queue.push_back(std::move(task));
+        queue_cv.notify_one();
+    }
+
+    Task PopTask() 
+    {
+        std::unique_lock<std::mutex> lck(queue_mtx);
+        while (queue.empty()) {
+            queue_cv.wait(lck);
+        }
+        auto task = std::move(queue.front());
+        queue.pop_front();
+        return task;
+    }
+
+    void PopTask(InternalQueueType& task_list)
+    {
+        std::unique_lock<std::mutex> lck(queue_mtx);
+        while (queue.empty()) {
+            queue_cv.wait(lck);
+        }
+        queue.swap(task_list);
+        queue.clear();
+    }
+};
+```
+
+一个相对标准基于互斥量和条件变量实现的线程安全队列，没啥好说的。
+
+worker_thread.hpp
+
+```cpp
+#pragma once
+
+#include <thread>
+#include <string>
+#include "task_queue.hpp"
+
+class WorkerThread {
+public:
+    WorkerThread(const std::string& name="");
+    ~WorkerThread();
+
+    WorkerThread(const WorkerThread&) = delete;
+    WorkerThread& operator=(const WorkerThread&) = delete;
+
+    WorkerThread(WorkerThread&&) = default;
+    WorkerThread& operator=(WorkerThread&&) = default;
+
+    void Start();
+    void Stop();
+    bool IsRunning();
+    std::shared_ptr<TaskQueue> GetTaskQueue();
+    const std::string& GetThreadName() const;
+
+    static std::shared_ptr<TaskQueue> GetCurrentTaskQueue();
+    static const std::string& GetCurrentThreadName();
+
+private:
+    std::string thread_name;
+    std::thread looper_thread;
+    std::shared_ptr<TaskQueue> task_queue;
+};
+```
+
+GetThreadName()、GetCurrentTaskQueue()和GetCurrentThreadName()这三个接口在类图里没有体现，
+主要是觉得这块不算我想介绍的WorkerThread类的主要部分。
+
+worker_thread.cpp
+
+```cpp
+#include "worker_thread.hpp"
+
+#include <cassert>
+#include <atomic>
+
+namespace {     // details
+
+std::atomic<int> thread_count{};
+thread_local std::shared_ptr<TaskQueue> current_thread_task_queue{};
+thread_local std::string current_thread_name{};
+
+// WorkerThreadInterrupt 
+struct WorkerThreadInterrupt {
+};
+
+void this_thread_exit() {
+    throw WorkerThreadInterrupt();
+}
+
+void process_task_loop(WorkerThread* worker_thread) {
+    current_thread_task_queue = worker_thread->GetTaskQueue();
+    current_thread_name = worker_thread->GetThreadName();
+
+    TaskQueue& incoming_queue = *current_thread_task_queue;
+	while (true) {
+        std::deque<Task> working_list;
+		incoming_queue.PopTask(working_list);
+		while (!working_list.empty()) {
+			auto task = std::move(working_list.front());
+			working_list.pop_front();
+            try {
+                task();
+            } catch (WorkerThreadInterrupt) {
+                current_thread_name = "";
+                current_thread_task_queue = nullptr;
+                return;
+            }
+		}
+	}
+}
+
+}   // namespace {
+
+// WorkerThread
+WorkerThread::WorkerThread(const std::string& name): thread_name(name) {
+    int id = ++thread_count;
+    thread_name += ":"+std::to_string(id);
+}
+
+WorkerThread::~WorkerThread() {
+    if (IsRunning()) {
+        Stop();
+    }
+}
+
+void WorkerThread::Start() {
+    if (IsRunning()) {
+        Stop();
+    }
+
+    task_queue = std::make_shared<TaskQueue>();
+    looper_thread = std::thread(&process_task_loop, this);
+}
+
+void WorkerThread::Stop() {
+    task_queue->PushTask(&this_thread_exit);
+    looper_thread.join();
+
+    looper_thread = std::thread();
+    task_queue = nullptr;
+}
+
+bool WorkerThread::IsRunning() {
+    return looper_thread.joinable(); 
+}
+
+std::shared_ptr<TaskQueue> WorkerThread::GetTaskQueue() {
+    return task_queue;
+}
+
+const std::string& WorkerThread::GetThreadName() const {
+    return thread_name;
+}
+
+std::shared_ptr<TaskQueue> WorkerThread::GetCurrentTaskQueue() {
+    return current_thread_task_queue;
+}
+
+const std::string& WorkerThread::GetCurrentThreadName() {
+    return current_thread_name;
+}
+```
+
+这块代码其是也没太多可说的，有一点点巧妙的地方的有三点：
+- process_task_loop线程循环里，每次都获取当前TaskQueue里的所有任务，以减少调用TaskQueue::PopTask的次数从而减少获取和释放锁的次数
+- process_task_loop线程是通过catch特定的异常类型（WorkerThreadInterrupt）来退出线程的
+- GetCurrentTaskQueue()和GetCurrentThreadName()这两个接口使用了thread_local关键字
+
+完整的工程项目代码：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/blog/cxx)
+当然，WorkerThread类最初是我仿照Google的Chrome源码中base库的MessageLoop类实现的超超简化版，所以WorkerThread类也经历了好几次演化，
+所有的WorkerThread类实现的版本都在：[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/worker_thread/)
+
