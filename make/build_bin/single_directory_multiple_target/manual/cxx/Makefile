@@ -1,0 +1,28 @@
+CXX = g++
+CXXFLAGS = -g3 -Wall -Wextra
+INCLUDES = 
+LDFLAGS = 
+LDLIBS = 
+
+PROGS =	queue_back_test queue_empty_test queue_front_test queue_pop_test
+
+.PHONY: all
+all: $(PROGS)
+	@echo "build OK!"
+
+clean:
+	@$(RM) $(PROGS) *.o
+	@echo "clean OK!"
+
+queue_back_test: queue_back_test.cpp
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
+
+queue_empty_test: queue_empty_test.cpp
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
+
+queue_front_test: queue_front_test.cpp
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
+
+queue_pop_test: queue_pop_test.cpp
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
+

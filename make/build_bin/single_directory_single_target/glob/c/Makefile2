@@ -1,0 +1,19 @@
+CC = gcc
+CFLAGS = -Wall -g3 -Wall -Wextra
+
+SOURCES = $(shell ls *.c)
+#OBJECTS = $(SOURCES:%.c=%.o)
+OBJECTS = $(subst .c,.o,$(SOURCES))
+TARGET = swap
+
+all: $(TARGET)
+	@echo "TARGET = $(TARGET)" 
+
+$(TARGET): $(OBJECTS)
+	$(CC) -o $@ $^
+
+.PHONY:
+clean:
+	$(RM) $(TARGET) a.out core *.o
+	@echo "clean OK!"
+
