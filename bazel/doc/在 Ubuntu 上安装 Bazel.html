@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-on-ubuntu -->
+<html lang="zh-CN-x-mtfrom-en" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="google-signin-client-id" content="721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com">
+    <meta name="google-signin-scope" content="profile email">
+    <meta property="og:site_name" content="Bazel">
+    <meta property="og:type" content="website"><meta name="robots" content="noindex"><meta name="googlebot" content="noindex"><meta name="theme-color" content="#0c713a">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    <link rel="manifest" href="https://bazel.google.cn/_pwa/bazel/manifest.json" crossorigin="use-credentials">
+    <link rel="preconnect" href="https://www.gstatic.cn/" crossorigin="">
+    <link rel="preconnect" href="https://fonts.gstatic.cn/" crossorigin="">
+    <link rel="preconnect" href="https://fonts.googleapis.cn/" crossorigin="">
+    <link rel="preconnect" href="https://apis.google.com/" crossorigin="">
+    <link rel="preconnect" href="https://www.google-analytics.com/" crossorigin=""><link rel="stylesheet" href="./在 Ubuntu 上安装 Bazel_files/css">
+      <link rel="stylesheet" href="./在 Ubuntu 上安装 Bazel_files/css2"><link rel="stylesheet" href="./在 Ubuntu 上安装 Bazel_files/app.css">
+      <link rel="shortcut icon" href="https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f/bazel/images/favicon-prod.png">
+    <link rel="apple-touch-icon" href="https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f/bazel/images/touchicon-180.png"><link rel="canonical" href="https://bazel.google.cn/install/ubuntu?hl=zh-cn">
+      <link rel="alternate" hreflang="en-cn" href="https://bazel.google.cn/install/ubuntu"><link rel="alternate" hreflang="x-default" href="https://bazel.google.cn/install/ubuntu"><link rel="alternate" hreflang="ar-cn" href="https://bazel.google.cn/install/ubuntu?hl=ar"><link rel="alternate" hreflang="bn-cn" href="https://bazel.google.cn/install/ubuntu?hl=bn"><link rel="alternate" hreflang="zh-Hans-cn" href="https://bazel.google.cn/install/ubuntu?hl=zh-cn"><link rel="alternate" hreflang="zh-Hant-cn" href="https://bazel.google.cn/install/ubuntu?hl=zh-tw"><link rel="alternate" hreflang="fa-cn" href="https://bazel.google.cn/install/ubuntu?hl=fa"><link rel="alternate" hreflang="he-cn" href="https://bazel.google.cn/install/ubuntu?hl=he"><link rel="alternate" hreflang="hi-cn" href="https://bazel.google.cn/install/ubuntu?hl=hi"><link rel="alternate" hreflang="id-cn" href="https://bazel.google.cn/install/ubuntu?hl=id"><link rel="alternate" hreflang="ja-cn" href="https://bazel.google.cn/install/ubuntu?hl=ja"><link rel="alternate" hreflang="ko-cn" href="https://bazel.google.cn/install/ubuntu?hl=ko"><link rel="alternate" hreflang="pt-BR-cn" href="https://bazel.google.cn/install/ubuntu?hl=pt-br"><link rel="alternate" hreflang="es-419-cn" href="https://bazel.google.cn/install/ubuntu?hl=es-419"><link rel="alternate" hreflang="th-cn" href="https://bazel.google.cn/install/ubuntu?hl=th"><link rel="alternate" hreflang="tr-cn" href="https://bazel.google.cn/install/ubuntu?hl=tr"><link rel="alternate" hreflang="vi-cn" href="https://bazel.google.cn/install/ubuntu?hl=vi"><link rel="alternate" hreflang="en-build" href="https://bazel.build/install/ubuntu"><link rel="alternate" hreflang="x-default" href="https://bazel.build/install/ubuntu"><link rel="alternate" hreflang="ar-build" href="https://bazel.build/install/ubuntu?hl=ar"><link rel="alternate" hreflang="bn-build" href="https://bazel.build/install/ubuntu?hl=bn"><link rel="alternate" hreflang="zh-Hans-build" href="https://bazel.build/install/ubuntu?hl=zh-cn"><link rel="alternate" hreflang="zh-Hant-build" href="https://bazel.build/install/ubuntu?hl=zh-tw"><link rel="alternate" hreflang="fa-build" href="https://bazel.build/install/ubuntu?hl=fa"><link rel="alternate" hreflang="he-build" href="https://bazel.build/install/ubuntu?hl=he"><link rel="alternate" hreflang="hi-build" href="https://bazel.build/install/ubuntu?hl=hi"><link rel="alternate" hreflang="id-build" href="https://bazel.build/install/ubuntu?hl=id"><link rel="alternate" hreflang="ja-build" href="https://bazel.build/install/ubuntu?hl=ja"><link rel="alternate" hreflang="ko-build" href="https://bazel.build/install/ubuntu?hl=ko"><link rel="alternate" hreflang="pt-BR-build" href="https://bazel.build/install/ubuntu?hl=pt-br"><link rel="alternate" hreflang="es-419-build" href="https://bazel.build/install/ubuntu?hl=es-419"><link rel="alternate" hreflang="th-build" href="https://bazel.build/install/ubuntu?hl=th"><link rel="alternate" hreflang="tr-build" href="https://bazel.build/install/ubuntu?hl=tr"><link rel="alternate" hreflang="vi-build" href="https://bazel.build/install/ubuntu?hl=vi"><title>
+    在 Ubuntu 上安装 Bazel
+  
+</title>
+
+<meta property="og:title" content="
+    在 Ubuntu 上安装 Bazel
+  
+"><meta property="og:url" content="https://bazel.google.cn/install/ubuntu?hl=zh-cn"><meta property="og:locale" content="zh_cn"><script type="text/javascript" async="" src="./在 Ubuntu 上安装 Bazel_files/linkid.js" nonce=""></script><script async="" src="./在 Ubuntu 上安装 Bazel_files/js" nonce=""></script><script async="" src="./在 Ubuntu 上安装 Bazel_files/app_loader.js"></script><script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    
+    "headline": "
+    在 Ubuntu 上安装 Bazel
+  
+"
+  }
+</script><link rel="alternate machine-translated-from" hreflang="en" href="https://bazel.google.cn/install/ubuntu?hl=en">
+  
+
+  
+
+  
+
+
+    <script src="./在 Ubuntu 上安装 Bazel_files/devsite_app_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_app_custom_elements_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_a11y_announce_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_analytics_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_book_nav_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_code_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_content_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_footer_linkboxes_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_footer_promos_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_footer_utility_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_header_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_heading_link_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_language_selector_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_notification_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_panel_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_progress_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_recommendations_sidebar_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_search_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_sitemask_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_snackbar_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_tabs_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_toc_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_tooltip_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_var_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_view_release_notes_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/analytics.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_dialog_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_dropdown_list_module__zh_cn.js" nonce=""></script><script src="./在 Ubuntu 上安装 Bazel_files/devsite_devsite_view_release_notes_dialog_module__zh_cn.js" nonce=""></script><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"></head>
+  <body class="" template="page" theme="bazel-theme" type="article" layout="docs" block-apix="" display-toc="" ready="" style="--devsite-js-header-height: 156px; --devsite-panel-height: 0px;">
+    <devsite-progress id="app-progress"></devsite-progress>
+  
+    <section class="devsite-wrapper"><devsite-header role="banner" top-row--height="48" bottom-row--height="108" bottom-tabs--height="48" fixed="" offset="0" style="--devsite-js-top-row--height: 48px; --devsite-js-bottom-row--height: 108px; --devsite-js-bottom-tabs--height: 48px;">
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="devsite-header--inner nocontent">
+  <div class="devsite-top-logo-row-wrapper-wrapper">
+    <div class="devsite-top-logo-row-wrapper">
+      <div class="devsite-top-logo-row">
+        <button type="button" id="devsite-hamburger-menu" class="devsite-header-icon-button button-flat material-icons gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Navigation menu button" aria-label="打开菜单">
+        </button>
+        <div class="devsite-product-name-wrapper">
+
+  <a href="https://bazel.google.cn/" class="devsite-site-logo-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Site logo" track-type="globalNav" track-name="bazel" track-metadata-position="nav" track-metadata-eventdetail="nav">
+
+  
+    <img src="./在 Ubuntu 上安装 Bazel_files/lockup.svg" class="devsite-site-logo" alt="Bazel">
+  
+
+</a>
+
+
+
+  
+  
+  <span class="devsite-product-name">
+    <ul class="devsite-breadcrumb-list">
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+    
+    
+      
+      
+    
+  </li>
+  
+</ul>
+  </span>
+
+</div>
+        <div class="devsite-top-logo-row-middle">
+          <div class="devsite-header-upper-tabs">
+            
+              
+              
+  <devsite-tabs class="upper-tabs" connected="">
+
+    
+
+  <nav class="devsite-tabs-wrapper" aria-label="上面的标签页">
+      
+        
+          <tab>
+            
+    <a href="https://bazel.google.cn/about?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/about?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - bazel 简介" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: Bazel 简介" track-name="bazel 简介">
+    Bazel 简介
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab active="">
+            
+    <a href="https://bazel.google.cn/start?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/start?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 开始使用" track-metadata-module="primary nav" aria-label="开始使用, selected" data-category="Site-Wide Custom Events" data-label="Tab: 开始使用" track-name="开始使用">
+    开始使用
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab>
+            
+    <a href="https://bazel.google.cn/docs?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/docs?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 用户指南" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 用户指南" track-name="用户指南">
+    用户指南
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab>
+            
+    <a href="https://bazel.google.cn/reference?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/reference?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 参考" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 参考" track-name="参考">
+    参考
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab>
+            
+    <a href="https://bazel.google.cn/extending?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/extending?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 扩展" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 扩展" track-name="扩展">
+    扩展
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab>
+            
+    <a href="https://bazel.google.cn/community?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/community?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 社区" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 社区" track-name="社区">
+    社区
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab dropdown="">
+  
+    <a href="https://bazel.google.cn/versions?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/versions?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 版本" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 版本" track-name="版本">
+    版本
+  
+    </a>
+  
+  
+    <a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#" role="button" aria-haspopup="true" aria-expanded="false" aria-label="以下项的下拉菜单 版本" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 版本" track-name="版本" class="devsite-tabs-dropdown-toggle devsite-icon devsite-icon-arrow-drop-down"></a>
+  
+  <div class="devsite-tabs-dropdown" aria-label="submenu" hidden="">
+    
+    <div class="devsite-tabs-dropdown-content">
+      
+        <div class="devsite-tabs-dropdown-column
+                    " style="width: 180px;">
+          
+            <ul class="devsite-tabs-dropdown-section
+                       ">
+              
+              
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/versions/7.0.0?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions/7.0.0?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      7.0
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/versions/6.4.0?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions/6.4.0?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      6.4
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/versions/6.3.0?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions/6.3.0?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      6.3
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/versions/6.2.0?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions/6.2.0?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      6.2
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/versions/6.1.0?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions/6.1.0?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      6.1
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/versions/6.0.0?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions/6.0.0?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      6.0
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://docs.bazel.build/versions/5.4.1/bazel-overview.html?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://docs.bazel.build/versions/5.4.1/bazel-overview.html?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      5.4.1
+                    </div>
+                    
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      
+        <div class="devsite-tabs-dropdown-column
+                    " style="width: 180px;">
+          
+            <ul class="devsite-tabs-dropdown-section
+                       ">
+              
+              
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      每晚
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/release/rolling?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/release/rolling?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      滚动版本
+                    </div>
+                    
+                  </a>
+                </li>
+              
+                <li class="devsite-nav-item">
+                  <a href="https://bazel.google.cn/versions?hl=zh-cn" track-type="nav" track-metadata-eventdetail="https://bazel.google.cn/versions?hl=zh-cn" track-metadata-position="nav - 版本" track-metadata-module="tertiary nav" tooltip="">
+                    
+                    <div class="devsite-nav-item-title">
+                      更多…
+                    </div>
+                    
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </div>
+      
+    </div>
+  </div>
+</tab>
+        
+      
+    <tab overflow-tab="" hidden=""><a aria-label="Extended Navigation" href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#" class="devsite-icon devsite-icon-arrow-drop-down">更多</a><div class="devsite-tabs-overflow-menu" scrollbars="" hidden=""></div></tab></nav></devsite-tabs>
+
+            
+           </div>
+          
+<devsite-search enable-suggestions="" project-name="Bazel" tenant-name="Bazel">
+  <form class="devsite-search-form" action="https://bazel.google.cn/s/results?hl=zh-cn" method="GET">
+    <div class="devsite-search-container">
+      <button type="button" search-open="" class="devsite-search-button devsite-header-icon-button button-flat material-icons" aria-label="打开搜索框"></button>
+      <div class="devsite-searchbox">
+        <input aria-activedescendant="" aria-autocomplete="list" aria-label="搜索" aria-expanded="false" aria-haspopup="listbox" autocomplete="off" class="devsite-search-field devsite-search-query" name="q" placeholder="搜索" role="combobox" type="text" value="" aria-controls="devsite-search-popout-container-id-1">
+          <div class="devsite-search-image material-icons" aria-hidden="true">
+            
+          </div>
+      </div>
+    </div>
+  <div class="devsite-popout" id="devsite-search-popout-container-id-1"><div class="devsite-popout-result devsite-suggest-results-container" devsite-hide=""></div></div></form>
+  <button type="button" search-close="" class="devsite-search-button devsite-header-icon-button button-flat material-icons" aria-label="关闭搜索框"></button>
+</devsite-search>
+
+        <div class="devsite-search-background" style="opacity: 1;"></div></div>
+
+        
+
+        
+
+        
+
+        
+<devsite-language-selector aria-label="选择您的语言偏好设置。"><template shadowrootmode="open"><!---->
+      <button type="button" aria-controls="language-menu" aria-haspopup="true">
+        <svg aria-hidden="true" class="icon-language" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22q-2.05 0-3.875-.788-1.825-.787-3.187-2.15-1.363-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.887.787-1.813 2.15-3.175Q6.3 3.575 8.125 2.787 9.95 2 12 2q2.075 0 3.887.787 1.813.788 3.175 2.151 1.363 1.362 2.15 3.175Q22 9.925 22 12q0 2.05-.788 3.875-.787 1.825-2.15 3.187-1.362 1.363-3.175 2.15Q14.075 22 12 22Zm0-2.05q.65-.9 1.125-1.875T13.9 16h-3.8q.3 1.1.775 2.075.475.975 1.125 1.875Zm-2.6-.4q-.45-.825-.787-1.713Q8.275 16.95 8.05 16H5.1q.725 1.25 1.812 2.175Q8 19.1 9.4 19.55Zm5.2 0q1.4-.45 2.487-1.375Q18.175 17.25 18.9 16h-2.95q-.225.95-.562 1.837-.338.888-.788 1.713ZM4.25 14h3.4q-.075-.5-.113-.988Q7.5 12.525 7.5 12t.037-1.012q.038-.488.113-.988h-3.4q-.125.5-.188.988Q4 11.475 4 12t.062 1.012q.063.488.188.988Zm5.4 0h4.7q.075-.5.113-.988.037-.487.037-1.012t-.037-1.012q-.038-.488-.113-.988h-4.7q-.075.5-.112.988Q9.5 11.475 9.5 12t.038 1.012q.037.488.112.988Zm6.7 0h3.4q.125-.5.188-.988Q20 12.525 20 12t-.062-1.012q-.063-.488-.188-.988h-3.4q.075.5.112.988.038.487.038 1.012t-.038 1.012q-.037.488-.112.988Zm-.4-6h2.95q-.725-1.25-1.813-2.175Q16 4.9 14.6 4.45q.45.825.788 1.712.337.888.562 1.838ZM10.1 8h3.8q-.3-1.1-.775-2.075Q12.65 4.95 12 4.05q-.65.9-1.125 1.875T10.1 8Zm-5 0h2.95q.225-.95.563-1.838.337-.887.787-1.712Q8 4.9 6.912 5.825 5.825 6.75 5.1 8Z"></path>
+        </svg>
+        <span class="label"><!--?lit$190424701$-->中文 – 简体</span>
+        <svg aria-hidden="true" class="icon-arrow" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="m12 15-5-5h10Z"></path>
+        </svg>
+      </button>
+      <div id="language-menu" role="menu" hidden="">
+        <slot></slot>
+      </div></template>
+  <ul role="presentation">
+    
+    
+    <li role="presentation">
+      <a role="menuitem" lang="en" href="https://bazel.google.cn/install/ubuntu#install-on-ubuntu">English</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="de" href="https://bazel.google.cn/install/ubuntu?hl=de#install-on-ubuntu">Deutsch</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="es" href="https://bazel.google.cn/install/ubuntu?hl=es#install-on-ubuntu">Español</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="es-419" href="https://bazel.google.cn/install/ubuntu?hl=es-419#install-on-ubuntu">Español – América Latina</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="fr" href="https://bazel.google.cn/install/ubuntu?hl=fr#install-on-ubuntu">Français</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="id" href="https://bazel.google.cn/install/ubuntu?hl=id#install-on-ubuntu">Indonesia</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="it" href="https://bazel.google.cn/install/ubuntu?hl=it#install-on-ubuntu">Italiano</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pl" href="https://bazel.google.cn/install/ubuntu?hl=pl#install-on-ubuntu">Polski</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pt" href="https://bazel.google.cn/install/ubuntu?hl=pt#install-on-ubuntu">Português</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pt-br" href="https://bazel.google.cn/install/ubuntu?hl=pt-br#install-on-ubuntu">Português – Brasil</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="vi" href="https://bazel.google.cn/install/ubuntu?hl=vi#install-on-ubuntu">Tiếng Việt</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="tr" href="https://bazel.google.cn/install/ubuntu?hl=tr#install-on-ubuntu">Türkçe</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ru" href="https://bazel.google.cn/install/ubuntu?hl=ru#install-on-ubuntu">Русский</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="he" href="https://bazel.google.cn/install/ubuntu?hl=he#install-on-ubuntu">עברית</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ar" href="https://bazel.google.cn/install/ubuntu?hl=ar#install-on-ubuntu">العربيّة</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="fa" href="https://bazel.google.cn/install/ubuntu?hl=fa#install-on-ubuntu">فارسی</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="hi" href="https://bazel.google.cn/install/ubuntu?hl=hi#install-on-ubuntu">हिंदी</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="bn" href="https://bazel.google.cn/install/ubuntu?hl=bn#install-on-ubuntu">বাংলা</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="th" href="https://bazel.google.cn/install/ubuntu?hl=th#install-on-ubuntu">ภาษาไทย</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="zh-cn" aria-current="true" href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-on-ubuntu">中文 – 简体</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="zh-tw" href="https://bazel.google.cn/install/ubuntu?hl=zh-tw#install-on-ubuntu">中文 – 繁體</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ja" href="https://bazel.google.cn/install/ubuntu?hl=ja#install-on-ubuntu">日本語</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ko" href="https://bazel.google.cn/install/ubuntu?hl=ko#install-on-ubuntu">한국어</a>
+    </li>
+    
+  </ul>
+</devsite-language-selector>
+
+
+        
+          
+  <a class="devsite-header-link devsite-top-button button gc-analytics-event" href="https://github.com/bazelbuild/bazel/" data-category="Site-Wide Custom Events" data-label="Site header link">
+    GitHub
+  </a>
+  
+        
+
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="devsite-collapsible-section
+    " style="transform: translate3d(0px, 0px, 0px);">
+    <div class="devsite-header-background">
+      
+        
+          <div class="devsite-product-id-row">
+            <div class="devsite-product-description-row">
+              
+                
+                  
+                  
+                  <ul class="devsite-breadcrumb-list">
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+    
+    
+      
+  <a href="https://bazel.google.cn/start?hl=zh-cn" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Lower Header" data-value="1" track-type="globalNav" track-name="breadcrumb" track-metadata-position="1" track-metadata-eventdetail="">
+    
+        快速开始使用 Bazel
+      
+  </a>
+  
+    
+  </li>
+  
+</ul>
+                
+              
+              
+            </div>
+            
+          </div>
+          
+        
+      
+      
+        <div class="devsite-doc-set-nav-row">
+          
+          
+            
+            
+  <devsite-tabs class="lower-tabs" connected="">
+
+    
+
+  <nav class="devsite-tabs-wrapper" aria-label="下面的标签页">
+      
+        
+          <tab active="">
+            
+    <a href="https://bazel.google.cn/install?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/install?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 安装" track-metadata-module="primary nav" aria-label="安装, selected" data-category="Site-Wide Custom Events" data-label="Tab: 安装" track-name="安装">
+    安装
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab>
+            
+    <a href="https://bazel.google.cn/start/cpp?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/start/cpp?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 首次构建教程" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 首次构建教程" track-name="首次构建教程">
+    首次构建教程
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+        
+          <tab>
+            
+    <a href="https://bazel.google.cn/concepts/build-ref?hl=zh-cn" track-metadata-eventdetail="https://bazel.google.cn/concepts/build-ref?hl=zh-cn" class="devsite-tabs-content gc-analytics-event " track-type="nav" track-metadata-position="nav - 概念" track-metadata-module="primary nav" data-category="Site-Wide Custom Events" data-label="Tab: 概念" track-name="概念">
+    概念
+  
+    </a>
+  
+  
+          </tab>
+        
+      
+    <tab overflow-tab="" hidden=""><a aria-label="More Options" href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#" class="devsite-icon devsite-icon-arrow-drop-down">更多</a><div class="devsite-tabs-overflow-menu" scrollbars="" hidden=""></div></tab></nav></devsite-tabs>
+
+          
+          
+        </div>
+      
+    </div>
+  </div>
+
+</div>
+
+
+
+  
+
+  
+</devsite-header>
+      <div class="devsite-book-nav-bg" fixed=""></div><devsite-book-nav scrollbars="" fixed="" style="--devsite-js-book-nav-y-offset: 0px; top: 156px; max-height: 819px;">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="devsite-book-nav-filter
+            ">
+  <span class="filter-list-icon material-icons" aria-hidden="true"></span>
+  <input type="text" placeholder="过滤条件" aria-label="输入文本以进行过滤" role="searchbox">
+  
+  <span class="filter-clear-button hidden" data-title="清除过滤条件" aria-label="清除过滤条件" role="button" tabindex="0"></span>
+</div>
+
+<nav class="devsite-book-nav devsite-nav nocontent" aria-label="侧边菜单">
+  <div class="devsite-mobile-header">
+    <button type="button" id="devsite-close-nav" class="devsite-header-icon-button button-flat material-icons gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Close navigation" aria-label="关闭导航栏">
+    </button>
+    <div class="devsite-product-name-wrapper">
+
+  <a href="https://bazel.google.cn/" class="devsite-site-logo-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Site logo" track-type="globalNav" track-name="bazel" track-metadata-position="nav" track-metadata-eventdetail="nav">
+
+  
+    <img src="./在 Ubuntu 上安装 Bazel_files/lockup.svg" class="devsite-site-logo" alt="Bazel">
+  
+
+</a>
+
+
+  
+      <span class="devsite-product-name">
+        
+        
+        <ul class="devsite-breadcrumb-list">
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+    
+    
+      
+      
+    
+  </li>
+  
+</ul>
+      </span>
+    
+
+</div>
+  </div>
+
+  <div class="devsite-book-nav-wrapper">
+    <div class="devsite-mobile-nav-top">
+      
+        <ul class="devsite-nav-list">
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="https://bazel.google.cn/about" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: Bazel 简介" track-name="bazel 简介" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Bazel 简介
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="https://bazel.google.cn/start" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Tab: 开始使用" track-name="开始使用" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      开始使用
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+                <ul class="devsite-nav-responsive-tabs">
+                  
+                    
+                    
+                    
+                    <li class="devsite-nav-item">
+                      
+  
+  <a href="https://bazel.google.cn/install" class="devsite-nav-title gc-analytics-event devsite-nav-has-children" data-category="Site-Wide Custom Events" data-label="Tab: 安装" track-name="安装" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="" menu="_book">
+      安装
+   </span>
+    
+    <span class="devsite-nav-icon material-icons" data-icon="forward" menu="_book">
+    </span>
+    
+  
+  </a>
+  
+
+  
+                    </li>
+                  
+                    
+                    
+                    
+                    <li class="devsite-nav-item">
+                      
+  
+  <a href="https://bazel.google.cn/start/cpp" class="devsite-nav-title gc-analytics-event
+              devsite-nav-has-children
+              " data-category="Site-Wide Custom Events" data-label="Tab: 首次构建教程" track-name="首次构建教程" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      首次构建教程
+   </span>
+    
+    <span class="devsite-nav-icon material-icons" data-icon="forward">
+    </span>
+    
+  
+  </a>
+  
+
+  
+                    </li>
+                  
+                    
+                    
+                    
+                    <li class="devsite-nav-item">
+                      
+  
+  <a href="https://bazel.google.cn/concepts/build-ref" class="devsite-nav-title gc-analytics-event
+              devsite-nav-has-children
+              " data-category="Site-Wide Custom Events" data-label="Tab: 概念" track-name="概念" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      概念
+   </span>
+    
+    <span class="devsite-nav-icon material-icons" data-icon="forward">
+    </span>
+    
+  
+  </a>
+  
+
+  
+                    </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="https://bazel.google.cn/docs" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: 用户指南" track-name="用户指南" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      用户指南
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="https://bazel.google.cn/reference" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: 参考" track-name="参考" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      参考
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="https://bazel.google.cn/extending" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: 扩展" track-name="扩展" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      扩展
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="https://bazel.google.cn/community" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: 社区" track-name="社区" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      社区
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="https://bazel.google.cn/versions" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: 版本" track-name="版本" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      版本
+   </span>
+    
+  
+  </a>
+  
+
+  
+    <ul class="devsite-nav-responsive-tabs devsite-nav-has-menu
+               ">
+      
+<li class="devsite-nav-item">
+
+  
+  <span class="devsite-nav-title" tooltip="" data-category="Site-Wide Custom Events" data-label="Tab: 版本" track-name="版本">
+  
+    <span class="devsite-nav-text" tooltip="" menu="版本">
+      更多
+   </span>
+    
+    <span class="devsite-nav-icon material-icons" data-icon="forward" menu="版本">
+    </span>
+    
+  
+  </span>
+  
+
+</li>
+
+    </ul>
+  
+              
+            </li>
+          
+          
+    
+<li class="devsite-nav-item">
+
+  
+  <a href="https://github.com/bazelbuild/bazel/" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: GitHub" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      GitHub
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+  
+          
+        </ul>
+      
+    </div>
+    
+      <div class="devsite-mobile-nav-bottom">
+        
+          
+          <ul class="devsite-nav-list" menu="_book">
+            <li class="devsite-nav-item"><a href="https://bazel.google.cn/install" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install"><span class="devsite-nav-text" tooltip="">概览</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/bazelisk" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/bazelisk" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/bazelisk"><span class="devsite-nav-text" tooltip="">使用 Bazelisk 进行安装</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/os-x" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/os-x" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/os-x"><span class="devsite-nav-text" tooltip="">macOS</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/windows" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/windows" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/windows"><span class="devsite-nav-text" tooltip="">Windows</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu" class="devsite-nav-title gc-analytics-event devsite-nav-active" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/ubuntu" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/ubuntu"><span class="devsite-nav-text" tooltip="">Ubuntu</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/suse" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/suse" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/suse"><span class="devsite-nav-text" tooltip="">openSUSE</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/docker-container" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/docker-container" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/docker-container"><span class="devsite-nav-text" tooltip="">在 Docker 容器中试用 Bazel</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/compile-source" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/compile-source" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/compile-source"><span class="devsite-nav-text" tooltip="">从源代码编译</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/completion" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/completion" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/completion"><span class="devsite-nav-text" tooltip="">命令行完成</span></a></li>
+
+  <li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ide" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Book nav link, pathname: /install/ide" track-type="bookNav" track-name="click" track-metadata-eventdetail="/install/ide"><span class="devsite-nav-text" tooltip="">与 IDE 集成</span></a></li>
+          </ul>
+        
+        
+          
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      <ul class="devsite-nav-list" menu="版本" aria-label="侧边菜单" hidden="">
+        
+          
+            
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/versions/7.0.0" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 7.0" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      7.<wbr>0
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/versions/6.4.0" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 6.4" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      6.<wbr>4
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/versions/6.3.0" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 6.3" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      6.<wbr>3
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/versions/6.2.0" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 6.2" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      6.<wbr>2
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/versions/6.1.0" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 6.1" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      6.<wbr>1
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/versions/6.0.0" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 6.0" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      6.<wbr>0
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://docs.bazel.build/versions/5.4.1/bazel-overview.html" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 5.4.1" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      5.<wbr>4.<wbr>1
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+          
+        
+          
+            
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 每晚" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      每晚
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/release/rolling" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 滚动版本" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      滚动版本
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://bazel.google.cn/versions" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: 更多…" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      更多…
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+          
+        
+      </ul>
+    
+  
+        
+        
+          
+    
+  
+    
+  
+    
+  
+        
+      </div>
+    
+  </div>
+</nav>
+        
+      </devsite-book-nav><div class="devsite-book-nav-blur" fixed="" style="--devsite-js-book-nav-scrollbar-width: 0px;"></div><button class="devsite-book-nav-toggle" aria-haspopup="menu" fixed="" aria-label="隐藏侧边导航栏" data-title="隐藏侧边导航栏" aria-expanded="true"><span class="material-icons devsite-book-nav-toggle-icon"></span></button>
+      <section id="gc-wrapper" style="margin-top: 156px;">
+        <main role="main" class="devsite-main-content" has-book-nav="" has-sidebar="">
+          
+          
+          <div class="devsite-sidebar" fixed="" style="--devsite-js-sidebar-max-height: 771px; --devsite-js-sidebar-max-width: 444.5px; --devsite-js-sidebar-offset: 0;">
+            <div class="devsite-sidebar-content">
+                
+                <devsite-toc class="devsite-nav devsite-toc" role="navigation" aria-label="本页内容" depth="2" scrollbars="" visible=""><ul class="devsite-nav-list"><li class="devsite-nav-item devsite-nav-heading devsite-toc-toggle"><span class="devsite-nav-title" role="heading" aria-level="2"><span class="devsite-nav-text">本页内容</span></span></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-on-ubuntu" class="devsite-nav-title gc-analytics-event devsite-nav-active" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="0" track-type="navigation" track-name="rightNav" track-metadata-position="0" track-metadata-link-destination="#install-on-ubuntu"><span class="devsite-nav-text" tooltip="">使用 Bazel 的 apt 代码库</span></a><ul class="devsite-nav-list"><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#add-dis-uri" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="0.0" track-type="navigation" track-name="rightNav" track-metadata-position="0.0" track-metadata-link-destination="#add-dis-uri"><span class="devsite-nav-text" tooltip="">第 1 步：将 Bazel 分发 URI 添加为软件包来源</span></a></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-bazel" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="0.1" track-type="navigation" track-name="rightNav" track-metadata-position="0.1" track-metadata-link-destination="#install-bazel"><span class="devsite-nav-text" tooltip="">第 2 步：安装和更新 Bazel</span></a></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-jdk" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="0.2" track-type="navigation" track-name="rightNav" track-metadata-position="0.2" track-metadata-link-destination="#install-jdk"><span class="devsite-nav-text" tooltip="">第 3 步：安装 JDK（可选）</span></a></li></ul></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#binary-installer" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="1" track-type="navigation" track-name="rightNav" track-metadata-position="1" track-metadata-link-destination="#binary-installer"><span class="devsite-nav-text" tooltip="">使用二进制安装程序</span></a><ul class="devsite-nav-list"><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-packages" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="1.0" track-type="navigation" track-name="rightNav" track-metadata-position="1.0" track-metadata-link-destination="#install-packages"><span class="devsite-nav-text" tooltip="">第 1 步：安装所需的软件包</span></a></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#run-installer" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="1.1" track-type="navigation" track-name="rightNav" track-metadata-position="1.1" track-metadata-link-destination="#run-installer"><span class="devsite-nav-text" tooltip="">第 2 步：运行安装程序</span></a></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#set-environment" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="1.2" track-type="navigation" track-name="rightNav" track-metadata-position="1.2" track-metadata-link-destination="#set-environment"><span class="devsite-nav-text" tooltip="">第 3 步：设置您的环境</span></a></li></ul></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#docker-container" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Right nav" data-value="2" track-type="navigation" track-name="rightNav" track-metadata-position="2" track-metadata-link-destination="#docker-container"><span class="devsite-nav-text" tooltip="">使用 Bazel Docker 容器</span></a></li></ul></devsite-toc>
+                <devsite-recommendations-sidebar class="nocontent devsite-nav">
+                </devsite-recommendations-sidebar>
+            </div>
+          </div>
+          
+          <devsite-content>
+            
+              
+
+
+
+
+
+
+
+
+
+
+
+<article class="devsite-article">
+  
+  
+  
+  
+    <div class="devsite-banner devsite-banner-translated nocontent">
+      <div class="devsite-banner-message">
+        <div class="devsite-banner-message-text">
+          <img src="./在 Ubuntu 上安装 Bazel_files/translated.svg" class="devsite-banner-translated-image" alt="">
+          <span class="devsite-banner-translated-text">
+            
+            此页面由 <a href="https://cloud.google.com/translate/?hl=zh-cn" data-title="您所在的区域可能无法访问此链接。">Cloud Translation API</a> 翻译。
+          </span>
+        </div>
+        
+        <a href="https://bazel.google.cn/install/ubuntu?hl=en" class="button gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Switch to English" browser-load="">Switch to English</a>
+      </div>
+    </div>
+  
+
+  <div class="devsite-article-meta nocontent" role="navigation">
+    
+    
+    <ul class="devsite-breadcrumb-list" aria-label="面包屑导航">
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+    
+    
+      
+  <a href="https://bazel.google.cn/?hl=zh-cn" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Breadcrumbs" data-value="1" track-type="globalNav" track-name="breadcrumb" track-metadata-position="1" track-metadata-eventdetail="Bazel">
+    
+        Bazel
+      
+  </a>
+  
+    
+  </li>
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+      
+      <div class="devsite-breadcrumb-guillemet material-icons" aria-hidden="true"></div>
+    
+    
+    
+      
+  <a href="https://bazel.google.cn/start?hl=zh-cn" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Breadcrumbs" data-value="2" track-type="globalNav" track-name="breadcrumb" track-metadata-position="2" track-metadata-eventdetail="">
+    
+        开始使用
+      
+  </a>
+  
+    
+  </li>
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+      
+      <div class="devsite-breadcrumb-guillemet material-icons" aria-hidden="true"></div>
+    
+    
+    
+      
+  <a href="https://bazel.google.cn/install?hl=zh-cn" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Breadcrumbs" data-value="3" track-type="globalNav" track-name="breadcrumb" track-metadata-position="3" track-metadata-eventdetail="">
+    
+        安装
+      
+  </a>
+  
+    
+  </li>
+  
+</ul>
+    
+      
+    
+  </div>
+  <h1 class="devsite-page-title" tabindex="-1">
+    在 Ubuntu 上安装 Bazel
+  
+</h1><div class="devsite-page-title-meta"></div>
+  
+
+  <devsite-toc class="devsite-nav devsite-toc-embedded" depth="2" devsite-toc-embedded="" expandable="" visible=""><ul class="devsite-nav-list"><li class="devsite-nav-item devsite-nav-heading devsite-toc-toggle"><span class="devsite-nav-title" role="heading" aria-level="2"><span class="devsite-nav-text">本页内容</span></span><button type="button" title="展开/收起内容" class="devsite-nav-show-all button-transparent material-icons"></button></li><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-on-ubuntu" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="0" track-type="navigation" track-name="embeddedNav" track-metadata-position="0" track-metadata-link-destination="#install-on-ubuntu"><span class="devsite-nav-text" tooltip="">使用 Bazel 的 apt 代码库</span></a><ul class="devsite-nav-list"><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#add-dis-uri" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="0.0" track-type="navigation" track-name="embeddedNav" track-metadata-position="0.0" track-metadata-link-destination="#add-dis-uri"><span class="devsite-nav-text" tooltip="">第 1 步：将 Bazel 分发 URI 添加为软件包来源</span></a></li><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-bazel" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="0.1" track-type="navigation" track-name="embeddedNav" track-metadata-position="0.1" track-metadata-link-destination="#install-bazel"><span class="devsite-nav-text" tooltip="">第 2 步：安装和更新 Bazel</span></a></li><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-jdk" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="0.2" track-type="navigation" track-name="embeddedNav" track-metadata-position="0.2" track-metadata-link-destination="#install-jdk"><span class="devsite-nav-text" tooltip="">第 3 步：安装 JDK（可选）</span></a></li></ul></li><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#binary-installer" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="1" track-type="navigation" track-name="embeddedNav" track-metadata-position="1" track-metadata-link-destination="#binary-installer"><span class="devsite-nav-text" tooltip="">使用二进制安装程序</span></a><ul class="devsite-nav-list"><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-packages" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="1.0" track-type="navigation" track-name="embeddedNav" track-metadata-position="1.0" track-metadata-link-destination="#install-packages"><span class="devsite-nav-text" tooltip="">第 1 步：安装所需的软件包</span></a></li><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#run-installer" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="1.1" track-type="navigation" track-name="embeddedNav" track-metadata-position="1.1" track-metadata-link-destination="#run-installer"><span class="devsite-nav-text" tooltip="">第 2 步：运行安装程序</span></a></li><li class="devsite-nav-item" visible=""><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#set-environment" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="1.2" track-type="navigation" track-name="embeddedNav" track-metadata-position="1.2" track-metadata-link-destination="#set-environment"><span class="devsite-nav-text" tooltip="">第 3 步：设置您的环境</span></a></li></ul></li><li class="devsite-nav-item"><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#docker-container" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="2" track-type="navigation" track-name="embeddedNav" track-metadata-position="2" track-metadata-link-destination="#docker-container"><span class="devsite-nav-text" tooltip="">使用 Bazel Docker 容器</span></a></li><li class="devsite-toc-toggle"><button type="button" class="button-flat devsite-nav-more-items material-icons" track-type="navigation" track-name="embeddedNavExpand" title="展开/收起内容"></button></li></ul></devsite-toc>
+  
+    
+  
+
+  
+
+
+
+
+
+
+<div class="devsite-article-body clearfix
+  ">
+
+  
+    
+    
+
+
+<a class="button button-with-icon" href="https://github.com/bazelbuild/bazel/issues/new?title=%5Bbazel.build%5D+Problem+with+/install/ubuntu&amp;template=doc_issue.yml&amp;link=https%3A%2F%2Fbazel.build/install/ubuntu" =""="" target="_blank">
+  报告问题<span aria-hidden="true" class="material-icons icon-after" translate="no">open_in_new</span>
+</a>
+
+<a class="button button-with-icon" href="https://github.com/bazelbuild/bazel/tree/master/site/en/install/ubuntu.md" =""="" target="_blank">
+  查看源代码<span aria-hidden="true" class="material-icons icon-after" translate="no">open_in_new</span>
+</a>
+
+<p></p>
+
+<p>本页面介绍了在 Ubuntu 上安装 Bazel 的方法。此外，它还会提供 Bazel 完成脚本和二进制文件安装程序的链接，前提是您将其作为备份选项使用（例如，如果您没有管理员访问权限）。</p>
+
+<p>支持的 Ubuntu Linux 平台：</p>
+
+<ul>
+<li>22.04 (LTS)</li>
+<li>20.04 (LTS)</li>
+<li>18.04 (LTS)</li>
+</ul>
+
+<p>Bazel 应该兼容其他 Ubuntu 版本和 Debian“Strett”及更高版本，但未经测试，也无法保证能够正常运行。</p>
+
+<p>使用以下方法之一在 Ubuntu 上安装 Bazel：</p>
+
+<ul>
+<li><em>建议</em>：<a href="https://bazel.google.cn/install/bazelisk?hl=zh-cn">使用 Bazelisk</a></li>
+<li><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-on-ubuntu">使用我们的自定义 APT 代码库</a></li>
+<li><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#binary-installer">使用二进制安装程序</a></li>
+<li><a href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#docker-container">使用 Bazel Docker 容器</a></li>
+<li><a href="https://bazel.google.cn/install/compile-source?hl=zh-cn">从源代码编译 Bazel</a></li>
+</ul>
+
+<p><strong>注意</strong>：对于基于 ARM 的系统，APT 代码库不包含 <code dir="ltr" translate="no">arm64</code> 版本，并且没有可用的二进制安装程序。请使用 Bazelisk 或从源代码进行编译。</p>
+
+<p>Bazel 附带两个完成脚本。安装 Bazel 后，您可以：</p>
+
+<ul>
+<li>访问 <a href="https://bazel.google.cn/install/completion?hl=zh-cn#bash">bash 完成脚本</a></li>
+<li>安装 <a href="https://bazel.google.cn/install/completion?hl=zh-cn#zsh">zsh 完成脚本</a></li>
+</ul>
+
+<h2 data-text="使用 Bazel 的 apt 代码库" id="install-on-ubuntu" tabindex="-1" role="presentation"><span class="devsite-heading" role="heading" aria-level="2">使用 Bazel 的 apt 代码库</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：使用 Bazel 的 apt 代码库" data-title="复制指向此部分的链接：使用 Bazel 的 apt 代码库" data-id="install-on-ubuntu"></button></h2>
+
+<h3 data-text="第 1 步：将 Bazel 分发 URI 添加为软件包来源" id="add-dis-uri" role="presentation"><span class="devsite-heading" role="heading" aria-level="3">第 1 步：将 Bazel 分发 URI 添加为软件包来源</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：第 1 步：将 Bazel 分发 URI 添加为软件包来源" data-title="复制指向此部分的链接：第 1 步：将 Bazel 分发 URI 添加为软件包来源" data-id="add-dis-uri"></button></h3>
+
+<p><strong>注意</strong>：此步骤只需执行一次设置步骤，</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo apt install apt</span><span class="pun">-</span><span class="pln">transport</span><span class="pun">-</span><span class="pln">https curl gnupg </span><span class="pun">-</span><span class="pln">y<br>curl </span><span class="pun">-</span><span class="pln">fsSL https</span><span class="pun">:</span><span class="com">//bazel.build/bazel-release.pub.gpg | gpg --dearmor &gt;bazel-archive-keyring.gpg</span><span class="pln"><br>sudo mv bazel</span><span class="pun">-</span><span class="pln">archive</span><span class="pun">-</span><span class="pln">keyring</span><span class="pun">.</span><span class="pln">gpg </span><span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">share</span><span class="pun">/</span><span class="pln">keyrings<br>echo </span><span class="str">"deb [arch=amd64 signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8"</span><span class="pln"> </span><span class="pun">|</span><span class="pln"> sudo tee </span><span class="pun">/</span><span class="pln">etc</span><span class="pun">/</span><span class="pln">apt</span><span class="pun">/</span><span class="pln">sources</span><span class="pun">.</span><span class="pln">list</span><span class="pun">.</span><span class="pln">d</span><span class="pun">/</span><span class="pln">bazel</span><span class="pun">.</span><span class="pln">list</span></code><span class="pln"><br></span></pre></devsite-code>
+<p>组件名称“jdk1.8”仅出于传统原因保留，与受支持或包含的 JDK 版本无关。Bazel 版本与 Java 版本无关。更改“jdk1.8”组件名称将破坏代码库的现有用户。</p>
+
+<h3 data-text="第 2 步：安装和更新 Bazel" id="install-bazel" role="presentation"><span class="devsite-heading" role="heading" aria-level="3">第 2 步：安装和更新 Bazel</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：第 2 步：安装和更新 Bazel" data-title="复制指向此部分的链接：第 2 步：安装和更新 Bazel" data-id="install-bazel"></button></h3>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo apt update </span><span class="pun">&amp;&amp;</span><span class="pln"> sudo apt install bazel</span></code><span class="pln"><br></span></pre></devsite-code>
+<p>安装后，您可以升级到常规 Bazel 版本，这是常规系统更新的一部分：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo apt update </span><span class="pun">&amp;&amp;</span><span class="pln"> sudo apt full</span><span class="pun">-</span><span class="pln">upgrade</span></code><span class="pln"><br></span></pre></devsite-code>
+<p><code dir="ltr" translate="no">bazel</code> 软件包始终安装最新的稳定版 Bazel。除了最新的 Bazel 之外，您还可以安装其他的旧版本，例如：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo apt install bazel</span><span class="pun">-</span><span class="lit">1.0</span><span class="pun">.</span><span class="lit">0</span></code><span class="pln"><br></span></pre></devsite-code>
+<p>这会在系统上安装 <code dir="ltr" translate="no">/usr/bin/bazel-1.0.0</code> 作为 Bazel 1.0.0。如果您需要特定的 Bazel 版本来构建项目，这种做法会非常有用，例如，它使用 <code dir="ltr" translate="no">.bazelversion</code> 文件来明确说明应该使用哪个 Bazel 版本来构建项目。</p>
+
+<p>（可选）您可以通过创建符号链接将 <code dir="ltr" translate="no">bazel</code> 设置为特定版本：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo ln </span><span class="pun">-</span><span class="pln">s </span><span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">bazel</span><span class="pun">-</span><span class="lit">1.0</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">bazel<br>bazel </span><span class="pun">--</span><span class="pln">version &nbsp;</span><span class="com"># 1.0.0</span></code><span class="pln"><br></span></pre></devsite-code>
+<h3 data-text="第 3 步：安装 JDK（可选）" id="install-jdk" role="presentation"><span class="devsite-heading" role="heading" aria-level="3">第 3 步：安装 JDK（可选）</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：第 3 步：安装 JDK（可选）" data-title="复制指向此部分的链接：第 3 步：安装 JDK（可选）" data-id="install-jdk"></button></h3>
+
+<p>Bazel 包含一个专用捆绑 JRE 作为其运行时，不需要您安装任何特定版本的 Java。</p>
+
+<p>但是，如果您想使用 Bazel 构建 Java 代码，则必须安装 JDK。</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo apt install </span><span class="kwd">default</span><span class="pun">-</span><span class="pln">jdk</span></code><span class="pln"><br></span></pre></devsite-code>
+<h2 data-text="使用二进制安装程序" id="binary-installer" role="presentation"><span class="devsite-heading" role="heading" aria-level="2">使用二进制安装程序</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：使用二进制安装程序" data-title="复制指向此部分的链接：使用二进制安装程序" data-id="binary-installer"></button></h2>
+
+<p>通常，您应该使用 apt 代码库，但如果您对机器没有管理员权限或无法添加自定义代码库，则二进制安装程序会很有用。</p>
+
+<p>您可以从 Bazel 的 <a class="external" href="https://github.com/bazelbuild/bazel/releases">GitHub 版本页面</a>下载二进制安装程序。</p>
+
+<p>安装程序包含 Bazel 二进制文件，并将其解压缩到 <code dir="ltr" translate="no">$HOME/bin</code> 文件夹中。您需要手动安装一些其他库，Bazel 才能正常运行。</p>
+
+<h3 data-text="第 1 步：安装所需的软件包" id="install-packages" role="presentation"><span class="devsite-heading" role="heading" aria-level="3">第 1 步：安装所需的软件包</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：第 1 步：安装所需的软件包" data-title="复制指向此部分的链接：第 1 步：安装所需的软件包" data-id="install-packages"></button></h3>
+
+<p>Bazel 需要一个 C++ 编译器和 unzip / zip 文件才能正常运行：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo apt install g</span><span class="pun">++</span><span class="pln"> unzip zip</span></code><span class="pln"><br></span></pre></devsite-code>
+<p>如果要使用 Bazel 构建 Java 代码，请安装 JDK：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">sudo apt</span><span class="pun">-</span><span class="kwd">get</span><span class="pln"> install </span><span class="kwd">default</span><span class="pun">-</span><span class="pln">jdk</span></code><span class="pln"><br></span></pre></devsite-code>
+<h3 data-text="第 2 步：运行安装程序" id="run-installer" role="presentation"><span class="devsite-heading" role="heading" aria-level="3">第 2 步：运行安装程序</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：第 2 步：运行安装程序" data-title="复制指向此部分的链接：第 2 步：运行安装程序" data-id="run-installer"></button></h3>
+
+<p>接下来，从 <a class="external" href="https://github.com/bazelbuild/bazel/releases">GitHub 上的 Bazel 版本页面</a>下载名为 <code dir="ltr" translate="no">bazel-<var translate="no">version</var>-installer-linux-x86_64.sh</code> 的 Bazel 二进制安装程序。</p>
+
+<p>运行方式如下：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="pln">chmod </span><span class="pun">+</span><span class="pln">x bazel</span><span class="pun">-</span><devsite-var scope="version" ready="" tabindex="0"><span class="devsite-var-wrapper"><span class="devsite-var-input-wrapper"><button class="material-icons devsite-icon-close" tabindex="-1"></button></span><var spellcheck="false" is-upgraded="" data-title="修改 version" aria-label="修改 version">version<button class="material-icons devsite-icon-edit" tabindex="-1"></button></var></span></devsite-var><span class="pun">-</span><span class="pln">installer</span><span class="pun">-</span><span class="pln">linux</span><span class="pun">-</span><span class="pln">x86_64</span><span class="pun">.</span><span class="pln">sh</span></code><span class="pln"><br></span><code class="devsite-terminal" dir="ltr"><span class="pun">./</span><span class="pln">bazel</span><span class="pun">-</span><devsite-var scope="version" ready="" tabindex="0"><span class="devsite-var-wrapper"><span class="devsite-var-input-wrapper"><button class="material-icons devsite-icon-close" tabindex="-1"></button></span><var spellcheck="false" is-upgraded="" data-title="修改 version" aria-label="修改 version">version<button class="material-icons devsite-icon-edit" tabindex="-1"></button></var></span></devsite-var><span class="pun">-</span><span class="pln">installer</span><span class="pun">-</span><span class="pln">linux</span><span class="pun">-</span><span class="pln">x86_64</span><span class="pun">.</span><span class="pln">sh </span><span class="pun">--</span><span class="pln">user</span></code><span class="pln"><br></span></pre></devsite-code>
+<p><code dir="ltr" translate="no">--user</code> 标志将 Bazel 安装到系统上的 <code dir="ltr" translate="no">$HOME/bin</code> 目录中，并将 <code dir="ltr" translate="no">.bazelrc</code> 路径设置为 <code dir="ltr" translate="no">$HOME/.bazelrc</code>。使用 <code dir="ltr" translate="no">--help</code> 命令可查看其他安装选项。</p>
+
+<h3 data-text="第 3 步：设置您的环境" id="set-environment" role="presentation"><span class="devsite-heading" role="heading" aria-level="3">第 3 步：设置您的环境</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：第 3 步：设置您的环境" data-title="复制指向此部分的链接：第 3 步：设置您的环境" data-id="set-environment"></button></h3>
+
+<p>如果您按上述方式使用 <code dir="ltr" translate="no">--user</code> 标志运行 Bazel 安装程序，则 Bazel 可执行文件会安装到 <code dir="ltr" translate="no">$HOME/bin</code> 目录中。建议您将此目录添加到默认路径，如下所示：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code class="devsite-terminal" dir="ltr"><span class="kwd">export</span><span class="pln"> PATH</span><span class="pun">=</span><span class="str">"$PATH:$HOME/bin"</span></code><span class="pln"><br></span></pre></devsite-code>
+<p>您也可以将此命令添加到 <code dir="ltr" translate="no">~/.bashrc</code> 或 <code dir="ltr" translate="no">~/.zshrc</code> 文件使其永久保留。</p>
+
+<h2 data-text="使用 Bazel Docker 容器" id="docker-container" role="presentation"><span class="devsite-heading" role="heading" aria-level="2">使用 Bazel Docker 容器</span><button type="button" class="devsite-heading-link button-flat material-icons" aria-label="复制指向此部分的链接：使用 Bazel Docker 容器" data-title="复制指向此部分的链接：使用 Bazel Docker 容器" data-id="docker-container"></button></h2>
+
+<p>我们在 <code dir="ltr" translate="no">gcr.io/bazel-public/bazel</code> 发布为每个 Bazel 版本安装了 Bazel 的 Docker 容器。您可以按如下方式使用 Docker 容器：</p>
+<devsite-code data-copy-event-label=""><div class="devsite-code-buttons-container" role="group" aria-label="操作按钮"><button type="button" class="gc-analytics-event material-icons devsite-icon-code-dark devsite-toggle-dark" data-category="Site-Wide Custom Events" data-label="Dark Code Toggle" track-type="exampleCode" track-name="darkCodeToggle" aria-label="深色代码主题背景" data-title="深色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-code-light devsite-toggle-light" data-category="Site-Wide Custom Events" data-label="Light Code Toggle" track-type="exampleCode" track-name="lightCodeToggle" aria-label="浅色代码主题背景" data-title="浅色代码主题背景"></button><button type="button" class="gc-analytics-event material-icons devsite-icon-copy" data-category="Site-Wide Custom Events" data-label="Click To Copy" track-type="exampleCode" track-name="clickToCopy" aria-label="复制代码示例" data-title="复制代码示例"></button></div><pre class="" translate="no" dir="ltr" is-upgraded=""><code dir="ltr"><span class="pln">$ docker pull gcr</span><span class="pun">.</span><span class="pln">io</span><span class="pun">/</span><span class="pln">bazel</span><span class="pun">-</span><span class="kwd">public</span><span class="pun">/</span><span class="pln">bazel</span><span class="pun">:&lt;</span><span class="pln">bazel version</span><span class="pun">&gt;</span><span class="pln"><br></span></code></pre></devsite-code>
+<p>Docker 容器通过<a href="https://github.com/bazelbuild/continuous-integration/tree/master/bazel/oci">这些步骤</a>构建。</p>
+
+  
+  
+
+  
+</div>
+
+  
+
+  
+    
+    
+      
+       
+    
+    
+  
+
+  
+  
+</article>
+
+
+<devsite-content-footer class="nocontent">
+  <p>如未另行说明，那么本页面中的内容已根据<a href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 许可</a>获得了许可，并且代码示例已根据 <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 许可</a>获得了许可。有关详情，请参阅 <a href="https://developers.google.cn/site-policies?hl=zh-cn">Google 开发者网站政策</a>。Java 是 Oracle 和/或其关联公司的注册商标。</p>
+  <p>最后更新时间 (UTC)：2023-07-13。</p>
+</devsite-content-footer>
+
+
+<devsite-notification>
+</devsite-notification>
+
+
+  
+<div class="devsite-content-data">
+  <template class="devsite-thumb-rating-down-categories"></template>
+  <template class="devsite-thumb-rating-up-categories"></template>
+  
+</div>
+            
+          </devsite-content>
+        </main>
+        <devsite-footer-promos class="devsite-footer">
+          
+            
+          
+        </devsite-footer-promos>
+        <devsite-footer-linkboxes class="devsite-footer">
+          
+            
+<nav class="devsite-footer-linkboxes nocontent" aria-label="页脚链接">
+  
+  <ul class="devsite-footer-linkboxes-list">
+    
+    <li class="devsite-footer-linkbox ">
+    <h3 class="devsite-footer-linkbox-heading no-link">掌握动态</h3>
+      <ul class="devsite-footer-linkbox-list">
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://blog.bazel.build/" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+            
+          
+            博客
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://github.com/bazelbuild/bazel" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 2)">
+            
+              
+              
+            
+          
+            GitHub
+          
+          </a>
+          
+          
+        </li>
+        
+      </ul>
+    </li>
+    
+    <li class="devsite-footer-linkbox ">
+    <h3 class="devsite-footer-linkbox-heading no-link">支持</h3>
+      <ul class="devsite-footer-linkbox-list">
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://bazel.google.cn/help" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+            
+          
+            支持
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://github.com/bazelbuild/bazel/issues" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 2)">
+            
+          
+            问题跟踪器
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://slack.bazel.build/" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 3)">
+            
+          
+            Slack
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://stackoverflow.com/questions/tagged/bazel" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 4)">
+            
+              
+              
+            
+          
+            Stack Overflow
+          
+          </a>
+          
+          
+        </li>
+        
+      </ul>
+    </li>
+    
+  </ul>
+  
+</nav>
+          
+        </devsite-footer-linkboxes>
+        <devsite-footer-utility class="devsite-footer">
+          
+            
+
+<div class="devsite-footer-utility nocontent">
+  
+
+  
+  <nav class="devsite-footer-utility-links" aria-label="实用程序链接">
+    
+    <ul class="devsite-footer-utility-list">
+      
+      <li class="devsite-footer-utility-item
+                 ">
+        
+        
+        <a class="devsite-footer-utility-link gc-analytics-event" href="https://policies.google.com/terms?hl=zh-cn" data-category="Site-Wide Custom Events" data-label="Footer 条款 link" data-title="您所在的区域可能无法访问此链接。">
+          条款
+        </a>
+        
+      </li>
+      
+      <li class="devsite-footer-utility-item
+                 ">
+        
+        
+        <a class="devsite-footer-utility-link gc-analytics-event" href="https://policies.google.com/privacy?hl=zh-cn" data-category="Site-Wide Custom Events" data-label="Footer 隐私权政策 link" data-title="您所在的区域可能无法访问此链接。">
+          隐私权政策
+        </a>
+        
+      </li>
+      
+    </ul>
+    
+    
+<devsite-language-selector aria-label="选择您的语言偏好设置。"><template shadowrootmode="open"><!---->
+      <button type="button" aria-controls="language-menu" aria-haspopup="true">
+        <svg aria-hidden="true" class="icon-language" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22q-2.05 0-3.875-.788-1.825-.787-3.187-2.15-1.363-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.887.787-1.813 2.15-3.175Q6.3 3.575 8.125 2.787 9.95 2 12 2q2.075 0 3.887.787 1.813.788 3.175 2.151 1.363 1.362 2.15 3.175Q22 9.925 22 12q0 2.05-.788 3.875-.787 1.825-2.15 3.187-1.362 1.363-3.175 2.15Q14.075 22 12 22Zm0-2.05q.65-.9 1.125-1.875T13.9 16h-3.8q.3 1.1.775 2.075.475.975 1.125 1.875Zm-2.6-.4q-.45-.825-.787-1.713Q8.275 16.95 8.05 16H5.1q.725 1.25 1.812 2.175Q8 19.1 9.4 19.55Zm5.2 0q1.4-.45 2.487-1.375Q18.175 17.25 18.9 16h-2.95q-.225.95-.562 1.837-.338.888-.788 1.713ZM4.25 14h3.4q-.075-.5-.113-.988Q7.5 12.525 7.5 12t.037-1.012q.038-.488.113-.988h-3.4q-.125.5-.188.988Q4 11.475 4 12t.062 1.012q.063.488.188.988Zm5.4 0h4.7q.075-.5.113-.988.037-.487.037-1.012t-.037-1.012q-.038-.488-.113-.988h-4.7q-.075.5-.112.988Q9.5 11.475 9.5 12t.038 1.012q.037.488.112.988Zm6.7 0h3.4q.125-.5.188-.988Q20 12.525 20 12t-.062-1.012q-.063-.488-.188-.988h-3.4q.075.5.112.988.038.487.038 1.012t-.038 1.012q-.037.488-.112.988Zm-.4-6h2.95q-.725-1.25-1.813-2.175Q16 4.9 14.6 4.45q.45.825.788 1.712.337.888.562 1.838ZM10.1 8h3.8q-.3-1.1-.775-2.075Q12.65 4.95 12 4.05q-.65.9-1.125 1.875T10.1 8Zm-5 0h2.95q.225-.95.563-1.838.337-.887.787-1.712Q8 4.9 6.912 5.825 5.825 6.75 5.1 8Z"></path>
+        </svg>
+        <span class="label"><!--?lit$190424701$-->中文 – 简体</span>
+        <svg aria-hidden="true" class="icon-arrow" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="m12 15-5-5h10Z"></path>
+        </svg>
+      </button>
+      <div id="language-menu" role="menu" hidden="">
+        <slot></slot>
+      </div></template>
+  <ul role="presentation">
+    
+    
+    <li role="presentation">
+      <a role="menuitem" lang="en" href="https://bazel.google.cn/install/ubuntu#install-on-ubuntu">English</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="de" href="https://bazel.google.cn/install/ubuntu?hl=de#install-on-ubuntu">Deutsch</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="es" href="https://bazel.google.cn/install/ubuntu?hl=es#install-on-ubuntu">Español</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="es-419" href="https://bazel.google.cn/install/ubuntu?hl=es-419#install-on-ubuntu">Español – América Latina</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="fr" href="https://bazel.google.cn/install/ubuntu?hl=fr#install-on-ubuntu">Français</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="id" href="https://bazel.google.cn/install/ubuntu?hl=id#install-on-ubuntu">Indonesia</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="it" href="https://bazel.google.cn/install/ubuntu?hl=it#install-on-ubuntu">Italiano</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pl" href="https://bazel.google.cn/install/ubuntu?hl=pl#install-on-ubuntu">Polski</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pt" href="https://bazel.google.cn/install/ubuntu?hl=pt#install-on-ubuntu">Português</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pt-br" href="https://bazel.google.cn/install/ubuntu?hl=pt-br#install-on-ubuntu">Português – Brasil</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="vi" href="https://bazel.google.cn/install/ubuntu?hl=vi#install-on-ubuntu">Tiếng Việt</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="tr" href="https://bazel.google.cn/install/ubuntu?hl=tr#install-on-ubuntu">Türkçe</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ru" href="https://bazel.google.cn/install/ubuntu?hl=ru#install-on-ubuntu">Русский</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="he" href="https://bazel.google.cn/install/ubuntu?hl=he#install-on-ubuntu">עברית</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ar" href="https://bazel.google.cn/install/ubuntu?hl=ar#install-on-ubuntu">العربيّة</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="fa" href="https://bazel.google.cn/install/ubuntu?hl=fa#install-on-ubuntu">فارسی</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="hi" href="https://bazel.google.cn/install/ubuntu?hl=hi#install-on-ubuntu">हिंदी</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="bn" href="https://bazel.google.cn/install/ubuntu?hl=bn#install-on-ubuntu">বাংলা</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="th" href="https://bazel.google.cn/install/ubuntu?hl=th#install-on-ubuntu">ภาษาไทย</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="zh-cn" aria-current="true" href="https://bazel.google.cn/install/ubuntu?hl=zh-cn#install-on-ubuntu">中文 – 简体</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="zh-tw" href="https://bazel.google.cn/install/ubuntu?hl=zh-tw#install-on-ubuntu">中文 – 繁體</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ja" href="https://bazel.google.cn/install/ubuntu?hl=ja#install-on-ubuntu">日本語</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ko" href="https://bazel.google.cn/install/ubuntu?hl=ko#install-on-ubuntu">한국어</a>
+    </li>
+    
+  </ul>
+</devsite-language-selector>
+
+  </nav>
+</div>
+          
+        </devsite-footer-utility>
+        <devsite-panel style="height: auto;"></devsite-panel>
+        
+      </section></section>
+    <devsite-sitemask></devsite-sitemask>
+    <devsite-snackbar style="bottom: 0px;">
+</devsite-snackbar>
+    <devsite-tooltip blocked-link=""></devsite-tooltip>
+    <devsite-heading-link></devsite-heading-link>
+    <devsite-analytics analytics-iframe="">
+      
+        <script type="application/json" analytics="">[{&#34;dimensions&#34;: {&#34;dimension3&#34;: true, &#34;dimension1&#34;: &#34;zh-cn&#34;, &#34;dimension2&#34;: &#34;zh-cn&#34;}, &#34;gaid&#34;: &#34;UA-61082125-6&#34;, &#34;metrics&#34;: {}, &#34;purpose&#34;: 0}]</script>
+<script type="application/json" tag-management="">{&#34;ga4&#34;: [&#34;G-JVVJFRW1WV&#34;], &#34;ga4p&#34;: [&#34;G-JVVJFRW1WV&#34;], &#34;gtm&#34;: [], &#34;parameters&#34;: {&#34;internalUser&#34;: &#34;False&#34;, &#34;language&#34;: {&#34;machineTranslated&#34;: &#34;True&#34;, &#34;requested&#34;: &#34;zh-cn&#34;, &#34;served&#34;: &#34;zh-cn&#34;}, &#34;pageType&#34;: &#34;article&#34;, &#34;projectName&#34;: &#34;Bazel&#34;, &#34;signedIn&#34;: &#34;False&#34;, &#34;tenant&#34;: &#34;bazel_china&#34;, &#34;recommendations&#34;: {&#34;sourcePage&#34;: &#34;&#34;, &#34;sourceType&#34;: 0, &#34;sourceRank&#34;: 0, &#34;sourceIdenticalDescriptions&#34;: 0, &#34;sourceTitleWords&#34;: 0, &#34;sourceDescriptionWords&#34;: 0, &#34;experiment&#34;: &#34;&#34;}, &#34;experiment&#34;: {&#34;ids&#34;: &#34;&#34;}}}</script>
+      
+    <iframe sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox" src="./在 Ubuntu 上安装 Bazel_files/analytics-iframe.html"></iframe></devsite-analytics>
+    
+    
+    <script nonce="">
+  
+  (function(d,e,v,s,i,t,E){d['GoogleDevelopersObject']=i;
+    t=e.createElement(v);t.async=1;t.src=s;E=e.getElementsByTagName(v)[0];
+    E.parentNode.insertBefore(t,E);})(window, document, 'script',
+    'https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f/bazel/js/app_loader.js', '[44,"zh_cn",null,"/js/devsite_app_module.js","https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f","https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f/bazel","https://bazel-dot-google-developers.gonglchuangl.net",null,null,["/_pwa/bazel/manifest.json","https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f/images/video-placeholder.svg","https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f/bazel/images/favicon-prod.png","https://www.gstatic.cn/devrel-devsite/prod/v8332a5cec2b627575422eb634078b4a9892f3eac6f9006e54b6e9bbf0bfda91f/bazel/images/lockup.svg","https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700&display=swap"],1,null,[1,6,8,12,14,17,21,25,40,50,52,63,70,75,76,80,87,91,92,93,97,98,100,101,102,103,104,105,107,108,109,110,111,112,113,115,117,118,120,122,124,125,126,127,129,130,131,132,133,134,135,136,138,140,141,144,147,148,149,150,151,152,154,155,156,157,158,159,161,163,164,165,168,169,170,172,173,179,180,182,183,186,190,191,193,196],"AIzaSyAP-jjEJBzmIyKR4F-3XITp8yM9T1gEEI8","AIzaSyB6xiKGDR5O3Ak2okS4rLkauxGUG7XP0hg","bazel.google.cn","AIzaSyAQk0fBONSGUqCNznf6Krs82Ap1-NV6J4o","AIzaSyCCxcqdrZ_7QMeLCRY20bh_SXdAYqy70KY",null,null,null,["ContentExcellence__enable_googler_button","Profiles__enable_inferred_interests","Search__enable_suggestions_from_borg","Cloud__enable_cloud_dlp_service","MiscFeatureFlags__enable_explain_this_code","Cloud__enable_cloud_facet_chat","Profiles__enable_profile_collections","Search__enable_faceted_search","MiscFeatureFlags__enable_project_variables","BookNav__enable_tenant_cache_key","OnSwitch__enable","Profiles__enable_public_developer_profiles","Localization__enable_locale_redirects","Experiments__reqs_query_experiments","Profiles__enable_profile_communities","Badges__enable_delete_badges","Search__enable_acl_suggestions","Profiles__require_profile_eligibility_for_signin","Cloud__enable_free_trial_server_call","BookNav__enable_collapsible_book_nav","Cloud__enable_cloud_shell","MiscFeatureFlags__enable_keyword_inheritance","BookNav__enable_book_nav_filtering","Search__enable_page_map","Profiles__enable_developer_profiles_dashboard_recommendations","Badges__enable_hide_badges","MiscFeatureFlags__enable_tls_version_for_gaia_calls","Profiles__enable_release_notes_notifications","Cloud__enable_cloudx_ping","Significatio__enable_footprints","Cloud__enable_cloudx_experiment_ids","Profiles__enable_profile_notifications_ui","Concierge__enable_pushui","Experiments__enable_experiments","MiscFeatureFlags__developers_footer_image","SignIn__enable_auto_signin_oauth","Profiles__enable_page_saving","Profiles__enable_developer_profiles_interests","Profiles__enable_searchable_interests","MiscFeatureFlags__enable_firebase_utm","MiscFeatureFlags__content_publisher_push_queue","Profiles__enable_developer_profiles_callout","OpenInReplit__enable_replit","Profiles__enable_awarding_url","Search__enable_dynamic_content_confidential_banner","MiscFeatureFlags__developers_footer_dark_image","Significatio__enable_experiment_id_caching","Badges__enable_drag_and_drop_badges","Cloud__enable_cloud_shell_fte_user_flow","AuthorPageInsights__enable_author_page_insights","Profiles__enable_suggested_interests","ContentExcellence__enable_verified_date","Search__enable_devsite_serp"],null,null,"AIzaSyBLEMok-5suZ67qRPzx0qUtbnLmyT_kCVE","https://developerscontentserving-pa.googleapis.com","AIzaSyCM4QpTRSqP5qI4Dvjt4OAScIN8sOUlO-k","https://developerscontentsearch-pa.googleapis.com",2]')
+  
+</script>
+    <devsite-a11y-announce aria-live="assertive" aria-atomic="true"></devsite-a11y-announce>
+  
+</body></html>
