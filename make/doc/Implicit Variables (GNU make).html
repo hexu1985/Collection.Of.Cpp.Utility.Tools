@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0074)https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html -->
+<html><!-- Created by GNU Texinfo 6.8, https://www.gnu.org/software/texinfo/ --><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<!-- This file documents the GNU make utility, which determines
+automatically which pieces of a large program need to be recompiled,
+and issues the commands to recompile them.
+
+This is Edition 0.77, last updated 26 February 2023,
+of The GNU Make Manual, for GNU make version 4.4.1.
+
+Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995,
+1996, 1997, 1998, 1999, 2000, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
+2020, 2021, 2022, 2023 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being "A GNU Manual,"
+and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<title>Implicit Variables (GNU make)</title>
+
+<meta name="description" content="Implicit Variables (GNU make)">
+<meta name="keywords" content="Implicit Variables (GNU make)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="https://www.gnu.org/software/make/manual/html_node/index.html" rel="start" title="Top">
+<link href="https://www.gnu.org/software/make/manual/html_node/Concept-Index.html" rel="index" title="Concept Index">
+<link href="https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="https://www.gnu.org/software/make/manual/html_node/Implicit-Rules.html" rel="up" title="Implicit Rules">
+<link href="https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html" rel="next" title="Chained Rules">
+<link href="https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html" rel="prev" title="Catalogue of Rules">
+<style type="text/css">
+<!--
+a.copiable-anchor {visibility: hidden; text-decoration: none; line-height: 0em}
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+span:hover a.copiable-anchor {visibility: visible}
+ul.no-bullet {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="./Implicit Variables (GNU make)_files/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section" id="Implicit-Variables">
+<div class="header">
+<p>
+Next: <a href="https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html" accesskey="n" rel="next">Chains of Implicit Rules</a>, Previous: <a href="https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html" accesskey="p" rel="prev">Catalogue of Built-In Rules</a>, Up: <a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Rules.html" accesskey="u" rel="up">Using Implicit Rules</a> &nbsp; [<a href="https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="https://www.gnu.org/software/make/manual/html_node/Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="Variables-Used-by-Implicit-Rules"></span><h3 class="section">10.3 Variables Used by Implicit Rules</h3>
+<span id="index-flags-for-compilers"></span>
+
+<p>The recipes in built-in implicit rules make liberal use of certain
+predefined variables.  You can alter the values of these variables in
+the makefile, with arguments to <code>make</code>, or in the environment to
+alter how the implicit rules work without redefining the rules
+themselves.  You can cancel all variables used by implicit rules with
+the ‘<samp>-R</samp>’ or ‘<samp>--no-builtin-variables</samp>’ option.
+</p>
+<p>For example, the recipe used to compile a C source file actually says
+‘<samp>$(CC) -c $(CFLAGS) $(CPPFLAGS)</samp>’.  The default values of the variables
+used are ‘<samp>cc</samp>’ and nothing, resulting in the command ‘<samp>cc -c</samp>’.  By
+redefining ‘<samp>CC</samp>’ to ‘<samp>ncc</samp>’, you could cause ‘<samp>ncc</samp>’ to be
+used for all C compilations performed by the implicit rule.  By redefining
+‘<samp>CFLAGS</samp>’ to be ‘<samp>-g</samp>’, you could pass the ‘<samp>-g</samp>’ option to
+each compilation.  <em>All</em> implicit rules that do C compilation use
+‘<samp>$(CC)</samp>’ to get the program name for the compiler and <em>all</em>
+include ‘<samp>$(CFLAGS)</samp>’ among the arguments given to the compiler.
+</p>
+<p>The variables used in implicit rules fall into two classes: those that are
+names of programs (like <code>CC</code>) and those that contain arguments for the
+programs (like <code>CFLAGS</code>).  (The “name of a program” may also contain
+some command arguments, but it must start with an actual executable program
+name.)  If a variable value contains more than one argument, separate them
+with spaces.
+</p>
+<p>The following tables describe of some of the more commonly-used predefined
+variables.  This list is not exhaustive, and the default values shown here may
+not be what <code>make</code> selects for your environment.  To see the
+complete list of predefined variables for your instance of GNU <code>make</code> you
+can run ‘<samp>make -p</samp>’ in a directory with no makefiles.
+</p>
+<p>Here is a table of some of the more common variables used as names of
+programs in built-in rules:
+</p>
+<dl compact="compact">
+<dt id="index-AR"><span><code>AR</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-AR" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Archive-maintaining program; default ‘<samp>ar</samp>’.
+<span id="index-ar"></span>
+</p>
+</dd>
+<dt id="index-AS"><span><code>AS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-AS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for compiling assembly files; default ‘<samp>as</samp>’.
+<span id="index-as-1"></span>
+</p>
+</dd>
+<dt id="index-CC"><span><code>CC</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CC" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for compiling C programs; default ‘<samp>cc</samp>’.
+<span id="index-cc-1"></span>
+</p>
+</dd>
+<dt id="index-CXX"><span><code>CXX</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CXX" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for compiling C++ programs; default ‘<samp>g++</samp>’.
+<span id="index-g_002b_002b-1"></span>
+</p>
+</dd>
+<dt id="index-CPP"><span><code>CPP</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CPP" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for running the C preprocessor, with results to standard output;
+default ‘<samp>$(CC) -E</samp>’.
+</p>
+</dd>
+<dt id="index-FC"><span><code>FC</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-FC" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for compiling or preprocessing Fortran and Ratfor programs;
+default ‘<samp>f77</samp>’.
+<span id="index-f77-1"></span>
+</p>
+</dd>
+<dt id="index-M2C"><span><code>M2C</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-M2C" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to use to compile Modula-2 source code; default ‘<samp>m2c</samp>’.
+<span id="index-m2c-1"></span>
+</p>
+</dd>
+<dt id="index-PC"><span><code>PC</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-PC" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for compiling Pascal programs; default ‘<samp>pc</samp>’.
+<span id="index-pc-1"></span>
+</p>
+</dd>
+<dt id="index-CO"><span><code>CO</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CO" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for extracting a file from RCS; default ‘<samp>co</samp>’.
+<span id="index-co-1"></span>
+</p>
+</dd>
+<dt id="index-GET"><span><code>GET</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-GET" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program for extracting a file from SCCS; default ‘<samp>get</samp>’.
+<span id="index-get-1"></span>
+</p>
+</dd>
+<dt id="index-LEX"><span><code>LEX</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-LEX" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to use to turn Lex grammars into source code; default ‘<samp>lex</samp>’.
+<span id="index-lex-1"></span>
+</p>
+</dd>
+<dt id="index-YACC"><span><code>YACC</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-YACC" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to use to turn Yacc grammars into source code; default ‘<samp>yacc</samp>’.
+<span id="index-yacc-2"></span>
+</p>
+</dd>
+<dt id="index-LINT"><span><code>LINT</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-LINT" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to use to run lint on source code; default ‘<samp>lint</samp>’.
+<span id="index-lint-1"></span>
+</p>
+</dd>
+<dt id="index-MAKEINFO"><span><code>MAKEINFO</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-MAKEINFO" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to convert a Texinfo source file into an Info file; default
+‘<samp>makeinfo</samp>’.
+<span id="index-makeinfo-1"></span>
+</p>
+</dd>
+<dt id="index-TEX"><span><code>TEX</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-TEX" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to make TeX <small>DVI</small> files from TeX source;
+default ‘<samp>tex</samp>’.
+<span id="index-tex-1"></span>
+</p>
+</dd>
+<dt id="index-TEXI2DVI"><span><code>TEXI2DVI</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-TEXI2DVI" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to make TeX <small>DVI</small> files from Texinfo source;
+default ‘<samp>texi2dvi</samp>’.
+<span id="index-texi2dvi-1"></span>
+</p>
+</dd>
+<dt id="index-WEAVE"><span><code>WEAVE</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-WEAVE" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to translate Web into TeX; default ‘<samp>weave</samp>’.
+<span id="index-weave-1"></span>
+</p>
+</dd>
+<dt id="index-CWEAVE"><span><code>CWEAVE</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CWEAVE" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to translate C Web into TeX; default ‘<samp>cweave</samp>’.
+<span id="index-cweave-1"></span>
+</p>
+</dd>
+<dt id="index-TANGLE"><span><code>TANGLE</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-TANGLE" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to translate Web into Pascal; default ‘<samp>tangle</samp>’.
+<span id="index-tangle-1"></span>
+</p>
+</dd>
+<dt id="index-CTANGLE"><span><code>CTANGLE</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CTANGLE" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Program to translate C Web into C; default ‘<samp>ctangle</samp>’.
+<span id="index-ctangle-1"></span>
+</p>
+</dd>
+<dt id="index-RM"><span><code>RM</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-RM" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Command to remove a file; default ‘<samp>rm -f</samp>’.
+<span id="index-rm"></span>
+</p></dd>
+</dl>
+
+<p>Here is a table of variables whose values are additional arguments for the
+programs above.  The default values for all of these is the empty
+string, unless otherwise noted.
+</p>
+<dl compact="compact">
+<dt id="index-ARFLAGS"><span><code>ARFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-ARFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Flags to give the archive-maintaining program; default ‘<samp>rv</samp>’.
+</p>
+</dd>
+<dt id="index-ASFLAGS"><span><code>ASFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-ASFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the assembler (when explicitly
+invoked on a ‘<samp>.s</samp>’ or ‘<samp>.S</samp>’ file).
+</p>
+</dd>
+<dt id="index-CFLAGS"><span><code>CFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the C compiler.
+</p>
+</dd>
+<dt id="index-CXXFLAGS"><span><code>CXXFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CXXFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the C++ compiler.
+</p>
+</dd>
+<dt id="index-COFLAGS"><span><code>COFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-COFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the RCS <code>co</code> program.
+</p>
+</dd>
+<dt id="index-CPPFLAGS"><span><code>CPPFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-CPPFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the C preprocessor and programs
+that use it (the C and Fortran compilers).
+</p>
+</dd>
+<dt id="index-FFLAGS"><span><code>FFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-FFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the Fortran compiler.
+</p>
+</dd>
+<dt id="index-GFLAGS"><span><code>GFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-GFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the SCCS <code>get</code> program.
+</p>
+</dd>
+<dt id="index-LDFLAGS"><span><code>LDFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-LDFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to compilers when they are supposed to invoke the linker,
+‘<samp>ld</samp>’, such as <code>-L</code>.  Libraries (<code>-lfoo</code>) should be
+added to the <code>LDLIBS</code> variable instead.
+</p>
+</dd>
+<dt id="index-LDLIBS"><span><code>LDLIBS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-LDLIBS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><span id="index-LOADLIBES"></span>
+<p>Library flags or names given to compilers when they are supposed to
+invoke the linker, ‘<samp>ld</samp>’.  <code>LOADLIBES</code> is a deprecated (but
+still supported) alternative to <code>LDLIBS</code>.  Non-library linker
+flags, such as <code>-L</code>, should go in the <code>LDFLAGS</code> variable.
+</p>
+</dd>
+<dt id="index-LFLAGS"><span><code>LFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-LFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to Lex.
+</p>
+</dd>
+<dt id="index-YFLAGS"><span><code>YFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-YFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to Yacc.
+</p>
+</dd>
+<dt id="index-PFLAGS"><span><code>PFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-PFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the Pascal compiler.
+</p>
+</dd>
+<dt id="index-RFLAGS"><span><code>RFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-RFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to the Fortran compiler for Ratfor programs.
+</p>
+</dd>
+<dt id="index-LINTFLAGS"><span><code>LINTFLAGS</code><a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html#index-LINTFLAGS" class="copiable-anchor"> ¶</a></span></dt>
+<dd><p>Extra flags to give to lint.
+</p></dd>
+</dl>
+
+</div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html">Chains of Implicit Rules</a>, Previous: <a href="https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html">Catalogue of Built-In Rules</a>, Up: <a href="https://www.gnu.org/software/make/manual/html_node/Implicit-Rules.html">Using Implicit Rules</a> &nbsp; [<a href="https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="https://www.gnu.org/software/make/manual/html_node/Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>
