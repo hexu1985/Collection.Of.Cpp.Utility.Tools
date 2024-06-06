@@ -9,15 +9,15 @@ public:
 	MemoryPool(size_t size = EXPANSION_SIZE);
 	virtual ~MemoryPool();
 
-	inline void *alloc(size_t size);
-	inline void free(void *someElement);
+	inline void* alloc(size_t size);
+	inline void free(void* someElement);
 
 private:
     struct MemoryChunk {
-        MemoryChunk *next;
+        MemoryChunk* next;
     };
 
-    MemoryChunk *freeList = NULL;
+    MemoryChunk* freeList = nullptr;
 	
 	enum { EXPANSION_SIZE = 32 };
 
@@ -31,9 +31,8 @@ MemoryPool<T>::MemoryPool(size_t size)
 }
 
 template <class T>
-MemoryPool<T>::~MemoryPool()
-{
-	for (MemoryChunk *nextPtr = freeList; freeList != NULL; nextPtr = freeList) {
+MemoryPool<T>::~MemoryPool() {
+	for (MemoryChunk* nextPtr = freeList; freeList != nullptr; nextPtr = freeList) {
 		freeList = freeList->next;
 		delete [] nextPtr;
 	}
@@ -41,13 +40,13 @@ MemoryPool<T>::~MemoryPool()
 
 template <class T>
 inline
-void *MemoryPool<T>::alloc(size_t)
+void* MemoryPool<T>::alloc(size_t)
 {
 	if (!freeList) {
 		expandTheFreeList();
 	}
 
-	MemoryChunk *head = freeList;
+	MemoryChunk* head = freeList;
 	freeList = head->next;
 
 	return head;
@@ -55,28 +54,26 @@ void *MemoryPool<T>::alloc(size_t)
 
 template <class T>
 inline
-void MemoryPool<T>::free(void *doomed)
-{
-	MemoryChunk *head = static_cast<MemoryChunk *>(doomed);
+void MemoryPool<T>::free(void* doomed) {
+	MemoryChunk* head = static_cast<MemoryChunk*>(doomed);
 
 	head->next = freeList;
 	freeList = head;
 }
 
 template <class T>
-void MemoryPool<T>::expandTheFreeList(int howMany)
-{
-	size_t size = (sizeof(T) > sizeof(MemoryChunk *)) ?
-		sizeof(T) : sizeof(MemoryChunk *);
+void MemoryPool<T>::expandTheFreeList(int howMany) {
+	size_t size = (sizeof(T) > sizeof(MemoryChunk*)) ?
+		sizeof(T) : sizeof(MemoryChunk*);
 
-	MemoryChunk *runner = reinterpret_cast<MemoryChunk *>(new char[size]);
+	MemoryChunk* runner = reinterpret_cast<MemoryChunk*>(new char[size]);
 
 	freeList = runner;
 	for (int i = 0; i < howMany; i++) {
 		runner->next =
-			reinterpret_cast<MemoryChunk *>(new char[size]);
+			reinterpret_cast<MemoryChunk*>(new char[size]);
 		runner = runner->next;
 	}
-	runner->next = NULL;
+	runner->next = nullptr;
 }
 

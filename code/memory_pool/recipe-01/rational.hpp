@@ -30,20 +30,20 @@ private:
 };
 
 inline
-void *Rational::operator new(size_t size) {
-    if (NULL == freeList) {
+void* Rational::operator new(size_t size) {
+    if (nullptr == freeList) {
         expandTheFreeList();
     }
 
-    NextOnFreeList *head = freeList;
+    NextOnFreeList* head = freeList;
     freeList = head->next;
 
     return head;
 }
 
 inline
-void Rational::operator delete(void *doomed, size_t size) {
-    NextOnFreeList *head = static_cast<NextOnFreeList *>(doomed);
+void Rational::operator delete(void* doomed, size_t size) {
+    NextOnFreeList* head = static_cast<NextOnFreeList*>(doomed);
 
     head->next = freeList;
     freeList = head;
