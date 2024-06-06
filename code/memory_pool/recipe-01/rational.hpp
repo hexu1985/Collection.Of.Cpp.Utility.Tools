@@ -1,11 +1,10 @@
-#ifndef RATIONAL_INC
-#define RATIONAL_INC
+#pragma once
 
 #include <cstddef>
 
 class NextOnFreeList {
 public:
-    NextOnFreeList *next;
+    NextOnFreeList* next;
 };
 
 class Rational {
@@ -14,8 +13,8 @@ public:
 
 	Rational(int a = 0, int b = 1): n(a), d(b) {}
 
-	void *operator new(size_t size); 
-	void operator delete(void *doomed, size_t size);
+	void* operator new(size_t size); 
+	void operator delete(void* doomed, size_t size);
 
 	static void newMemPool() { expandTheFreeList(); }
 	static void deleteMemPool();
@@ -23,17 +22,16 @@ public:
 	static void expandTheFreeList();
 
 private:
-	static NextOnFreeList *freeList;
+	static NextOnFreeList* freeList;
 
 private:
-	int n;	// 分子
-	int d;	// 分母
+	int n;	// Numerator
+	int d;	// Denominator
 };
 
 inline
-void *Rational::operator new(size_t size)
-{
-    if (NULL == freeList) {    // 如果列表为空，则将其填满
+void *Rational::operator new(size_t size) {
+    if (NULL == freeList) {
         expandTheFreeList();
     }
 
@@ -44,12 +42,10 @@ void *Rational::operator new(size_t size)
 }
 
 inline
-void Rational::operator delete(void *doomed, size_t size)
-{
+void Rational::operator delete(void *doomed, size_t size) {
     NextOnFreeList *head = static_cast<NextOnFreeList *>(doomed);
 
     head->next = freeList;
     freeList = head;
 }
 
-#endif

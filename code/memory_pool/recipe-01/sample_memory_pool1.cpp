@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-	Rational *array[1000];
+	Rational* array[1000];
 
 	Rational::newMemPool();
 

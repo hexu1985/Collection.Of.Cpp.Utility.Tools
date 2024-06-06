@@ -1,28 +1,25 @@
 #include "rational.hpp"
 
-NextOnFreeList *Rational::freeList = NULL;
+NextOnFreeList* Rational::freeList = nullptr;
 
-void Rational::expandTheFreeList()
-{
-	// 我们必须分配足够大的对象以包含下一个指针
-	size_t size = (sizeof(Rational) > sizeof(NextOnFreeList *)) ?
-		sizeof(Rational) : sizeof(NextOnFreeList *);
+void Rational::expandTheFreeList() {
+	size_t size = (sizeof(Rational) > sizeof(NextOnFreeList*)) ?
+		sizeof(Rational) : sizeof(NextOnFreeList*);
 
-	NextOnFreeList *runner = reinterpret_cast<NextOnFreeList *>(new char[size]);
+	NextOnFreeList* runner = reinterpret_cast<NextOnFreeList*>(new char[size]);
 
 	freeList = runner;
 	for (int i = 0; i < EXPANSION_SIZE; i++) {
 		runner->next =
-			reinterpret_cast<NextOnFreeList *>(new char[size]);
+			reinterpret_cast<NextOnFreeList*>(new char[size]);
 		runner = runner->next;
 	}
-	runner->next = NULL;
+	runner->next = nullptr;
 }
 
-void Rational::deleteMemPool()
-{
-    NextOnFreeList *nextPtr;
-    for (nextPtr = freeList; nextPtr != NULL; nextPtr = freeList) {
+void Rational::deleteMemPool() {
+    NextOnFreeList* nextPtr;
+    for (nextPtr = freeList; nextPtr != nullptr; nextPtr = freeList) {
         freeList = freeList->next;
         delete [] nextPtr;
     }
