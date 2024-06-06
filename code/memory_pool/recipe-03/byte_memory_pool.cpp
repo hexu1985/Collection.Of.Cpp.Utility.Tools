@@ -10,7 +10,6 @@ ByteMemoryPool::MemoryChunk::MemoryChunk(MemoryChunk *nextChunk, size_t reqSize)
 
 ByteMemoryPool::MemoryChunk::~MemoryChunk() { delete [] mem; }
 
-// 创建ByteMemoryPool对象, 生成私有存储空间
 ByteMemoryPool::ByteMemoryPool(size_t initSize)
 {
     expandStorage(initSize);

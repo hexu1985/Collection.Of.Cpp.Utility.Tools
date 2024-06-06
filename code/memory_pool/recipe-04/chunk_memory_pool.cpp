@@ -18,7 +18,6 @@ ChunkMemoryPool::~ChunkMemoryPool()
 
 void ChunkMemoryPool::expandTheFreeList(int howMany)
 {
-	// 我们必须分配足够大的对象以包含下一个指针
 	size_t size = (chunkSize > sizeof(MemoryChunk *)) ?
 		chunkSize : sizeof(MemoryChunk *);
 
