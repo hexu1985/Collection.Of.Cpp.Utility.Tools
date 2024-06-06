@@ -1,4 +1,4 @@
 #include "rational.hpp"
 
-MemoryPool<Rational> *Rational::stPool = 0;
-MTMemoryPool<MemoryPool<Rational>, DummyLock> *Rational::memPool = 0;
+MemoryPool<Rational>* Rational::stPool = nullptr;
+MTMemoryPool<MemoryPool<Rational>, DummyLock>* Rational::memPool = nullptr;

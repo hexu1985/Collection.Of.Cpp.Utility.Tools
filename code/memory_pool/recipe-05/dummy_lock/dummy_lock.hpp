@@ -1,5 +1,4 @@
-#ifndef DUMMY_LOCK_INC
-#define DUMMY_LOCK_INC
+#pragma once
 
 class DummyLock {
 public:
@@ -7,4 +6,3 @@ public:
     inline void unlock() {}
 };
 
-#endif
