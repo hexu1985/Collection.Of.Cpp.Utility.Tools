@@ -8,12 +8,12 @@ public:
     ChunkMemoryPool(size_t chunk_size, size_t expansion_size = EXPANSION_SIZE);
     virtual ~ChunkMemoryPool();
 
-    inline void *alloc(size_t size);
-    inline void free(void *someElement);
+    inline void* alloc(size_t size);
+    inline void free(void* someElement);
 
 private:
     struct MemoryChunk {
-        MemoryChunk *next;
+        MemoryChunk* next;
     };
 
     enum {
@@ -26,11 +26,10 @@ private:
     const size_t chunkSize;
     size_t expansionSize;
 
-    MemoryChunk *listOfMemoryChunks = NULL;
+    MemoryChunk* listOfMemoryChunks = nullptr;
 };
 
-inline void *ChunkMemoryPool::alloc(size_t)
-{
+inline void* ChunkMemoryPool::alloc(size_t) {
     if (!listOfMemoryChunks) {
         expandTheFreeList(expansionSize);
     }
@@ -41,9 +40,8 @@ inline void *ChunkMemoryPool::alloc(size_t)
     return head;
 }
 
-inline void ChunkMemoryPool::free(void *doomed)
-{
-    MemoryChunk *head = static_cast<MemoryChunk *>(doomed);
+inline void ChunkMemoryPool::free(void* doomed) {
+    MemoryChunk* head = static_cast<MemoryChunk*>(doomed);
 
     head->next = listOfMemoryChunks;
     listOfMemoryChunks = head;
