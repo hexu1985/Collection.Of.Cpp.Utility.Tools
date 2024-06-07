@@ -25,8 +25,7 @@ private:
 };
 
 template <class T>
-MemoryPool<T>::MemoryPool(size_t size)
-{
+MemoryPool<T>::MemoryPool(size_t size) {
 	expandTheFreeList(size);
 }
 
@@ -40,8 +39,7 @@ MemoryPool<T>::~MemoryPool() {
 
 template <class T>
 inline
-void* MemoryPool<T>::alloc(size_t)
-{
+void* MemoryPool<T>::alloc(size_t) {
 	if (!freeList) {
 		expandTheFreeList();
 	}

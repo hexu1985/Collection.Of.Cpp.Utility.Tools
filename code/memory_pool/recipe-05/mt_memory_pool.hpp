@@ -14,14 +14,12 @@ private:
 };
 
 template <class M, class L>
-MTMemoryPool<M, L>::MTMemoryPool(M &st_pool): stPool(st_pool)
-{
+MTMemoryPool<M, L>::MTMemoryPool(M &st_pool): stPool(st_pool) {
 }
 
 template <class M, class L>
 inline
-void* MTMemoryPool<M, L>::alloc(size_t size)
-{
+void* MTMemoryPool<M, L>::alloc(size_t size) {
     void* mem;
 
     theLock.lock();
@@ -33,8 +31,7 @@ void* MTMemoryPool<M, L>::alloc(size_t size)
 
 template <class M, class L>
 inline
-void MTMemoryPool<M, L>::free(void* doomed)
-{
+void MTMemoryPool<M, L>::free(void* doomed) {
     theLock.lock();
     stPool.free(doomed);
     theLock.unlock();
