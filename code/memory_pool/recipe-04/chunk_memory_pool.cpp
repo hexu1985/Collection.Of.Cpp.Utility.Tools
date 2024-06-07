@@ -10,7 +10,7 @@ ChunkMemoryPool::ChunkMemoryPool(size_t chunk_size, size_t expansion_size):
 ChunkMemoryPool::~ChunkMemoryPool() {
 	for (MemoryChunk* nextPtr = listOfMemoryChunks; listOfMemoryChunks != nullptr; nextPtr = listOfMemoryChunks) {
 		listOfMemoryChunks = listOfMemoryChunks->next;
-		delete [] nextPtr;
+		delete [] reinterpret_cast<char*>(nextPtr);
 	}
 }
 
