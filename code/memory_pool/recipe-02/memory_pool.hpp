@@ -26,14 +26,14 @@ private:
 
 template <class T>
 MemoryPool<T>::MemoryPool(size_t size) {
-	expandTheFreeList(size);
+//	expandTheFreeList(size);
 }
 
 template <class T>
 MemoryPool<T>::~MemoryPool() {
 	for (MemoryChunk* nextPtr = freeList; freeList != nullptr; nextPtr = freeList) {
 		freeList = freeList->next;
-		delete [] nextPtr;
+		delete [] reinterpret_cast<char*>(nextPtr);
 	}
 }
 
