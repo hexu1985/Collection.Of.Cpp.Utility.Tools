@@ -1,10 +1,10 @@
 
 RM = rm -f
-CXX = g++
-CXXFLAGS = -Wall -g -std=c++11
+CXX = clang++
+CXXFLAGS = -g -O3 -mavx2 -Wall -pedantic
 INCLUDES = 
+LDLIBS = 
 LDFLAGS =
-LDPATH =
 
 SOURCES = $(shell ls *.cpp)
 PROGS = $(SOURCES:%.cpp=%)
@@ -15,5 +15,8 @@ all: $(PROGS)
 clean:
 	$(RM) $(PROGS)
 
-%: %.cpp
-	$(CXX) -o $@ $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH)
+%.o:%.cpp
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCLUDE)
+
+%: %.o
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
