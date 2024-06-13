@@ -26,7 +26,7 @@ private:
 
 template <class T>
 MemoryPool<T>::MemoryPool(size_t size) {
-//	expandTheFreeList(size);
+	expandTheFreeList(size);
 }
 
 template <class T>
@@ -38,7 +38,6 @@ MemoryPool<T>::~MemoryPool() {
 }
 
 template <class T>
-inline
 void* MemoryPool<T>::alloc(size_t) {
 	if (!freeList) {
 		expandTheFreeList();
@@ -51,7 +50,6 @@ void* MemoryPool<T>::alloc(size_t) {
 }
 
 template <class T>
-inline
 void MemoryPool<T>::free(void* doomed) {
 	MemoryChunk* head = static_cast<MemoryChunk*>(doomed);
 

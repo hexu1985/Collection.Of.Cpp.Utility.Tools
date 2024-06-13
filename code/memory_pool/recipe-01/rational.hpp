@@ -2,10 +2,7 @@
 
 #include <cstddef>
 
-class NextOnFreeList {
-public:
-    NextOnFreeList* next;
-};
+class NextOnFreeList;
 
 class Rational {
 public:
@@ -28,24 +25,4 @@ private:
 	int n;	// Numerator
 	int d;	// Denominator
 };
-
-inline
-void* Rational::operator new(size_t size) {
-    if (nullptr == freeList) {
-        expandTheFreeList();
-    }
-
-    NextOnFreeList* head = freeList;
-    freeList = head->next;
-
-    return head;
-}
-
-inline
-void Rational::operator delete(void* doomed, size_t size) {
-    NextOnFreeList* head = static_cast<NextOnFreeList*>(doomed);
-
-    head->next = freeList;
-    freeList = head;
-}
 
