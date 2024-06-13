@@ -1,20 +1,25 @@
+# Makefile
 
-RM = rm -f
-CXX = g++
-CXXFLAGS = -Wall -g -DNDEBUG -std=c++11
+CXX = clang++
+CXXFLAGS = -g -O3 -mavx2 -Wall -pedantic
 INCLUDES = 
-LDFLAGS = 
-LDPATH =
-VPATH = 
+LDLIBS = 
+LDFLAGS =
+VPATH =
 
-SOURCES = $(shell ls *.cpp)
-PROGS = sample_mt_memory_pool_dummy_lock
+PROGS =	example
 
+.PHONY: all
 all: $(PROGS)
-	@echo "PROGS = $(PROGS)" 
+	@echo "build OK!"
 
 clean:
-	$(RM) $(PROGS)
+	@$(RM) $(PROGS) *.o perf.data*
+	@echo "clean OK!"
 
-$(PROGS): $(SOURCES)
-	$(CXX) -o $@ $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH)
+%.o:%.cpp
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCLUDE)
+
+example: example.o rational.o
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
+
