@@ -7,18 +7,18 @@ using namespace std;
 
 int main()
 {
-	Rational *array[1000];
+	Rational* array[5000];
 
 	Rational::newMemPool();
 
 	// 此处开始计时
 	auto start = chrono::steady_clock::now();
 
-	for (int j = 0; j < 5000; j++) {
-		for (int i = 0; i < 1000; i++) {
+	for (int j = 0; j < 10000; j++) {
+		for (int i = 0; i < 5000; i++) {
 			array[i] = new Rational(i);
 		}
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 5000; i++) {
 			delete array[i];
 		}
 	}
@@ -28,7 +28,7 @@ int main()
 
 	cout << "use time: " << chrono::duration_cast<chrono::milliseconds>(end-start).count() << " ms" << endl;
 
-	Rational::deleteMemPool();
+    Rational::deleteMemPool();
 
 	return 0;
 }
