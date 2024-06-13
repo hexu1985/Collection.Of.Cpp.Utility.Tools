@@ -1,27 +1,25 @@
 # Makefile
 
-RM = rm -f
-CXX = g++
-CXXFLAGS = -Wall -g -std=c++11
-INCLUDE = -I../include
-LDFLAGS = 
-LDPATH = 
-VPATH = ../src
+CXX = clang++
+CXXFLAGS = -g -O3 -mavx2 -Wall -pedantic
+INCLUDES = 
+LDLIBS = 
+LDFLAGS =
+VPATH =
 
-PROGS =	sample_chunk_memory_pool1
+PROGS =	example
 
 .PHONY: all
 all: $(PROGS)
 	@echo "build OK!"
 
 clean:
-	@$(RM) $(PROGS) *.o
+	@$(RM) $(PROGS) *.o perf.data*
 	@echo "clean OK!"
 
 %.o:%.cpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCLUDE)
 
-sample_chunk_memory_pool1: sample_chunk_memory_pool1.o rational.o chunk_memory_pool.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDPATH)
-
+example: example.o rational.o chunk_memory_pool.o
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
 
