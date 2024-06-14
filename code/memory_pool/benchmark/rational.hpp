@@ -1,5 +1,4 @@
-#ifndef RATIONAL_INC
-#define RATIONAL_INC
+#pragma once
 
 class Rational {
 public:
@@ -10,4 +9,3 @@ private:
 	int d;	// Denominator
 };
 
-#endif
