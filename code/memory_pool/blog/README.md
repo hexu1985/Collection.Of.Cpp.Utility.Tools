@@ -103,8 +103,8 @@ $ perf report --stdio
 当然，这个测试代码是量身定做的，但实际项目中，通过linux性能分析工具perf发现性能热点的套路还是可以复用的。
 
 接下来我们要测试具体的时延，作为性能优化的基准，虽然example.cpp中基于chrono::steady_clock的计时可以作为时延数据，
-但我这里还是给出更加专业的工具测试的结果：基于Google Benchmark库，Benchmark库的安装和使用这里不做介绍，不熟悉的同学
-可以自行去网上搜索资料。
+但我这里还是给出用更加专业的工具进行测试的结果：基于Google Benchmark库，Benchmark库的安装和使用这里不做介绍，
+不熟悉的同学可以自行去网上搜索资料。
 
 我们将example.cpp稍微改造改造，得出使用Google Benchmark库测试的程序：benchmark.cpp
 
@@ -152,5 +152,43 @@ $ ./benchmark
 
 通过结果我们可以知道在特定CPU配置和系统负载情况下的时延：51099 ns（由于是单线程模式下，墙上时钟和CPU时钟结果一样）。
 
+有了基准测试数据，以及测试性能的统一方式，我们接下来就可以开始实现我们的内存池了。
 
+**内存池版本1：专用 Rational 内存管理器**
 
+为避免频繁地使用默认内存管理器，Rational 类要维护一个预先分配的 Rational 对象的静态连接列表，该列表列出空闲的可用对象。
+当需要 Rational 对象时，可以从空闲列表中取出一个，使用后再把它放回空闲列表以便今后分配。
+
+我们声明了一个辅助结构来连接空闲列表的相邻元素。
+
+```cpp
+class NextOnFreeList {
+public:
+    NextOnFreeList* next;
+};
+```
+
+空闲列表被声明为一个由NextOnFreeList元素组成的列表。
+
+```cpp
+class Rational {
+public:
+    // ...
+
+private:
+	static NextOnFreeList* freeList;
+
+private:
+    // ...
+};
+```
+
+虽然空闲列表的每个元素都声明为 NextOnFreeList 结构，但是它们
+仍然是 Rational 对象。创建一个元素时，我们给它分配足够大的空间以包含
+Rational 对象。为了遍历对象，每个 Rational 对象的前几个字节均用于
+指向空闲列表的下一个对象。我们可以通过把 Rational 对象转换成指向
+NextOnFreeList 类型的指针来实现。
+
+这样，该空闲列表有双重身份：其一是 Rational 对象的序列，其二是 NextOnFreeList 元素的序列。
+
+![figure-6.1](figure-6.1.png)
