@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 #mpl.rcParams["axes.unicode_minus"] = False
 
 # some simple data
-x = [1,2]
-y = [51117, 50000]
-x_label = ["version 0", "version 1"]
+x = [1,2,3]
+y = [51099, 17534, 20642]
+x_label = ["benchmark", "version 1", "version 2"]
 
 # create bar
 plt.bar(x,y,align="center",color="c",tick_label=x_label,hatch="/")

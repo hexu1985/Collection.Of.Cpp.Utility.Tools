@@ -417,6 +417,50 @@ private:
 };
 ```
 
-至于性能测试代码，几乎没有变化。照例，我们给出测试结果。
+至于性能测试代码，几乎没有变化。
 
+完整的工程链接在：[recipe-02](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/memory_pool/recipe-02)
 
+编译并运行代码：
+
+```shell
+$ clang++ -o example example.cpp rational.cpp -g -O3 -mavx2 -Wall -pedantic
+$ ./example 
+use time: 202 ms
+```
+
+直观的看到，性能相比针对 Rational 专用的内存管理器，性能略微有所下降，原因分析是因为多了一层MemoryPool，多了一层函数调用的开销。
+
+我们再使用Google Benchmark库测试的程序跑一遍：
+
+```shell
+$ clang++ -o benchmark benchmark.cpp rational.cpp -g -O3 -mavx2 -Wall -pedantic -I/home/hexu/local/google_benchmark/include -Wl,-rpath,/home/hexu/local/google_benchmark/lib -Wl,--enable-new-dtags -L/home/hexu/local/google_benchmark/lib -pthread -lbenchmark
+$ ./benchmark
+```
+
+我们就会得到如下输出：
+
+![recipe-02 google](recipe-02_google.png)
+
+20642 ns这个结果和基于chrono::steady_clock的计时统计是一致的。
+
+然后我们再来看看热点分布。命令和之前的一样：
+
+```shell
+$ sudo bash -c "echo -1 > /proc/sys/kernel/perf_event_paranoid"
+$ perf record ./example
+$ perf report --stdio
+```
+
+运行命令，我们会得到如下输出：
+
+![recipe-02 perf](recipe-02_perf.png)
+
+对比版本1的热点分析结果，我又发现两件事情：
+- new() 加上 MemoryPool::alloc()的时间略微大于 Rational 专用内存管理版本的new()，印证了我说的多一层函数调用的开销。
+- 没有发现MemoryPool::free()的时间占比，以及 delete() 的时间和 Rational 专用内存管理版本的 delete() 时间大致相同，
+  猜测是因为 MemoryPool::free() 被 inline 到了 delete() 里。
+
+至此，我们将三种版本（基准版本、版本1、版本2）的性能数据（Google Benchmark给出）结果可视化显示出来：
+
+![perf compare](perf_compare.png)
