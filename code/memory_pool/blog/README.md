@@ -464,3 +464,19 @@ $ perf report --stdio
 至此，我们将三种版本（基准版本、版本1、版本2）的性能数据（Google Benchmark给出）结果可视化显示出来：
 
 ![perf compare](perf_compare.png)
+
+**总结**
+
+性能优化需要测试数据和测试工具（方法）的支撑，无论是发现性能瓶颈，还是验证性能优化效果。
+
+本篇文章就到此结束，感谢各位同学的阅读。
+
+为了完整性，我还列出了这里没介绍的其他版本的线程池的实现：
+- 单线程内存池--版本3：可变大小内存管理器 [recipe-03](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/memory_pool/recipe-03)
+- 单线程内存池--版本2：固定大小对象的内存池，非模板实现 [recipe-04](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/memory_pool/recipe-04)
+- 多线程内存池 [recipe-05](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/memory_pool/recipe-05)
+- 单线程内存池：固定大小对象的内存池，内存池的大小也是编译期指定的，模板实现 [recipe-06](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/memory_pool/recipe-06)
+
+### 参考文档：
+
+- 《提高C++性能的编译技术》（Efficient C++: Performance Programming Techniques）
