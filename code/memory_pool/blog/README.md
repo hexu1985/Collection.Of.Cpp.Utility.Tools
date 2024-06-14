@@ -480,3 +480,4 @@ $ perf report --stdio
 ### 参考文档：
 
 - 《提高C++性能的编译技术》（Efficient C++: Performance Programming Techniques）
+- Google Benchmark: <https://github.com/google/benchmark>
