@@ -192,3 +192,103 @@ NextOnFreeList 类型的指针来实现。
 这样，该空闲列表有双重身份：其一是 Rational 对象的序列，其二是 NextOnFreeList 元素的序列。
 
 ![figure-6.1](figure-6.1.png)
+
+将空闲列表声明为 Rational 类的静态成员， Rational 的操作符 new() 和 delete() 可以管理该静态列表。
+这两个操作符重载了对应的全局操作符。
+
+```cpp
+class Rational {
+public:
+    enum { EXPANSION_SIZE = 32 };
+
+	Rational(int a = 0, int b = 1): n(a), d(b) {}
+
+	void* operator new(size_t size); 
+	void operator delete(void* doomed, size_t size);
+
+	static void newMemPool() { expandTheFreeList(); }
+	static void deleteMemPool();
+
+	static void expandTheFreeList();
+
+private:
+	static NextOnFreeList* freeList;
+
+private:
+	int n;	// Numerator
+	int d;	// Denominator
+};
+```
+
+new() 从空闲列表头部分配一个 Rational 对象所需的内存。如果列表为空，就扩展列表。
+
+```cpp
+void* Rational::operator new(size_t size) {
+    if (nullptr == freeList) {
+        expandTheFreeList();
+    }
+
+    NextOnFreeList* head = freeList;
+    freeList = head->next;
+
+    return head;
+}
+```
+
+delete() 把 Rational 对象的内存直接添加到空闲列表的头部，以释放一个 Rational 对象。
+
+```cpp
+void Rational::operator delete(void* doomed, size_t size) {
+    NextOnFreeList* head = static_cast<NextOnFreeList*>(doomed);
+
+    head->next = freeList;
+    freeList = head;
+}
+```
+
+当空闲列表用完时，需要从堆上分配更多的 Rational 对象内存。
+
+```cpp
+void Rational::expandTheFreeList() {
+	size_t size = (sizeof(Rational) > sizeof(NextOnFreeList*)) ?
+		sizeof(Rational) : sizeof(NextOnFreeList*);
+
+	NextOnFreeList* runner = reinterpret_cast<NextOnFreeList*>(new char[size]);
+
+	freeList = runner;
+	for (int i = 0; i < EXPANSION_SIZE; i++) {
+		runner->next =
+			reinterpret_cast<NextOnFreeList*>(new char[size]);
+		runner = runner->next;
+	}
+	runner->next = nullptr;
+}
+```
+
+完整的工程链接在：[recipe-01](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/memory_pool/recipe-01)
+
+编译并运行代码：
+
+```shell
+$ clang++ -o example example.cpp rational.cpp -g -O3 -mavx2 -Wall -pedantic
+$ ./example 
+use time: 168 ms
+```
+
+直观的看到，性能的确有一定的提升，我们再使用Google Benchmark库测试的程序跑一遍：
+
+```shell
+$ clang++ -o benchmark benchmark.cpp rational.cpp -g -O3 -mavx2 -Wall -pedantic -I/home/hexu/local/google_benchmark/include -Wl,-rpath,/home/hexu/local/google_benchmark/lib -Wl,--enable-new-dtags -L/home/hexu/local/google_benchmark/lib -pthread -lbenchmark
+$ ./benchmark
+```
+
+我们就会得到如下输出：
+
+![recipe-01 google](recipe-01_google.png)
+
+17534 ns这个结果和基于chrono::steady_clock的计时统计是一致的。
+
+然后我们再来看看热点分布。
+
+
+
