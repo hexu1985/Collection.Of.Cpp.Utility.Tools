@@ -288,7 +288,22 @@ $ ./benchmark
 
 17534 ns这个结果和基于chrono::steady_clock的计时统计是一致的。
 
-然后我们再来看看热点分布。
+然后我们再来看看热点分布。命令和之前的一样：
 
+```shell
+$ sudo bash -c "echo -1 > /proc/sys/kernel/perf_event_paranoid"
+$ perf record ./example
+$ perf report --stdio
+```
+
+运行命令，我们会得到如下输出：
+
+![recipe-01 perf](recipe-01_perf.png)
+
+对比之前的热点分析结果，我发现两件事情：
+- main的时间占比从8.06%提升到37.66%：由于测试程序总用时下降，main函数占比占高是正常的。
+- malloc和free函数的相关项消失了：由于我们自己实现了内存管理，所以malloc和free的调用次数明显下降。
+
+虽然为 Rational 专用定制的内存管理，不是最优实现，但也达到了性能提升，而且我们通过测试工具和测试数据验证了优化的效果。
 
 
