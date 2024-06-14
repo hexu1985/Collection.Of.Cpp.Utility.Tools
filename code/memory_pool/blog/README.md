@@ -306,4 +306,117 @@ $ perf report --stdio
 
 虽然为 Rational 专用定制的内存管理，不是最优实现，但也达到了性能提升，而且我们通过测试工具和测试数据验证了优化的效果。
 
+作为C++语言实现的内存池，是不可能绕开模板（template）的，文章的最后，我们给出基于模板实现的“固定大小对象的内存池”。
+
+**版本2：固定大小对象的内存池**
+
+由于几乎是把版本1的代码直译成模板形式，所以我就话不多说，直接上代码吧：
+
+memory_pool.hpp函数里，定义了MemoryPool的模板类，模板参数类型T指定了内存池的对象类型（其实只依赖了对象的大小而已）。
+
+```cpp
+#pragma once
+
+#include <cstddef>
+#include <new>
+
+template <class T>
+class MemoryPool {
+public:
+	MemoryPool(size_t size = EXPANSION_SIZE);
+	virtual ~MemoryPool();
+
+	inline void* alloc(size_t size);
+	inline void free(void* someElement);
+
+private:
+    struct MemoryChunk {
+        MemoryChunk* next;
+    };
+
+    MemoryChunk* freeList = nullptr;
+	
+	enum { EXPANSION_SIZE = 32 };
+
+	void expandTheFreeList(int howMany = EXPANSION_SIZE);
+};
+
+template <class T>
+MemoryPool<T>::MemoryPool(size_t size) {
+	expandTheFreeList(size);
+}
+
+template <class T>
+MemoryPool<T>::~MemoryPool() {
+	for (MemoryChunk* nextPtr = freeList; freeList != nullptr; nextPtr = freeList) {
+		freeList = freeList->next;
+		delete [] reinterpret_cast<char*>(nextPtr);
+	}
+}
+
+template <class T>
+void* MemoryPool<T>::alloc(size_t) {
+	if (!freeList) {
+		expandTheFreeList();
+	}
+
+	MemoryChunk* head = freeList;
+	freeList = head->next;
+
+	return head;
+}
+
+template <class T>
+void MemoryPool<T>::free(void* doomed) {
+	MemoryChunk* head = static_cast<MemoryChunk*>(doomed);
+
+	head->next = freeList;
+	freeList = head;
+}
+
+template <class T>
+void MemoryPool<T>::expandTheFreeList(int howMany) {
+	size_t size = (sizeof(T) > sizeof(MemoryChunk*)) ?
+		sizeof(T) : sizeof(MemoryChunk*);
+
+	MemoryChunk* runner = reinterpret_cast<MemoryChunk*>(new char[size]);
+
+	freeList = runner;
+	for (int i = 0; i < howMany; i++) {
+		runner->next =
+			reinterpret_cast<MemoryChunk*>(new char[size]);
+		runner = runner->next;
+	}
+	runner->next = nullptr;
+}
+```
+
+rational.hpp里 Rational 类的调整是：不再需要维护它自己的空闲列表。这项任务委托给了MemoryPool类。
+
+```cpp
+#pragma once
+
+#include "memory_pool.hpp"
+
+class Rational {
+public:
+	Rational(int a = 0, int b = 1): n(a), d(b) {}
+
+	void* operator new(size_t size); 
+	void operator delete(void* doomed, size_t size); 
+
+	static void newMemPool() { memPool = new MemoryPool<Rational>(64); }
+	static void deleteMemPool() { delete memPool; }
+
+private:
+	static MemoryPool<Rational>* memPool;
+
+private:
+	int n;	// Numerator
+	int d;	// Denominator
+};
+```
+
+至于性能测试代码，几乎没有变化。照例，我们给出测试结果。
+
 
