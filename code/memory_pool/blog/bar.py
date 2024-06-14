@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 # some simple data
 x = [1,2]
-y = [10000, 50000]
+y = [51117, 50000]
 x_label = ["version 0", "version 1"]
 
 # create bar
