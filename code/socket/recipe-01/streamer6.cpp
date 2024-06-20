@@ -12,7 +12,7 @@ DEFINE_string(host, "::1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
 DEFINE_bool(client, false, "run as the client");
 
-std::ostream& operator <<(std::ostream& out, const std::tuple<std::string, uint16_t>& address)
+std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
 {
     out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
     return out;
