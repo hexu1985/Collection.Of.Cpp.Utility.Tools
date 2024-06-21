@@ -45,13 +45,8 @@ std::string recvall(Socket& sock, size_t length) {
 
 std::string get_block(Socket& sock) {
     auto data = recvall(sock, sizeof(uint32_t));
-    uint32_t block_length = ntohl(*(reinterpret_cast<uint32_t*>(data.data())));
+    uint32_t block_length = ntohl(*(reinterpret_cast<const uint32_t*>(data.data())));
     return recvall(sock, block_length);
-}
-
-template <typename T>
-std::string_view make_string_view(const T* data) {
-    return std::string_view(reinterpret_cast<const char*>(data), sizeof(T));
 }
 
 void put_block(Socket& sock, const std::string& message) {

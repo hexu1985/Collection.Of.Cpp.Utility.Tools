@@ -1,7 +1,11 @@
+
+ABSEIL_DIR=$(HOME)/local/abseil
+
 CXX = g++
-CXXFLAGS = -g3 -Wall -Wextra -std=c++17
-LDFLAGS = 
-LDLIBS = -lgflags
+CXXFLAGS = -g3 -Wall -Wextra
+INCLUDES = -I$(ABSEIL_DIR)/include
+LDFLAGS = -L$(ABSEIL_DIR)/lib
+LDLIBS = -lgflags -labsl_string_view
 
 PROGS =	streamer streamer6 blocks tcp_sixteen byteorder
 LIBOBJS = SocketException.o Socket.o SocketUtility.o
@@ -13,6 +17,9 @@ all: $(PROGS)
 clean:
 	@$(RM) $(PROGS) *.o
 	@echo "clean OK!"
+
+%.o:%.cpp
+	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDES)
 
 streamer: streamer.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)

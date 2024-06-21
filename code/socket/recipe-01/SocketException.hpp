@@ -2,12 +2,12 @@
 
 #include <stdexcept>
 #include <string>
-#include <string_view>
+#include <absl/strings/string_view.h>
 
 class SocketError: public std::runtime_error {
 public:
-    SocketError(int error_code, std::string_view msg);
-    SocketError(std::string_view msg);
+    SocketError(int error_code, absl::string_view msg);
+    SocketError(absl::string_view msg);
 
     int ErrorCode() { return error_code_; }
 
@@ -18,8 +18,8 @@ protected:
 // getaddrinfo error
 class GAIError: public std::runtime_error {
 public:
-    GAIError(int error_code, std::string_view msg);
-    GAIError(std::string_view msg);
+    GAIError(int error_code, absl::string_view msg);
+    GAIError(absl::string_view msg);
 
     int ErrorCode() { return error_code_; }
 

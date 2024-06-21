@@ -1,5 +1,10 @@
 ### BSD socket API封装
 
+项目依赖：
+- fmtlib
+- abseil
+- gflags（示例代码依赖）
+
 函数命名规则：
 - 和C API重名的都改成首字母大写
 - 其他函数都是小写加下划线方式
