@@ -5,6 +5,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <errno.h>
+#include <iostream>
 
 #include <memory>
 
@@ -75,7 +76,7 @@ std::string Inet_ntop(int family, const void *addrptr) {
     return ptr;
 }
 
-std::tuple<std::string, uint16_t> Sock_ntop(const struct sockaddr *sa, socklen_t salen) {
+std::tuple<std::string, uint16_t> sock_ntop(const struct sockaddr *sa, socklen_t salen) {
     std::string host;
     uint16_t port;
     switch (sa->sa_family) {
@@ -94,7 +95,7 @@ std::tuple<std::string, uint16_t> Sock_ntop(const struct sockaddr *sa, socklen_t
     }
 
     default:
-        throw std::runtime_error(format("sock_ntop: unknown AF_xxx: {}, len {}", sa->sa_family, salen));
+        std::cerr << format("sock_ntop: unknown AF_xxx: {}, len {}", sa->sa_family, salen) << "\n";
     }
     return std::make_tuple(std::move(host), port);
 }
@@ -132,9 +133,9 @@ void Socket::Connect(const char* host, uint16_t port) {
     }
 }
 
-void Socket::Sendall(std::string_view data) {
+void Socket::sendall(std::string_view data) {
     if (writen(sockfd_, data.data(), data.size()) != data.size()) {
-        throw SocketError(errno, "Sendall() error");
+        throw SocketError(errno, "sendall() error");
     }
 }
 
@@ -197,7 +198,7 @@ std::tuple<std::string, uint16_t> Socket::Getsockname() {
         throw SocketError(errno, "Getsockname() error");
     }
 
-    return Sock_ntop(sa, salen);
+    return sock_ntop(sa, salen);
 }
 
 Socket Socket::Accept(std::tuple<std::string, uint16_t>* peername) {
@@ -221,7 +222,7 @@ again:
     sock.family_ = family_;
 
     if (peername) {
-        *peername = Sock_ntop(sa, salen);
+        *peername = sock_ntop(sa, salen);
     }
 
     return sock;
@@ -261,6 +262,6 @@ std::tuple<std::string, uint16_t> Socket::Getpeername() {
         throw SocketError(errno, "Getpeername() error");
     }
 
-    return Sock_ntop(sa, salen);
+    return sock_ntop(sa, salen);
 }
 

@@ -71,7 +71,7 @@ void server(const char* interface, uint16_t port) {
         std::cout << "  Socket peer: " << sc.Getpeername() << "\n";
         auto message = recvall(sc, 16);
         std::cout << "  Incoming sixteen-octet message: " << message << "\n";
-        sc.Sendall("Farewell, client");
+        sc.sendall("Farewell, client");
         sc.Close();
         std::cout << "  Reply sent, socket closed\n";
     }
@@ -81,7 +81,7 @@ void client(const char* host, uint16_t port) {
     Socket sock(AF_INET, SOCK_STREAM);
     sock.Connect(host, port);
     std::cout << "Client has been assigned socket name " << sock.Getsockname() << "\n";
-    sock.Sendall("Hi there, server");
+    sock.sendall("Hi there, server");
     auto reply = recvall(sock, 16);
     std::cout << "The server said " << reply << "\n";
     sock.Close();

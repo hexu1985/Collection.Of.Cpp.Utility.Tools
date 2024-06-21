@@ -21,7 +21,7 @@ public:
 
     void Connect(const char* host, uint16_t port);
 
-    void Sendall(std::string_view data);
+    void sendall(std::string_view data);
 
     void Close();
 
