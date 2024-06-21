@@ -250,3 +250,17 @@ size_t Socket::Send(std::string_view data, int flags) {
     return n;
 }
 
+std::tuple<std::string, uint16_t> Socket::Getpeername() {
+    struct sockaddr_storage address;
+    memset(&address, 0, sizeof(address));
+
+    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&address);
+    socklen_t salen = sizeof(address);
+
+    if (getpeername(sockfd_, sa, &salen) < 0) {
+        throw SocketError(errno, "Getpeername() error");
+    }
+
+    return Sock_ntop(sa, salen);
+}
+

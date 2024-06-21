@@ -41,6 +41,8 @@ public:
 
     size_t Send(std::string_view data, int flags=0);
 
+    std::tuple<std::string, uint16_t> Getpeername();
+
 private:
     Socket() = default;
 
