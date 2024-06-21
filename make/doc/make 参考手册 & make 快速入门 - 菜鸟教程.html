@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)https://www.gy328.com/ref/docs/make.html -->
+<html lang="en" data-color-mode="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>make 参考手册
+ &amp;  make 快速入门 - 菜鸟教程</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta description="包含 最重要概念、函数、方法等的 make 备忘单。 初学者的完整快速参考。
+
+Makefile 入门，为开发人员分享快速参考备忘单。">
+<meta keywords="make,reference,Quick,Reference,快速入门,cheat,sheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%221em%22%20width%3D%221em%22%3E%20%3Cpath%20d%3D%22m21.66%2010.44-.98%204.18c-.84%203.61-2.5%205.07-5.62%204.77-.5-.04-1.04-.13-1.62-.27l-1.68-.4c-4.17-.99-5.46-3.05-4.48-7.23l.98-4.19c.2-.85.44-1.59.74-2.2%201.17-2.42%203.16-3.07%206.5-2.28l1.67.39c4.19.98%205.47%203.05%204.49%207.23Z%22%20fill%3D%22%23c9d1d9%22%2F%3E%20%3Cpath%20d%3D%22M15.06%2019.39c-.62.42-1.4.77-2.35%201.08l-1.58.52c-3.97%201.28-6.06.21-7.35-3.76L2.5%2013.28c-1.28-3.97-.22-6.07%203.75-7.35l1.58-.52c.41-.13.8-.24%201.17-.31-.3.61-.54%201.35-.74%202.2l-.98%204.19c-.98%204.18.31%206.24%204.48%207.23l1.68.4c.58.14%201.12.23%201.62.27Zm2.43-8.88c-.06%200-.12-.01-.19-.02l-4.85-1.23a.75.75%200%200%201%20.37-1.45l4.85%201.23a.748.748%200%200%201-.18%201.47Z%22%20fill%3D%22%23228e6c%22%20%2F%3E%20%3Cpath%20d%3D%22M14.56%2013.89c-.06%200-.12-.01-.19-.02l-2.91-.74a.75.75%200%200%201%20.37-1.45l2.91.74c.4.1.64.51.54.91-.08.34-.38.56-.72.56Z%22%20fill%3D%22%23228e6c%22%20%2F%3E%20%3C%2Fsvg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="./make 参考手册 &amp; make 快速入门 - 菜鸟教程_files/style.css">
+<link rel="stylesheet" href="./make 参考手册 &amp; make 快速入门 - 菜鸟教程_files/katex.css">
+</head>
+<body><nav class="header-nav"><div class="max-container"><a href="https://www.gy328.com/ref/index.html" class="logo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" height="1em" width="1em">
+  <path d="m21.66 10.44-.98 4.18c-.84 3.61-2.5 5.07-5.62 4.77-.5-.04-1.04-.13-1.62-.27l-1.68-.4c-4.17-.99-5.46-3.05-4.48-7.23l.98-4.19c.2-.85.44-1.59.74-2.2 1.17-2.42 3.16-3.07 6.5-2.28l1.67.39c4.19.98 5.47 3.05 4.49 7.23Z" fill="#c9d1d9"></path>
+  <path d="M15.06 19.39c-.62.42-1.4.77-2.35 1.08l-1.58.52c-3.97 1.28-6.06.21-7.35-3.76L2.5 13.28c-1.28-3.97-.22-6.07 3.75-7.35l1.58-.52c.41-.13.8-.24 1.17-.31-.3.61-.54 1.35-.74 2.2l-.98 4.19c-.98 4.18.31 6.24 4.48 7.23l1.68.4c.58.14 1.12.23 1.62.27Zm2.43-8.88c-.06 0-.12-.01-.19-.02l-4.85-1.23a.75.75 0 0 1 .37-1.45l4.85 1.23a.748.748 0 0 1-.18 1.47Z" fill="#228e6c"></path>
+  <path d="M14.56 13.89c-.06 0-.12-.01-.19-.02l-2.91-.74a.75.75 0 0 1 .37-1.45l2.91.74c.4.1.64.51.54.91-.08.34-.38.56-.72.56Z" fill="#228e6c"></path>
+</svg>
+<span class="title">菜鸟教程</span></a><div class="menu"><a href="javascript:void(0);" class="searchbtn" id="searchbtn"><svg xmlns="http://www.w3.org/2000/svg" height="1em" width="1em" viewBox="0 0 18 18">
+  <path fill="currentColor" d="M17.71,16.29 L14.31,12.9 C15.4069846,11.5024547 16.0022094,9.77665502 16,8 C16,3.581722 12.418278,0 8,0 C3.581722,0 0,3.581722 0,8 C0,12.418278 3.581722,16 8,16 C9.77665502,16.0022094 11.5024547,15.4069846 12.9,14.31 L16.29,17.71 C16.4777666,17.8993127 16.7333625,18.0057983 17,18.0057983 C17.2666375,18.0057983 17.5222334,17.8993127 17.71,17.71 C17.8993127,17.5222334 18.0057983,17.2666375 18.0057983,17 C18.0057983,16.7333625 17.8993127,16.4777666 17.71,16.29 Z M2,8 C2,4.6862915 4.6862915,2 8,2 C11.3137085,2 14,4.6862915 14,8 C14,11.3137085 11.3137085,14 8,14 C4.6862915,14 2,11.3137085 2,8 Z"></path>
+</svg><span>搜索</span><span>⌘K</span></a><a href="https://github.com/jaywcjlove/reference/blob/main/docs/make.md" class="" target="__blank"><svg viewBox="0 0 36 36" fill="currentColor" height="1em" width="1em"><path d="m33 6.4-3.7-3.7a1.71 1.71 0 0 0-2.36 0L23.65 6H6a2 2 0 0 0-2 2v22a2 2 0 0 0 2 2h22a2 2 0 0 0 2-2V11.76l3-3a1.67 1.67 0 0 0 0-2.36ZM18.83 20.13l-4.19.93 1-4.15 9.55-9.57 3.23 3.23ZM29.5 9.43 26.27 6.2l1.85-1.85 3.23 3.23Z"></path><path fill="none" d="M0 0h36v36H0z"></path></svg><span>编辑</span></a><button id="darkMode" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="light" height="1em" width="1em">
+  <path d="M6.995 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007-2.246-5.007-5.007-5.007S6.995 9.239 6.995 12zM11 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2H2zm17 0h3v2h-3zM5.637 19.778l-1.414-1.414 2.121-2.121 1.414 1.414zM16.242 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.344 7.759 4.223 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"></path>
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="dark" height="1em" width="1em">
+  <path d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142 3.906 3.906 10.237 3.905 14.143 0a9.946 9.946 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z"></path>
+</svg>
+</button><script src="./make 参考手册 &amp; make 快速入门 - 菜鸟教程_files/dark.js"></script></div></div></nav><div class="wrap h1body-exist max-container"><header class="wrap-header h1wrap"><h1 id="make-参考手册"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="1em" width="1em">
+  <path d="M107.946667 838.4l57.173333 23.893333v-385.28l-103.68 250.026667c-17.493333 43.52 3.413333 93.44 46.506667 111.36z m832-157.866667L728.32 169.813333a85.888 85.888 0 0 0-77.226667-52.48c-11.093333 0-22.613333 1.706667-33.706666 6.4L302.933333 253.866667a85.290667 85.290667 0 0 0-46.08 110.933333l211.626667 510.72a85.248 85.248 0 0 0 110.933333 46.08l314.026667-130.133333a85.077333 85.077333 0 0 0 46.506667-110.933334zM336.213333 373.333333c-23.466667 0-42.666667-19.2-42.666666-42.666666s19.2-42.666667 42.666666-42.666667 42.666667 19.2 42.666667 42.666667-19.2 42.666667-42.666667 42.666666z m-85.333333 469.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h61.866667l-147.2-355.84v270.506667z"></path>
+</svg><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#make-%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C"><span class="icon icon-link"></span></a>make 参考手册</h1><div class="wrap-body">
+<p>包含 最重要概念、函数、方法等的 make 备忘单。 初学者的完整快速参考。</p>
+</div></header><div class="menu-tocs"><div class="menu-btn"><svg aria-hidden="true" fill="currentColor" height="1em" width="1em" viewBox="0 0 16 16" version="1.1" data-view-component="true">
+  <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+</svg></div><div class="menu-modal"><a aria-hidden="true" class="leve2 tocs-link" data-num="2" href="https://www.gy328.com/ref/docs/make.html#makefile-%E5%85%A5%E9%97%A8">Makefile 入门</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E7%A4%BA%E4%BE%8B">示例</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B">工作流程</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4">文件命令</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84">自定义文件路径</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E9%9A%90%E5%BC%8F%E7%94%9F%E6%88%90">隐式生成</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E8%A7%84%E5%88%99">规则</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%B8%85%E7%A9%BA%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6">清空目标文件</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%B3%A8%E9%87%8A">注释</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%8D%A2%E8%A1%8C-">换行 \</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%BC%95%E7%94%A8%E5%85%B6%E5%AE%83%E7%9A%84-makefile">引用其它的 Makefile</a><a aria-hidden="true" class="leve2 tocs-link" data-num="2" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%98%E9%87%8F">变量</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E8%B5%8B%E5%80%BC%E7%AC%A6">赋值符</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%9C%A8%E6%89%A7%E8%A1%8C%E6%97%B6%E6%89%A9%E5%B1%95%E5%85%81%E8%AE%B8%E9%80%92%E5%BD%92%E6%89%A9%E5%B1%95">在执行时扩展，允许递归扩展</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%9C%A8%E5%A3%B0%E6%98%8E%E6%97%B6%E6%89%A9%E5%B1%95">在声明时扩展</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%AA%E6%9C%89%E5%9C%A8%E8%AF%A5%E5%8F%98%E9%87%8F%E4%B8%BA%E7%A9%BA%E6%97%B6%E6%89%8D%E8%AE%BE%E7%BD%AE%E5%80%BC">只有在该变量为空时才设置值</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%B0%86%E5%80%BC%E8%BF%BD%E5%8A%A0%E5%88%B0%E5%8F%98%E9%87%8F%E7%9A%84%E5%B0%BE%E7%AB%AF">将值追加到变量的尾端</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#override">override</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%98%E9%87%8F-1">变量</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E9%81%BF%E5%85%8D%E9%80%92%E5%BD%92%E5%8F%98%E9%87%8F">避免递归变量</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#shell-%E5%8F%98%E9%87%8F">Shell 变量</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%AE%9A%E4%B9%89%E5%A4%9A%E8%A1%8C%E5%8F%98%E9%87%8F">定义多行变量</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E8%87%AA%E5%8A%A8%E5%8F%98%E9%87%8F">自动变量</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#">$@</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-1">$&lt;</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-2">$^</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-3">$+</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-4">$?</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-5">$*</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-6">$%</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%86%85%E7%BD%AE%E5%91%BD%E5%90%8D%E5%8F%98%E9%87%8F%E7%9A%84%E5%8F%82%E6%95%B0">内置命名变量的参数</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%86%85%E7%BD%AE%E5%B7%B2%E5%91%BD%E5%90%8D%E7%9A%84%E5%8F%98%E9%87%8F">内置已命名的变量</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%86%85%E7%BD%AE%E7%9A%84%E5%8F%98%E9%87%8F">内置的变量</a><a aria-hidden="true" class="leve2 tocs-link" data-num="2" href="https://www.gy328.com/ref/docs/make.html#%E4%B9%A6%E5%86%99%E8%A7%84%E5%88%99">书写规则</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%96%87%E4%BB%B6%E6%90%9C%E5%AF%BBvpath">文件搜寻（vpath）</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-7">%</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E9%80%9A%E9%85%8D%E7%AC%A6">通配符</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-8">*</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-9">~</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#-10">?</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E9%9D%99%E6%80%81%E6%A8%A1%E5%BC%8F">静态模式</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E4%BC%AA%E7%9B%AE%E6%A0%87">伪目标</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E7%BA%A6%E5%AE%9A%E4%BF%97%E6%88%90%E7%9A%84%E8%A7%84%E5%88%99">约定俗成的规则</a><a aria-hidden="true" class="leve2 tocs-link" data-num="2" href="https://www.gy328.com/ref/docs/make.html#%E5%91%BD%E4%BB%A4">命令</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%9B%9E%E5%A3%B0">回声（@）</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%98%BE%E7%A4%BA%E5%91%BD%E4%BB%A4%E7%A6%81%E6%AD%A2%E5%91%BD%E4%BB%A4">显示命令、禁止命令</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E6%98%BE%E7%A4%BA%E5%91%BD%E4%BB%A4">显示命令</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E7%A6%81%E6%AD%A2%E5%91%BD%E4%BB%A4">禁止命令</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4">执行命令</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#make-%E5%8F%82%E6%95%B0">make 参数</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#-debugoptions">-debug[=&lt;options&gt;]</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#make-%E7%9A%84%E9%80%80%E5%87%BA%E7%A0%81">make 的退出码</a><a aria-hidden="true" class="leve2 tocs-link" data-num="2" href="https://www.gy328.com/ref/docs/make.html#%E5%88%A4%E6%96%AD%E5%92%8C%E5%BE%AA%E7%8E%AF">判断和循环</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%8D%95%E5%88%86%E6%94%AF%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD">单分支条件判断</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%A4%9A%E5%88%86%E6%94%AF%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD">多分支条件判断</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#ifneq-%E8%AF%AD%E6%B3%95">ifneq 语法</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#ifeq-%E8%AF%AD%E6%B3%95">ifeq 语法</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#ifdef">ifdef</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#for-%E5%BE%AA%E7%8E%AF">for 循环</a><a aria-hidden="true" class="leve2 tocs-link" data-num="2" href="https://www.gy328.com/ref/docs/make.html#%E5%87%BD%E6%95%B0">函数</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%9B%BF%E6%8D%A2%E5%87%BD%E6%95%B0subst">字符串处理函数 - 替换函数(subst)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%A8%A1%E5%BC%8F%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2%E5%87%BD%E6%95%B0patsubst">字符串处理函数 - 模式字符串替换函数(patsubst)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8E%BB%E7%A9%BA%E6%A0%BC%E5%87%BD%E6%95%B0strip">字符串处理函数 - 去空格函数(strip)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%9F%A5%E6%89%BE%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0findstring">字符串处理函数 - 查找字符串函数(findstring)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E8%BF%87%E6%BB%A4%E5%87%BD%E6%95%B0filter">字符串处理函数 - 过滤函数(filter)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8F%8D%E8%BF%87%E6%BB%A4%E5%87%BD%E6%95%B0filter-out">字符串处理函数 - 反过滤函数(filter-out)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%8E%92%E5%BA%8F%E5%87%BD%E6%95%B0sort">字符串处理函数 - 排序函数(sort)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8F%96%E5%8D%95%E8%AF%8D%E5%87%BD%E6%95%B0word">字符串处理函数 - 取单词函数（word)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8F%96%E5%8D%95%E8%AF%8D%E4%B8%B2%E5%87%BD%E6%95%B0wordlist">字符串处理函数 - 取单词串函数(wordlist)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8D%95%E8%AF%8D%E4%B8%AA%E6%95%B0%E7%BB%9F%E8%AE%A1%E5%87%BD%E6%95%B0words">字符串处理函数 - 单词个数统计函数(words)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E9%A6%96%E5%8D%95%E8%AF%8D%E5%87%BD%E6%95%B0firstword">字符串处理函数 - 首单词函数(firstword)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E6%96%87%E4%BB%B6%E5%90%8D%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0">文件名操作函数</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E7%9B%AE%E5%BD%95%E5%87%BD%E6%95%B0dir">取目录函数(dir)</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E6%96%87%E4%BB%B6%E5%87%BD%E6%95%B0notdir">取文件函数(notdir)</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E5%90%8E%E7%BC%80%E5%87%BD%E6%95%B0suffix">取后缀函数（suffix)</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0basename">取前缀函数(basename)</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%8A%A0%E5%90%8E%E7%BC%80%E5%87%BD%E6%95%B0addsuffix">加后缀函数(addsuffix)</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E5%8A%A0%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0addprefix">加前缀函数(addprefix)</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E8%BF%9E%E6%8E%A5%E5%87%BD%E6%95%B0join">连接函数(join)</a><a aria-hidden="true" class="leve3 tocs-link" data-num="3" href="https://www.gy328.com/ref/docs/make.html#%E5%85%B6%E5%AE%83%E5%87%BD%E6%95%B0">其它函数</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#foreach-%E5%87%BD%E6%95%B0">foreach 函数</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#if-%E5%87%BD%E6%95%B0">if 函数</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#call-%E5%87%BD%E6%95%B0">call 函数</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#shell-%E5%87%BD%E6%95%B0">shell 函数</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#%E6%8E%A7%E5%88%B6-make-%E7%9A%84%E5%87%BD%E6%95%B0">控制 make 的函数</a><a aria-hidden="true" class="leve4 tocs-link" data-num="4" href="https://www.gy328.com/ref/docs/make.html#origin-%E5%87%BD%E6%95%B0">origin 函数</a><a aria-hidden="true" class="leve2 tocs-link" data-num="2" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%A6%E8%A7%81">另见</a></div></div><div class="h1wrap-body"><div class="wrap h2body-exist"><div class="wrap-header h2wrap"><h2 id="makefile-入门"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#makefile-%E5%85%A5%E9%97%A8"><span class="icon icon-link"></span></a>Makefile 入门</h2><div class="wrap-body">
+<!-- markdownlint-disable MD010 -->
+</div></div><div class="h2wrap-body"><div class="wrap h3body-exist"><div class="wrap-header h3wrap"><h3 id="示例"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E7%A4%BA%E4%BE%8B"><span class="icon icon-link"></span></a>示例</h3><div class="wrap-body">
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">a.txt</span><span class="token punctuation">:</span> b.txt c.txt
+</span><span class="code-line">	cat b.txt c.txt &gt; a.txt
+</span></code></pre>
+<h4 id="工作流程"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="icon icon-link"></span></a>工作流程</h4>
+<ul class="style-timeline">
+<li>读入所有的 <code>Makefile</code>。</li>
+<li>读入被 <code>include</code> 的其它 <code>Makefile</code>。</li>
+<li>初始化文件中的变量。</li>
+<li>推导隐晦规则，并分析所有规则。</li>
+<li>为所有的目标文件创建依赖关系链。</li>
+<li>根据依赖关系，决定哪些目标要重新生成。</li>
+<li>执行生成命令。</li>
+</ul>
+<!--rehype:className=style-timeline-->
+</div></div></div><div class="wrap h3body-exist"><div class="wrap-header h3wrap"><h3 id="文件命令"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4"><span class="icon icon-link"></span></a>文件命令</h3><div class="wrap-body">
+<p>make命令会以 <code>GNUmakefile</code>（不推荐使用）、<code>makefile</code>、<code>Makefile</code>（推荐使用）的顺序查找当前目录下的文件。</p>
+<h4 id="自定义文件路径"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="icon icon-link"></span></a>自定义文件路径</h4>
+<pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span> target <span class="token parameter variable">-f</span> FILE
+</span></code></pre>
+<p>我们可以使用 <code>-f FILE</code> 来指定makefile文件的路径</p>
+<h4 id="隐式生成"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E9%9A%90%E5%BC%8F%E7%94%9F%E6%88%90"><span class="icon icon-link"></span></a>隐式生成</h4>
+<p>如果文件夹中没有 makefile 文件，只有 main.c 源文件，那么我们可以使用 <code>make main.o</code> 隐式生成链接文件</p>
+<pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span> main.o
+</span><span class="code-line"><span class="token comment"># 实际执行： cc    -c -o main.o main.c</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="规则"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E8%A7%84%E5%88%99"><span class="icon icon-link"></span></a>规则</h3><div class="wrap-body">
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">TARGET</span><span class="token punctuation">:</span> PREREQUISITES
+</span><span class="code-line">  COMMAMD
+</span><span class="code-line">...
+</span></code></pre>
+<ul class="style-round">
+<li><code>target</code>: 规则的目标。目标可以是规则的动作（如 <code>clean</code> 等），也可以是目标文件或者最后的可执行文件。</li>
+<li><code>prerequisites</code>: 规则的依赖。生成规则目标文件所需要的文件名列表（通常一个目标依赖于一个或者多个文件）。</li>
+<li><code>command</code>: 规则的命令行。规则要执行的动作（任意的 shell 命令或者在 shell 下执行的程序）。<span style="color:red">命令需要以 tab 键开头</span></li>
+</ul>
+<!--rehype:className=style-round-->
+<pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span> <span class="token punctuation">[</span>TARGET <span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+</span></code></pre>
+<hr>
+<pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span>        <span class="token comment"># 没有参数首先运行 TARGET</span>
+</span><span class="code-line">$ <span class="token function">make</span> <span class="token builtin class-name">help</span>   <span class="token comment"># 显示可用目标</span>
+</span><span class="code-line">$ <span class="token function">make</span> dist   <span class="token comment"># 从当前目录制作一个发布存档</span>
+</span><span class="code-line">$ <span class="token function">make</span> check  <span class="token comment"># 无需安装的单元测试</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="清空目标文件"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%B8%85%E7%A9%BA%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="icon icon-link"></span></a>清空目标文件</h3><div class="wrap-body">
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token builtin-target builtin">.PHONY</span><span class="token punctuation">:</span> clean
+</span><span class="code-line"><span class="token target symbol">clean</span><span class="token punctuation">:</span>
+</span><span class="code-line">  rm *.o temp
+</span></code></pre>
+<p><code>.PHONY</code> 内置命令将排除 clean 文件，不会因为当前目录中因为有 clean 文件而不会不执行 clean 伪目标</p>
+<p class="auto-wrap"><span style="color:red">clean 从来都是放在文件的最后</span></p>
+<!--rehype:className=auto-wrap-->
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="注释"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%B3%A8%E9%87%8A"><span class="icon icon-link"></span></a>注释</h3><div class="wrap-body">
+<p>makefile 文件的注释与 bash 脚本一致</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token comment"># 这是一个注释</span>
+</span><span class="code-line"><span class="token target symbol">main.o</span> <span class="token punctuation">:</span> main.c
+</span><span class="code-line">	cc -c main.c
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="换行-"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%8D%A2%E8%A1%8C-"><span class="icon icon-link"></span></a>换行 <code>\</code></h3><div class="wrap-body">
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token comment"># 这是一个注释</span>
+</span><span class="code-line"><span class="token target symbol">main.o</span> <span class="token punctuation">:</span> main.c
+</span><span class="code-line">	cc -c \
+</span><span class="code-line">	main.c
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="引用其它的-makefile"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%BC%95%E7%94%A8%E5%85%B6%E5%AE%83%E7%9A%84-makefile"><span class="icon icon-link"></span></a>引用其它的 Makefile</h3><div class="wrap-body">
+<p><code>include</code> 关键字可以把别的 Makefile 包含进来。这样使用 make 运行的时候就会</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token comment"># makefile</span>
+</span><span class="code-line"><span class="token keyword">include</span> foo.make
+</span></code></pre>
+<p>如果你想让 make 不理那些无法读取的文件，并且继续执行。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token keyword">-include</span> &lt;filename&gt;
+</span></code></pre>
+</div></div></div></div></div><div class="wrap h2body-exist"><div class="wrap-header h2wrap"><h2 id="变量"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%98%E9%87%8F"><span class="icon icon-link"></span></a>变量</h2><div class="wrap-body">
+</div></div><div class="h2wrap-body"><div class="wrap h3body-exist"><div class="wrap-header h3wrap"><h3 id="赋值符"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E8%B5%8B%E5%80%BC%E7%AC%A6"><span class="icon icon-link"></span></a>赋值符</h3><div class="wrap-body">
+<h4 id="在执行时扩展允许递归扩展"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%9C%A8%E6%89%A7%E8%A1%8C%E6%97%B6%E6%89%A9%E5%B1%95%E5%85%81%E8%AE%B8%E9%80%92%E5%BD%92%E6%89%A9%E5%B1%95"><span class="icon icon-link"></span></a>在执行时扩展，允许递归扩展</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">VARIABLE <span class="token operator">=</span> value
+</span></code></pre>
+<h4 id="在声明时扩展"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%9C%A8%E5%A3%B0%E6%98%8E%E6%97%B6%E6%89%A9%E5%B1%95"><span class="icon icon-link"></span></a>在声明时扩展</h4>
+<p>可以防止递归，并且只能引用之前声明过的变量</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">VARIABLE <span class="token operator">:=</span> value
+</span></code></pre>
+<h4 id="只有在该变量为空时才设置值"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%AA%E6%9C%89%E5%9C%A8%E8%AF%A5%E5%8F%98%E9%87%8F%E4%B8%BA%E7%A9%BA%E6%97%B6%E6%89%8D%E8%AE%BE%E7%BD%AE%E5%80%BC"><span class="icon icon-link"></span></a>只有在该变量为空时才设置值</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">VARIABLE <span class="token operator">?=</span> value
+</span></code></pre>
+<h4 id="将值追加到变量的尾端"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%B0%86%E5%80%BC%E8%BF%BD%E5%8A%A0%E5%88%B0%E5%8F%98%E9%87%8F%E7%9A%84%E5%B0%BE%E7%AB%AF"><span class="icon icon-link"></span></a>将值追加到变量的尾端</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">VARIABLE <span class="token operator">+=</span> value
+</span></code></pre>
+<h4 id="override"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#override"><span class="icon icon-link"></span></a>override</h4>
+<p>如果变量前不指定 <code>override</code>，那么命令行中指定的变量可以对 Makefile 中的变量重新定义。</p>
+<pre class="auto-wrap"><code class="language-makefile code-highlight"><span class="code-line"><span class="token comment"># 不会重新定义</span>
+</span><span class="code-line"><span class="token keyword">override</span> VARIABLE <span class="token operator">=</span> value
+</span><span class="code-line"><span class="token keyword">override</span> VARIABLE <span class="token operator">:=</span> value
+</span><span class="code-line"><span class="token keyword">override</span> VARIABLE <span class="token operator">?=</span> value
+</span><span class="code-line"><span class="token keyword">override</span> VARIABLE <span class="token operator">+=</span> value
+</span><span class="code-line"><span class="token keyword">override</span> <span class="token keyword">define</span>
+</span><span class="code-line">  <span class="token comment">#...</span>
+</span><span class="code-line"><span class="token keyword">endef</span>
+</span></code></pre>
+<!--rehype:className=auto-wrap-->
+</div></div></div><div class="wrap h3body-exist"><div class="wrap-header h3wrap"><h3 id="变量-1"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%98%E9%87%8F-1"><span class="icon icon-link"></span></a>变量</h3><div class="wrap-body">
+<p>需要使用 <code>$()</code> 或者 <code>${}</code> 对变量进行引用</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">file <span class="token operator">=</span> main.c
+</span><span class="code-line">
+</span><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	clang -o hello <span class="token variable">$</span><span class="token punctuation">{</span>file<span class="token punctuation">}</span>
+</span></code></pre>
+<h4 id="避免递归变量"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E9%81%BF%E5%85%8D%E9%80%92%E5%BD%92%E5%8F%98%E9%87%8F"><span class="icon icon-link"></span></a>避免递归变量</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token comment"># 这样会使变量陷入无穷递归</span>
+</span><span class="code-line">A <span class="token operator">=</span> <span class="token variable">$</span><span class="token punctuation">(</span>B<span class="token punctuation">)</span>
+</span><span class="code-line">B <span class="token operator">=</span> <span class="token variable">$</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">x <span class="token operator">:=</span> foo
+</span><span class="code-line">y <span class="token operator">:=</span> <span class="token variable">$</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> bar
+</span><span class="code-line">x <span class="token operator">:=</span> later
+</span><span class="code-line">
+</span><span class="code-line"><span class="token comment"># 等价于</span>
+</span><span class="code-line"><span class="token comment"># x = later</span>
+</span><span class="code-line"><span class="token comment"># y = foo bar</span>
+</span></code></pre>
+<h4 id="shell-变量"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#shell-%E5%8F%98%E9%87%8F"><span class="icon icon-link"></span></a>Shell 变量</h4>
+<p>如果要使用 Shell 变量，需要在之前加上 <code>$</code></p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	echo <span class="token variable">$$HOME</span>
+</span></code></pre>
+<h4 id="定义多行变量"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AE%9A%E4%B9%89%E5%A4%9A%E8%A1%8C%E5%8F%98%E9%87%8F"><span class="icon icon-link"></span></a>定义多行变量</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token keyword">define</span> foo
+</span><span class="code-line">echo foo
+</span><span class="code-line">echo bar
+</span><span class="code-line"><span class="token keyword">endef</span>
+</span><span class="code-line">
+</span><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	<span class="token variable">$</span><span class="token punctuation">{</span>foo<span class="token punctuation">}</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-exist row-span-2"><div class="wrap-header h3wrap"><h3 id="自动变量"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E8%87%AA%E5%8A%A8%E5%8F%98%E9%87%8F"><span class="icon icon-link"></span></a>自动变量</h3><div class="wrap-body">
+<!--rehype:wrap-class=row-span-2-->
+<h4 id=""><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#"><span class="icon icon-link"></span></a><code>$@</code></h4>
+<p><code>$@</code>:指代当前目标，即 Make 命令当前构建的那个目标</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">foo</span><span class="token punctuation">:</span>
+</span><span class="code-line">	touch <span class="token variable">$@</span>
+</span></code></pre>
+<hr>
+<pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span> foo
+</span><span class="code-line"><span class="token comment"># $@ 就是指的这里的 foo</span>
+</span></code></pre>
+<h4 id="-1"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-1"><span class="icon icon-link"></span></a><code>$&lt;</code></h4>
+<p><code>$&lt;</code> 指代第一个前置条件。比如，规则为 t: p1 p2，那么 <code>$&lt;</code> 就指代 p1</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">a.md</span><span class="token punctuation">:</span> b.md c.md
+</span><span class="code-line">  cp <span class="token variable">$&lt;</span> <span class="token variable">$@</span>
+</span></code></pre>
+<hr>
+<p>使用 <code>make a.md</code>,相当于以下写法</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">a.md</span><span class="token punctuation">:</span> b.md c.md
+</span><span class="code-line">    cp b.md a.md 
+</span></code></pre>
+<h4 id="-2"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-2"><span class="icon icon-link"></span></a><code>$^</code></h4>
+<p><code>$^</code> 指代所有的前置条件,去除重复项</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">a.md</span><span class="token punctuation">:</span> b.md c.md
+</span><span class="code-line">  echo <span class="token variable">$^</span>
+</span></code></pre>
+<h4 id="-3"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-3"><span class="icon icon-link"></span></a><code>$+</code></h4>
+<p><code>$^</code> 指代所有的前置条件，不会去除重复项</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">a.md</span><span class="token punctuation">:</span> b.md c.md c.md
+</span><span class="code-line">	echo <span class="token variable">$+</span>
+</span></code></pre>
+<h4 id="-4"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-4"><span class="icon icon-link"></span></a><code>$?</code></h4>
+<p><code>$?</code> 指代更新的依赖，只有最近更新过的依赖才会引用</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">a.md</span><span class="token punctuation">:</span> b.md c.md c.md
+</span><span class="code-line">	cat <span class="token variable">$?</span> &gt; a.md
+</span></code></pre>
+<h4 id="-5"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-5"><span class="icon icon-link"></span></a><code>$*</code></h4>
+<p><code>$*</code> 指代匹配符匹配的部分</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">main.o</span><span class="token punctuation">:</span> main.c
+</span><span class="code-line">	clang -o <span class="token variable">$*</span> <span class="token variable">$*.c</span>
+</span></code></pre>
+<hr>
+<pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span> main
+</span><span class="code-line"><span class="token comment"># 此时 cc  main.c -o main</span>
+</span></code></pre>
+<h4 id="-6"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-6"><span class="icon icon-link"></span></a><code>$%</code></h4>
+<p><code>$%</code>: 仅当目标是函数库文件中，表示规则中的目标成员名</p>
+<ul class="style-round">
+<li>windows 中是 <code>.lib</code> 文件</li>
+<li>unix 中是 <code>.a</code> 文件</li>
+</ul>
+<!--rehype:className=style-round-->
+</div></div></div><div class="wrap h3body-not-exist col-span-2"><div class="wrap-header h3wrap"><h3 id="内置命名变量的参数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%86%85%E7%BD%AE%E5%91%BD%E5%90%8D%E5%8F%98%E9%87%8F%E7%9A%84%E5%8F%82%E6%95%B0"><span class="icon icon-link"></span></a>内置命名变量的参数</h3><div class="wrap-body">
+<!--rehype:wrap-class=col-span-2-->
+<p>这些变量都是相关下面的命令的参数。如果没有指明其默认值，那么其默认值都是空。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="left-align"><thead><tr><th align="left">:-</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>ARFLAGS</code></td><td align="left">函数库打包程序AR命令的参数。默认值是 <code>rv</code></td></tr><tr><td align="left"><code>ASFLAGS</code></td><td align="left">汇编语言编译器参数。（当明显地调用 <code>.s</code> 或 <code>.S</code> 文件时）</td></tr><tr><td align="left"><code>CFLAGS</code></td><td align="left">C 语言编译器参数。</td></tr><tr><td align="left"><code>CXXFLAGS</code></td><td align="left">C++ 语言编译器参数。</td></tr><tr><td align="left"><code>COFLAGS</code></td><td align="left">RCS 命令参数。</td></tr><tr><td align="left"><code>CPPFLAGS</code></td><td align="left">C 预处理器参数。（ <code>C</code> 和 <code>Fortran</code> 编译器也会用到）。</td></tr><tr><td align="left"><code>FFLAGS</code></td><td align="left">Fortran 语言编译器参数。</td></tr><tr><td align="left"><code>GFLAGS</code></td><td align="left">SCCS <code>get</code> 程序参数。</td></tr><tr><td align="left"><code>LDFLAGS</code></td><td align="left">链接器参数。（如：<code>ld</code> ）</td></tr><tr><td align="left"><code>PFLAGS</code></td><td align="left">Pascal 语言编译器参数。</td></tr><tr><td align="left"><code>LFLAGS</code></td><td align="left">Lex 文法分析器参数。</td></tr><tr><td align="left"><code>RFLAGS</code></td><td align="left">Ratfor 程序的 Fortran 编译器参数。</td></tr><tr><td align="left"><code>YFLAGS</code></td><td align="left">Yacc 文法分析器参数。</td></tr></tbody></table>
+<!--rehype:className=left-align-->
+</div></div></div><div class="wrap h3body-exist col-span-2"><div class="wrap-header h3wrap"><h3 id="内置已命名的变量"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%86%85%E7%BD%AE%E5%B7%B2%E5%91%BD%E5%90%8D%E7%9A%84%E5%8F%98%E9%87%8F"><span class="icon icon-link"></span></a>内置已命名的变量</h3><div class="wrap-body">
+<!--rehype:wrap-class=col-span-2-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="left-align"><thead><tr><th align="left">:-</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>AR</code></td><td align="left">函数库打包程序。默认命令是 <code>ar</code></td></tr><tr><td align="left"><code>AS</code></td><td align="left">汇编语言编译程序。默认命令是 <code>as</code></td></tr><tr><td align="left"><code>CC</code></td><td align="left">C 语言编译程序。默认命令是 <code>cc</code></td></tr><tr><td align="left"><code>CXX</code></td><td align="left">C++ 语言编译程序。默认命令是 <code>g++</code></td></tr><tr><td align="left"><code>CO</code></td><td align="left">从 RCS 文件中扩展文件程序。默认命令是 <code>co</code></td></tr><tr><td align="left"><code>CPP</code></td><td align="left">C 程序的预处理器（输出是标准输出设备）。默认命令是 <code>$(CC) –E</code></td></tr><tr><td align="left"><code>FC</code></td><td align="left">Fortran 和 Ratfor 的编译器和预处理程序。默认命令是 <code>f77</code></td></tr><tr><td align="left"><code>GET</code></td><td align="left">从 SCCS 文件中扩展文件的程序。默认命令是 <code>get</code></td></tr><tr><td align="left"><code>LEX</code></td><td align="left">Lex 方法分析器程序（针对于 C 或 Ratfor）。默认命令是 <code>lex</code></td></tr><tr><td align="left"><code>PC</code></td><td align="left">Pascal 语言编译程序。默认命令是 <code>pc</code></td></tr><tr><td align="left"><code>YACC</code></td><td align="left">Yacc 文法分析器（针对于 C 程序）。默认命令是 <code>yacc</code></td></tr><tr><td align="left"><code>YACCR</code></td><td align="left">Yacc 文法分析器（针对于 Ratfor 程序）。默认命令是 <code>yacc –r</code></td></tr><tr><td align="left"><code>MAKEINFO</code></td><td align="left">转换 Texinfo 源文件（.texi）到 Info 文件程序。默认命令是 <code>makeinfo</code></td></tr><tr><td align="left"><code>TEX</code></td><td align="left">从 TeX 源文件创建TeX DVI文件的程序。默认命令是 <code>tex</code></td></tr><tr><td align="left"><code>TEXI2DVI</code></td><td align="left">从 Texinfo 源文件创建 TeX DVI 文件的程序。默认命令是 <code>texi2dvi</code></td></tr><tr><td align="left"><code>WEAVE</code></td><td align="left">转换 Web 到 TeX 的程序。默认命令是 <code>weave</code></td></tr><tr><td align="left"><code>CWEAVE</code></td><td align="left">转换 C Web 到 TeX 的程序。默认命令是 <code>cweave</code></td></tr><tr><td align="left"><code>TANGLE</code></td><td align="left">转换 Web 到 Pascal 语言的程序。默认命令是 <code>tangle</code></td></tr><tr><td align="left"><code>CTANGLE</code></td><td align="left">转换 C Web 到 C。默认命令是 <code>ctangle</code></td></tr><tr><td align="left"><code>RM</code></td><td align="left">删除文件命令。默认命令是 <code>rm –f</code></td></tr></tbody></table>
+<!--rehype:className=left-align-->
+<h4 id="内置的变量"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%86%85%E7%BD%AE%E7%9A%84%E5%8F%98%E9%87%8F"><span class="icon icon-link"></span></a>内置的变量</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	<span class="token variable">$</span><span class="token punctuation">{</span>CC<span class="token punctuation">}</span> -o main main.c
+</span></code></pre>
+</div></div></div></div></div><div class="wrap h2body-exist"><div class="wrap-header h2wrap"><h2 id="书写规则"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E4%B9%A6%E5%86%99%E8%A7%84%E5%88%99"><span class="icon icon-link"></span></a>书写规则</h2><div class="wrap-body">
+</div></div><div class="h2wrap-body"><div class="wrap h3body-exist col-span-3"><div class="wrap-header h3wrap"><h3 id="文件搜寻vpath"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%96%87%E4%BB%B6%E6%90%9C%E5%AF%BBvpath"><span class="icon icon-link"></span></a>文件搜寻（<code>vpath</code>）</h3><div class="wrap-body">
+<!--rehype:wrap-class=col-span-3-->
+<p>如果没有指定 vpath 变量，make 只会在当前的目录中去寻找依赖文件和目标文件。否则，如果当前目录没有，就会到指定的目录中去寻找</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">:-</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>vpath &lt;pattern&gt; &lt;directories&gt;</code></td><td align="left">为符合模式 &lt;pattern&gt; 的文件指定搜索目录 &lt;directories&gt;</td></tr><tr><td align="left"><code>vpath &lt;pattern&gt;</code></td><td align="left">清除符合模式 &lt;pattern&gt; 的文件的搜索目录。</td></tr><tr><td align="left"><code>vpath</code></td><td align="left">清除所有已被设置好了的文件搜索目录</td></tr></tbody></table>
+<h4 id="-7"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-7"><span class="icon icon-link"></span></a><code>%</code></h4>
+<ul>
+<li>vpath 使用方法中的 &lt;pattern&gt; 需要包含 <code>%</code> 字符。<code>%</code> 的意思是匹配零或若干字符（类似于<strong>通配符</strong>）,并且引用规则是需要使用<strong>自动变量</strong></li>
+</ul>
+<pre class="auto-wrap"><code class="language-makefile code-highlight"><span class="code-line"><span class="token keyword">vpath</span> %.c dist
+</span><span class="code-line">TARGET <span class="token operator">=</span> hello
+</span><span class="code-line">OBJ <span class="token operator">=</span> bar.o foo.o
+</span><span class="code-line">
+</span><span class="code-line"><span class="token target symbol"><span class="token variable">$</span>(TARGET)</span><span class="token punctuation">:</span> <span class="token variable">$</span><span class="token punctuation">(</span>OBJ<span class="token punctuation">)</span>
+</span><span class="code-line">	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -o <span class="token variable">$@</span> <span class="token variable">$^</span>
+</span><span class="code-line">
+</span><span class="code-line"><span class="token target symbol">%.o</span><span class="token punctuation">:</span> <span class="token variable">$.c</span>
+</span><span class="code-line">	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -o <span class="token variable">$&lt;</span> -o <span class="token comment">#@</span>
+</span></code></pre>
+<!--rehype:className=auto-wrap-->
+</div></div></div><div class="wrap h3body-exist"><div class="wrap-header h3wrap"><h3 id="通配符"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="icon icon-link"></span></a>通配符</h3><div class="wrap-body">
+<h4 id="-8"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-8"><span class="icon icon-link"></span></a><code>*</code></h4>
+<p><code>*</code>：与 linux 系统下的一样</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token comment"># 清除所有 .o 结尾的文件</span>
+</span><span class="code-line"><span class="token target symbol">clean</span><span class="token punctuation">:</span>
+</span><span class="code-line">    rm -f *.o
+</span></code></pre>
+<h4 id="-9"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-9"><span class="icon icon-link"></span></a><code>~</code></h4>
+<p><code>~</code>：在 linux 或 mac 下表示用户目录，win 下表示 <code>HOME</code> 环境变量</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">    ls ~
+</span></code></pre>
+<h4 id="-10"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-10"><span class="icon icon-link"></span></a><code>?</code></h4>
+<p><code>?</code>: 与在 linux 等类似，可以匹配单个字符</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	ls -ll packag?.json
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="静态模式"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E9%9D%99%E6%80%81%E6%A8%A1%E5%BC%8F"><span class="icon icon-link"></span></a>静态模式</h3><div class="wrap-body">
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">TARGET</span><span class="token punctuation">:</span> PREREQUISITES <span class="token punctuation">:</span>PREREQUISITES
+</span><span class="code-line">  COMMAMD
+</span><span class="code-line"><span class="token comment">#...</span>
+</span></code></pre>
+<ul>
+<li><code>target</code> 定义了一系列的目标文件</li>
+<li>第一个 <code>prerequisites</code> 是指明了 target 的模式，也就是的目标集模式。</li>
+<li>第二个 <code>prerequisites</code> 是目标的依赖模式，它对第一个 <code>prerequisites</code> 形成的模式再进行一次依赖目标的定义</li>
+</ul>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">objects <span class="token operator">=</span> foo.o main.o
+</span><span class="code-line">
+</span><span class="code-line"><span class="token target symbol"><span class="token variable">$</span>(objects)</span><span class="token punctuation">:</span> %.o<span class="token punctuation">:</span> %.c
+</span><span class="code-line">	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -c <span class="token variable">$</span><span class="token punctuation">(</span>CFLAGS<span class="token punctuation">)</span> <span class="token variable">$&lt;</span> -o <span class="token variable">$@</span>
+</span></code></pre>
+<hr>
+<p>相当于:</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">foo.o</span> <span class="token punctuation">:</span> foo.c
+</span><span class="code-line">    <span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -c <span class="token variable">$</span><span class="token punctuation">(</span>CFLAGS<span class="token punctuation">)</span> foo.c -o foo.o
+</span><span class="code-line"><span class="token target symbol">main.o</span> <span class="token punctuation">:</span> main.c
+</span><span class="code-line">    <span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -c <span class="token variable">$</span><span class="token punctuation">(</span>CFLAGS<span class="token punctuation">)</span> main.c -o main.o
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="伪目标"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E4%BC%AA%E7%9B%AE%E6%A0%87"><span class="icon icon-link"></span></a>伪目标</h3><div class="wrap-body">
+<ul>
+<li><strong>伪目标</strong>并不是一个文件，只是一个标签。只有通过显式地指明这个<strong>目标</strong>才能让其生效</li>
+<li>使用 <code>.PHONY</code> 来显式地指明目标是 <code>伪目标</code></li>
+</ul>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token builtin-target builtin">.PHONY</span> <span class="token punctuation">:</span> clean
+</span><span class="code-line"><span class="token target symbol">clean</span> <span class="token punctuation">:</span>
+</span><span class="code-line">    rm *.o temp
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist col-span-2"><div class="wrap-header h3wrap"><h3 id="约定俗成的规则"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E7%BA%A6%E5%AE%9A%E4%BF%97%E6%88%90%E7%9A%84%E8%A7%84%E5%88%99"><span class="icon icon-link"></span></a>约定俗成的规则</h3><div class="wrap-body">
+<!--rehype:wrap-class=col-span-2-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="style-round"><thead><tr><th align="left">:-</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>all</code></td><td align="left">该伪目标是所有目标的目标，一般用于编译所有的目标</td></tr><tr><td align="left"><code>clean</code></td><td align="left">该伪目标用于删除所有由 make 创建的文件</td></tr><tr><td align="left"><code>install</code></td><td align="left">该伪目标用于安装已编译好的程序，即将目标执行文件拷贝到指定目标中</td></tr><tr><td align="left"><code>print</code></td><td align="left">该伪目标用于例出改变过的源文件</td></tr><tr><td align="left"><code>tar</code></td><td align="left">该伪目标用于把源程序打包备份为 tar 文件</td></tr><tr><td align="left"><code>dist</code></td><td align="left">该伪目标用于创建压缩文件，一般将 tar 文件压成 Z 或 gz 文件</td></tr><tr><td align="left"><code>TAGS</code></td><td align="left">该伪目标用于更新所有的目标，以备完整地重编译使用</td></tr><tr><td align="left"><code>check/test</code></td><td align="left">这两个伪目标用于测试 makefile 的流程</td></tr></tbody></table>
+<!--rehype:className=style-round-->
+<!--rehype:className=auto-wrap-->
+</div></div></div></div></div><div class="wrap h2body-exist"><div class="wrap-header h2wrap"><h2 id="命令"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%91%BD%E4%BB%A4"><span class="icon icon-link"></span></a>命令</h2><div class="wrap-body">
+</div></div><div class="h2wrap-body"><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="回声"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%9B%9E%E5%A3%B0"><span class="icon icon-link"></span></a>回声（<code>@</code>）</h3><div class="wrap-body">
+<p>正常情况下，make会打印每条命令，然后再执行，这就叫做回声（echoing）</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">all</span><span class="token punctuation">:</span>
+</span><span class="code-line">  <span class="token comment"># 会有命令执行显示</span>
+</span><span class="code-line">	echo Hello, world
+</span></code></pre>
+<hr>
+<pre class="auto-wrap"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">all</span><span class="token punctuation">:</span>
+</span><span class="code-line">  <span class="token comment"># 不会有命令执行的显示</span>
+</span><span class="code-line">	<span class="token operator">@</span>echo Hello, world
+</span></code></pre>
+<!--rehype:className=auto-wrap-->
+</div></div></div><div class="wrap h3body-exist"><div class="wrap-header h3wrap"><h3 id="显示命令禁止命令"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%98%BE%E7%A4%BA%E5%91%BD%E4%BB%A4%E7%A6%81%E6%AD%A2%E5%91%BD%E4%BB%A4"><span class="icon icon-link"></span></a>显示命令、禁止命令</h3><div class="wrap-body">
+<h4 id="显示命令"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%98%BE%E7%A4%BA%E5%91%BD%E4%BB%A4"><span class="icon icon-link"></span></a>显示命令</h4>
+<p>如果我们只希望显示命令，而不希望执行命令，可以使用 <code>-n</code> 或者 <code>--just-print</code></p>
+<pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span> all --just-print 
+</span><span class="code-line">$ <span class="token function">make</span> all <span class="token parameter variable">-n</span> 
+</span></code></pre>
+<h4 id="禁止命令"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E7%A6%81%E6%AD%A2%E5%91%BD%E4%BB%A4"><span class="icon icon-link"></span></a>禁止命令</h4>
+<p><code>-s</code> 或 <code>--silent</code> 或 <code>--quiet</code> 与 <code>@</code> 一样，用于禁止回声</p>
+<pre class="auto-wrap"><code class="language-bash code-highlight"><span class="code-line">$ <span class="token function">make</span> all <span class="token parameter variable">-s</span> 
+</span></code></pre>
+<!--rehype:className=auto-wrap-->
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="执行命令"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="icon icon-link"></span></a>执行命令</h3><div class="wrap-body">
+<p>使用 tab 及换行</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">exec</span><span class="token punctuation">:</span>
+</span><span class="code-line">    cd /home/hchen
+</span><span class="code-line">    pwd
+</span></code></pre>
+<hr>
+<p>使用 <code>;</code></p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">exec</span><span class="token punctuation">:</span>
+</span><span class="code-line">    cd /home/hchen<span class="token punctuation">;</span> pwd
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist col-span-3"><div class="wrap-header h3wrap"><h3 id="make-参数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#make-%E5%8F%82%E6%95%B0"><span class="icon icon-link"></span></a>make 参数</h3><div class="wrap-body">
+<!--rehype:wrap-class=col-span-3-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="left-align"><thead><tr><th align="left">:-</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>-b</code>,<code>-m</code></td><td align="left">忽略和其它版本make的兼容性</td></tr><tr><td align="left"><code>-B</code></td><td align="left">(<code>--always-make</code>) 认为所有的目标都需要重编译</td></tr><tr><td align="left"><code>-C &lt;dir&gt;</code></td><td align="left">(<code>--directory=&lt;dir&gt;</code>) 指定读取makefile的目录</td></tr><tr><td align="left"><code>-e</code></td><td align="left">(<code>--environment-overrides</code>) 指明环境变量的值覆盖 makefile 中定义的变量的值</td></tr><tr><td align="left"><code>-f=&lt;file&gt;</code></td><td align="left">指定需要执行的makefile</td></tr><tr><td align="left"><code>-h</code></td><td align="left">显示帮助信息</td></tr><tr><td align="left"><code>-i</code></td><td align="left">(<code>--ignore-errors</code>)在执行时忽略所有的错误</td></tr><tr><td align="left"><code>-I &lt;dir&gt;</code></td><td align="left">(<code>--include-dir=&lt;dir&gt;</code>) 指定一个被包含 makefile 的搜索目标</td></tr><tr><td align="left"><code>-j [&lt;nums&gt;]</code></td><td align="left">(<code>--jobs[=&lt;jobsnum&gt;]</code>)指同时运行命令的个数</td></tr><tr><td align="left"><code>-k</code></td><td align="left">(<code>--keep-going</code>)出错也不停止运行</td></tr><tr><td align="left"><code>-l &lt;load&gt;</code></td><td align="left"><code>--load-average[=&lt;load&gt;]</code>、<code>-max-load[=&lt;load&gt;]</code> 指定make运行命令的负载</td></tr><tr><td align="left"><code>-n</code></td><td align="left">(<code>--just-print</code>, <code>--dry-run</code>, <code>--recon</code>) 仅输出执行过程中的命令序列，但不执行</td></tr><tr><td align="left"><code>-o &lt;file&gt;</code></td><td align="left">(<code>--old-file=&lt;file&gt;</code>, <code>--assume-old=&lt;file&gt;</code>)不重新生成的指定的 &lt;file&gt;，即使目标的依赖文件新于它</td></tr><tr><td align="left"><code>-p</code></td><td align="left">(<code>--print-data-base</code>) 输出 makefile 中的所有数据，包括所有的规则和变量</td></tr><tr><td align="left"><code>-q</code></td><td align="left">(<code>--question</code>) 不运行命令，也不输出。仅仅是检查所指定的目标是否需要更新</td></tr><tr><td align="left"><code>-r</code></td><td align="left">(<code>--no-builtin-rules</code>) 禁止 make 使用任何隐含规则</td></tr><tr><td align="left"><code>-R</code></td><td align="left">(<code>--no-builtin-variabes</code>) 禁止 make 使用任何作用于变量上的隐含规则</td></tr><tr><td align="left"><code>-s</code></td><td align="left">(<code>--silent</code>,<code>--quiet</code>) 在命令运行时不输出命令的输出</td></tr><tr><td align="left"><code>-S</code></td><td align="left">(<code>--no-keep-going</code>, <code>--stop</code>) 取消“-k”选项的作用</td></tr><tr><td align="left"><code>-t</code></td><td align="left"><code>--touch</code> 相当于 UNIX 的 touch 命令，只是把目标的修改日期变成最新的，也就是阻止生成目标的命令运行</td></tr><tr><td align="left"><code>-v</code></td><td align="left">(<code>--version</code>) 输出 make 程序的版本、版权等关于 make 的信息</td></tr><tr><td align="left"><code>-w</code></td><td align="left">(<code>--print-directory</code>) 输出运行 makefile 之前和之后的信息。<code>--no-print-directory</code> 可以禁止 <code>-w</code></td></tr><tr><td align="left"><code>-W &lt;file&gt;</code></td><td align="left"><code>--what-if=&lt;file&gt;</code>, <code>--new-file=&lt;file&gt;</code>, <code>--assume-file=&lt;file&gt;</code> 假定目标 &lt;file&gt; 需要更新，如果和 <code>-n</code> 选项使用，那么这个参数会输出该目标更新时的运行动作</td></tr><tr><td align="left"><code>--warn-undefined-variables</code></td><td align="left">只要 make 发现有未定义的变量，那么就输出警告信息</td></tr></tbody></table>
+<!--rehype:className=left-align-->
+</div></div></div><div class="wrap h3body-not-exist col-span-2"><div class="wrap-header h3wrap"><h3 id="-debugoptions"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#-debugoptions"><span class="icon icon-link"></span></a><code>-debug[=&lt;options&gt;]</code></h3><div class="wrap-body">
+<!--rehype:wrap-class=col-span-2-->
+<p>输出 make 的调试信息。下面是 &lt;options&gt;的取值：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="left-align"><thead><tr><th align="left">options</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>a</code></td><td align="left"><code>all</code>，输出所有的调试信息</td></tr><tr><td align="left"><code>b</code></td><td align="left"><code>basic</code>，只输出简单的调试信息。即输出不需要重编译的目标</td></tr><tr><td align="left"><code>v</code></td><td align="left"><code>verbose</code>，包括 b 的信息。输出包括 makefile 被解析的信息，不需要被重编译的依赖文件等</td></tr><tr><td align="left"><code>i</code></td><td align="left"><code>implicit</code>，输出所有的隐含规则</td></tr><tr><td align="left"><code>j</code></td><td align="left"><code>jobs</code>，输出执行规则中命令的详细信息，如命令的 PID、返回码等</td></tr><tr><td align="left"><code>m</code></td><td align="left"><code>makefile</code>，输出 make 读取 makefile，更新 makefile，执行 makefile 的信息</td></tr></tbody></table>
+<!--rehype:className=left-align-->
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="make-的退出码"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#make-%E7%9A%84%E9%80%80%E5%87%BA%E7%A0%81"><span class="icon icon-link"></span></a>make 的退出码</h3><div class="wrap-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">:-</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>0</code></td><td align="left">成功执行</td></tr><tr><td align="left"><code>1</code></td><td align="left">运行时出现错误</td></tr><tr><td align="left"><code>2</code></td><td align="left">使用了 <code>-q</code> 选项，并且一些目标不需要更新</td></tr></tbody></table>
+</div></div></div></div></div><div class="wrap h2body-exist"><div class="wrap-header h2wrap"><h2 id="判断和循环"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%88%A4%E6%96%AD%E5%92%8C%E5%BE%AA%E7%8E%AF"><span class="icon icon-link"></span></a>判断和循环</h2><div class="wrap-body">
+</div></div><div class="h2wrap-body"><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="单分支条件判断"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8D%95%E5%88%86%E6%94%AF%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="icon icon-link"></span></a>单分支条件判断</h3><div class="wrap-body">
+<ul class="style-round">
+<li><code>ifeq</code> 的意思表示条件语句的开始，表达式包含两个参数，如果相同则为真。</li>
+<li><code>ifneq</code> 的意思表示条件语句的开始，表达式包含两个参数，如果不同则为真。</li>
+<li><code>else</code> 表示条件表达式为假的情况。</li>
+<li><code>endif</code> 表示一个条件语句的结束，任何一个条件表达式都应该以 <code>endif</code> 结束。</li>
+</ul>
+<!--rehype:className=style-round-->
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line"><span class="token keyword">ifeq</span> <span class="token punctuation">(</span><span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span>, cc<span class="token punctuation">)</span>
+</span><span class="code-line">	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -o foo foo.c
+</span><span class="code-line"><span class="token keyword">else</span>
+</span><span class="code-line">	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -o bar bar.c
+</span><span class="code-line"><span class="token keyword">endif</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-exist"><div class="wrap-header h3wrap"><h3 id="多分支条件判断"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%A4%9A%E5%88%86%E6%94%AF%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="icon icon-link"></span></a>多分支条件判断</h3><div class="wrap-body">
+<h4 id="ifneq-语法"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#ifneq-%E8%AF%AD%E6%B3%95"><span class="icon icon-link"></span></a>ifneq 语法</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token keyword">ifneq</span> <span class="token punctuation">(</span>&lt;arg1&gt;, &lt;arg2&gt;<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token keyword">ifneq</span> <span class="token string">'&lt;arg1&gt;'</span> <span class="token string">'&lt;arg2&gt;'</span>
+</span><span class="code-line"><span class="token keyword">ifneq</span> <span class="token string">"&lt;arg1&gt;"</span> <span class="token string">"&lt;arg2&gt;"</span>
+</span><span class="code-line"><span class="token keyword">ifneq</span> <span class="token string">"&lt;arg1&gt;"</span> <span class="token string">'&lt;arg2&gt;'</span>
+</span><span class="code-line"><span class="token keyword">ifneq</span> <span class="token string">'&lt;arg1&gt;'</span> <span class="token string">"&lt;arg2&gt;"</span>
+</span></code></pre>
+<h4 id="ifeq-语法"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#ifeq-%E8%AF%AD%E6%B3%95"><span class="icon icon-link"></span></a>ifeq 语法</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token keyword">ifeq</span> <span class="token punctuation">(</span>&lt;arg1&gt;, &lt;arg2&gt;<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token keyword">ifeq</span> <span class="token string">'&lt;arg1&gt;'</span> <span class="token string">'&lt;arg2&gt;'</span>
+</span><span class="code-line"><span class="token keyword">ifeq</span> <span class="token string">"&lt;arg1&gt;"</span> <span class="token string">"&lt;arg2&gt;"</span>
+</span><span class="code-line"><span class="token keyword">ifeq</span> <span class="token string">"&lt;arg1&gt;"</span> <span class="token string">'&lt;arg2&gt;'</span>
+</span><span class="code-line"><span class="token keyword">ifeq</span> <span class="token string">'&lt;arg1&gt;'</span> <span class="token string">"&lt;arg2&gt;"</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="ifdef"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#ifdef"><span class="icon icon-link"></span></a>ifdef</h3><div class="wrap-body">
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token keyword">ifdef</span> &lt;variable-name&gt;
+</span></code></pre>
+<p><code>ifdef</code> 会根据 variable-name 判断，如果为空则为真</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">bar <span class="token operator">=</span>
+</span><span class="code-line">foo <span class="token operator">=</span> <span class="token variable">$</span><span class="token punctuation">(</span>bar<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token keyword">ifdef</span> foo
+</span><span class="code-line">    frobozz <span class="token operator">=</span> yes
+</span><span class="code-line"><span class="token keyword">else</span>
+</span><span class="code-line">    frobozz <span class="token operator">=</span> no
+</span><span class="code-line"><span class="token keyword">endif</span>
+</span><span class="code-line">
+</span><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	echo <span class="token variable">$</span><span class="token punctuation">(</span>frobozz<span class="token punctuation">)</span>
+</span></code></pre>
+<p><code>ifndef</code> 则和 <code>ifdef</code> 是相反的意思</p>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="for-循环"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#for-%E5%BE%AA%E7%8E%AF"><span class="icon icon-link"></span></a>for 循环</h3><div class="wrap-body">
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">LIST <span class="token operator">=</span> one two three
+</span><span class="code-line"><span class="token target symbol">all</span><span class="token punctuation">:</span>
+</span><span class="code-line">	for i in <span class="token variable">$</span><span class="token punctuation">(</span>LIST<span class="token punctuation">)</span><span class="token punctuation">;</span> do \
+</span><span class="code-line">	    echo <span class="token variable">$$i;</span> \
+</span><span class="code-line">	done
+</span></code></pre>
+</div></div></div></div></div><div class="wrap h2body-exist"><div class="wrap-header h2wrap"><h2 id="函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>函数</h2><div class="wrap-body">
+</div></div><div class="h2wrap-body"><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---替换函数subst"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%9B%BF%E6%8D%A2%E5%87%BD%E6%95%B0subst"><span class="icon icon-link"></span></a>字符串处理函数 - 替换函数(<code>subst</code>)</h3><div class="wrap-body">
+<p>把字串 &lt;text&gt; 中的 &lt;from&gt; 字符串替换成 &lt;to&gt; 。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">subst</span> &lt;from&gt;,&lt;to&gt;,&lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>示例</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">subst</span> ee,EE,feet on the street<span class="token punctuation">)</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---模式字符串替换函数patsubst"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%A8%A1%E5%BC%8F%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2%E5%87%BD%E6%95%B0patsubst"><span class="icon icon-link"></span></a>字符串处理函数 - 模式字符串替换函数(<code>patsubst</code>)</h3><div class="wrap-body">
+<p>查找 &lt;text&gt; 中的单词（<strong>单词以空格、Tab或回车换行分隔</strong>）是否符合模式 &lt;pattern&gt;。匹配，则以 &lt;replacement&gt; 替换。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">patsubst</span> &lt;pattern&gt;,&lt;replacement&gt;,&lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<ul>
+<li>示例</li>
+</ul>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">patsubst</span> %.c,%.o,x.c.c bar.c<span class="token punctuation">)</span>
+</span></code></pre>
+<p>把字串 x.c.c bar.c 符合模式 %.c 的单词替换成 %.o ，返回结果是 x.c.o bar.o</p>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---去空格函数strip"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8E%BB%E7%A9%BA%E6%A0%BC%E5%87%BD%E6%95%B0strip"><span class="icon icon-link"></span></a>字符串处理函数 - 去空格函数(<code>strip</code>)</h3><div class="wrap-body">
+<p>去掉 <string> 字串中开头和结尾的空字符。</string></p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">strip</span> &lt;string&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>示例</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">strip</span> a b c <span class="token punctuation">)</span>
+</span></code></pre>
+<p>把字串 <code>a b c</code> 去掉开头和结尾的空格，结果是 a b c。</p>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---查找字符串函数findstring"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%9F%A5%E6%89%BE%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0findstring"><span class="icon icon-link"></span></a>字符串处理函数 - 查找字符串函数(<code>findstring</code>)</h3><div class="wrap-body">
+<p>在字串 &lt;in&gt; 中查找 &lt;find&gt; 字串。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">findstring</span> &lt;find&gt;,&lt;in&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>示例：</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">findstring</span> a,a b c<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">findstring</span> a,b c<span class="token punctuation">)</span>
+</span></code></pre>
+<p>第一个函数返回 a 字符串，第二个返回空字符串</p>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---过滤函数filter"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E8%BF%87%E6%BB%A4%E5%87%BD%E6%95%B0filter"><span class="icon icon-link"></span></a>字符串处理函数 - 过滤函数(<code>filter</code>)</h3><div class="wrap-body">
+<p>以 &lt;pattern&gt; 模式过滤 &lt;text&gt; 字符串中的单词，保留符合模式 &lt;pattern&gt; 的单词。可以有多个模式。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">filter</span> &lt;pattern...&gt;,&lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>示例</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">sources <span class="token operator">:=</span> foo.c bar.c baz.s ugh.h
+</span><span class="code-line"><span class="token target symbol">foo</span><span class="token punctuation">:</span> <span class="token variable">$</span><span class="token punctuation">(</span>sources<span class="token punctuation">)</span>
+</span><span class="code-line">    cc <span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">filter</span> %.c %.s,<span class="token variable">$</span><span class="token punctuation">(</span>sources<span class="token punctuation">)</span><span class="token punctuation">)</span> -o foo
+</span><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">filter</span> %.c %.s,<span class="token variable">$</span><span class="token punctuation">(</span>sources<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+</span><span class="code-line"><span class="token comment"># 返回的值是 foo.c bar.c baz.s</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---反过滤函数filter-out"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8F%8D%E8%BF%87%E6%BB%A4%E5%87%BD%E6%95%B0filter-out"><span class="icon icon-link"></span></a>字符串处理函数 - 反过滤函数(<code>filter-out</code>)</h3><div class="wrap-body">
+<p>以 &lt;pattern&gt; 模式过滤 &lt;text&gt; 字符串中的单词，去除符合模式 &lt;pattern&gt; 的单词。可以有多个模式。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">filter-out</span> &lt;pattern...&gt;,&lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>示例：</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">objects<span class="token operator">=</span>main1.o foo.o main2.o bar.o
+</span><span class="code-line">mains<span class="token operator">=</span>main1.o main2.o
+</span><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">filter-out</span> <span class="token variable">$</span><span class="token punctuation">(</span>mains<span class="token punctuation">)</span>,<span class="token variable">$</span><span class="token punctuation">(</span>objects<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+</span><span class="code-line"><span class="token comment"># 返回值是 foo.o bar.o 。</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---排序函数sort"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E6%8E%92%E5%BA%8F%E5%87%BD%E6%95%B0sort"><span class="icon icon-link"></span></a>字符串处理函数 - 排序函数(<code>sort</code>)</h3><div class="wrap-body">
+<p>给字符串 &lt;list&gt; 中的单词排序（升序）。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">sort</span> &lt;list&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<ul>
+<li>示例：<code>$(sort foo bar lose)</code> 返回 <code>bar foo lose</code></li>
+<li>注意：sort 函数会去掉 <code>&lt;list&gt;</code> 中相同的单词</li>
+</ul>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---取单词函数word"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8F%96%E5%8D%95%E8%AF%8D%E5%87%BD%E6%95%B0word"><span class="icon icon-link"></span></a>字符串处理函数 - 取单词函数（<code>word</code>)</h3><div class="wrap-body">
+<p>取字符串 &lt;text&gt; 中第 &lt;n&gt; 个单词。（从一开始）</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">word</span> &lt;n&gt;,&lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>示例：<code>$(word 2, foo bar baz)</code> 返回值是 <code>bar</code></p>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---取单词串函数wordlist"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8F%96%E5%8D%95%E8%AF%8D%E4%B8%B2%E5%87%BD%E6%95%B0wordlist"><span class="icon icon-link"></span></a>字符串处理函数 - 取单词串函数(<code>wordlist</code>)</h3><div class="wrap-body">
+<ul>
+<li>从字符串 &lt;text&gt; 中取从 &lt;s&gt; 开始到 &lt;e&gt; 的单词串。&lt;s&gt; 和 &lt;e&gt; 是一个数字。</li>
+</ul>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">wordlist</span> &lt;ss&gt;,&lt;e&gt;,&lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>示例：<code>$(wordlist 2, 3, foo bar baz)</code> 返回值是 bar baz。</p>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---单词个数统计函数words"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E5%8D%95%E8%AF%8D%E4%B8%AA%E6%95%B0%E7%BB%9F%E8%AE%A1%E5%87%BD%E6%95%B0words"><span class="icon icon-link"></span></a>字符串处理函数 - 单词个数统计函数(<code>words</code>)</h3><div class="wrap-body">
+<ul>
+<li>统计 &lt;text&gt; 中字符串中的单词个数。</li>
+</ul>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">words</span> &lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<ul>
+<li>示例：<code>$(words, foo bar baz)</code> 返回值是 3。</li>
+</ul>
+</div></div></div><div class="wrap h3body-not-exist"><div class="wrap-header h3wrap"><h3 id="字符串处理函数---首单词函数firstword"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0---%E9%A6%96%E5%8D%95%E8%AF%8D%E5%87%BD%E6%95%B0firstword"><span class="icon icon-link"></span></a>字符串处理函数 - 首单词函数(<code>firstword</code>)</h3><div class="wrap-body">
+<ul>
+<li>取字符串 &lt;text&gt; 中的第一个单词。</li>
+</ul>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">firstword</span> &lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<ul>
+<li>示例：<code>$(firstword foo bar)</code> 返回值是 <code>foo</code></li>
+</ul>
+</div></div></div><div class="wrap h3body-exist row-span-2"><div class="wrap-header h3wrap"><h3 id="文件名操作函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%96%87%E4%BB%B6%E5%90%8D%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>文件名操作函数</h3><div class="wrap-body">
+<!--rehype:wrap-class=row-span-2-->
+<h4 id="取目录函数dir"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E7%9B%AE%E5%BD%95%E5%87%BD%E6%95%B0dir"><span class="icon icon-link"></span></a>取目录函数(<code>dir</code>)</h4>
+<p>从文件名序列 &lt;names&gt; 中取出目录部分。目录部分是指最后一个反斜杠（<code>/</code>）之前的部分。如果没有反斜杠，那么返回 <code>./</code>。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">dir</span> &lt;names...&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">dir</span> src/foo.c hacks<span class="token punctuation">)</span> 
+</span><span class="code-line"><span class="token comment">#返回值是 src/ ./</span>
+</span></code></pre>
+<h4 id="取文件函数notdir"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E6%96%87%E4%BB%B6%E5%87%BD%E6%95%B0notdir"><span class="icon icon-link"></span></a>取文件函数(<code>notdir</code>)</h4>
+<p>从文件名序列 &lt;names&gt; 中取出非目录部分。非目录部分是指最後一个反斜杠（<code>/</code>）之后的部分。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">notdir</span> &lt;names...&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">notdir</span> src/foo.c hacks<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># 返回值是 foo.c hacks</span>
+</span></code></pre>
+<h4 id="取后缀函数suffix"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E5%90%8E%E7%BC%80%E5%87%BD%E6%95%B0suffix"><span class="icon icon-link"></span></a>取后缀函数（<code>suffix</code>)</h4>
+<p>从文件名序列 &lt;names&gt; 中取出各个文件名的后缀</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">suffix</span> &lt;names...&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">suffix</span> src/foo.c src-1.0/bar.c hacks<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># 返回值是 .c .c</span>
+</span></code></pre>
+<h4 id="取前缀函数basename"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%96%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0basename"><span class="icon icon-link"></span></a>取前缀函数(<code>basename</code>)</h4>
+<p>从文件名序列 &lt;names&gt; 中取出各个文件名的前缀部分。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">basename</span> &lt;names...&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">basename</span> src/foo.c src-1.0/bar.c hacks<span class="token punctuation">)</span> 
+</span><span class="code-line"><span class="token comment"># 返回值是 src/foo src-1.0/bar hacks</span>
+</span></code></pre>
+<h4 id="加后缀函数addsuffix"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8A%A0%E5%90%8E%E7%BC%80%E5%87%BD%E6%95%B0addsuffix"><span class="icon icon-link"></span></a>加后缀函数(<code>addsuffix</code>)</h4>
+<p>把后缀 &lt;suffix&gt; 加到 &lt;names&gt; 中的每个单词后面</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">addsuffix</span> &lt;suffix&gt;,&lt;names...&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">addsuffix</span> .c,foo bar<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># 返回值是 foo.c bar.c </span>
+</span></code></pre>
+<h4 id="加前缀函数addprefix"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8A%A0%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0addprefix"><span class="icon icon-link"></span></a>加前缀函数(<code>addprefix</code>)</h4>
+<p>把前缀 &lt;prefix&gt; 加到 &lt;names&gt; 中的每个单词前面。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span>addprefix &lt;prefix&gt;,&lt;names...&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span>addprefix src/,foo bar<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># 返回值是 src/foo src/bar 。</span>
+</span></code></pre>
+<h4 id="连接函数join"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E8%BF%9E%E6%8E%A5%E5%87%BD%E6%95%B0join"><span class="icon icon-link"></span></a>连接函数(<code>join</code>)</h4>
+<p>把 &lt;list2&gt; 中的单词对应地加到 &lt;list1&gt; 的单词后面。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">join</span> &lt;list1&gt;,&lt;list2&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">join</span> aaa bbb , 111 222 333<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># 返回值是 aaa111 bbb222 333 。</span>
+</span></code></pre>
+</div></div></div><div class="wrap h3body-exist col-span-2"><div class="wrap-header h3wrap"><h3 id="其它函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%85%B6%E5%AE%83%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>其它函数</h3><div class="wrap-body">
+<!--rehype:wrap-class=col-span-2-->
+<h4 id="foreach-函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#foreach-%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>foreach 函数</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">foreach</span> &lt;var&gt;,&lt;list&gt;,&lt;text&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token comment"># $(name) 中的单词会被挨个取出，并存到变量 n 中，</span>
+</span><span class="code-line"><span class="token comment"># $(n).o 每次根据 $(n) 计算出一个值，这些值以空格分隔，最后作为 foreach 函数的返回</span>
+</span><span class="code-line">names <span class="token operator">:=</span> a b c d
+</span><span class="code-line">files <span class="token operator">:=</span> <span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">foreach</span> n,<span class="token variable">$</span><span class="token punctuation">(</span>names<span class="token punctuation">)</span>,<span class="token variable">$</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>.o<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	echo <span class="token variable">$</span><span class="token punctuation">(</span>files<span class="token punctuation">)</span>
+</span></code></pre>
+<h4 id="if-函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#if-%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>if 函数</h4>
+<p>与之前的条件语句——<code>ifeq</code> 类似</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">if</span> &lt;condition&gt;,&lt;then-part&gt;<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># 或者</span>
+</span><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">if</span> &lt;condition&gt;,&lt;then-part&gt;,&lt;<span class="token keyword">else</span>-part&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<h4 id="call-函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#call-%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>call 函数</h4>
+<p>call 函数是唯一一个可以用来创建新的参数化的函数。</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">call</span> &lt;expression&gt;,&lt;parm1&gt;,&lt;parm2&gt;,...,&lt;parmn&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<hr>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">reverse <span class="token operator">=</span>  <span class="token variable">$</span><span class="token punctuation">(</span>2<span class="token punctuation">)</span> <span class="token variable">$</span><span class="token punctuation">(</span>1<span class="token punctuation">)</span>
+</span><span class="code-line">
+</span><span class="code-line">foo <span class="token operator">=</span> <span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">call</span> reverse,a,b<span class="token punctuation">)</span>
+</span><span class="code-line">
+</span><span class="code-line"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+</span><span class="code-line">	echo <span class="token variable">$</span><span class="token punctuation">(</span>foo<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># b a</span>
+</span></code></pre>
+<h4 id="shell-函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#shell-%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>shell 函数</h4>
+<p>使用操作系统 Shell 的命令</p>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line">contents <span class="token operator">:=</span> <span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">shell</span> cat foo<span class="token punctuation">)</span>
+</span><span class="code-line">files <span class="token operator">:=</span> <span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">shell</span> echo *.c<span class="token punctuation">)</span>
+</span></code></pre>
+<h4 id="控制-make-的函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E6%8E%A7%E5%88%B6-make-%E7%9A%84%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>控制 make 的函数</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">error</span> &lt;text ...&gt;<span class="token punctuation">)</span>
+</span><span class="code-line"><span class="token comment"># and</span>
+</span><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">warning</span> &lt;text ...&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<h4 id="origin-函数"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#origin-%E5%87%BD%E6%95%B0"><span class="icon icon-link"></span></a>origin 函数</h4>
+<pre class="language-makefile"><code class="language-makefile code-highlight"><span class="code-line"><span class="token variable">$</span><span class="token punctuation">(</span><span class="token function">origin</span> &lt;variable&gt;<span class="token punctuation">)</span>
+</span></code></pre>
+<p>origin 函数用于告诉这个变量的从何而来</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="left-align"><thead><tr><th align="left">:-</th><th align="left">:-</th></tr></thead><tbody><tr><td align="left"><code>undefined</code></td><td align="left">如果 &lt;variable&gt; 未定义，返回 <code>undefined</code></td></tr><tr><td align="left"><code>default</code></td><td align="left">如果 &lt;variable&gt; 是默认的，如 <code>CC</code></td></tr><tr><td align="left"><code>environment</code></td><td align="left">如果 &lt;variable&gt; 是环境变量，并且当 Makefile 执行时，-e 参数没有被打开</td></tr><tr><td align="left"><code>file</code></td><td align="left">如果 &lt;variable&gt; 这个变量被定义在 Makefile 中。</td></tr><tr><td align="left"><code>command line</code></td><td align="left">如果 &lt;variable&gt; 这个变量是被命令行定义的。</td></tr><tr><td align="left"><code>override</code></td><td align="left">如果 &lt;variable&gt; 是被 override 指示符重新定义的。</td></tr><tr><td align="left"><code>automatic</code></td><td align="left">如果 &lt;variable&gt; 是一个命令运行中的自动化变量</td></tr></tbody></table>
+<!--rehype:className=left-align-->
+</div></div></div></div></div><div class="wrap h2body-not-exist"><div class="wrap-header h2wrap"><h2 id="另见"><a aria-hidden="true" tabindex="-1" href="https://www.gy328.com/ref/docs/make.html#%E5%8F%A6%E8%A7%81"><span class="icon icon-link"></span></a>另见</h2><div class="wrap-body">
+<ul>
+<li><a href="https://seisman.github.io/how-to-write-makefile/overview.html">make 中文教程</a> <em>(seisman.github.io)</em></li>
+<li><a href="https://www.gnu.org/software/make/manual/make.html#toc-Overview-of-make">make 手册</a> <em>(<a href="http://www.gnu.org/">www.gnu.org</a>)</em></li>
+<li><a href="https://www.gnu.org/software/make/">make 官网</a> <em><a href="http://www.gnu.org/">www.gnu.org</a></em></li>
+</ul>
+</div></div><div class="h2wrap-body"></div></div></div></div><footer class="footer-wrap"><footer class="max-container">© 菜鸟教程.</footer></footer><script src="./make 参考手册 &amp; make 快速入门 - 菜鸟教程_files/data.js" defer=""></script><script src="./make 参考手册 &amp; make 快速入门 - 菜鸟教程_files/fuse.min.js" defer=""></script><script src="./make 参考手册 &amp; make 快速入门 - 菜鸟教程_files/main.js" defer=""></script><div id="mysearch"><div class="mysearch-box"><div class="mysearch-input"><div><svg xmlns="http://www.w3.org/2000/svg" height="1em" width="1em" viewBox="0 0 18 18">
+  <path fill="currentColor" d="M17.71,16.29 L14.31,12.9 C15.4069846,11.5024547 16.0022094,9.77665502 16,8 C16,3.581722 12.418278,0 8,0 C3.581722,0 0,3.581722 0,8 C0,12.418278 3.581722,16 8,16 C9.77665502,16.0022094 11.5024547,15.4069846 12.9,14.31 L16.29,17.71 C16.4777666,17.8993127 16.7333625,18.0057983 17,18.0057983 C17.2666375,18.0057983 17.5222334,17.8993127 17.71,17.71 C17.8993127,17.5222334 18.0057983,17.2666375 18.0057983,17 C18.0057983,16.7333625 17.8993127,16.4777666 17.71,16.29 Z M2,8 C2,4.6862915 4.6862915,2 8,2 C11.3137085,2 14,4.6862915 14,8 C14,11.3137085 11.3137085,14 8,14 C4.6862915,14 2,11.3137085 2,8 Z"></path>
+</svg><input id="mysearch-input" type="search" placeholder="搜索" autocomplete="off"><div class="mysearch-clear"></div></div><button id="mysearch-close" type="button">搜索</button></div><div class="mysearch-result"><div id="mysearch-menu"></div><div id="mysearch-content"></div></div></div></div>
+
+</body></html>
