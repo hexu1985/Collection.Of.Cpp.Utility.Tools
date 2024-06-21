@@ -20,6 +20,9 @@ public:
     ~Socket();
 
     void Connect(const char* host, uint16_t port);
+    void Connect(const std::tuple<std::string, uint16_t>& address) {
+        Connect(std::get<0>(address).c_str(), std::get<1>(address));
+    }
 
     void sendall(std::string_view data);
 
@@ -28,6 +31,9 @@ public:
     void Shutdown(int how);
 
     void Bind(const char* host, uint16_t port);
+    void Bind(const std::tuple<std::string, uint16_t>& address) {
+        Bind(std::get<0>(address).c_str(), std::get<1>(address));
+    }
 
     void Listen(int backlog);
 
