@@ -57,7 +57,7 @@ std::string_view make_string_view(const T* data) {
 void put_block(Socket& sock, const std::string& message) {
     uint32_t block_length = message.length();
     block_length = htonl(block_length);
-    sock.Send(make_string_view(&block_length));
+    sock.Send(&block_length, sizeof(block_length));
     sock.Send(message);
 }
 

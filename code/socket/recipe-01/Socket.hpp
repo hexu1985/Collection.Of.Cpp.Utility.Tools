@@ -39,7 +39,10 @@ public:
 
     void Setsockopt(int level, int optname, int value);
 
-    size_t Send(std::string_view data, int flags=0);
+    size_t Send(const void *buf, size_t len, int flags=0);
+    size_t Send(std::string_view data, int flags=0) {
+        return Send(data.data(), data.size(), flags);
+    }
 
     std::tuple<std::string, uint16_t> Getpeername();
 

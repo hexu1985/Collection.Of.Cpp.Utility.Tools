@@ -243,8 +243,8 @@ void Socket::Setsockopt(int level, int optname, int optval) {
     }
 }
 
-size_t Socket::Send(std::string_view data, int flags) {
-    auto n = send(sockfd_, data.data(), data.size(), flags);
+size_t Socket::Send(const void *buf, size_t len, int flags) {
+    auto n = send(sockfd_, buf, len, flags);
     if (n < 0) {
         throw SocketError(errno, "Send error()");
     }
