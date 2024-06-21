@@ -25,10 +25,10 @@ std::string usage(const char* prog) {
     return os.str();
 }
 
-void server(const char* host, uint16_t port) {
+void server(const std::tuple<std::string, uint16_t>& address) {
     Socket sock(AF_INET6, SOCK_STREAM);
     sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
-    sock.Bind(host, port);
+    sock.Bind(address);
     sock.Listen(1);
     std::cout << "Run this script in another window with '--client' to connect\n";
     std::cout << "Listening at " << sock.Getsockname() << "\n";
@@ -52,9 +52,9 @@ void server(const char* host, uint16_t port) {
     sock.Close();
 }
 
-void client(const char* host, uint16_t port) {
+void client(const std::tuple<std::string, uint16_t>& address) {
     Socket sock(AF_INET6, SOCK_STREAM);
-    sock.Connect(host, port);
+    sock.Connect(address);
     sock.Shutdown(SHUT_RD);
     sock.sendall("Beautiful is better than ugly.\n");
     sock.sendall("Explicit is better than implicit.\n");
@@ -66,13 +66,13 @@ int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    std::function<void(const char*, uint16_t)> function;
+    std::function<void(const std::tuple<std::string, uint16_t>&)> function;
     if (FLAGS_client) {
         function = &client;
     } else {
         function = &server;
     }
-    function(FLAGS_host.c_str(), FLAGS_port);
+    function(std::make_tuple(FLAGS_host, FLAGS_port));
 
     return 0;
 }
