@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g3 -Wall -Wextra -std=c++17
+CXXFLAGS = -g3 -Wall -Wextra
 INCLUDES = 
 LDFLAGS = 
 LDLIBS = -lpthread
