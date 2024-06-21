@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 # project name and language
 project(wrapsocket LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package( gflags REQUIRED )
@@ -14,6 +14,8 @@ if ( gflags_FOUND )
 else()
     message(STATUS "Not found gflags")
 endif ()
+
+add_subdirectory(abseil-cpp)
 
 # generate a library from sources
 add_library(wrapsocket 
@@ -25,6 +27,8 @@ add_library(wrapsocket
     SocketUtility.hpp 
     SocketUtility.cpp
     )
+
+target_link_libraries(wrapsocket absl::strings)
 
 add_executable(streamer streamer.cpp)
 target_link_libraries(streamer wrapsocket gflags)
