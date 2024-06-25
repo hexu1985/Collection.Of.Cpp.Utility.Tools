@@ -133,7 +133,7 @@ void Socket::Connect(const char* host, uint16_t port) {
     }
 }
 
-void Socket::sendall(absl::string_view data) {
+void Socket::sendall(StringView data) {
     if (writen(sockfd_, data.data(), data.size()) != data.size()) {
         throw SocketError(errno, "sendall() error");
     }

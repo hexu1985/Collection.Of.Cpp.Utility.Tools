@@ -24,7 +24,7 @@ public:
         Connect(std::get<0>(address).c_str(), std::get<1>(address));
     }
 
-    void sendall(absl::string_view data);
+    void sendall(StringView data);
 
     void Close();
 
@@ -46,7 +46,7 @@ public:
     void Setsockopt(int level, int optname, int value);
 
     size_t Send(const void *buf, size_t len, int flags=0);
-    size_t Send(absl::string_view data, int flags=0) {
+    size_t Send(StringView data, int flags=0) {
         return Send(data.data(), data.size(), flags);
     }
 
