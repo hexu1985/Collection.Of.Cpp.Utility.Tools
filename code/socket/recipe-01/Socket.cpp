@@ -228,9 +228,9 @@ again:
     return sock;
 }
 
-std::string Socket::Recv(size_t len) {
+std::string Socket::Recv(size_t len, int flags) {
     std::unique_ptr<char[]> buf(new char[len]);
-    auto n = read(sockfd_, buf.get(), len);
+    auto n = recv(sockfd_, buf.get(), len, flags);
     if (n < 0) {
         throw SocketError(errno, "Recv error()");
     } 

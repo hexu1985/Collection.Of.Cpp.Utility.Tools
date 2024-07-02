@@ -41,7 +41,7 @@ public:
 
     Socket Accept(std::tuple<std::string, uint16_t>* peername=nullptr);
 
-    std::string Recv(size_t len);
+    std::string Recv(size_t len, int flags=0);
 
     void Setsockopt(int level, int optname, int value);
 
