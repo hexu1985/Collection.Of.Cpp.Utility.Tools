@@ -10,11 +10,13 @@
 
 #define FMT_HEADER_ONLY
 #include "fmt/format.h"
+#include "fmt/ranges.h"
 #include "fmt/chrono.h"
 
 #include "Socket.hpp"
 
 using fmt::format;
+using fmt::print;
 
 const size_t MAX_BYTES = 65535;
 
@@ -33,12 +35,6 @@ static bool ValidateRole(const char* name, const std::string& value) {
 // 使用全局 static 变量来注册函数，static 变量会在 main 函数开始时就调用
 static const bool role_dummy = gflags::RegisterFlagValidator(&FLAGS_role, &ValidateRole);
 
-std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
-{
-    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
-    return out;
-}
-
 std::string usage(const char* prog) {
     std::ostringstream os;
     os << "\nusage: " << prog << " [--help] [--role client|server] [--port PORT]\n\n"
@@ -49,12 +45,12 @@ std::string usage(const char* prog) {
 void server(uint16_t port) {
     Socket sock(AF_INET, SOCK_DGRAM);
     sock.Bind("127.0.0.1", port);
-    std::cout << "Listening at " << sock.Getsockname() << "\n";
+    print("Listening at {}\n", sock.Getsockname());
     SocketAddress address;
     std::string data;
     while (true) {
         data = sock.Recvfrom(MAX_BYTES, address);
-        std::cout << "The client at " << address.to_string() << " says " << data << std::endl;
+        print("The client at {} says {}\n", address.to_string(), data);
         data = format("Your data was {} bytes long", data.length());
         sock.Sendto(data, address);
     }
@@ -64,10 +60,10 @@ void client(uint16_t port) {
     Socket sock(AF_INET, SOCK_DGRAM);
     std::string data = format("The time is {}", std::chrono::system_clock::now());
     sock.Sendto(data, "127.0.0.1", port);
-    std::cout << "Client has been assigned socket name " << sock.Getsockname() << "\n";
+    print("The OS assigned me the address {}\n", sock.Getsockname());
     SocketAddress address;
     data = sock.Recvfrom(MAX_BYTES, address);
-    std::cout << "The server " << address.to_string() << " replied " << data << std::endl;
+    print("The server {} replied {}\n", address.to_string(), data);
     sock.Close();
 }
 

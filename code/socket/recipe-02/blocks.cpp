@@ -8,10 +8,12 @@
 
 #define FMT_HEADER_ONLY
 #include "fmt/format.h"
+#include "fmt/ranges.h"
 
 #include "Socket.hpp"
 
 using fmt::format;
+using fmt::print;
 
 DEFINE_string(host, "127.0.0.1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
@@ -61,18 +63,18 @@ void server(const std::tuple<std::string, uint16_t>& address) {
     sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
     sock.Bind(address);
     sock.Listen(1);
-    std::cout << "Run this script in another window with '--client' to connect\n";
-    std::cout << "Listening at " << sock.Getsockname() << "\n";
+    print("Run this script in another window with \"-c\" to connect\n");
+    print("Listening at {}\n", sock.Getsockname());
     std::tuple<std::string, uint16_t> sockname;
     Socket sc = sock.Accept(&sockname);
-    std::cout << "Accepted connection from " << sockname << "\n";
+    print("Accepted connection from {}\n", sockname);
     sc.Shutdown(SHUT_WR);
     while (true) {
         auto block = get_block(sc);
         if (block.empty()) {
             break;
         }
-        std::cout << "Block says: " << block << "\n";
+        print("Block says: {}\n", block);
     }
     sc.Close();
     sock.Close();
@@ -94,11 +96,7 @@ int main(int argc, char* argv[]) {
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
     std::function<void(const std::tuple<std::string, uint16_t>&)> function;
-    if (FLAGS_client) {
-        function = &client;
-    } else {
-        function = &server;
-    }
+    function = FLAGS_client ? &client : &server;
     function(std::make_tuple(FLAGS_host, FLAGS_port));
 
     return 0;

@@ -6,17 +6,18 @@
 
 #include <gflags/gflags.h>
 
+#define FMT_HEADER_ONLY
+#include "fmt/format.h"
+#include "fmt/ranges.h"
+
 #include "Socket.hpp"
+
+using fmt::format;
+using fmt::print;
 
 DEFINE_string(host, "::1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
 DEFINE_bool(client, false, "run as the client");
-
-std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
-{
-    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
-    return out;
-}
 
 std::string usage(const char* prog) {
     std::ostringstream os;
@@ -30,24 +31,24 @@ void server(const std::tuple<std::string, uint16_t>& address) {
     sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
     sock.Bind(address);
     sock.Listen(1);
-    std::cout << "Run this script in another window with '--client' to connect\n";
-    std::cout << "Listening at " << sock.Getsockname() << "\n";
+    print("Run this script in another window with '--client' to connect\n");
+    print("Listening at {}\n", sock.Getsockname());
     std::tuple<std::string, uint16_t> sockname;
     Socket sc = sock.Accept(&sockname);
-    std::cout << "Accepted connection from " << sockname << "\n";
+    print("Accepted connection from {}\n", sockname);
     sc.Shutdown(SHUT_WR);
     std::string message;
     while (true) {
         std::string more = sc.Recv(8192);
         if (more.empty()) {
-            std::cout << "Received zero bytes - end of file\n";
+            print("Received zero bytes - end of file\n");
             break;
         }
-        std::cout << "Received " << more.length() << " bytes\n";
+        print("Received {} bytes\n", more.length());
         message += more;
     }
-    std::cout << "Message:\n";
-    std::cout << message << std::endl;
+    print("Message:\n");
+    print(message);
     sc.Close();
     sock.Close();
 }
@@ -67,11 +68,7 @@ int main(int argc, char* argv[]) {
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
     std::function<void(const std::tuple<std::string, uint16_t>&)> function;
-    if (FLAGS_client) {
-        function = &client;
-    } else {
-        function = &server;
-    }
+    function = FLAGS_client ? &client : &server;
     function(std::make_tuple(FLAGS_host, FLAGS_port));
 
     return 0;
