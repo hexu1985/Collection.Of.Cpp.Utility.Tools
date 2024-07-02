@@ -26,6 +26,8 @@ add_library(wrapsocket
     Socket.cpp
     SocketUtility.hpp 
     SocketUtility.cpp
+    SocketAddress.hpp
+    SocketAddress.cpp
     )
 
 target_link_libraries(wrapsocket absl::strings)
@@ -44,3 +46,6 @@ target_link_libraries(tcp_sixteen wrapsocket gflags)
 
 add_executable(byteorder byteorder.cpp)
 target_link_libraries(byteorder wrapsocket gflags)
+
+add_executable(udp_local udp_local.cpp)
+target_link_libraries(udp_local wrapsocket gflags)

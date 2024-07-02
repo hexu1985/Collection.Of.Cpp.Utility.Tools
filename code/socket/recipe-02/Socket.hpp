@@ -80,6 +80,19 @@ public:
         return Sendto(data.data(), data.size(), 0, host, port);
     }
 
+    size_t Sendto(const void* buf, size_t len, int flags, const std::tuple<std::string, uint16_t>& address) {
+        return Sendto(buf, len, flags, std::get<0>(address).c_str(), std::get<1>(address));
+    }
+    size_t Sendto(const void* buf, size_t len, const std::tuple<std::string, uint16_t>& address) {
+        return Sendto(buf, len, 0, address);
+    }
+    size_t Sendto(StringView data, int flags, const std::tuple<std::string, uint16_t>& address) {
+        return Sendto(data.data(), data.size(), flags, address);
+    }
+    size_t Sendto(StringView data, const std::tuple<std::string, uint16_t>& address) {
+        return Sendto(data.data(), data.size(), 0, address);
+    }
+
 private:
     Socket() = default;
 
