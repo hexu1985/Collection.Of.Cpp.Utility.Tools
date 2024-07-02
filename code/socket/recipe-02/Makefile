@@ -7,7 +7,7 @@ INCLUDES = -I$(ABSEIL_DIR)/include
 LDFLAGS = -L$(ABSEIL_DIR)/lib
 LDLIBS = -lgflags -labsl_string_view
 
-PROGS =	streamer streamer6 blocks tcp_sixteen byteorder
+PROGS =	streamer streamer6 blocks tcp_sixteen byteorder udp_local
 LIBOBJS = SocketException.o Socket.o SocketUtility.o SocketAddress.o
 
 .PHONY: all
@@ -34,5 +34,8 @@ tcp_sixteen: tcp_sixteen.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 byteorder: byteorder.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+udp_local: udp_local.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

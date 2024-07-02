@@ -173,7 +173,7 @@ std::string Socket::Recv(size_t len, int flags) {
     std::unique_ptr<char[]> buf(new char[len]);
     auto n = recv(sockfd_, buf.get(), len, flags);
     if (n < 0) {
-        throw SocketError(errno, "Recv error()");
+        throw SocketError(errno, "Recv() error");
     } 
     return std::string(buf.get(), n);
 }
@@ -187,7 +187,7 @@ void Socket::Setsockopt(int level, int optname, int optval) {
 size_t Socket::Send(const void* buf, size_t len, int flags) {
     auto n = send(sockfd_, buf, len, flags);
     if (n < 0) {
-        throw SocketError(errno, "Send error()");
+        throw SocketError(errno, "Send() error");
     }
     return n;
 }
@@ -206,14 +206,15 @@ std::tuple<std::string, uint16_t> Socket::Getpeername() {
     return sock_ntop(sa, salen);
 }
 
-std::string Socket::Recvfrom(size_t len, int flags, SocketAddress* src_addr) {
-    std::unique_ptr<char[]> buf(new char[len]);
-    struct sockaddr* addr = src_addr ? src_addr->addr_ptr() : nullptr;
-    socklen_t* addrlen = src_addr ? src_addr->addr_len_ptr() : nullptr;
+std::string Socket::Recvfrom(size_t len, int flags, SocketAddress& src_addr) {
+    src_addr.clean();
+    struct sockaddr* addr = src_addr.addr_ptr(); 
+    socklen_t* addrlen = src_addr.addr_len_ptr();
 
+    std::unique_ptr<char[]> buf(new char[len]);
     ssize_t n = recvfrom(sockfd_, buf.get(), len, flags, addr, addrlen);
     if (n < 0) {
-        throw SocketError(errno, "Recvfrom error()");
+        throw SocketError(errno, "Recvfrom() error");
     }
     return std::string(buf.get(), n);
 }
@@ -221,9 +222,24 @@ std::string Socket::Recvfrom(size_t len, int flags, SocketAddress* src_addr) {
 size_t Socket::Sendto(const void* buf, size_t len, int flags, const SocketAddress& dest_addr) {
     const struct sockaddr* addr = dest_addr.addr_ptr(); 
     socklen_t addrlen = *dest_addr.addr_len_ptr(); 
+
     ssize_t n = sendto(sockfd_, buf, len, flags, addr, addrlen);
     if (n < 0) {
-        throw SocketError(errno, "Sendto error()");
+        throw SocketError(errno, format("Sendto({}) error", dest_addr.to_string()));
+    }
+    return n;
+}
+
+size_t Socket::Sendto(const void* buf, size_t len, int flags, const char* host, uint16_t port) {
+    addrinfo hints{};
+    hints.ai_family = family_;
+
+    std::string serv = std::to_string(port);
+    auto servinfo = Getaddrinfo(host, serv.c_str(), &hints);
+
+    ssize_t n = sendto(sockfd_, buf, len, flags, servinfo->ai_addr, servinfo->ai_addrlen);
+    if (n < 0) {
+        throw SocketError(errno, format("Sendto({}, {}) error", host, port));
     }
     return n;
 }

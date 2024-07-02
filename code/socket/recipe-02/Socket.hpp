@@ -53,7 +53,10 @@ public:
 
     std::tuple<std::string, uint16_t> Getpeername();
 
-    std::string Recvfrom(size_t len, int flags, SocketAddress* src_addr);
+    std::string Recvfrom(size_t len, int flags, SocketAddress& src_addr);
+    std::string Recvfrom(size_t len, SocketAddress& src_addr) {
+        return Recvfrom(len, 0, src_addr);
+    }
 
     size_t Sendto(const void* buf, size_t len, int flags, const SocketAddress& dst_addr);
     size_t Sendto(const void* buf, size_t len, const SocketAddress& dst_addr) {
@@ -64,6 +67,17 @@ public:
     }
     size_t Sendto(StringView data, const SocketAddress& dst_addr) {
         return Sendto(data.data(), data.size(), 0, dst_addr);
+    }
+
+    size_t Sendto(const void* buf, size_t len, int flags, const char* host, uint16_t port); 
+    size_t Sendto(const void* buf, size_t len, const char* host, uint16_t port) {
+        return Sendto(buf, len, 0, host, port);
+    }
+    size_t Sendto(StringView data, int flags, const char* host, uint16_t port) {
+        return Sendto(data.data(), data.size(), flags, host, port);
+    }
+    size_t Sendto(StringView data, const char* host, uint16_t port) {
+        return Sendto(data.data(), data.size(), 0, host, port);
     }
 
 private:
