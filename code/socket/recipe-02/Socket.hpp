@@ -24,7 +24,6 @@ public:
     void Connect(const std::tuple<std::string, uint16_t>& address) {
         Connect(std::get<0>(address).c_str(), std::get<1>(address));
     }
-    void Connect(const SocketAddress& address);
 
     void sendall(StringView data);
 
@@ -36,7 +35,6 @@ public:
     void Bind(const std::tuple<std::string, uint16_t>& address) {
         Bind(std::get<0>(address).c_str(), std::get<1>(address));
     }
-    void Bind(const SocketAddress& address);
 
     void Listen(int backlog);
 
@@ -44,7 +42,7 @@ public:
 
     Socket Accept(std::tuple<std::string, uint16_t>* peername=nullptr);
 
-    std::string Recv(size_t len);
+    std::string Recv(size_t len, int flags=0);
 
     void Setsockopt(int level, int optname, int value);
 
@@ -55,6 +53,19 @@ public:
 
     std::tuple<std::string, uint16_t> Getpeername();
 
+    std::string Recvfrom(size_t len, int flags, SocketAddress* src_addr);
+
+    size_t Sendto(const void* buf, size_t len, int flags, const SocketAddress& dst_addr);
+    size_t Sendto(const void* buf, size_t len, const SocketAddress& dst_addr) {
+        return Sendto(buf, len, 0, dst_addr);
+    }
+    size_t Sendto(StringView data, int flags, const SocketAddress& dst_addr) {
+        return Sendto(data.data(), data.size(), flags, dst_addr);
+    }
+    size_t Sendto(StringView data, const SocketAddress& dst_addr) {
+        return Sendto(data.data(), data.size(), 0, dst_addr);
+    }
+
 private:
     Socket() = default;
 
@@ -62,5 +73,4 @@ private:
     int sockfd_=-1;
     int family_=-1;
 };
-
 

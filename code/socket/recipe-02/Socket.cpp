@@ -169,9 +169,9 @@ again:
     return sock;
 }
 
-std::string Socket::Recv(size_t len) {
+std::string Socket::Recv(size_t len, int flags) {
     std::unique_ptr<char[]> buf(new char[len]);
-    auto n = read(sockfd_, buf.get(), len);
+    auto n = recv(sockfd_, buf.get(), len, flags);
     if (n < 0) {
         throw SocketError(errno, "Recv error()");
     } 
@@ -206,3 +206,24 @@ std::tuple<std::string, uint16_t> Socket::Getpeername() {
     return sock_ntop(sa, salen);
 }
 
+std::string Socket::Recvfrom(size_t len, int flags, SocketAddress* src_addr) {
+    std::unique_ptr<char[]> buf(new char[len]);
+    struct sockaddr* addr = src_addr ? src_addr->addr_ptr() : nullptr;
+    socklen_t* addrlen = src_addr ? src_addr->addr_len_ptr() : nullptr;
+
+    ssize_t n = recvfrom(sockfd_, buf.get(), len, flags, addr, addrlen);
+    if (n < 0) {
+        throw SocketError(errno, "Recvfrom error()");
+    }
+    return std::string(buf.get(), n);
+}
+
+size_t Socket::Sendto(const void* buf, size_t len, int flags, const SocketAddress& dest_addr) {
+    const struct sockaddr* addr = dest_addr.addr_ptr(); 
+    socklen_t addrlen = *dest_addr.addr_len_ptr(); 
+    ssize_t n = sendto(sockfd_, buf, len, flags, addr, addrlen);
+    if (n < 0) {
+        throw SocketError(errno, "Sendto error()");
+    }
+    return n;
+}
