@@ -2,6 +2,5 @@
 
 for i in $(seq 1 10)
 do
-    echo $i
-    ./print_pid &
+    ./print_pid_nolock $i &
 done

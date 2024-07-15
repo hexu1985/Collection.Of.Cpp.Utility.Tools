@@ -1,19 +1,19 @@
 CXX = g++
-CXXFLAGS = -g3 -Wall -Wextra
-CC = g++	# for link
+CXXFLAGS = -g3 -Wall -Wextra #-DDEBUG
+INCLUDE = 
 LDFLAGS = 
-LDLIBS = -lrt
+LDLIBS = -lpthread
 
-SOURCES = $(shell ls *.cpp)
-TARGETS = $(subst .cpp,,$(SOURCES))
-#TARGETS = $(SOURCES:%.cpp=%)
+PROGS =	print_pid_nolock
 
-all: $(TARGETS)
-	@echo "TARGETS = $(TARGETS)" 
+.PHONY: all
+all: $(PROGS)
+	@echo "build OK!"
 
-$(TARGETS): %: %.o
-
-.PHONY:
 clean:
-	$(RM) $(TARGETS) a.out core *.o
+	@$(RM) $(PROGS) *.o
 	@echo "clean OK!"
+
+print_pid_nolock: print_pid_nolock.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
