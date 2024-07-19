@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     boost::lock_guard<bip::named_mutex> lock(global_mutex);//读锁定
     for (int i = 0; i < print_times; i++) {
         print_pid(pid);
-        std::this_thread::sleep_for(500ms);
+        std::this_thread::sleep_for(100ms);
     }
 
     return 0;

@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     int print_times = 10;
     for (int i = 0; i < print_times; i++) {
         print_pid(pid);
-        std::this_thread::sleep_for(500ms);
+        std::this_thread::sleep_for(100ms);
     }
 
     return 0;
