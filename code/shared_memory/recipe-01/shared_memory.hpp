@@ -1,45 +1,33 @@
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <unistd.h>
+#pragma once
 
-#include <stdexcept>
+#include <stddef.h>
+#include <stdint.h>
+#include <sys/stat.h>
 
-template<class T>
 class SharedMemory {
-    int fd;
-    T* ptr;
-    const char* name;
-
 public:
-    SharedMemory(const char* name, bool owner=false) {
-        fd = shm_open(name, O_RDWR | O_CREAT, 0600);
-        if (fd == -1) {
-            throw std::runtime_error("Failed to open a shared memory region");
-        }
+    SharedMemory(const char* name, bool readonly=false);
+    ~SharedMemory();
 
-        if (ftruncate(fd, sizeof(T)) < 0) {
-            close(fd);
-            throw std::runtime_error("Failed to set size of a shared memory region");
-        };
+    SharedMemory(SharedMemory&& other);
+    SharedMemory& operator= (SharedMemory&& other);
 
-        ptr = (T*) mmap(nullptr, sizeof(T), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-        if (!ptr) {
-            close(fd);
-            throw std::runtime_error("Failed to mmap a shared memory region");
-        }
+    void truncate(off_t length);
+    off_t get_size() const;
+    void* get_address() const; 
+    void clear();
 
-        this->name = owner ? name : nullptr;
-    }
+    static SharedMemory create(const char* name, size_t length, bool check_exists=false);
+    static bool remove(const char* name) noexcept;
 
-    ~SharedMemory() {
-        munmap(ptr, sizeof(T));
-        close(fd);
-        if (name) {
-            shm_unlink(name);
-        }
-    }
+private:
+    SharedMemory(const SharedMemory&) = delete;
+    SharedMemory& operator= (const SharedMemory&) = delete;
 
-    T& get() const {
-        return *ptr;
-    }
+private:
+    SharedMemory(int fd, void* ptr);
+
+private:
+    int fd_ = -1;
+    void* ptr_ = nullptr;
 };

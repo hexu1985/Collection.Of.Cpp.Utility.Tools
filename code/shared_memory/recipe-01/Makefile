@@ -1,19 +1,36 @@
+
 CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra
-CC = g++	# for link
-LDFLAGS = 
-LDLIBS = -lrt
+INCLUDES =
+LDFLAGS =
+LDLIBS = -lgflags -lrt
 
-SOURCES = $(shell ls *.cpp)
-TARGETS = $(subst .cpp,,$(SOURCES))
-#TARGETS = $(SOURCES:%.cpp=%)
+PROGS =	shm_create shm_remove shm_read shm_write shmem
+LIBOBJS = shared_memory.o
 
-all: $(TARGETS)
-	@echo "TARGETS = $(TARGETS)" 
+.PHONY: all
+all: $(PROGS)
+	@echo "build OK!"
 
-$(TARGETS): %: %.o
-
-.PHONY:
 clean:
-	$(RM) $(TARGETS) a.out core *.o
+	@$(RM) $(PROGS) *.o
 	@echo "clean OK!"
+
+%.o:%.cpp
+	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDES)
+
+shm_create: shm_create.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+shm_remove: shm_remove.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+shm_read: shm_read.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+shm_write: shm_write.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+shmem: shmem.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+

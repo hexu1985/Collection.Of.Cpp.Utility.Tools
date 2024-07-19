@@ -1,7 +1,8 @@
 #include <sstream>
 #include <gflags/gflags.h>
 
-#include "posix_api.hpp"
+#include "shared_memory.hpp"
+#include "dump_functions.hpp"
 
 DEFINE_string(name, "shm_test", "shared memory name");
 
@@ -16,16 +17,12 @@ int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    int fd = Shm_open(FLAGS_name.c_str(), O_RDWR, FILE_MODE);
+    SharedMemory shared_memory(FLAGS_name.c_str(), true);
+    const uint8_t* ptr = (const uint8_t*) shared_memory.get_address();
+    size_t size = shared_memory.get_size();
 
-    struct stat stat;
-    Fstat(fd, &stat);
-
-    uint8_t* ptr = (uint8_t*) Mmap(NULL, stat.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-    Close(fd);
-
-    for (int i = 0; i < stat.st_size; i++)
-        *ptr++ = i % 256;
+    dump_hex(ptr, size, "");
+    printf("\n");
 
     return 0;
 }
