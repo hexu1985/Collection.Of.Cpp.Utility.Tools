@@ -2,7 +2,6 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <sys/stat.h>
 
 class SharedMemory {
 public:
@@ -12,8 +11,8 @@ public:
     SharedMemory(SharedMemory&& other);
     SharedMemory& operator= (SharedMemory&& other);
 
-    void truncate(off_t length);
-    off_t get_size() const;
+    void truncate(size_t length);
+    size_t get_size() const;
     void* get_address() const; 
     void clear();
 

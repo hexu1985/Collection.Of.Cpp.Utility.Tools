@@ -2,6 +2,7 @@
 
 #include <errno.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <fcntl.h>           /* For O_* constants */
 #include <unistd.h>
 
@@ -87,13 +88,13 @@ SharedMemory& SharedMemory::operator= (SharedMemory&& other) {
     return *this;
 }
 
-void SharedMemory::truncate(off_t length) {
+void SharedMemory::truncate(size_t length) {
     if (ftruncate(fd_, length) == -1) {
         throw std::system_error(errno, std::system_category(), "ftruncate error");
     }
 }
 
-off_t SharedMemory::get_size() const {
+size_t SharedMemory::get_size() const {
     struct stat stat;
     Fstat(fd_, &stat);
     return stat.st_size;
