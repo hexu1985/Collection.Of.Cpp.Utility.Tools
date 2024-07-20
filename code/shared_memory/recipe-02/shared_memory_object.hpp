@@ -15,9 +15,12 @@ public:
     size_t size() const;
     int fileno() const;
 
+    void* map(size_t length, bool readonly=false, long offset=0);
+
     void swap(SharedMemoryObject& other) noexcept;
 
     static bool remove(const char* name) noexcept;
+    static void unmap(void* addr, size_t length) noexcept;
 
 private:
     SharedMemoryObject(const SharedMemoryObject&) = delete;
