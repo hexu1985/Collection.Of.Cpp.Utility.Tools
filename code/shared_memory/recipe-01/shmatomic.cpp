@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <atomic>
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -8,9 +8,6 @@
 #include "shared_memory.hpp"
 
 const char* kSharedMemPath = "/sample_point";
-const size_t kPayloadSize = 16;
-
-using namespace std::literals;
 
 template<class T>
 class SharedMem {
@@ -35,30 +32,38 @@ public:
     }
 };
 
-
 struct Payload {
-  uint32_t index;
-  uint8_t raw[kPayloadSize];
+  std::atomic_bool data_ready;
+  std::atomic_bool data_processed;
+  int index;
 };
 
 
 void producer() {
   SharedMem<Payload> writer(kSharedMemPath);
   Payload& pw = writer.get();
-  for (int i = 0; i < 5; i++) {
+  if (!pw.data_ready.is_lock_free()) {
+    throw std::runtime_error("Timestamp is not lock-free");
+  }
+  for (int i = 0; i < 10; i++) {
+    pw.data_processed.store(false);
     pw.index = i;
-    std::fill_n(pw.raw, sizeof(pw.raw) - 1, 'a' + i);
-    pw.raw[sizeof(pw.raw) - 1] = '\0';
-    std::this_thread::sleep_for(150ms);
+    pw.data_ready.store(true);
+    while(!pw.data_processed.load());
   }
 }
 
 void consumer() {
   SharedMem<Payload> point_reader(kSharedMemPath, true);
   Payload& pr = point_reader.get();
+  if (!pr.data_ready.is_lock_free()) {
+    throw std::runtime_error("Timestamp is not lock-free");
+  }
   for (int i = 0; i < 10; i++) {
-    std::cout << "Read data frame " << pr.index << ": " << pr.raw << std::endl;
-    std::this_thread::sleep_for(100ms);
+    while(!pr.data_ready.load());
+    pr.data_ready.store(false);
+    std::cout << "Processing data chunk " << pr.index << std::endl;
+    pr.data_processed.store(true);
   }
 }
 
