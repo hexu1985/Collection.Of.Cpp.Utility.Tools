@@ -19,6 +19,7 @@ public:
 
     void swap(SharedMemoryObject& other) noexcept;
 
+    static bool exists(const char* name) noexcept;
     static bool remove(const char* name) noexcept;
     static void unmap(void* addr, size_t length) noexcept;
 

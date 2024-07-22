@@ -87,6 +87,13 @@ void* SharedMemoryObject::map(size_t length, bool readonly, long offset) {
 	return ptr;
 }
 
+bool SharedMemoryObject::exists(const char* name) noexcept {
+    if (shm_open(name, O_RDONLY, (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) == -1)
+       return false;
+    else
+       return true; 
+}
+
 bool SharedMemoryObject::remove(const char* name) noexcept {
     if (shm_unlink(name) == -1) {
         return false;
