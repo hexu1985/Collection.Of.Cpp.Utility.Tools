@@ -3,10 +3,10 @@ CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra
 INCLUDES =
 LDFLAGS =
-LDLIBS = -lgflags -lrt
+LDLIBS = -lgflags -lpthread -lrt
 
 PROGS =	interprocess_mutex_create
-LIBOBJS = shared_memory_object.o
+LIBOBJS = shared_memory.o interprocess_mutex.o
 
 .PHONY: all
 all: $(PROGS)

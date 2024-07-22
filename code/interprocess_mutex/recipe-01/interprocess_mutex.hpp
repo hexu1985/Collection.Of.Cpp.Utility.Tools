@@ -1,7 +1,7 @@
 #pragma once
 
 #include <pthread.h>
-#include "shared_memory.hpp"
+#include "shared_memory_object.hpp"
 
 class InterprocessMutex {
 public:
@@ -19,5 +19,5 @@ private:
         pthread_mutex_t mutex;
     };
 
-    SharedMemory<Handle> handle_; 
+    SharedMemoryObject<Handle> handle_; 
 };
