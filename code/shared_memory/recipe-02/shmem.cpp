@@ -3,8 +3,6 @@
 #include <chrono>
 #include <thread>
 
-#include <sys/mman.h>
-#include <fcntl.h>
 #include <unistd.h>
 
 #include "shared_memory_object.hpp"
