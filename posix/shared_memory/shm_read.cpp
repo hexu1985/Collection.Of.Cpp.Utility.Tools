@@ -8,7 +8,7 @@ DEFINE_string(name, "shm_test", "shared memory name");
 
 std::string usage(const char* prog) {
     std::ostringstream os;
-    os << "\nusage: " << prog << " [--check_exists] [--name NAME] [--length LENGTH]\n\n"
+    os << "\nusage: " << prog << " [--name NAME]\n\n"
         << "create shared memory\n";
     return os.str();
 }
