@@ -1,7 +1,7 @@
 #include <sstream>
 #include <gflags/gflags.h>
 
-#include "shared_memory_object.hpp"
+#include "shared_memory.hpp"
 
 DEFINE_string(name, "shm_test", "shared memory name");
 
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    SharedMemoryObject::remove(FLAGS_name.c_str());
+    SharedMemory::remove(FLAGS_name.c_str());
 
     return 0;
 }

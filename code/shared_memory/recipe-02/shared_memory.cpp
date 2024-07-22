@@ -1,4 +1,4 @@
-#include "shared_memory_object.hpp"
+#include "shared_memory.hpp"
 
 #include <errno.h>
 #include <sys/mman.h>
@@ -13,10 +13,10 @@
 
 using fmt::format;
 
-SharedMemoryObject::SharedMemoryObject() noexcept {
+SharedMemory::SharedMemory() noexcept {
 }
 
-SharedMemoryObject::SharedMemoryObject(const char* name, bool check_exists) {
+SharedMemory::SharedMemory(const char* name, bool check_exists) {
     int flags = O_RDWR | O_CREAT;
     if (check_exists) {
         flags |= O_EXCL;
@@ -29,19 +29,19 @@ SharedMemoryObject::SharedMemoryObject(const char* name, bool check_exists) {
     }
 }
 
-SharedMemoryObject::~SharedMemoryObject() {
+SharedMemory::~SharedMemory() {
     if (fd_ >= 0) {
         close(fd_);
         fd_ = -1;
     }
 }
 
-SharedMemoryObject::SharedMemoryObject(SharedMemoryObject&& other) {
+SharedMemory::SharedMemory(SharedMemory&& other) {
     fd_ = other.fd_;
     other.fd_ = -1;
 }
 
-SharedMemoryObject& SharedMemoryObject::operator= (SharedMemoryObject&& other) {
+SharedMemory& SharedMemory::operator= (SharedMemory&& other) {
     if (&other == this) {
         return *this;
     }
@@ -55,13 +55,13 @@ SharedMemoryObject& SharedMemoryObject::operator= (SharedMemoryObject&& other) {
     return *this;
 }
 
-void SharedMemoryObject::truncate(size_t length) {
+void SharedMemory::truncate(size_t length) {
     if (ftruncate(fd_, length) == -1) {
         throw std::system_error(errno, std::system_category(), "ftruncate error");
     }
 }
 
-size_t SharedMemoryObject::size() const {
+size_t SharedMemory::size() const {
     struct stat stat;
 	if (fstat(fd_, &stat) == -1) {
         throw std::system_error(errno, std::system_category(), "fstat error");
@@ -69,16 +69,16 @@ size_t SharedMemoryObject::size() const {
     return stat.st_size;
 }
 
-int SharedMemoryObject::fileno() const {
+int SharedMemory::fileno() const {
     return fd_;
 }
 
-void SharedMemoryObject::swap(SharedMemoryObject& other) noexcept {
+void SharedMemory::swap(SharedMemory& other) noexcept {
     using std::swap;
     swap(fd_, other.fd_);
 }
 
-void* SharedMemoryObject::map(size_t length, bool readonly, long offset) {
+void* SharedMemory::map(size_t length, bool readonly, long offset) {
 	void* ptr;
     int prot = readonly ? (PROT_READ) : (PROT_READ | PROT_WRITE);
 	if ((ptr = mmap(NULL, length, prot, MAP_SHARED, fd_, offset)) == MAP_FAILED) {
@@ -87,20 +87,20 @@ void* SharedMemoryObject::map(size_t length, bool readonly, long offset) {
 	return ptr;
 }
 
-bool SharedMemoryObject::exists(const char* name) noexcept {
+bool SharedMemory::exists(const char* name) noexcept {
     if (shm_open(name, O_RDONLY, (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) == -1)
        return false;
     else
        return true; 
 }
 
-bool SharedMemoryObject::remove(const char* name) noexcept {
+bool SharedMemory::remove(const char* name) noexcept {
     if (shm_unlink(name) == -1) {
         return false;
     }
     return true;
 }
 
-void SharedMemoryObject::unmap(void* addr, size_t length) noexcept {
+void SharedMemory::unmap(void* addr, size_t length) noexcept {
     munmap(addr, length);
 }

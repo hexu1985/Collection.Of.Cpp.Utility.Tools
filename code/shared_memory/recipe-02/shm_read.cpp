@@ -1,7 +1,7 @@
 #include <sstream>
 #include <gflags/gflags.h>
 
-#include "shared_memory_object.hpp"
+#include "shared_memory.hpp"
 #include "dump_functions.hpp"
 
 DEFINE_string(name, "shm_test", "shared memory name");
@@ -17,12 +17,12 @@ int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    if (!SharedMemoryObject::exists(FLAGS_name.c_str())) {
+    if (!SharedMemory::exists(FLAGS_name.c_str())) {
         printf("shared memory of %s not exists!\n", FLAGS_name.c_str());
         return -1;
     }
 
-    SharedMemoryObject shared_memory(FLAGS_name.c_str());
+    SharedMemory shared_memory(FLAGS_name.c_str());
     size_t size = shared_memory.size();
     const uint8_t* ptr = (const uint8_t*) shared_memory.map(size, true);
 

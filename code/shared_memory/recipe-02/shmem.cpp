@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "shared_memory.hpp"
+#include "shared_memory_object.hpp"
 
 const char* kSharedMemPath = "/sample_point";
 const size_t kPayloadSize = 16;
@@ -15,7 +15,7 @@ const size_t kPayloadSize = 16;
 using namespace std::literals;
 
 template <typename T>
-using SharedMem = SharedMemory<T>;
+using SharedMem = SharedMemoryObject<T>;
 
 struct Payload {
   uint32_t index;
@@ -41,7 +41,7 @@ void consumer() {
     std::cout << "Read data frame " << pr.index << ": " << pr.raw << std::endl;
     std::this_thread::sleep_for(100ms);
   }
-  SharedMemoryObject::remove(kSharedMemPath);
+  SharedMemory::remove(kSharedMemPath);
 }
 
 int main() {
