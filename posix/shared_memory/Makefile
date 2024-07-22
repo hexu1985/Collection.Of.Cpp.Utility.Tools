@@ -5,7 +5,7 @@ INCLUDES =
 LDFLAGS =
 LDLIBS = -lgflags -lrt
 
-PROGS =	shm_create shm_remove shm_read shm_write
+PROGS =	shmcreate shmunlink shmread shmwrite
 LIBOBJS = posix_api.o
 
 .PHONY: all
@@ -19,15 +19,15 @@ clean:
 %.o:%.cpp
 	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDES)
 
-shm_create: shm_create.o $(LIBOBJS)
+shmcreate: shmcreate.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-shm_remove: shm_remove.o $(LIBOBJS)
+shmunlink: shmunlink.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-shm_read: shm_read.o $(LIBOBJS)
+shmread: shmread.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-shm_write: shm_write.o $(LIBOBJS)
+shmwrite: shmwrite.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

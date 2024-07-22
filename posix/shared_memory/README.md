@@ -4,27 +4,27 @@
 
 **创建共享内存**
 
-源码：shm_create.cpp
+源码：shmcreate.cpp
 
 使用示例：
 
 ```
-$ ./shm_create --helpshort
-shm_create:
-usage: ./shm_create [--check_exists] [--name NAME] [--length LENGTH]
+$ ./shmcreate --helpshort
+shmcreate:
+usage: ./shmcreate [--check_exists] [--name NAME] [--length LENGTH]
 
 create shared memory
 
 
-  Flags from shm_create.cpp:
+  Flags from shmcreate.cpp:
     -check_exists (check shared memory already exists) type: bool
       default: false
     -length (shared memory length) type: uint32 default: 1024
     -name (shared memory name) type: string default: "shm_test"
-$ ./shm_create --name "test" --length 128
+$ ./shmcreate --name "test" --length 128
 $ ls /dev/shm/
 test
-$ ./shm_create --name "test" --check_exists
+$ ./shmcreate --name "test" --check_exists
 terminate called after throwing an instance of 'std::system_error'
   what():  shm_open error for test: File exists
 已放弃 (核心已转储)
@@ -33,24 +33,24 @@ $
 
 **删除共享内存**
 
-源码：shm_remove.cpp
+源码：shmunlink.cpp
 
 ```
-$ ./shm_remove --helpshort
-shm_remove:
-usage: ./shm_remove [--name NAME]
+$ ./shmunlink --helpshort
+shmunlink:
+usage: ./shmunlink [--name NAME]
 
 remove shared memory
 
 
-  Flags from shm_remove.cpp:
+  Flags from shmunlink.cpp:
     -name (shared memory name) type: string default: "shm_test"
-$ ./shm_create --name "test" --length 128
+$ ./shmcreate --name "test" --length 128
 $ ls /dev/shm/
 test
-$ ./shm_remove --name "test"
+$ ./shmunlink --name "test"
 $ ls /dev/shm/
-$ ./shm_remove --name "test"
+$ ./shmunlink --name "test"
 terminate called after throwing an instance of 'std::system_error'
   what():  shm_unlink error: No such file or directory
 已放弃 (核心已转储)
@@ -58,29 +58,29 @@ terminate called after throwing an instance of 'std::system_error'
 
 **读写共享内存**
 
-源码：shm_read.cpp，shm_write.cpp
+源码：shmread.cpp，shmwrite.cpp
 
 ```
-$ ./shm_read --helpshort
-shm_read:
-usage: ./shm_read [--check_exists] [--name NAME] [--length LENGTH]
+$ ./shmread --helpshort
+shmread:
+usage: ./shmread [--name NAME]
 
 create shared memory
 
 
-  Flags from shm_read.cpp:
+  Flags from shmread.cpp:
     -name (shared memory name) type: string default: "shm_test"
-$ ./shm_write --helpshort
-shm_write:
-usage: ./shm_write [--check_exists] [--name NAME] [--length LENGTH]
+$ ./shmwrite --helpshort
+shmwrite:
+usage: ./shmwrite [--name NAME]
 
 create shared memory
 
 
-  Flags from shm_write.cpp:
+  Flags from shmwrite.cpp:
     -name (shared memory name) type: string default: "shm_test"
-$ ./shm_create --name "test" --length 512
-$ ./shm_read --name "test"
+$ ./shmcreate --name "test" --length 512
+$ ./shmread --name "test"
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
@@ -113,8 +113,8 @@ $ ./shm_read --name "test"
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-$ ./shm_write --name "test"
-$ ./shm_read --name "test"
+$ ./shmwrite --name "test"
+$ ./shmread --name "test"
 00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
 10 11 12 13 14 15 16 17  18 19 1A 1B 1C 1D 1E 1F
 20 21 22 23 24 25 26 27  28 29 2A 2B 2C 2D 2E 2F
