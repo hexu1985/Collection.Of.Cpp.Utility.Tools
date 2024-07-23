@@ -121,10 +121,10 @@ SharedMemory SharedMemory::open_or_create(const char* name) {
 }
 
 SharedMemory SharedMemory::open_read_write(const char* name) {
-    return SharedMemory(Shm_open(name, O_RDWR, FILE_MODE));
+    return SharedMemory(Shm_open(name, O_RDWR, 0));
 }
 
 SharedMemory SharedMemory::open_read_only(const char* name) {
-    return SharedMemory(Shm_open(name, O_RDONLY, FILE_MODE));
+    return SharedMemory(Shm_open(name, O_RDONLY, 0));
 }
 

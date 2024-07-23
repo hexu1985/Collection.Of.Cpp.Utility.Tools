@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    int fd = Shm_open(FLAGS_name.c_str(), O_RDONLY, FILE_MODE);
+    int fd = Shm_open(FLAGS_name.c_str(), O_RDONLY, 0);
 
     struct stat stat;
     Fstat(fd, &stat);
