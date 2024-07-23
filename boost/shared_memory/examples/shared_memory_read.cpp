@@ -10,13 +10,13 @@ int main(int argc, char* argv[]) {
         name = argv[1];
     }
 
-    shared_memory_object shdmem{open_only, name, read_write};
+    shared_memory_object shdmem{open_only, name, read_only};
     std::cout << shdmem.get_name() << '\n';
     offset_t size;
     if (shdmem.get_size(size))
         std::cout << size << '\n';
 
-    mapped_region region{shdmem, read_write};
+    mapped_region region{shdmem, read_only};
     char* ptr = static_cast<char*>(region.get_address());
 
     for (int i = 0; i < size; i++) {
