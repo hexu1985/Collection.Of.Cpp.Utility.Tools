@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra #-std=c++17
 LDFLAGS = 
-LDLIBS = -lboost_thread -lboost_system -lpthread
+LDLIBS = -lboost_thread -lboost_system -lpthread -lgflags
 
 SOURCES = $(shell ls *.cpp)
 TARGETS = $(subst .cpp,,$(SOURCES))
