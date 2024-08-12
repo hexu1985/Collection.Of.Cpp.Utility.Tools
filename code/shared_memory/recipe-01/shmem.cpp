@@ -14,16 +14,16 @@ using namespace std::literals;
 
 template<class T>
 class SharedMem {
-    SharedMemoryObject shared_memory;
+    SharedMemoryObject shdmem;
     const char* name;
 
 public:
-    SharedMem(const char* name, bool owner=false): shared_memory(SharedMemoryObject::create(name, sizeof(T))) {
+    SharedMem(const char* name, bool owner=false): shdmem(SharedMemoryObject::create(name, sizeof(T))) {
         this->name = owner ? name : nullptr;
     }
 
     ~SharedMem() {
-        shared_memory.clear();
+        shdmem.clear();
         if (name) {
             std::cout << "Remove shared mem instance " << name << std::endl;
             SharedMemoryObject::remove(name);
@@ -31,7 +31,7 @@ public:
     }
 
     T& get() const {
-      return *((T* ) shared_memory.get_address());
+      return *((T* ) shdmem.get_address());
     }
 };
 

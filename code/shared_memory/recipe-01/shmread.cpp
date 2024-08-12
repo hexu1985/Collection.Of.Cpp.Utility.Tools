@@ -17,9 +17,9 @@ int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    SharedMemoryObject shared_memory(FLAGS_name.c_str(), true);
-    const uint8_t* ptr = (const uint8_t*) shared_memory.get_address();
-    size_t size = shared_memory.get_size();
+    SharedMemoryObject shdmem(FLAGS_name.c_str(), true);
+    const uint8_t* ptr = (const uint8_t*) shdmem.get_address();
+    size_t size = shdmem.get_size();
 
     dump_hex(ptr, size, "");
     printf("\n");
