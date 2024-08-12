@@ -1,4 +1,4 @@
-#include "interprocess_mutex.hpp"
+#include "named_mutex.hpp"
 
 #include <errno.h>
 #include <system_error>
@@ -53,7 +53,7 @@ void Pthread_mutex_init(pthread_mutex_t* mtx) {
 
 }   // namespace
 
-InterprocessMutex::InterprocessMutex(const char* name): handle_(name) {
+NamedMutex::NamedMutex(const char* name): handle_(name) {
     std::atomic_flag& flag = handle_.get().flag;
 
     while (true) {
@@ -90,10 +90,10 @@ InterprocessMutex::InterprocessMutex(const char* name): handle_(name) {
     }
 }
 
-InterprocessMutex::~InterprocessMutex() {
+NamedMutex::~NamedMutex() {
 }
 
-void InterprocessMutex::lock() {
+void NamedMutex::lock() {
     pthread_mutex_t* mtx = &handle_.get().mutex;
 
     while (true) {
@@ -108,7 +108,7 @@ void InterprocessMutex::lock() {
     }
 }
 
-void InterprocessMutex::unlock() {
+void NamedMutex::unlock() {
     pthread_mutex_t* mtx = &handle_.get().mutex;
 
     int n = pthread_mutex_unlock(mtx);
@@ -117,7 +117,7 @@ void InterprocessMutex::unlock() {
     }
 }
 
-bool InterprocessMutex::try_lock() {
+bool NamedMutex::try_lock() {
     pthread_mutex_t* mtx = &handle_.get().mutex;
 
     int n = pthread_mutex_trylock(mtx);
@@ -131,6 +131,6 @@ bool InterprocessMutex::try_lock() {
     return false;
 }
 
-bool InterprocessMutex::remove(const char* name) {
+bool NamedMutex::remove(const char* name) {
     return SharedMemory::remove(name); 
 }

@@ -1,4 +1,4 @@
-#include "interprocess_mutex.hpp"
+#include "named_mutex.hpp"
  
 int main(int argc, char* argv[]) {
     const char* name = "mtx";
@@ -6,6 +6,6 @@ int main(int argc, char* argv[]) {
         name = argv[1];
     }
     
-    InterprocessMutex global_mutex(name);
+    NamedMutex global_mutex(name);
     return 0;
 }

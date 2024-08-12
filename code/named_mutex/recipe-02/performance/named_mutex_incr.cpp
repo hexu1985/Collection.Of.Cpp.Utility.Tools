@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #include <mutex>
-#include "interprocess_mutex.hpp"
+#include "named_mutex.hpp"
 
 #include "benchmark/benchmark.h"
 
@@ -16,12 +16,12 @@
 #define REPEAT(x) REPEAT32(x)
 
 unsigned long x {0};
-InterprocessMutex m("mtx");
+NamedMutex m("mtx");
 void BM_mutex(benchmark::State& state) {
     for (auto _ : state) {
         REPEAT(
             {
-                std::lock_guard<InterprocessMutex> g(m);
+                std::lock_guard<NamedMutex> g(m);
                 benchmark::DoNotOptimize(++x);
             }
         );
@@ -32,11 +32,11 @@ void BM_mutex(benchmark::State& state) {
 void BM_mutex0(benchmark::State& state) {
     unsigned long x {0};
     std::string mtx_name = "mtx"+std::to_string(state.thread_index());
-    InterprocessMutex m(mtx_name.c_str());
+    NamedMutex m(mtx_name.c_str());
     for (auto _ : state) {
         REPEAT(
             {
-                std::lock_guard<InterprocessMutex> g(m);
+                std::lock_guard<NamedMutex> g(m);
                 benchmark::DoNotOptimize(++x);
             }
         );

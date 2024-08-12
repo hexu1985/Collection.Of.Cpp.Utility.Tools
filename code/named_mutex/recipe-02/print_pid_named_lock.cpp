@@ -4,11 +4,11 @@
 #include <string>
 #include <iostream>
 #include <mutex>
-#include "interprocess_mutex.hpp"
+#include "named_mutex.hpp"
 
 using namespace std::literals;
 
-InterprocessMutex global_mutex("mtx");
+NamedMutex global_mutex("mtx");
 
 void print_pid(int pid=-1) {
     if (pid < 0) {
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     }
 
     int print_times = 10;
-    std::lock_guard<InterprocessMutex> lock(global_mutex);//读锁定
+    std::lock_guard<NamedMutex> lock(global_mutex);//读锁定
     for (int i = 0; i < print_times; i++) {
         print_pid(pid);
         std::this_thread::sleep_for(100ms);

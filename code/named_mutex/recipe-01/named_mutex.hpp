@@ -1,13 +1,12 @@
 #pragma once
 
 #include <pthread.h>
-#include <atomic>
 #include "shared_memory_object.hpp"
 
-class InterprocessMutex {
+class NamedMutex {
 public:
-    InterprocessMutex(const char* name);
-    ~InterprocessMutex();
+    NamedMutex(const char* name);
+    ~NamedMutex();
 
     void lock();
     void unlock();
@@ -17,8 +16,6 @@ public:
 
 private:
     struct Handle {
-        std::atomic_flag flag;
-        int state;
         pthread_mutex_t mutex;
     };
 

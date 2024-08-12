@@ -5,8 +5,8 @@ INCLUDES =
 LDFLAGS =
 LDLIBS = -lgflags -lpthread -lrt
 
-PROGS =	interprocess_mutex_create interprocess_mutex_remove print_pid_interprocess_lock
-LIBOBJS = shared_memory.o interprocess_mutex.o
+PROGS =	named_mutex_create named_mutex_remove print_pid_named_lock
+LIBOBJS = shared_memory.o named_mutex.o
 
 .PHONY: all
 all: $(PROGS)
@@ -19,13 +19,13 @@ clean:
 %.o:%.cpp
 	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDES)
 
-interprocess_mutex_create: interprocess_mutex_create.o $(LIBOBJS)
+named_mutex_create: named_mutex_create.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-interprocess_mutex_remove: interprocess_mutex_remove.o $(LIBOBJS)
+named_mutex_remove: named_mutex_remove.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-print_pid_interprocess_lock: print_pid_interprocess_lock.o $(LIBOBJS)
+print_pid_named_lock: print_pid_named_lock.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 
