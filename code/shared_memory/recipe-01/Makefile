@@ -6,7 +6,7 @@ LDFLAGS =
 LDLIBS = -lgflags -lrt
 
 PROGS =	shmcreate shmunlink shmread shmwrite shmem shmatomic
-LIBOBJS = shared_memory.o
+LIBOBJS = shared_memory_object.o
 
 .PHONY: all
 all: $(PROGS)

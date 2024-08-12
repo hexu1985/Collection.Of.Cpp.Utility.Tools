@@ -5,7 +5,7 @@
 
 #include <unistd.h>
 
-#include "shared_memory.hpp"
+#include "shared_memory_object.hpp"
 
 const char* kSharedMemPath = "/sample_point";
 const size_t kPayloadSize = 16;
@@ -14,11 +14,11 @@ using namespace std::literals;
 
 template<class T>
 class SharedMem {
-    SharedMemory shared_memory;
+    SharedMemoryObject shared_memory;
     const char* name;
 
 public:
-    SharedMem(const char* name, bool owner=false): shared_memory(SharedMemory::create(name, sizeof(T))) {
+    SharedMem(const char* name, bool owner=false): shared_memory(SharedMemoryObject::create(name, sizeof(T))) {
         this->name = owner ? name : nullptr;
     }
 
@@ -26,7 +26,7 @@ public:
         shared_memory.clear();
         if (name) {
             std::cout << "Remove shared mem instance " << name << std::endl;
-            SharedMemory::remove(name);
+            SharedMemoryObject::remove(name);
         }
     }
 
