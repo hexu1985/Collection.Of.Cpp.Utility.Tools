@@ -1,32 +1,23 @@
 #pragma once
 
-#include <stddef.h>
+#include "shared_memory_object.hpp"
 
+template<class T>
 class SharedMemory {
+    SharedMemoryObject shd_mem_obj_;
+    T* ptr_;
+
 public:
-    SharedMemory() noexcept;
-    SharedMemory(const char* name, bool check_exists=false);
-    ~SharedMemory();
+    SharedMemory(const char* name): shd_mem_obj_(name) {
+        shd_mem_obj_.truncate(sizeof(T));
+        ptr_ = static_cast<T*>(shd_mem_obj_.map(sizeof(T)));
+    }
 
-    SharedMemory(SharedMemory&& other);
-    SharedMemory& operator= (SharedMemory&& other);
+    ~SharedMemory() {
+        SharedMemoryObject::unmap(ptr_, sizeof(T));
+    }
 
-    void truncate(size_t length);
-    size_t size() const;
-    int fileno() const;
-
-    void* map(size_t length, bool readonly=false, long offset=0);
-
-    void swap(SharedMemory& other) noexcept;
-
-    static bool exists(const char* name) noexcept;
-    static bool remove(const char* name) noexcept;
-    static void unmap(void* addr, size_t length) noexcept;
-
-private:
-    SharedMemory(const SharedMemory&) = delete;
-    SharedMemory& operator= (const SharedMemory&) = delete;
-
-private:
-    int fd_ = -1;
-};  
+    T& get() const {
+        return *ptr_;
+    }
+};

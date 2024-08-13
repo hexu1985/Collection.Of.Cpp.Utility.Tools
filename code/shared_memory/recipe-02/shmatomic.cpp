@@ -5,12 +5,12 @@
 
 #include <unistd.h>
 
-#include "shared_memory_object.hpp"
+#include "shared_memory.hpp"
 
 const char* kSharedMemPath = "/sample_point";
 
 template <typename T>
-using SharedMem = SharedMemoryObject<T>;
+using SharedMem = SharedMemory<T>;
 
 struct Payload {
   std::atomic_bool data_ready;
@@ -34,7 +34,7 @@ void producer() {
 }
 
 void consumer() {
-  SharedMem<Payload> point_reader(kSharedMemPath, true);
+  SharedMem<Payload> point_reader(kSharedMemPath/*, true*/);
   Payload& pr = point_reader.get();
   if (!pr.data_ready.is_lock_free()) {
     throw std::runtime_error("Timestamp is not lock-free");
