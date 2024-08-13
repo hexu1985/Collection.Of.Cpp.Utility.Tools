@@ -11,6 +11,10 @@ public:
     bool try_lock();
     void unlock();
 
+    pthread_mutex_t* native_handle() {
+        return &mtx_;
+    }
+
 private:
     InterprocessMutex(const InterprocessMutex&) = delete;
     InterprocessMutex& operator= (const InterprocessMutex&) = delete;
@@ -18,3 +22,7 @@ private:
 private:
     pthread_mutex_t mtx_;
 };
+
+inline pthread_mutex_t* native_handle(InterprocessMutex& mutex) {
+    return mutex.native_handle();
+}
