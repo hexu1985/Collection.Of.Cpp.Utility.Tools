@@ -1,0 +1,1 @@
+../../shared_memory/recipe-03/shared_memory_object.hpp
