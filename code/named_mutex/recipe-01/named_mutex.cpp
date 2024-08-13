@@ -88,5 +88,5 @@ bool NamedMutex::try_lock() {
 }
 
 bool NamedMutex::remove(const char* name) {
-    return SharedMemory::remove(name); 
+    return SharedMemoryObject::remove(name); 
 }

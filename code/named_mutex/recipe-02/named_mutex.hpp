@@ -2,7 +2,7 @@
 
 #include <pthread.h>
 #include <atomic>
-#include "shared_memory_object.hpp"
+#include "shared_memory.hpp"
 
 class NamedMutex {
 public:
@@ -22,5 +22,5 @@ private:
         pthread_mutex_t mutex;
     };
 
-    SharedMemoryObject<Handle> handle_; 
+    SharedMemory<Handle> handle_; 
 };
