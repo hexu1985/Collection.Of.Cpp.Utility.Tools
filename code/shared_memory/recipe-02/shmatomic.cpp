@@ -34,7 +34,7 @@ void producer() {
 }
 
 void consumer() {
-  SharedMem<Payload> point_reader(kSharedMemPath/*, true*/);
+  SharedMem<Payload> point_reader(kSharedMemPath);
   Payload& pr = point_reader.get();
   if (!pr.data_ready.is_lock_free()) {
     throw std::runtime_error("Timestamp is not lock-free");
@@ -45,6 +45,7 @@ void consumer() {
     std::cout << "Processing data chunk " << pr.index << std::endl;
     pr.data_processed.store(true);
   }
+  SharedMemoryObject::remove(kSharedMemPath);
 }
 
 int main() {

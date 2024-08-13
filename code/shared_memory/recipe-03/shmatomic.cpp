@@ -5,12 +5,12 @@
 
 #include <unistd.h>
 
-#include "shared_memory_object.hpp"
+#include "shared_memory.hpp"
 
 const char* kSharedMemPath = "/sample_point";
 
 template <typename T>
-using SharedMem = SharedMemoryObject<T>;
+using SharedMem = SharedMemory<T>;
 
 struct Payload {
   std::atomic_bool data_ready;
@@ -45,7 +45,7 @@ void consumer() {
     std::cout << "Processing data chunk " << pr.index << std::endl;
     pr.data_processed.store(true);
   }
-  SharedMemory::remove(kSharedMemPath);
+  SharedMemoryObject::remove(kSharedMemPath);
 }
 
 int main() {
