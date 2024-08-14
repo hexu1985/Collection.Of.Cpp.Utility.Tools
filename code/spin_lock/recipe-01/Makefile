@@ -1,8 +1,8 @@
 
 RM = rm -f
 CXX = g++
-CXXFLAGS = -Wall -g -std=c++11
-INCLUDES = -I../include
+CXXFLAGS = -Wall -g #-std=c++11
+INCLUDES = 
 LDFLAGS = -lpthread
 LDPATH =
 
