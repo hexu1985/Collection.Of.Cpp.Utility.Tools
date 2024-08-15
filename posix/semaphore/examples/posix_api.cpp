@@ -83,3 +83,45 @@ void Sem_getvalue(sem_t* sem, int* valp) {
     }
 }
 
+int Open(const char *pathname, int oflag, ...) {
+	int		fd;
+	va_list	ap;
+	mode_t	mode;
+
+	if (oflag & O_CREAT) {
+		va_start(ap, oflag);		/* init ap to final named argument */
+		mode = va_arg(ap, mode_t);
+		if ( (fd = open(pathname, oflag, mode)) == -1) {
+            throw std::system_error(errno, std::system_category(), 
+                    format("open error for {}", pathname));
+        }
+		va_end(ap);
+	} else {
+		if ( (fd = open(pathname, oflag)) == -1) {
+            throw std::system_error(errno, std::system_category(), 
+                    format("open error for {}", pathname));
+        }
+	}
+	return(fd);
+}
+
+ssize_t Read(int fd, void *ptr, size_t nbytes) {
+	ssize_t		n;
+
+	if ( (n = read(fd, ptr, nbytes)) == -1) {
+        throw std::system_error(errno, std::system_category(), "read error");
+    }
+	return(n);
+}
+
+void Write(int fd, void *ptr, size_t nbytes) {
+	if (write(fd, ptr, nbytes) != nbytes) {
+        throw std::system_error(errno, std::system_category(), "write error");
+    }
+}
+
+void Close(int fd) {
+	if (close(fd) == -1) {
+        throw std::system_error(errno, std::system_category(), "close error");
+    }
+}

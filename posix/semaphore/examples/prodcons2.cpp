@@ -19,7 +19,7 @@ main(int argc, char **argv)
 {
 	if (argc != 2) {
 		printf("usage: prodcons2 <#items>\n");
-        return -1;
+        exit(1);
     }
 	nitems = atoi(argv[1]);
 

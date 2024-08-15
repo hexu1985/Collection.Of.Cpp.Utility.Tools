@@ -16,3 +16,9 @@ void    Sem_wait(sem_t* sem);
 int     Sem_trywait(sem_t* sem); 
 void    Sem_post(sem_t* sem); 
 void    Sem_getvalue(sem_t* sem, int* valp); 
+
+
+int      Open(const char *, int , ...);
+ssize_t  Read(int, void *, size_t);
+void     Write(int, void *, size_t);
+void     Close(int);

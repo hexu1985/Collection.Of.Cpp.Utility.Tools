@@ -1,9 +1,10 @@
+/* include main */
 #include <thread>
 #include <stdio.h>
 #include <stdlib.h>
 #include "posix_api.hpp"
 
-#define	NBUFF	 10
+#define	NBUFF	  2
 #define	SEM_MUTEX	"mutex"	 	/* these are args to px_ipc_name() */
 #define	SEM_NEMPTY	"nempty"
 #define	SEM_NSTORED	"nstored"
@@ -21,7 +22,7 @@ int
 main(int argc, char **argv)
 {
 	if (argc != 2) {
-		printf("usage: prodcons1 <#items>\n");
+		printf("usage: deadlock <#items>\n");
         exit(1);
     }
 	nitems = atoi(argv[1]);
@@ -34,15 +35,12 @@ main(int argc, char **argv)
 	shared.nstored = Sem_open(SEM_NSTORED, O_CREAT | O_EXCL,
 							  FILE_MODE, 0);
 
-		/* 4create one producer thread and one consumer thread */
     std::thread thr_produce(produce);
     std::thread thr_consume(consume);
 
-		/* 4wait for the two threads */
     thr_produce.join();
     thr_consume.join();
 
-		/* 4remove the semaphores */
 	Sem_unlink(SEM_MUTEX);
 	Sem_unlink(SEM_NEMPTY);
 	Sem_unlink(SEM_NSTORED);
@@ -56,8 +54,12 @@ void produce()
 	int		i;
 
 	for (i = 0; i < nitems; i++) {
+		printf("prod: calling sem_wait(nempty)\n");
 		Sem_wait(shared.nempty);	/* wait for at least 1 empty slot */
+		printf("prod: got sem_wait(nempty)\n");
+		printf("prod: calling sem_wait(mutex)\n");
 		Sem_wait(shared.mutex);
+		printf("prod: got sem_wait(mutex), storing %d\n", i);
 		shared.buff[i % NBUFF] = i;	/* store i into circular buffer */
 		Sem_post(shared.mutex);
 		Sem_post(shared.nstored);	/* 1 more stored item */
@@ -69,12 +71,16 @@ void consume()
 	int		i;
 
 	for (i = 0; i < nitems; i++) {
-		Sem_wait(shared.nstored);		/* wait for at least 1 stored item */
+		printf("cons: calling sem_wait(mutex)\n");
 		Sem_wait(shared.mutex);
-		if (shared.buff[i % NBUFF] != i)
-			printf("buff[%d] = %d\n", i, shared.buff[i % NBUFF]);
+		printf("cons: got sem_wait(mutex)\n");
+		printf("cons: calling sem_wait(nstored)\n");
+		Sem_wait(shared.nstored);		/* wait for at least 1 stored item */
+		printf("cons: got sem_wait(nstored)\n");
+		printf("cons: fetched %d\n", shared.buff[i % NBUFF]);
 		Sem_post(shared.mutex);
 		Sem_post(shared.nempty);		/* 1 more empty slot */
 	}
+	printf("\n");
 }
 /* end prodcons */
