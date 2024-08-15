@@ -5,7 +5,7 @@ INCLUDES =
 LDFLAGS =
 LDLIBS = -lgflags -lpthread -lrt
 
-PROGS =	semcreate semunlink semwait semtrywait sempost semgetvalue prodcons1
+PROGS =	semcreate semunlink semwait semtrywait sempost semgetvalue prodcons1 prodcons2
 LIBOBJS = posix_api.o
 
 .PHONY: all
@@ -38,5 +38,8 @@ semgetvalue: semgetvalue.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 prodcons1: prodcons1.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+prodcons2: prodcons2.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

@@ -10,6 +10,8 @@
 sem_t*  Sem_open(const char* name, int oflag, .../* mode_t mode, unsigned int value */);
 void    Sem_close(sem_t *);
 void    Sem_unlink(const char *);
+void	Sem_init(sem_t *, int, unsigned int);
+void	Sem_destroy(sem_t *);
 void    Sem_wait(sem_t* sem); 
 int     Sem_trywait(sem_t* sem); 
 void    Sem_post(sem_t* sem); 

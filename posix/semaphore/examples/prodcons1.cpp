@@ -1,5 +1,6 @@
-/* include main */
 #include <thread>
+#include <stdio.h>
+#include <stdlib.h>
 #include "posix_api.hpp"
 
 #define	NBUFF	 10
@@ -19,8 +20,6 @@ void consume();
 int
 main(int argc, char **argv)
 {
-	pthread_t	tid_produce, tid_consume;
-
 	if (argc != 2) {
 		printf("usage: prodcons1 <#items>\n");
         return -1;

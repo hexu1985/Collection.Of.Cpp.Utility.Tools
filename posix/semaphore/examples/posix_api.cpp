@@ -44,6 +44,18 @@ void Sem_unlink(const char* name) {
     }
 }
 
+void Sem_init(sem_t *sem, int pshared, unsigned int value) {
+    if (sem_init(sem, pshared, value) == -1) {
+        throw std::system_error(errno, std::system_category(), "sem_init error");
+    }
+}
+
+void Sem_destroy(sem_t *sem) {
+	if (sem_destroy(sem) == -1) {
+        throw std::system_error(errno, std::system_category(), "sem_destroy error");
+    }
+}
+
 void Sem_wait(sem_t* sem) {
 	if (sem_wait(sem) == -1) {
         throw std::system_error(errno, std::system_category(), "sem_wait error");
