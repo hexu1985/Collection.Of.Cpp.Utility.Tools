@@ -4,10 +4,10 @@ GBENCH_DIR=$(HOME)/local/google_benchmark
 RM = rm -f
 CXX = clang++
 CXXFLAGS = -g -O3 -mavx2 -Wall -pedantic
-INCLUDES = -I$(GBENCH_DIR)/include -I..
+INCLUDES = -I$(GBENCH_DIR)/include -I.. -I../src -I../shared_memory
 LDLIBS = -pthread -lbenchmark
 LDFLAGS = -Wl,-rpath,$(GBENCH_DIR)/lib -Wl,--enable-new-dtags -L$(GBENCH_DIR)/lib
-VPATH = ..
+VPATH = ../src ../shared_memory
 
 PROGS = std_mutex_incr named_mutex_incr
 

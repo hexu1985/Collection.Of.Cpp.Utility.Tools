@@ -1,1 +1,0 @@
-../../shared_memory/recipe-02/shared_memory_object.cpp
