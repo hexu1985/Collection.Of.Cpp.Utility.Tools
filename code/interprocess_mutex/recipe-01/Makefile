@@ -1,12 +1,13 @@
 
 CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra
-INCLUDES =
+INCLUDES = -Isrc -Ishared_memory
 LDFLAGS =
 LDLIBS = -lpthread -lrt
 
 PROGS =	sample_thread_nolock sample_thread_lock named_mutex_create named_mutex_remove print_pid_named_lock
 LIBOBJS = interprocess_mutex.o shared_memory_object.o
+VPATH = src shared_memory
 
 .PHONY: all
 all: $(PROGS)
