@@ -97,6 +97,5 @@ void consume()
 		Sem_post(&shared.mutex);
 		Sem_post(&shared.nempty);		/* 1 more empty slot */
 	}
-	return;
 }
 /* end consume */
