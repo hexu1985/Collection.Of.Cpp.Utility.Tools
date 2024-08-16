@@ -1,12 +1,13 @@
 
 CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra
-INCLUDES =
+INCLUDES = -Isrc
 LDFLAGS =
 LDLIBS = -lgflags -lrt
 
 PROGS =	shmcreate shmunlink shmread shmwrite shmem shmatomic
 LIBOBJS = shared_memory_object.o
+VPATH = src
 
 .PHONY: all
 all: $(PROGS)
