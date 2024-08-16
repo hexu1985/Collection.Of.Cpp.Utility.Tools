@@ -1,12 +1,13 @@
 
 CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra
-INCLUDES =
+INCLUDES = -Isrc -Iinterprocess_mutex
 LDFLAGS =
 LDLIBS = -lpthread -lrt
 
 PROGS =	sample_wait sample_notify_one sample_notify_all
 LIBOBJS = interprocess_mutex.o interprocess_condition.o
+VPATH = src interprocess_mutex
 
 .PHONY: all
 all: $(PROGS)
