@@ -23,8 +23,7 @@ void consume(int* arg);
 /* end globals */
 
 /* include main */
-    int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     int		i, prodcount[MAXNTHREADS], conscount[MAXNTHREADS];
     std::thread thr_produce[MAXNTHREADS], thr_consume[MAXNTHREADS];

@@ -19,8 +19,7 @@ struct {	/* data shared by producers and consumer */
 void produce(int* arg);
 void consume();
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     int		i, count[MAXNTHREADS];
     std::thread thr_produce[MAXNTHREADS], thr_consume;

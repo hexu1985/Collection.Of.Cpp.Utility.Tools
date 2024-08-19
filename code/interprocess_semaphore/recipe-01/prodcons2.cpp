@@ -14,8 +14,7 @@ struct {	/* data shared by producer and consumer */
 void produce();
 void consume();
 
-    int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     if (argc != 2) {
         printf("usage: prodcons2 <#items>\n");
