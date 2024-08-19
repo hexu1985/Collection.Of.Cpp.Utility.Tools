@@ -9,11 +9,7 @@ InterprocessSemaphore::~InterprocessSemaphore() {
 
 void InterprocessSemaphore::post() {
     std::unique_lock<InterprocessMutex> lck{mutex_};
-    if (count_ == 0) {
-//        cond_.notify_all();
-        lck.unlock();
-        cond_.notify_one();
-    }
+    cond_.notify_one();
     count_++;
 }
 
