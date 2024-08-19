@@ -4,7 +4,7 @@ INCLUDES = -Isrc -Iinterprocess_mutex -Iinterprocess_condition
 LDFLAGS =
 LDLIBS = -lpthread -lrt
 
-PROGS =	prodcons2 prodcons3 prodcons4 
+PROGS =	prodcons2 prodcons3 prodcons4 mycat1 mycat2
 LIBOBJS = interprocess_mutex.o interprocess_condition.o interprocess_semaphore.o
 VPATH = src interprocess_mutex interprocess_condition
 
@@ -26,6 +26,12 @@ prodcons3: prodcons3.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 prodcons4: prodcons4.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+mycat1: mycat1.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+mycat2: mycat2.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 

@@ -2,9 +2,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include <boost/interprocess/sync/interprocess_semaphore.hpp>
-
-using namespace boost::interprocess;
+#include "interprocess_semaphore.hpp"
 
 #define	BUFFSIZE		8192
 #define	NBUFF	 8
@@ -14,7 +12,7 @@ struct {	/* data shared by producer and consumer */
     char	data[BUFFSIZE];			/* a buffer */
     ssize_t	n;						/* count of #bytes in the buffer */
   } buff[NBUFF];					/* NBUFF of these buffers/counts */
-  interprocess_semaphore *mutex, *nempty, *nstored;
+  InterprocessSemaphore *mutex, *nempty, *nstored;
 } shared;
 
 FILE* fp;							/* input file to copy to stdout */
@@ -40,9 +38,9 @@ main(int argc, char **argv)
     setbuf(fp, NULL);
 
 		/* 4initialize three semaphores */
-	shared.mutex = new interprocess_semaphore{1};
-	shared.nempty = new interprocess_semaphore{NBUFF};
-	shared.nstored = new interprocess_semaphore{0};
+	shared.mutex = new InterprocessSemaphore{1};
+	shared.nempty = new InterprocessSemaphore{NBUFF};
+	shared.nstored = new InterprocessSemaphore{0};
 
 		/* 4one producer thread, one consumer thread */
     thr_produce = std::thread(produce);
