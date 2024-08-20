@@ -1,13 +1,13 @@
 
 CXX = g++
-CXXFLAGS = -g3 -Wall -Wextra
-INCLUDES = -Isrc -Ishared_memory
+CXXFLAGS = -g -Wall -Wextra
+INCLUDES = -Isrc
 LDFLAGS =
 LDLIBS = -lpthread -lrt
 
-PROGS =	sample_thread_nolock sample_thread_lock named_mutex_create named_mutex_remove print_pid_named_lock
-LIBOBJS = interprocess_mutex.o shared_memory_object.o
-VPATH = src shared_memory
+PROGS =	sample_lock sample_mutex sample_native_handle sample_try_lock
+LIBOBJS = interprocess_mutex.o
+VPATH = src
 
 .PHONY: all
 all: $(PROGS)
@@ -20,19 +20,14 @@ clean:
 %.o:%.cpp
 	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDES)
 
-sample_thread_nolock: sample_thread_nolock.o
+sample_lock: sample_lock.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-sample_thread_lock: sample_thread_lock.o $(LIBOBJS)
+sample_mutex: sample_mutex.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-named_mutex_create: named_mutex_create.o $(LIBOBJS)
+sample_native_handle: sample_native_handle.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-named_mutex_remove: named_mutex_remove.o $(LIBOBJS)
+sample_try_lock: sample_try_lock.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-print_pid_named_lock: print_pid_named_lock.o $(LIBOBJS)
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-
