@@ -83,7 +83,51 @@ SYNOPSIS
 返回：若成功则为0，若出错则为-1。
 
 
+**mmap函数**
 
+mmap函数把一个文件或一个Posix共享内存对象映射到调用进程的地址空间，使用该函数有三个目的：
+
+- 使用普通文件以提供内存映射IO
+- 使用特殊文件以提供匿名内存映射
+- 使用Posix共享内存对象以提供Posix共享内存区
+
+本文中主要用于：使用Posix共享内存对象以提供Posix共享内存区
+
+```c
+MMAP(2)                    Linux Programmer's Manual                   MMAP(2)
+
+NAME
+       mmap, munmap - map or unmap files or devices into memory
+
+SYNOPSIS
+       #include <sys/mman.h>
+
+       void *mmap(void *addr, size_t length, int prot, int flags,
+                  int fd, off_t offset);
+
+       See NOTES for information on feature test macro requirements.
+```
+
+返回：若成功则为被映射区的起始地址，若出错则为MAP_FAILED。
+
+mmap参数解析：
+
+- addr指定映射内存的起始地址，通常设为NULL，让内核自己决定起始地址
+- length是被映射到调用进程地址空间中的字节数，它从被映射文件fd开头起第offset个字节处开始算，offset通常设为0，下图展示了这个映射关系
+- prot指定对映射内存区的保护，通常设为PROT_READ | PROT_WRITE
+    + PORT_READ     -> 可读
+    + PORT_WRITE    -> 可写
+    + PORT_EXEC     -> 可执行
+    + PORT_NONE     -> 数据不可访问
+- flags必须在MAP_SHARED和MAP_PRIVATE这两个标志中选择指定一个，进程间共享内存需要使用MAP_SHARED
+    + MAP_SHARED  -> 变动是共享的
+    + MAP_PRIVATE  -> 变动是私自的
+    + MAP_FIXED        -> 准确的解析addr参数
+- 可移植的代码应把addr设为NULL，并且flags不指定MAP_FIXED
+
+![memory_mappedfile](memory_mappedfile.png)
+
+mmap成功返回后，fd参数可以关闭。该操作对由于mmap建立的映射关系没有影响。
 
 
 
