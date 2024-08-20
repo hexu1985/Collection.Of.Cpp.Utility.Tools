@@ -16,6 +16,7 @@ void print_thread_id (int id) {
 
 int main ()
 {
+    static_assert(std::is_same<InterprocessMutex::native_handle_type, pthread_mutex_t*>::value);
     std::thread threads[10];
     // spawn 10 threads:
     for (int i=0; i<10; ++i)
