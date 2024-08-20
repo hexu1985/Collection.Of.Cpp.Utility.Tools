@@ -7,6 +7,7 @@
 
 至于C++封装类的好处与代价，留给读者自己判断;)
 
+
 ### Posix共享内存API介绍及示例
 
 注：这里的API介绍和示例都来自《UNIX网络编程卷2进程间通信(第2版)》这本书。
@@ -26,9 +27,9 @@ Posix.1提供了两种在无亲缘关系进程间共享内存区的方法
 - munmap
 - ftruncate
 - fstat
-- close
 
 我们接下来分别介绍每个接口的含义：
+
 
 **shm_open函数**
 
@@ -128,6 +129,462 @@ mmap参数解析：
 ![memory_mappedfile](memory_mappedfile.png)
 
 mmap成功返回后，fd参数可以关闭。该操作对由于mmap建立的映射关系没有影响。
+
+
+**munmap函数**
+
+mmap建立的映射关系通过munmap删除，其中addr是mmap返回的地址，len是映射区的大小，同mmap的参数len。
+
+```c
+MMAP(2)                    Linux Programmer's Manual                   MMAP(2)
+
+NAME
+       mmap, munmap - map or unmap files or devices into memory
+
+SYNOPSIS
+       #include <sys/mman.h>
+
+       int munmap(void *addr, size_t length);
+
+       See NOTES for information on feature test macro requirements.
+```
+
+返回：若成功则为0，若出错则为-1。
+
+其中addr参数是由mmap返回的地址，len是映射区的大小。再次访问这些地址将导致向调用进程产生一个SIGSEGV信号。
+
+
+**ftruncate函数**
+
+处理mmap的时候，普通文件或Posix共享内存对象的大小都可以通过调用ftruncate设置。
+
+```c
+TRUNCATE(2)                Linux Programmer's Manual               TRUNCATE(2)
+NAME
+       truncate, ftruncate - truncate a file to a specified length
+SYNOPSIS
+       #include <unistd.h>
+       #include <sys/types.h>
+       int truncate(const char *path, off_t length);
+       int ftruncate(int fd, off_t length);
+```
+
+返回：若成功则为0，若出错则为-1。
+
+- 对于普通文件，若文件长度大于length，额外的数据会被丢弃；若文件长度小于length，则扩展文件大小到length
+- 对于Posix共享内存对象，ftruncate把该对象的大小设置成length字节
+
+我们调用ftruncate来指定新创建的Posix共享内存对象大小，或者修改已存在的Posix共享内存对象大小。
+
+- 创建新的Posix共享内存对象时指定大小是必须的，否则访问mmap返回的地址会报bus error错误
+- 当打开一个已存在的Posix共享内存对象时，可以调用fstat来获取该对象的信息
+
+
+**fstat函数**
+
+当打开一个已存在的共享内存区对象时，我们可调用 fstat来获取有关该对象的信息。
+
+```c
+STAT(2)                    Linux Programmer's Manual                   STAT(2)
+NAME
+       stat, fstat, lstat - get file status
+SYNOPSIS
+       #include <sys/types.h>
+       #include <sys/stat.h>
+       #include <unistd.h>
+       int fstat(int fd, struct stat *buf);
+```
+
+返回：若成功则为0，若出错则为-1。
+
+stat结构有12个或以上的成员，然而当fd指代一个内存共享区对象时，只有四个成员含有信息。
+
+```c
+struct stat {
+  mode_t    st_mode;    /* protection */
+  uid_t     st_uid;     /* user ID of owner */
+  gid_t     st_gid;     /* group ID of owner */
+  off_t     st_size;    /* total size, in bytes */
+};
+```
+
+接口介绍完了，我们接下来给出使用Posix共享内存的示例程序。
+首先给出示例程序列表：
+- shmcreate
+- shmunlink
+- shmwrite
+- shmread
+
+**shmcreate程序**
+
+shmcreate程序以某个指定的名字和长度创建一个共享内存区对象。
+
+源码：shmcreate.cpp
+
+```cpp
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "posix_api.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+DEFINE_uint32(length, 1024, "shared memory length");
+DEFINE_bool(check_exists, false, "check shared memory already exists");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--check_exists] [--name NAME] [--length LENGTH]\n\n"
+        << "create shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    int flags = O_RDWR | O_CREAT;
+    if (FLAGS_check_exists) {
+        flags |= O_EXCL;
+    }
+
+    int fd = Shm_open(FLAGS_name.c_str(), flags, FILE_MODE);
+    Ftruncate(fd, FLAGS_length);
+
+    void* ptr = Mmap(NULL, FLAGS_length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+    return 0;
+}
+```
+
+使用示例：
+
+```
+$ ./shmcreate --helpshort
+shmcreate:
+usage: ./shmcreate [--check_exists] [--name NAME] [--length LENGTH]
+
+create shared memory
+
+
+  Flags from shmcreate.cpp:
+    -check_exists (check shared memory already exists) type: bool
+      default: false
+    -length (shared memory length) type: uint32 default: 1024
+    -name (shared memory name) type: string default: "shm_test"
+$ ./shmcreate --name "test" --length 128
+$ ls /dev/shm/
+test
+$ ./shmcreate --name "test" --check_exists
+terminate called after throwing an instance of 'std::system_error'
+  what():  shm_open error for test: File exists
+已放弃 (核心已转储)
+$
+```
+
+shmcreate创建所指定的共享内存区对象。如果指定了`-check_exists`选项，那么若该对象已经存在则将出错。
+ftruncate设置该对象的长度，mmap则把它映射到调用进程的地址空间。本程序随后终止。
+既然Posix共享内存至少具备随内核的持续性，因此本程序的终止不会删除该共享内存区对象。
+
+**shmunlink程序**
+
+shmunlink从系统中删除一个共享内存对象的名字。
+
+源码：shmunlink.cpp
+
+```
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "posix_api.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--name NAME]\n\n"
+        << "remove shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    Shm_unlink(FLAGS_name.c_str());
+
+    return 0;
+}
+```
+
+使用示例：
+
+```
+$ ./shmunlink --helpshort
+shmunlink:
+usage: ./shmunlink [--name NAME]
+
+remove shared memory
+
+
+  Flags from shmunlink.cpp:
+    -name (shared memory name) type: string default: "shm_test"
+$ ./shmcreate --name "test" --length 128
+$ ls /dev/shm/
+test
+$ ./shmunlink --name "test"
+$ ls /dev/shm/
+$ ./shmunlink --name "test"
+terminate called after throwing an instance of 'std::system_error'
+  what():  shm_unlink error: No such file or directory
+已放弃 (核心已转储)
+```
+
+**shmwrite和shmread程序**
+
+shmwrite程序，它往一共共享内存区对象中写入一个模式：0，1，2，...，254，255，0，1，等等。
+
+源码：shmwrite.cpp
+
+```cpp
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "posix_api.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--name NAME]\n\n"
+        << "write shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    int fd = Shm_open(FLAGS_name.c_str(), O_RDWR, 0);
+
+    struct stat stat;
+    Fstat(fd, &stat);
+
+    uint8_t* ptr = (uint8_t*) Mmap(NULL, stat.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    Close(fd);
+
+    for (int i = 0; i < stat.st_size; i++)
+        *ptr++ = i % 256;
+
+    return 0;
+}
+```
+
+用shm_open打开所指定的共享内存区对象，fstat获取其大小信息。使用mmap映射它之后close它的描述符。
+然后就可以通过访问mmap返回的指针，把模式写入该共享内存。
+
+shmread程序读取共享内存内容，并以十六进制的方式打印出来。
+
+源码：shmread.cpp
+
+```cpp
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "posix_api.hpp"
+#include "dump_functions.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--name NAME]\n\n"
+        << "read shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    int fd = Shm_open(FLAGS_name.c_str(), O_RDONLY, 0);
+
+    struct stat stat;
+    Fstat(fd, &stat);
+
+    const uint8_t* ptr = (const uint8_t*) Mmap(NULL, stat.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    Close(fd);
+
+    dump_hex(ptr, stat.st_size, "");
+    printf("\n");
+
+    return 0;
+}
+```
+
+用只读模式打开所指定的共享内存区对象，使用fstat获取其大小信息。使用mmap映射把它映射到内存（用于只读目的），之后close它的描述符。
+然后就可以通过访问mmap返回的指针，打印该共享内存的内容。
+
+使用示例：
+
+```
+$ ./shmread --helpshort
+shmread:
+usage: ./shmread [--name NAME]
+
+create shared memory
+
+
+  Flags from shmread.cpp:
+    -name (shared memory name) type: string default: "shm_test"
+$ ./shmwrite --helpshort
+shmwrite:
+usage: ./shmwrite [--name NAME]
+
+create shared memory
+
+
+  Flags from shmwrite.cpp:
+    -name (shared memory name) type: string default: "shm_test"
+$ ./shmcreate --name "test" --length 512
+$ ./shmread --name "test"
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+$ ./shmwrite --name "test"
+$ ./shmread --name "test"
+00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+10 11 12 13 14 15 16 17  18 19 1A 1B 1C 1D 1E 1F
+20 21 22 23 24 25 26 27  28 29 2A 2B 2C 2D 2E 2F
+30 31 32 33 34 35 36 37  38 39 3A 3B 3C 3D 3E 3F
+40 41 42 43 44 45 46 47  48 49 4A 4B 4C 4D 4E 4F
+50 51 52 53 54 55 56 57  58 59 5A 5B 5C 5D 5E 5F
+60 61 62 63 64 65 66 67  68 69 6A 6B 6C 6D 6E 6F
+70 71 72 73 74 75 76 77  78 79 7A 7B 7C 7D 7E 7F
+80 81 82 83 84 85 86 87  88 89 8A 8B 8C 8D 8E 8F
+90 91 92 93 94 95 96 97  98 99 9A 9B 9C 9D 9E 9F
+A0 A1 A2 A3 A4 A5 A6 A7  A8 A9 AA AB AC AD AE AF
+B0 B1 B2 B3 B4 B5 B6 B7  B8 B9 BA BB BC BD BE BF
+C0 C1 C2 C3 C4 C5 C6 C7  C8 C9 CA CB CC CD CE CF
+D0 D1 D2 D3 D4 D5 D6 D7  D8 D9 DA DB DC DD DE DF
+E0 E1 E2 E3 E4 E5 E6 E7  E8 E9 EA EB EC ED EE EF
+F0 F1 F2 F3 F4 F5 F6 F7  F8 F9 FA FB FC FD FE FF
+00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+10 11 12 13 14 15 16 17  18 19 1A 1B 1C 1D 1E 1F
+20 21 22 23 24 25 26 27  28 29 2A 2B 2C 2D 2E 2F
+30 31 32 33 34 35 36 37  38 39 3A 3B 3C 3D 3E 3F
+40 41 42 43 44 45 46 47  48 49 4A 4B 4C 4D 4E 4F
+50 51 52 53 54 55 56 57  58 59 5A 5B 5C 5D 5E 5F
+60 61 62 63 64 65 66 67  68 69 6A 6B 6C 6D 6E 6F
+70 71 72 73 74 75 76 77  78 79 7A 7B 7C 7D 7E 7F
+80 81 82 83 84 85 86 87  88 89 8A 8B 8C 8D 8E 8F
+90 91 92 93 94 95 96 97  98 99 9A 9B 9C 9D 9E 9F
+A0 A1 A2 A3 A4 A5 A6 A7  A8 A9 AA AB AC AD AE AF
+B0 B1 B2 B3 B4 B5 B6 B7  B8 B9 BA BB BC BD BE BF
+C0 C1 C2 C3 C4 C5 C6 C7  C8 C9 CA CB CC CD CE CF
+D0 D1 D2 D3 D4 D5 D6 D7  D8 D9 DA DB DC DD DE DF
+E0 E1 E2 E3 E4 E5 E6 E7  E8 E9 EA EB EC ED EE EF
+F0 F1 F2 F3 F4 F5 F6 F7  F8 F9 FA FB FC FD FE FF
+```
+
+或者可以用hexdump命令查看共享内存的内容：
+
+```
+$ hexdump -C /dev/shm/shm_test
+00000000  00 01 02 03 04 05 06 07  08 09 0a 0b 0c 0d 0e 0f  |................|
+00000010  10 11 12 13 14 15 16 17  18 19 1a 1b 1c 1d 1e 1f  |................|
+00000020  20 21 22 23 24 25 26 27  28 29 2a 2b 2c 2d 2e 2f  | !"#$%&'()*+,-./|
+00000030  30 31 32 33 34 35 36 37  38 39 3a 3b 3c 3d 3e 3f  |0123456789:;<=>?|
+00000040  40 41 42 43 44 45 46 47  48 49 4a 4b 4c 4d 4e 4f  |@ABCDEFGHIJKLMNO|
+00000050  50 51 52 53 54 55 56 57  58 59 5a 5b 5c 5d 5e 5f  |PQRSTUVWXYZ[\]^_|
+00000060  60 61 62 63 64 65 66 67  68 69 6a 6b 6c 6d 6e 6f  |`abcdefghijklmno|
+00000070  70 71 72 73 74 75 76 77  78 79 7a 7b 7c 7d 7e 7f  |pqrstuvwxyz{|}~.|
+00000080  80 81 82 83 84 85 86 87  88 89 8a 8b 8c 8d 8e 8f  |................|
+00000090  90 91 92 93 94 95 96 97  98 99 9a 9b 9c 9d 9e 9f  |................|
+000000a0  a0 a1 a2 a3 a4 a5 a6 a7  a8 a9 aa ab ac ad ae af  |................|
+000000b0  b0 b1 b2 b3 b4 b5 b6 b7  b8 b9 ba bb bc bd be bf  |................|
+000000c0  c0 c1 c2 c3 c4 c5 c6 c7  c8 c9 ca cb cc cd ce cf  |................|
+000000d0  d0 d1 d2 d3 d4 d5 d6 d7  d8 d9 da db dc dd de df  |................|
+000000e0  e0 e1 e2 e3 e4 e5 e6 e7  e8 e9 ea eb ec ed ee ef  |................|
+000000f0  f0 f1 f2 f3 f4 f5 f6 f7  f8 f9 fa fb fc fd fe ff  |................|
+00000100  00 01 02 03 04 05 06 07  08 09 0a 0b 0c 0d 0e 0f  |................|
+00000110  10 11 12 13 14 15 16 17  18 19 1a 1b 1c 1d 1e 1f  |................|
+00000120  20 21 22 23 24 25 26 27  28 29 2a 2b 2c 2d 2e 2f  | !"#$%&'()*+,-./|
+00000130  30 31 32 33 34 35 36 37  38 39 3a 3b 3c 3d 3e 3f  |0123456789:;<=>?|
+00000140  40 41 42 43 44 45 46 47  48 49 4a 4b 4c 4d 4e 4f  |@ABCDEFGHIJKLMNO|
+00000150  50 51 52 53 54 55 56 57  58 59 5a 5b 5c 5d 5e 5f  |PQRSTUVWXYZ[\]^_|
+00000160  60 61 62 63 64 65 66 67  68 69 6a 6b 6c 6d 6e 6f  |`abcdefghijklmno|
+00000170  70 71 72 73 74 75 76 77  78 79 7a 7b 7c 7d 7e 7f  |pqrstuvwxyz{|}~.|
+00000180  80 81 82 83 84 85 86 87  88 89 8a 8b 8c 8d 8e 8f  |................|
+00000190  90 91 92 93 94 95 96 97  98 99 9a 9b 9c 9d 9e 9f  |................|
+000001a0  a0 a1 a2 a3 a4 a5 a6 a7  a8 a9 aa ab ac ad ae af  |................|
+000001b0  b0 b1 b2 b3 b4 b5 b6 b7  b8 b9 ba bb bc bd be bf  |................|
+000001c0  c0 c1 c2 c3 c4 c5 c6 c7  c8 c9 ca cb cc cd ce cf  |................|
+000001d0  d0 d1 d2 d3 d4 d5 d6 d7  d8 d9 da db dc dd de df  |................|
+000001e0  e0 e1 e2 e3 e4 e5 e6 e7  e8 e9 ea eb ec ed ee ef  |................|
+000001f0  f0 f1 f2 f3 f4 f5 f6 f7  f8 f9 fa fb fc fd fe ff  |................|
+00000200  00 01 02 03 04 05 06 07  08 09 0a 0b 0c 0d 0e 0f  |................|
+00000210  10 11 12 13 14 15 16 17  18 19 1a 1b 1c 1d 1e 1f  |................|
+00000220  20 21 22 23 24 25 26 27  28 29 2a 2b 2c 2d 2e 2f  | !"#$%&'()*+,-./|
+00000230  30 31 32 33 34 35 36 37  38 39 3a 3b 3c 3d 3e 3f  |0123456789:;<=>?|
+00000240  40 41 42 43 44 45 46 47  48 49 4a 4b 4c 4d 4e 4f  |@ABCDEFGHIJKLMNO|
+00000250  50 51 52 53 54 55 56 57  58 59 5a 5b 5c 5d 5e 5f  |PQRSTUVWXYZ[\]^_|
+00000260  60 61 62 63 64 65 66 67  68 69 6a 6b 6c 6d 6e 6f  |`abcdefghijklmno|
+00000270  70 71 72 73 74 75 76 77  78 79 7a 7b 7c 7d 7e 7f  |pqrstuvwxyz{|}~.|
+00000280  80 81 82 83 84 85 86 87  88 89 8a 8b 8c 8d 8e 8f  |................|
+00000290  90 91 92 93 94 95 96 97  98 99 9a 9b 9c 9d 9e 9f  |................|
+000002a0  a0 a1 a2 a3 a4 a5 a6 a7  a8 a9 aa ab ac ad ae af  |................|
+000002b0  b0 b1 b2 b3 b4 b5 b6 b7  b8 b9 ba bb bc bd be bf  |................|
+000002c0  c0 c1 c2 c3 c4 c5 c6 c7  c8 c9 ca cb cc cd ce cf  |................|
+000002d0  d0 d1 d2 d3 d4 d5 d6 d7  d8 d9 da db dc dd de df  |................|
+000002e0  e0 e1 e2 e3 e4 e5 e6 e7  e8 e9 ea eb ec ed ee ef  |................|
+000002f0  f0 f1 f2 f3 f4 f5 f6 f7  f8 f9 fa fb fc fd fe ff  |................|
+00000300  00 01 02 03 04 05 06 07  08 09 0a 0b 0c 0d 0e 0f  |................|
+00000310  10 11 12 13 14 15 16 17  18 19 1a 1b 1c 1d 1e 1f  |................|
+00000320  20 21 22 23 24 25 26 27  28 29 2a 2b 2c 2d 2e 2f  | !"#$%&'()*+,-./|
+00000330  30 31 32 33 34 35 36 37  38 39 3a 3b 3c 3d 3e 3f  |0123456789:;<=>?|
+00000340  40 41 42 43 44 45 46 47  48 49 4a 4b 4c 4d 4e 4f  |@ABCDEFGHIJKLMNO|
+00000350  50 51 52 53 54 55 56 57  58 59 5a 5b 5c 5d 5e 5f  |PQRSTUVWXYZ[\]^_|
+00000360  60 61 62 63 64 65 66 67  68 69 6a 6b 6c 6d 6e 6f  |`abcdefghijklmno|
+00000370  70 71 72 73 74 75 76 77  78 79 7a 7b 7c 7d 7e 7f  |pqrstuvwxyz{|}~.|
+00000380  80 81 82 83 84 85 86 87  88 89 8a 8b 8c 8d 8e 8f  |................|
+00000390  90 91 92 93 94 95 96 97  98 99 9a 9b 9c 9d 9e 9f  |................|
+000003a0  a0 a1 a2 a3 a4 a5 a6 a7  a8 a9 aa ab ac ad ae af  |................|
+000003b0  b0 b1 b2 b3 b4 b5 b6 b7  b8 b9 ba bb bc bd be bf  |................|
+000003c0  c0 c1 c2 c3 c4 c5 c6 c7  c8 c9 ca cb cc cd ce cf  |................|
+000003d0  d0 d1 d2 d3 d4 d5 d6 d7  d8 d9 da db dc dd de df  |................|
+000003e0  e0 e1 e2 e3 e4 e5 e6 e7  e8 e9 ea eb ec ed ee ef  |................|
+000003f0  f0 f1 f2 f3 f4 f5 f6 f7  f8 f9 fa fb fc fd fe ff  |................|
+00000400
+```
 
 
 
