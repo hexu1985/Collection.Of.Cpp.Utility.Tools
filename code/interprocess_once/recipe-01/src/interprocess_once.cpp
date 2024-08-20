@@ -35,7 +35,7 @@ enum class ExecuteState {
 
 }   // namespace
 
-void CallOnce(InterprocessOnceFlag& flag, std::function<void()> fn) {
+void interprocess_call_once(InterprocessOnceFlag& flag, std::function<void()> fn) {
     SpinLockRef lock(flag.lock);
     while (true) {
         std::unique_lock<SpinLockRef> scoped_lock(lock);

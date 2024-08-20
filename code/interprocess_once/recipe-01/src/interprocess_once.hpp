@@ -8,4 +8,5 @@ struct InterprocessOnceFlag {
     int execute_state = 0;
 };
 
-void CallOnce(InterprocessOnceFlag& flag, std::function<void()> fn);
+void interprocess_call_once(InterprocessOnceFlag& flag, std::function<void()> fn);
+
