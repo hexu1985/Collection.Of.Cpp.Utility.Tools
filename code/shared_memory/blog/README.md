@@ -524,7 +524,221 @@ F0 F1 F2 F3 F4 F5 F6 F7  F8 F9 FA FB FC FD FE FF
 
 ### C++封装类的实现以及示例
 
+Posix共享内存的C++封装涉及两个类，分别是：
+- class SharedMemoryObject
+- template<class T> class SharedMemory
 
+接下来我们分别介绍，[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/shared_memory/recipe-03)
+
+**SharedMemoryObject类**
+
+SharedMemoryObject是一个非模板类，封装了我们上面介绍的那些Posix接口，
+但并非一一对应，而是针对共享内存，封装出语义更明确的接口。
+
+先给出SharedMemoryObject类的定义，然后再介绍类成员函数的实现。
+
+头文件：shared_memory_object.hpp
+
+```cpp
+#pragma once
+
+#include <stddef.h>
+
+class SharedMemoryObject {
+public:
+    SharedMemoryObject() noexcept;
+    ~SharedMemoryObject();
+
+    SharedMemoryObject(SharedMemoryObject&& other);
+    SharedMemoryObject& operator= (SharedMemoryObject&& other);
+
+    void truncate(size_t length);
+    size_t size() const;
+    int fileno() const;
+
+    void* map(size_t length, bool readonly=false, long offset=0);
+
+    void swap(SharedMemoryObject& other) noexcept;
+
+    static bool exists(const char* name) noexcept;
+    static bool remove(const char* name) noexcept;
+    static void unmap(void* addr, size_t length) noexcept;
+
+    static SharedMemoryObject create_only(const char* name);
+    static SharedMemoryObject open_or_create(const char* name);
+    static SharedMemoryObject open_read_write(const char* name);
+    static SharedMemoryObject open_read_only(const char* name);
+
+private:
+    SharedMemoryObject(const SharedMemoryObject&) = delete;
+    SharedMemoryObject& operator= (const SharedMemoryObject&) = delete;
+
+    explicit SharedMemoryObject(int fd);
+
+private:
+    int fd_ = -1;
+};  
+```
+
+SharedMemoryObject类管理shm_open返回的文件描述符。
+
+默认的构造函数可以创建一个空的SharedMemoryObject对象，然后，
+由create_only、open_or_create、open_read_write和open_read_only这四个静态成员函数，
+实现不同模式的共享内存创建或打开功能，调用者也就不用关心shm_open函数oflag和mode参数的组合了。
+SharedMemoryObject类不支持复制构造函数和复制赋值运算符，像其他管理资源类一样，
+可以通过移动构造函数或移动赋值运算符，将管理的共享内存资源从一个对象转移到另一个对象。
+
+exists静态成员函数用来判断指定名字的共享内存对象是否存在。
+
+remove静态成员函数用来删除指定名字的共享内存对象。底层实现调用shm_unlink。
+
+unmap静态成员函数用来删除map建立的映射关系。底层实现调用munmap。
+
+truncate成员函数修改共享内存对象大小。底层实现调用ftruncate。
+
+size成员函数获取共享内存对象的大小。底层实现调用fstat。
+
+fileno成员函数返回共享内存对象关联的文件描述符。
+
+swap成员函数交换两个共享内存对象关联的文件描述符。
+
+接下来，我们看看shmcreate、shmunlink、shmwrite和shmread程序的C++版本。
+
+源码：shmcreate.cpp
+
+```cpp
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "shared_memory_object.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+DEFINE_uint32(length, 1024, "shared memory length");
+DEFINE_bool(check_exists, false, "check shared memory already exists");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--check_exists] [--name NAME] [--length LENGTH]\n\n"
+        << "create shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    SharedMemoryObject shdmem;
+    if (FLAGS_check_exists) {
+        shdmem = SharedMemoryObject::create_only(FLAGS_name.c_str());
+    } else {
+        shdmem = SharedMemoryObject::open_or_create(FLAGS_name.c_str());
+    }
+    shdmem.truncate(FLAGS_length);
+    return 0;
+}
+```
+
+源码：shmunlink.cpp
+
+```cpp
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "shared_memory_object.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--name NAME]\n\n"
+        << "remove shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    SharedMemoryObject::remove(FLAGS_name.c_str());
+
+    return 0;
+}
+```
+
+源码：shmwrite.cpp
+
+```cpp
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "shared_memory_object.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--name NAME]\n\n"
+        << "write shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    if (!SharedMemoryObject::exists(FLAGS_name.c_str())) {
+        printf("shared memory of %s not exists!\n", FLAGS_name.c_str());
+        return -1;
+    }
+
+    SharedMemoryObject shdmem = SharedMemoryObject::open_read_write(FLAGS_name.c_str());
+    size_t size = shdmem.size();
+    uint8_t* ptr = (uint8_t*) shdmem.map(size);
+
+    for (int i = 0; i < size; i++)
+        *ptr++ = i % 256;
+
+    return 0;
+}
+```
+
+源码：shmread.cpp
+
+```cpp
+#include <sstream>
+#include <gflags/gflags.h>
+
+#include "shared_memory_object.hpp"
+#include "dump_functions.hpp"
+
+DEFINE_string(name, "shm_test", "shared memory name");
+
+std::string usage(const char* prog) {
+    std::ostringstream os;
+    os << "\nusage: " << prog << " [--name NAME]\n\n"
+        << "read shared memory\n";
+    return os.str();
+}
+
+int main(int argc, char* argv[]) {
+    gflags::SetUsageMessage(usage(argv[0]));
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    if (!SharedMemoryObject::exists(FLAGS_name.c_str())) {
+        printf("shared memory of %s not exists!\n", FLAGS_name.c_str());
+        return -1;
+    }
+
+    SharedMemoryObject shdmem = SharedMemoryObject::open_read_only(FLAGS_name.c_str());
+    size_t size = shdmem.size();
+    const uint8_t* ptr = (const uint8_t*) shdmem.map(size, true);
+
+    dump_hex(ptr, size, "");
+    printf("\n");
+
+    return 0;
+}
+```
 
 
 
