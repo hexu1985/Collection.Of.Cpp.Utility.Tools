@@ -10,6 +10,8 @@
 const char* kSharedMemPath = "/sample_point";
 const size_t kPayloadSize = 16;
 
+using namespace std::literals;
+
 template <typename T>
 using SharedMem = SharedMemory<T>;
 
@@ -32,6 +34,7 @@ void producer() {
     pw.index = i;
     std::fill_n(pw.raw, sizeof(pw.raw) - 1, 'a' + i);
     pw.raw[sizeof(pw.raw) - 1] = '\0';
+    std::this_thread::sleep_for(150ms);
     pw.data_ready.store(true);
     while(!pw.data_processed.load());
   }
@@ -47,6 +50,7 @@ void consumer() {
     while(!pr.data_ready.load());
     pr.data_ready.store(false);
     std::cout << "Read data frame " << pr.index << ": " << pr.raw << std::endl;
+    std::this_thread::sleep_for(100ms);
     pr.data_processed.store(true);
   }
   SharedMemoryObject::remove(kSharedMemPath);

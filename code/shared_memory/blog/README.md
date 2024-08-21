@@ -293,7 +293,7 @@ shmunlink从系统中删除一个共享内存对象的名字。
 
 源码：shmunlink.cpp
 
-```
+```cpp
 #include <sstream>
 #include <gflags/gflags.h>
 
@@ -582,25 +582,25 @@ private:
 
 SharedMemoryObject类管理shm_open返回的文件描述符。
 
-默认的构造函数可以创建一个空的SharedMemoryObject对象，然后，
-由create_only、open_or_create、open_read_write和open_read_only这四个静态成员函数，
-实现不同模式的共享内存创建或打开功能，调用者也就不用关心shm_open函数oflag和mode参数的组合了。
-SharedMemoryObject类不支持复制构造函数和复制赋值运算符，像其他管理资源类一样，
-可以通过移动构造函数或移动赋值运算符，将管理的共享内存资源从一个对象转移到另一个对象。
+- 默认的构造函数可以创建一个空的SharedMemoryObject对象，然后，
+  由create_only、open_or_create、open_read_write和open_read_only这四个静态成员函数，
+  实现不同模式的共享内存创建或打开功能，调用者也就不用关心shm_open函数oflag和mode参数的组合了。
+  SharedMemoryObject类不支持复制构造函数和复制赋值运算符，像其他管理资源类一样，
+  可以通过移动构造函数或移动赋值运算符，将管理的共享内存资源从一个对象转移到另一个对象。
 
-exists静态成员函数用来判断指定名字的共享内存对象是否存在。
+- exists静态成员函数用来判断指定名字的共享内存对象是否存在。
 
-remove静态成员函数用来删除指定名字的共享内存对象。底层实现调用shm_unlink。
+- remove静态成员函数用来删除指定名字的共享内存对象。底层实现调用shm_unlink。
 
-unmap静态成员函数用来删除map建立的映射关系。底层实现调用munmap。
+- unmap静态成员函数用来删除map建立的映射关系。底层实现调用munmap。
 
-truncate成员函数修改共享内存对象大小。底层实现调用ftruncate。
+- truncate成员函数修改共享内存对象大小。底层实现调用ftruncate。
 
-size成员函数获取共享内存对象的大小。底层实现调用fstat。
+- size成员函数获取共享内存对象的大小。底层实现调用fstat。
 
-fileno成员函数返回共享内存对象关联的文件描述符。
+- fileno成员函数返回共享内存对象关联的文件描述符。
 
-swap成员函数交换两个共享内存对象关联的文件描述符。
+- swap成员函数交换两个共享内存对象关联的文件描述符。
 
 接下来，我们看看shmcreate、shmunlink、shmwrite和shmread程序的C++版本。
 
@@ -739,6 +739,166 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 ```
+
+SharedMemoryObject类只是在Posix接口上的一个很薄的封装类，为了提供更高层且使用更简单的接口，
+我们在SharedMemoryObject类的基础上，提供了一个模板类template<class T> class SharedMemory。
+
+我们先给出SharedMemory类的接口和实现，然后再举一个使用SharedMemory类的示例程序。
+
+源码：shared_memory.hpp
+
+```cpp
+#pragma once
+
+#include "shared_memory_object.hpp"
+
+template<class T>
+class SharedMemory {
+    SharedMemoryObject shm_mem_obj_;
+    T* ptr_;
+
+public:
+    explicit SharedMemory(const char* name): shm_mem_obj_(SharedMemoryObject::open_or_create(name)) {
+        shm_mem_obj_.truncate(sizeof(T));
+        ptr_ = static_cast<T*>(shm_mem_obj_.map(sizeof(T)));
+    }
+
+    ~SharedMemory() {
+        SharedMemoryObject::unmap(ptr_, sizeof(T));
+    }
+
+    T& get() const {
+        return *ptr_;
+    }
+};
+```
+
+SharedMemory模板类依赖于SharedMemoryObject类管理Posix共享内存对象，
+模板参数定义了存储于共享内存实例中的数据类型。通过这种方式，
+可使SharedMemory类型实例处于安全状态。使用SharedMemory类的应用程序
+不必显式的进行void指针的类型转换，SharedMemory类里以类型安全的方式完成此操作。
+
+- 全部共享内存应用程序和初始化过程在SharedMemory构造函数里完成，
+  该函数只包含一个参数：共享内存对象名。构造函数通过SharedMemoryObject::open_or_create静态函数
+  创建共享内存对象，并把共享内存对象的大小设置成sizeof(T)，然后将ptr_成员设置成共享内存映射的地址。
+
+- 析构函数从地址空间中解除共享内存对象的映射。
+
+- 当访问共享数据时，SharedMemory类提供了一个简单的get()方法，
+  该方法返回一个指向存储于共享内存的对象的引用。
+
+接下来，给出使用SharedMemory的示例程序：
+
+源码：shmem.cpp
+
+```cpp
+#include <algorithm>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+#include <unistd.h>
+
+#include "shared_memory.hpp"
+
+const char* kSharedMemPath = "/sample_point";
+const size_t kPayloadSize = 16;
+
+using namespace std::literals;
+
+template <typename T>
+using SharedMem = SharedMemory<T>;
+
+struct Payload {
+  uint32_t index;
+  uint8_t raw[kPayloadSize];
+};
+
+
+void producer() {
+  SharedMem<Payload> writer(kSharedMemPath);
+  Payload& pw = writer.get();
+  for (int i = 0; i < 5; i++) {
+    pw.index = i;
+    std::fill_n(pw.raw, sizeof(pw.raw) - 1, 'a' + i);
+    pw.raw[sizeof(pw.raw) - 1] = '\0';
+    std::this_thread::sleep_for(150ms);
+  }
+}
+
+void consumer() {
+  SharedMem<Payload> point_reader(kSharedMemPath);
+  Payload& pr = point_reader.get();
+  for (int i = 0; i < 10; i++) {
+    std::cout << "Read data frame " << pr.index << ": " << pr.raw << std::endl;
+    std::this_thread::sleep_for(100ms);
+  }
+  SharedMemoryObject::remove(kSharedMemPath);
+}
+
+int main() {
+
+  if (fork()) {
+    consumer();
+  } else {
+    producer();
+  }
+}
+```
+
+示例程序会生成两个独立的进程：通过Posix的fork()函数生成一个子进程。
+该子进程表示为数据生产者，而父进程则表示为数据消费者。
+
+```cpp
+  if (fork()) {
+    consumer();
+  } else {
+    producer();
+  }
+```
+
+此处定义了一个Payload数据类型，以供生产者和消费者数据交换使用。
+
+```cpp
+struct Payload {
+  uint32_t index;
+  uint8_t raw[kPayloadSize];
+};
+```
+
+数据生产者生成了一个SharedMemory<Payload>实例，
+使用SharedMemory的get()方法获取共享内存对象中的Payload实例引用，
+每隔150ms，递增Payload的index字段，并通过匹配index的拉丁字母填充数据。
+
+```cpp
+  Payload& pw = writer.get();
+  for (int i = 0; i < 5; i++) {
+    pw.index = i;
+    std::fill_n(pw.raw, sizeof(pw.raw) - 1, 'a' + i);
+    pw.raw[sizeof(pw.raw) - 1] = '\0';
+    std::this_thread::sleep_for(150ms);
+  }
+```
+
+消费者则利用与生产者相同的名称生成的一个SharedMemory<Payload>实例，
+每隔100ms，应用程序将从共享对象中读取数据，并将其输出至屏幕。
+
+编译并运行程序，可以得到如下输出：
+
+![shmem](shmem.png)
+
+在消费者的输出结果中，可以看到所接收的生产者写入数据。
+由于消费者和生产者周期时长并不匹配，因而有时可以看到相同的数据
+被读取了两次。
+
+这个示例程序里，省略了生产者和消费者的同步机制。鉴于二者作为独立的
+项目运行，所以无法保证生产者在消费者试图读取数据时已经更新了数据。
+
+---
+
+接下来，我们在原有代码的基础上增加同步机制，给出一个相对完整的
+基于共享内存对象的生产者、消费者的示例程序。
+
 
 
 
