@@ -773,9 +773,9 @@ public:
 };
 ```
 
-SharedMemory模板类依赖于SharedMemoryObject类管理Posix共享内存对象，
+SharedMemory模板类依赖于SharedMemoryObject类来管理Posix共享内存对象，
 模板参数定义了存储于共享内存实例中的数据类型。通过这种方式，
-可使SharedMemory类型实例处于安全状态。使用SharedMemory类的应用程序
+可使SharedMemory类型实例处于类型安全状态。使用SharedMemory类的应用程序
 不必显式的进行void指针的类型转换，SharedMemory类里以类型安全的方式完成此操作。
 
 - 全部共享内存应用程序和初始化过程在SharedMemory构造函数里完成，
@@ -871,6 +871,8 @@ struct Payload {
 每隔150ms，递增Payload的index字段，并通过匹配index的拉丁字母填充数据。
 
 ```cpp
+void producer() {
+  ...
   Payload& pw = writer.get();
   for (int i = 0; i < 5; i++) {
     pw.index = i;
@@ -878,28 +880,191 @@ struct Payload {
     pw.raw[sizeof(pw.raw) - 1] = '\0';
     std::this_thread::sleep_for(150ms);
   }
+}
 ```
 
 消费者则利用与生产者相同的名称生成的一个SharedMemory<Payload>实例，
 每隔100ms，应用程序将从共享对象中读取数据，并将其输出至屏幕。
 
+```cpp
+void consumer() {
+  ...
+  Payload& pr = point_reader.get();
+  for (int i = 0; i < 10; i++) {
+    std::cout << "Read data frame " << pr.index << ": " << pr.raw << std::endl;
+    std::this_thread::sleep_for(100ms);
+  }
+  SharedMemoryObject::remove(kSharedMemPath);
+}
+```
+
 编译并运行程序，可以得到如下输出：
 
-![shmem](shmem.png)
+![shmem.cpp](shmem.png)
 
 在消费者的输出结果中，可以看到所接收的生产者写入数据。
 由于消费者和生产者周期时长并不匹配，因而有时可以看到相同的数据
 被读取了两次。
 
 这个示例程序里，省略了生产者和消费者的同步机制。鉴于二者作为独立的
-项目运行，所以无法保证生产者在消费者试图读取数据时已经更新了数据。
+进程运行，所以无法保证生产者在消费者试图读取数据时已经更新了数据。
 
 ---
 
 接下来，我们在原有代码的基础上增加同步机制，给出一个相对完整的
 基于共享内存对象的生产者、消费者的示例程序。
 
+还是先给出完整程序，然后再具体介绍。
 
+源码：shmem2.cpp
+
+```cpp
+#include <atomic>
+#include <algorithm>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+#include <unistd.h>
+
+#include "shared_memory.hpp"
+
+const char* kSharedMemPath = "/sample_point";
+const size_t kPayloadSize = 16;
+
+using namespace std::literals;
+
+template <typename T>
+using SharedMem = SharedMemory<T>;
+
+struct Payload {
+  std::atomic_bool data_ready;
+  std::atomic_bool data_processed;
+  uint32_t index;
+  uint8_t raw[kPayloadSize];
+};
+
+
+void producer() {
+  SharedMem<Payload> writer(kSharedMemPath);
+  Payload& pw = writer.get();
+  if (!pw.data_ready.is_lock_free()) {
+    throw std::runtime_error("Timestamp is not lock-free");
+  }
+  for (int i = 0; i < 10; i++) {
+    pw.data_processed.store(false);
+    pw.index = i;
+    std::fill_n(pw.raw, sizeof(pw.raw) - 1, 'a' + i);
+    pw.raw[sizeof(pw.raw) - 1] = '\0';
+    std::this_thread::sleep_for(150ms);
+    pw.data_ready.store(true);
+    while(!pw.data_processed.load());
+  }
+}
+
+void consumer() {
+  SharedMem<Payload> point_reader(kSharedMemPath);
+  Payload& pr = point_reader.get();
+  if (!pr.data_ready.is_lock_free()) {
+    throw std::runtime_error("Timestamp is not lock-free");
+  }
+  for (int i = 0; i < 10; i++) {
+    while(!pr.data_ready.load());
+    pr.data_ready.store(false);
+    std::cout << "Read data frame " << pr.index << ": " << pr.raw << std::endl;
+    std::this_thread::sleep_for(100ms);
+    pr.data_processed.store(true);
+  }
+  SharedMemoryObject::remove(kSharedMemPath);
+}
+
+int main() {
+
+  if (fork()) {
+    consumer();
+  } else {
+    producer();
+  }
+}
+```
+
+我们用文本比较工具可以一目了然的看到增改的地方：
+
+![shmem.cpp vs shmem2.cpp](shmem_vs_shmem2.png)
+
+首先的修改是对Payload结构体：
+
+```cpp
+struct Payload {
+  std::atomic_bool data_ready;
+  std::atomic_bool data_processed;
+  uint32_t index;
+  uint8_t raw[kPayloadSize];
+};
+```
+
+可以看出，Payload结构体，再原有的数据字段基础上，
+增加了两个atomic_bool成员变量data_ready和data_processed，
+用来同步生产者和消费者的数据读写。
+
+示例程序会生成两个独立的进程：通过Posix的fork()函数生成一个子进程。
+该子进程表示为数据生产者，而父进程则表示为数据消费者，这点与之前的示例程序一样。
+
+然后是数据生产者，数据生产者生成了一个SharedMemory<Payload>实例，
+使用SharedMemory的get()方法获取共享内存对象中的Payload实例引用，这点与之前的示例程序一样。
+不同的是，循环次数从5变成10的同时，还增加了同步该数据的访问操作。
+
+```cpp
+void producer() {
+  ...
+  for (int i = 0; i < 10; i++) {
+    pw.data_processed.store(false);
+    pw.index = i;
+    std::fill_n(pw.raw, sizeof(pw.raw) - 1, 'a' + i);
+    pw.raw[sizeof(pw.raw) - 1] = '\0';
+    std::this_thread::sleep_for(150ms);
+    pw.data_ready.store(true);
+    while(!pw.data_processed.load());
+  }
+}
+```
+
+在每次循环过程中，更新index和raw字段之前，需要重置data_processed标志。
+在数据更新完毕后，则需要设置data_ready标志，该标志可视为一个面向使用者的指示器，
+表明新的数据块已处于就绪状态。随后是一段等待过程，直至数据被使用者处理完毕。
+这一循环过程持续进行，直至data_processed标志变为true，接下来则进入下一次循环。
+
+至于数据消费者也是类似的方式工作。
+消费者则利用与生产者相同的名称生成的一个SharedMemory<Payload>实例，
+应用程序将从共享对象中读取数据，并将其输出至屏幕，这点与之前的示例程序一样。
+不同的是，增加了同步该数据的访问操作。
+
+```cpp
+void consumer() {
+  ...
+  for (int i = 0; i < 10; i++) {
+    while(!pr.data_ready.load());
+    pr.data_ready.store(false);
+    std::cout << "Read data frame " << pr.index << ": " << pr.raw << std::endl;
+    std::this_thread::sleep_for(100ms);
+    pr.data_processed.store(true);
+  }
+  SharedMemoryObject::remove(kSharedMemPath);
+}
+```
+
+每次循环都会产生一个短暂的等待过程，直到数据达到就绪状态。
+
+在生产者将data_ready标志设置为true后，消费者即可安全地读取和处理数据。
+在当前实现中，消费者将index和raw字段内容，一并输出至屏幕。
+在数据处理完毕后，消费者将把data_processed标志置为true。
+这将在生产者一端触发下一次数据生成循环操作。
+
+编译并运行程序，可以得到如下输出：
+
+![shmem2.cpp](shmem2.png)
+
+最终，我们将看到处理后数据块的确定的输出结果，且不包含任何遗漏或重复性内容。
 
 
 

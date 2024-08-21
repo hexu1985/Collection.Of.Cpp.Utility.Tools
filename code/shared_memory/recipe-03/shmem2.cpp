@@ -1,4 +1,5 @@
 #include <atomic>
+#include <algorithm>
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -18,7 +19,7 @@ using SharedMem = SharedMemory<T>;
 struct Payload {
   std::atomic_bool data_ready;
   std::atomic_bool data_processed;
-  int index;
+  uint32_t index;
   uint8_t raw[kPayloadSize];
 };
 
