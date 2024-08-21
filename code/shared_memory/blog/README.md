@@ -525,8 +525,8 @@ F0 F1 F2 F3 F4 F5 F6 F7  F8 F9 FA FB FC FD FE FF
 ### C++封装类的实现以及示例
 
 Posix共享内存的C++封装涉及两个类，分别是：
-- class SharedMemoryObject
-- template<class T> class SharedMemory
+- `class SharedMemoryObject`
+- `template<class T> class SharedMemory`
 
 接下来我们分别介绍，[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/shared_memory/recipe-03)
 
@@ -741,7 +741,7 @@ int main(int argc, char* argv[]) {
 ```
 
 SharedMemoryObject类只是在Posix接口上的一个很薄的封装类，为了提供更高层且使用更简单的接口，
-我们在SharedMemoryObject类的基础上，提供了一个模板类template<class T> class SharedMemory。
+我们在SharedMemoryObject类的基础上，提供了一个模板类`template<class T> class SharedMemory`。
 
 我们先给出SharedMemory类的接口和实现，然后再举一个使用SharedMemory类的示例程序。
 
@@ -866,7 +866,7 @@ struct Payload {
 };
 ```
 
-数据生产者生成了一个SharedMemory<Payload>实例，
+数据生产者生成了一个`SharedMemory<Payload>`实例，
 使用SharedMemory的get()方法获取共享内存对象中的Payload实例引用，
 每隔150ms，递增Payload的index字段，并通过匹配index的拉丁字母填充数据。
 
@@ -883,7 +883,7 @@ void producer() {
 }
 ```
 
-消费者则利用与生产者相同的名称生成的一个SharedMemory<Payload>实例，
+消费者则利用与生产者相同的名称生成的一个`SharedMemory<Payload>`实例，
 每隔100ms，应用程序将从共享对象中读取数据，并将其输出至屏幕。
 
 ```cpp
@@ -1010,7 +1010,7 @@ struct Payload {
 示例程序会生成两个独立的进程：通过Posix的fork()函数生成一个子进程。
 该子进程表示为数据生产者，而父进程则表示为数据消费者，这点与之前的示例程序一样。
 
-然后是数据生产者，数据生产者生成了一个SharedMemory<Payload>实例，
+然后是数据生产者，数据生产者生成了一个`SharedMemory<Payload>`实例，
 使用SharedMemory的get()方法获取共享内存对象中的Payload实例引用，这点与之前的示例程序一样。
 不同的是，循环次数从5变成10的同时，还增加了同步该数据的访问操作。
 
@@ -1035,7 +1035,7 @@ void producer() {
 这一循环过程持续进行，直至data_processed标志变为true，接下来则进入下一次循环。
 
 至于数据消费者也是类似的方式工作。
-消费者则利用与生产者相同的名称生成的一个SharedMemory<Payload>实例，
+消费者则利用与生产者相同的名称生成的一个`SharedMemory<Payload>`实例，
 应用程序将从共享对象中读取数据，并将其输出至屏幕，这点与之前的示例程序一样。
 不同的是，增加了同步该数据的访问操作。
 
@@ -1066,6 +1066,16 @@ void consumer() {
 
 最终，我们将看到处理后数据块的确定的输出结果，且不包含任何遗漏或重复性内容。
 
+---
+
+至此，对于“C++封装Posix API之共享内存”的介绍也就算结束了，
+产品级别的项目或是跨平台项目，还是使用C++ boost库的shared_memory_object和mapped_region类吧，
+SharedMemoryObject类相当于shared_memory_object+mapped_region类，
+项目中如果希望用`SharedMemory<T>`来简化编码，又要考虑跨平台，就可以基于
+C++ boost的shared_memory_object和mapped_region来实现`SharedMemory<T>`类。
+
+最后的最后，附赠shmcreate、shmunlink、shmwrite和shmread示例程序的boost库版本：
+[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/boost/interprocess/shared_memory/examples)
 
 
 ### 参考文档：
