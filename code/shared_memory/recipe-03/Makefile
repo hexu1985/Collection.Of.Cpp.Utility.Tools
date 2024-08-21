@@ -5,7 +5,7 @@ INCLUDES = -Isrc
 LDFLAGS =
 LDLIBS = -lgflags -lrt
 
-PROGS =	shmcreate shmunlink shmread shmwrite shmem shmatomic
+PROGS =	shmcreate shmunlink shmread shmwrite shmem shmatomic shmatomic2
 LIBOBJS = shared_memory_object.o
 VPATH = src
 
@@ -36,5 +36,8 @@ shmem: shmem.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 shmatomic: shmatomic.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+shmatomic2: shmatomic2.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
