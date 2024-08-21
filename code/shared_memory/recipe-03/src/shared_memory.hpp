@@ -8,7 +8,7 @@ class SharedMemory {
     T* ptr_;
 
 public:
-    SharedMemory(const char* name): shm_mem_obj_(SharedMemoryObject::open_or_create(name)) {
+    explicit SharedMemory(const char* name): shm_mem_obj_(SharedMemoryObject::open_or_create(name)) {
         shm_mem_obj_.truncate(sizeof(T));
         ptr_ = static_cast<T*>(shm_mem_obj_.map(sizeof(T)));
     }
