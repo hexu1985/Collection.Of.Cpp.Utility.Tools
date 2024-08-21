@@ -8,7 +8,7 @@ class SharedMemory {
     T* ptr_;
 
 public:
-    SharedMemory(const char* name): shd_mem_obj_(name) {
+    explicit SharedMemory(const char* name): shd_mem_obj_(name) {
         shd_mem_obj_.truncate(sizeof(T));
         ptr_ = static_cast<T*>(shd_mem_obj_.map(sizeof(T)));
     }
