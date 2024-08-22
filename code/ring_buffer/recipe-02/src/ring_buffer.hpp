@@ -28,25 +28,23 @@ public:
         free(buffer_);
     }
 
-    T& push() {
-        T& current = buffer_->objects[buffer_->write];
+    void push(const T& object) {
+        buffer_->objects[buffer_->write] = object;
         buffer_->write = (buffer_->write + 1) % buffer_->capacity;
         buffer_->queued++;
         if (buffer_->queued > buffer_->capacity) {
             buffer_->queued = buffer_->capacity;
             buffer_->read = buffer_->write;
         }
-        return current;
     }
 
-    const T& pull() {
+    void pop(T& object) {
         if (is_empty()) {
             throw std::runtime_error("No data in the ring buffer");
         }
-        T& current = buffer_->objects[buffer_->read];
+        object = buffer_->objects[buffer_->read];
         buffer_->read = (buffer_->read + 1) % buffer_->capacity;
         buffer_->queued--;
-        return current;
     }
 
     bool is_empty() {
