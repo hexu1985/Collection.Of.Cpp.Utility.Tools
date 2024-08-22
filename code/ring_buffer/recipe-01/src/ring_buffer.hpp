@@ -11,25 +11,23 @@ private:
 public:
     RingBuffer(): read(0), write(0), queued(0) {}
 
-    T& push() {
-        T& current = objects[write];
+    void push(const T& object) {
+        objects[write] = object;
         write = (write + 1) % N;
         queued++;
         if (queued > N) {
             queued = N;
             read = write;
         }
-        return current;
     }
 
-    const T& pull() {
+    void pop(T& object) {
         if (is_empty()) {
             throw std::runtime_error("No data in the ring buffer");
         }
-        T& current = objects[read];
+        object = objects[read];
         read = (read + 1) % N;
         queued--;
-        return current;
     }
 
     bool is_empty() {
