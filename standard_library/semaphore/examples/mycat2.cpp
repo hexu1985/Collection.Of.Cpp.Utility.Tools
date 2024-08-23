@@ -2,9 +2,9 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include <boost/interprocess/sync/interprocess_semaphore.hpp>
+#include <semaphore>
 
-using namespace boost::interprocess;
+using std::counting_semaphore;
 
 #define	BUFFSIZE		8192
 #define	NBUFF	 8
@@ -14,7 +14,7 @@ struct {	/* data shared by producer and consumer */
     char	data[BUFFSIZE];			/* a buffer */
     ssize_t	n;						/* count of #bytes in the buffer */
   } buff[NBUFF];					/* NBUFF of these buffers/counts */
-  interprocess_semaphore *mutex, *nempty, *nstored;
+  counting_semaphore<> *mutex, *nempty, *nstored;
 } shared;
 
 FILE* fp;							/* input file to copy to stdout */
@@ -40,9 +40,9 @@ main(int argc, char **argv)
     setbuf(fp, NULL);
 
 		/* 4initialize three semaphores */
-	shared.mutex = new interprocess_semaphore{1};
-	shared.nempty = new interprocess_semaphore{NBUFF};
-	shared.nstored = new interprocess_semaphore{0};
+	shared.mutex = new counting_semaphore<>{1};
+	shared.nempty = new counting_semaphore<>{NBUFF};
+	shared.nstored = new counting_semaphore<>{0};
 
 		/* 4one producer thread, one consumer thread */
     thr_produce = std::thread(produce);
@@ -64,21 +64,21 @@ void produce()
 	int		i;
 
 	for (i = 0; ; ) {
-		shared.nempty->wait();	/* wait for at least 1 empty slot */
+		shared.nempty->acquire();	/* acquire for at least 1 empty slot */
 
-		shared.mutex->wait();
+		shared.mutex->acquire();
 			/* 4critical region */
-		shared.mutex->post();
+		shared.mutex->release();
 
 		shared.buff[i].n = fread(shared.buff[i].data, 1, BUFFSIZE, fp);
 		if (shared.buff[i].n == 0) {
-		    shared.nstored->post();	/* 1 more stored item */
+		    shared.nstored->release();	/* 1 more stored item */
 			return;
 		}
 		if (++i >= NBUFF)
 			i = 0;					/* circular buffer */
 
-		shared.nstored->post();	/* 1 more stored item */
+		shared.nstored->release();	/* 1 more stored item */
 	}
 }
 
@@ -87,11 +87,11 @@ void consume()
 	int		i;
 
 	for (i = 0; ; ) {
-		shared.nstored->wait();		/* wait for at least 1 stored item */
+		shared.nstored->acquire();		/* acquire for at least 1 stored item */
 
-		shared.mutex->wait();
+		shared.mutex->acquire();
 			/* 4critical region */
-		shared.mutex->post();
+		shared.mutex->release();
 
 		if (shared.buff[i].n == 0)
 			return;
@@ -99,7 +99,7 @@ void consume()
 		if (++i >= NBUFF)
 			i = 0;					/* circular buffer */
 
-		shared.nempty->post();		/* 1 more empty slot */
+		shared.nempty->release();		/* 1 more empty slot */
 	}
 }
 /* end prodcons */

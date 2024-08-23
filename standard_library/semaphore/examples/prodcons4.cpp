@@ -2,9 +2,9 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include <boost/interprocess/sync/interprocess_semaphore.hpp>
+#include <semaphore>
 
-using namespace boost::interprocess;
+using std::counting_semaphore;
 
 #define	NBUFF	 	 10
 #define	MAXNTHREADS	100
@@ -17,7 +17,7 @@ struct {	/* data shared by producers and consumers */
     int	nputval;		/* value to store in buff[] */
     int	nget;			/* item number: 0, 1, 2, ... */
     int	ngetval;		/* value fetched from buff[] */
-    interprocess_semaphore *mutex, *nempty, *nstored;
+    counting_semaphore<> *mutex, *nempty, *nstored;
 } shared;
 
 void produce(int* arg);
@@ -39,9 +39,9 @@ int main(int argc, char **argv)
     nconsumers = std::min(atoi(argv[3]), MAXNTHREADS);
 
     /* 4initialize three semaphores */
-    shared.mutex = new interprocess_semaphore{1};
-    shared.nempty = new interprocess_semaphore{NBUFF};
-    shared.nstored = new interprocess_semaphore{0};
+    shared.mutex = new counting_semaphore<>{1};
+    shared.nempty = new counting_semaphore<>{NBUFF};
+    shared.nstored = new counting_semaphore<>{0};
 
     /* 4create all producers and all consumers */
     for (i = 0; i < nproducers; i++) {
@@ -74,13 +74,13 @@ int main(int argc, char **argv)
 void produce(int* arg)
 {
     for ( ; ; ) {
-        shared.nempty->wait();	/* wait for at least 1 empty slot */
-        shared.mutex->wait();
+        shared.nempty->acquire();	/* acquire for at least 1 empty slot */
+        shared.mutex->acquire();
 
         if (shared.nput >= nitems) {
-            shared.nstored->post();	/* let consumers terminate */
-            shared.nempty->post();
-            shared.mutex->post();
+            shared.nstored->release();	/* let consumers terminate */
+            shared.nempty->release();
+            shared.mutex->release();
             return;			/* all done */
         }
 
@@ -88,8 +88,8 @@ void produce(int* arg)
         shared.nput++;
         shared.nputval++;
 
-        shared.mutex->post();
-        shared.nstored->post();	/* 1 more stored item */
+        shared.mutex->release();
+        shared.nstored->release();	/* 1 more stored item */
         *arg += 1;
     }
 }
@@ -101,12 +101,12 @@ void consume(int* arg)
     int		i;
 
     for ( ; ; ) {
-        shared.nstored->wait();		/* wait for at least 1 stored item */
-        shared.mutex->wait();
+        shared.nstored->acquire();		/* acquire for at least 1 stored item */
+        shared.mutex->acquire();
 
         if (shared.nget >= nitems) {
-            shared.nstored->post();
-            shared.mutex->post();
+            shared.nstored->release();
+            shared.mutex->release();
             return;			/* all done */
         }
 
@@ -116,8 +116,8 @@ void consume(int* arg)
         shared.nget++;
         shared.ngetval++;
 
-        shared.mutex->post();
-        shared.nempty->post();		/* 1 more empty slot */
+        shared.mutex->release();
+        shared.nempty->release();		/* 1 more empty slot */
         *arg += 1;
     }
 }
