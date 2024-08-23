@@ -15,12 +15,11 @@ struct Frame {
 RingBuffer<Frame, 5> frames;
 
 void producer() {
-    Frame out; 
     for (size_t i = 0; i < 20; i++) {
+        Frame& out = frames.push();
         out.index = i;
         std::fill_n(out.data, sizeof(out.data) - 1, 'a' + i);
         out.data[sizeof(out.data) - 1] = '\0';
-        frames.push(out);
         std::this_thread::sleep_for(100ms);
     }
 }
@@ -32,7 +31,7 @@ void consumer() {
         if (!frames.has_data()) {
             continue;
         }
-        frames.pop(in);
+        const Frame& in = frames.pull();
         std::cout << "Frame " << in.index << ": " << in.data << std::endl;
     }
 }

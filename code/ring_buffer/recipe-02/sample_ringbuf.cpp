@@ -9,41 +9,38 @@ struct Frame {
 
 int main() {
     RingBuffer<Frame> frames(10);
-    Frame frame;
 
     std::cout << "Frames " << (frames.has_data() ? "" : "do not ")
         << "contain data" << std::endl;
     try {
-        frames.pop(frame);
+        const Frame& frame = frames.pull();
     } catch (std::runtime_error e) {
         std::cout << "Exception caught: " << e.what() << std::endl;
     }
 
-    Frame out; 
     for (size_t i = 0; i < 5; i++) {
+        Frame& out = frames.push();
         out.index = i;
         out.data[0] = 'a' + i;
         out.data[1] = '\0';
-        frames.push(out);
     }
     std::cout << "Frames " << (frames.has_data() ? "" : "do not ")
         << "contain data" << std::endl;
-    Frame in;
     while (frames.has_data()) {
-        frames.pop(in);
+        const Frame& in = frames.pull();
         std::cout << "Frame " << in.index << ": " << in.data << std::endl;
     }
 
     for (size_t i = 0; i < 26; i++) {
+        Frame& out = frames.push();
         out.index = i;
         out.data[0] = 'a' + i;
         out.data[1] = '\0';
-        frames.push(out);
     }
     std::cout << "Frames " << (frames.has_data() ? "" : "do not ")
         << "contain data" << std::endl;
     while (frames.has_data()) {
-        frames.pop(in);
+        const Frame& in = frames.pull();
         std::cout << "Frame " << in.index << ": " << in.data << std::endl;
     }
 }
