@@ -5,7 +5,7 @@ INCLUDES =
 LDFLAGS =
 LDLIBS = -lgflags -lrt
 
-PROGS =	mqcreate1 mqcreate
+PROGS =	mqcreate1 mqcreate mqgetattr mqunlink
 LIBOBJS = posix_api.o
 
 .PHONY: all
@@ -25,7 +25,10 @@ mqcreate1: mqcreate1.o $(LIBOBJS)
 mqcreate: mqcreate.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-shmunlink: shmunlink.o $(LIBOBJS)
+mqgetattr: mqgetattr.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+mqunlink: mqunlink.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 shmread: shmread.o $(LIBOBJS)

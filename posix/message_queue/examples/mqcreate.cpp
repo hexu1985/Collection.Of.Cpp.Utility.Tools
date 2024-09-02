@@ -1,6 +1,6 @@
 #include <cstdlib>
+#include <cstdio>
 #include <sstream>
-#include <iostream>
 #include <gflags/gflags.h>
 
 #include "posix_api.hpp"
@@ -12,7 +12,7 @@ DEFINE_bool(check_exists, false, "check message queue already exists");
 
 std::string usage(const char* prog) {
     std::ostringstream os;
-    os << "\nusage: " << prog << " [--check_exists] [--name NAME]\n\n"
+    os << "\nusage: " << prog << " [--check_exists] [--name NAME] [--queue_max_size QUEUE_MAX_SIZE] [--message_max_size MESSAGE_MAX_SIZE]\n\n"
         << "create message queue\n";
     return os.str();
 }
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 
 	if ((attr.mq_maxmsg != 0 && attr.mq_msgsize == 0) ||
 		(attr.mq_maxmsg == 0 && attr.mq_msgsize != 0)) {
-        std::cerr << "must specify both -m maxmsg and -z msgsize\n";
+        printf("must specify both -m maxmsg and -z msgsize\n");
         exit(1);
     }
 
