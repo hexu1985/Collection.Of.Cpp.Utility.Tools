@@ -56,4 +56,19 @@ void Mq_setattr(mqd_t mqdes, const struct mq_attr *newattr, struct mq_attr *olda
     }
 }
 
+void Mq_send(mqd_t mqd, const char *ptr, size_t len, unsigned int prio) {
+    if (mq_send(mqd, ptr, len, prio) == -1) {
+        throw std::system_error(errno, std::system_category(), "mq_send error");
+    }
+}
+
+ssize_t Mq_receive(mqd_t mqd, char *ptr, size_t len, unsigned int *prio) {
+    ssize_t n;
+
+    if ( (n = mq_receive(mqd, ptr, len, prio)) == -1) {
+        throw std::system_error(errno, std::system_category(), "mq_receive error");
+    }
+    return(n);
+}
+
 

@@ -5,7 +5,7 @@ INCLUDES =
 LDFLAGS =
 LDLIBS = -lgflags -lrt
 
-PROGS =	mqcreate1 mqcreate mqgetattr mqunlink
+PROGS =	mqcreate1 mqcreate mqgetattr mqunlink mqsend mqreceive
 LIBOBJS = posix_api.o
 
 .PHONY: all
@@ -31,9 +31,9 @@ mqgetattr: mqgetattr.o $(LIBOBJS)
 mqunlink: mqunlink.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-shmread: shmread.o $(LIBOBJS)
+mqsend: mqsend.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-shmwrite: shmwrite.o $(LIBOBJS)
+mqreceive: mqreceive.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
