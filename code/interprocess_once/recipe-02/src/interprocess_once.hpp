@@ -6,7 +6,7 @@
 static_assert(ATOMIC_BOOL_LOCK_FREE == 2, "atomic_bool need lock free");
 
 struct InterprocessOnceFlag {
-    std::atomic_bool lock;
+    std::atomic_bool lock{false};
     int execute_state = 0;
 };
 
