@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <memory>
 #include <gflags/gflags.h>
 
 #include "posix_api.hpp"
@@ -31,13 +32,13 @@ int main(int argc, char **argv) {
 	struct mq_attr attr;
 	Mq_getattr(mqd, &attr);
 
-	void* buff = malloc(attr.mq_msgsize);
+    std::unique_ptr<char[]> buff{new char[attr.mq_msgsize]};
 
     unsigned int prio;
-	ssize_t n = Mq_receive(mqd, (char*) buff, attr.mq_msgsize, &prio);
+	ssize_t n = Mq_receive(mqd, buff.get(), attr.mq_msgsize, &prio);
 	printf("read %ld bytes, priority = %u\n", (long) n, prio);
     if (FLAGS_dump && n > 0) {
-        std::string content((const char*) buff, n);
+        std::string content(buff.get(), n);
         std::cout << "content[" << content << "]" << std::endl;
     }
 
