@@ -23,3 +23,4 @@
 - [基于C++标准库实现线程池类](code/thread_pool/blog)
 - [基于C++标准库实现流水线模式](code/pipeline/blog)
 - [C++性能优化之内存池](code/memory_pool/blog)
+- [C++封装Posix API之共享内存](code/shared_memory/blog)
