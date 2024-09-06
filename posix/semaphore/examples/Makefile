@@ -6,7 +6,7 @@ LDFLAGS =
 LDLIBS = -lgflags -lpthread -lrt
 
 PROGS =	semcreate semunlink semwait semtrywait sempost semgetvalue prodcons1 prodcons2 prodcons3 prodcons4 \
-		mycat1 mycat2 deadlock
+		mycat1 mycat2 deadlock semsysconf testeintr
 LIBOBJS = posix_api.o
 
 .PHONY: all
@@ -57,6 +57,12 @@ mycat2: mycat2.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 deadlock: deadlock.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+semsysconf: semsysconf.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+testeintr: testeintr.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 

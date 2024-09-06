@@ -83,6 +83,21 @@ void Sem_getvalue(sem_t* sem, int* valp) {
     }
 }
 
+long Sysconf(int name) {
+    long    val;
+
+    errno = 0;      /* in case sysconf() does not change this */
+    if ( (val = sysconf(name)) == -1) {
+        if (errno != 0) {
+            throw std::system_error(errno, std::system_category(), "sysconf error");
+        } else {
+            throw std::system_error(errno, std::system_category(), 
+                    format("sysconf: {} not defined", name));
+        }
+    }
+    return(val);
+}
+
 int Open(const char *pathname, int oflag, ...) {
 	int		fd;
 	va_list	ap;
@@ -125,3 +140,34 @@ void Close(int fd) {
         throw std::system_error(errno, std::system_category(), "close error");
     }
 }
+
+Sigfunc *signal(int signo, Sigfunc *func) {
+    struct sigaction    act, oact;
+
+    act.sa_handler = func;
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0;
+    if (signo == SIGALRM) {
+#ifdef  SA_INTERRUPT
+        act.sa_flags |= SA_INTERRUPT;   /* SunOS 4.x */
+#endif
+    } else {
+#ifdef  SA_RESTART
+        act.sa_flags |= SA_RESTART;     /* SVR4, 44BSD */
+#endif
+    }
+    if (sigaction(signo, &act, &oact) < 0)
+        return(SIG_ERR);
+    return(oact.sa_handler);
+}
+/* end signal */
+
+Sigfunc *Signal(int signo, Sigfunc *func) {    /* for our signal() function */
+    Sigfunc *sigfunc;
+
+    if ( (sigfunc = signal(signo, func)) == SIG_ERR) {
+        throw std::system_error(errno, std::system_category(), "signal error");
+    }
+    return(sigfunc);
+}
+

@@ -4,6 +4,7 @@
 #include <sys/stat.h>        /* For mode constants */
 #include <fcntl.h>           /* For O_* constants */
 #include <unistd.h>
+#include <signal.h>
 
 #define	FILE_MODE	(S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
@@ -17,8 +18,15 @@ int     Sem_trywait(sem_t* sem);
 void    Sem_post(sem_t* sem); 
 void    Sem_getvalue(sem_t* sem, int* valp); 
 
-
 int      Open(const char *, int , ...);
 ssize_t  Read(int, void *, size_t);
 void     Write(int, void *, size_t);
 void     Close(int);
+
+long     Sysconf(int);
+
+typedef void    Sigfunc(int);   /* for signal handlers */
+
+Sigfunc *signal(int, Sigfunc *);
+Sigfunc *Signal(int, Sigfunc *);
+
