@@ -751,9 +751,133 @@ int main() {
 10: 0.5s
 ```
 
-原因是为啥呢？答案就出在下图：
+原因是为啥呢？我们用可视化的系统性能分析工具来验证一下，这里我使用了Nsight Systems（这里有点儿杀鸡用牛刀的意思）：
+
+执行如下命令：
+
+```
+$ sudo sh -c 'echo 2 >/proc/sys/kernel/perf_event_paranoid'
+$ nsys profile --stats=true --force-overwrite=true -o profile_no_pipeline ./no_pipeline
+$ nsys profile --stats=true --force-overwrite=true -o profile_simple_pipeline ./simple_pipeline_test
+```
+
+然后用`nsys-ui`打开性能分析文件，可以得到如下的可视化性能分析时序图：
+
+串行调用的程序：
+![nsys_no_pipeline](nsys_no_pipeline.png)
+
+流水线化的程序：
+![nsys_pipeline](nsys_pipeline.png)
+
+对于以上两个图，我稍作一些说明：
+图中nanosleep对应于源码中plus_one、mul_two和print函数中调用的this_thread::sleep_for（因为底层是基于nanosleep实现的，我的开发环境是linux）：
+
+```cpp
+int plus_one(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return x + 1;
+}
+
+int mul_two(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return x * 2;
+}
+
+std::string print(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return std::to_string(x);
+}
+```
+
+对于流水线化的程序的图中，各行代表一个独立线程，具体说明如下：
+- 线程[31269]：对应的是主线程，即main函数锁在线程，pthread_cond_wait对应的是`pipeline.get(output);`调用
+- 线程[31277]：对应的是调用plus_one的线程
+- 线程[31278]：对应的是调用mul_two的线程
+- 线程[31279]：对应的是调用print的线程
+
+而线程[31278]和线程[31279]中的pthread_cond_wait对应是，SimpleDataFilter类中的worker_thread函数里的代码：
+
+```
+    void worker_thread()
+    {
+        IT arg;
+        OT res;
+        while(!done)
+        {
+            this->get(arg);     // pthread_cond_wait对应的行
+            res = filter_func(std::move(arg));
+            this->put(res);
+        }
+    }
+```
+
+为了更清晰的看出流水化的各个datafilter线程，下面给出标色区分的示意图：
 
 ![运行比较](no_pipeline_vs_pipeline.png)
+
+进一步的，我们可以调整各个datafilter的处理时间，来看看在pipeline模式下，处理最慢的datafilter决定整个pipeline的性能：
+
+我们修改plus_one、mul_two和print函数中this_thread::sleep_for的时长，然后用nsys重跑测试程序，
+
+首先把plus_one和mul_two的处理时间缩短，代码修改如下：
+
+```cpp
+int plus_one(int x) {
+    this_thread::sleep_for(milliseconds(300));
+    return x + 1;
+}
+
+int mul_two(int x) {
+    this_thread::sleep_for(milliseconds(400));
+    return x * 2;
+}
+
+std::string print(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return std::to_string(x);
+}
+```
+
+然后会得到如下的时序图：
+
+串行调用的程序：
+![nsys_no_pipeline](nsys_no_pipeline3.png)
+
+流水线化的程序：
+![nsys_pipeline](nsys_pipeline3.png)
+
+我们从图中可以看出，整个流水线处理时间由处理最慢的datafilter决定，本示例里是print所在的datafilter。
+
+如果我们把处理时长的关系调过来，把处理最慢的datafilter放到更靠近数据源头的部分，我们还会看到后端
+的datafilter有明显的数据等待过程。
+
+代码修改如下：
+
+```cpp
+int plus_one(int x) {
+    this_thread::sleep_for(milliseconds(500));
+    return x + 1;
+}
+
+int mul_two(int x) {
+    this_thread::sleep_for(milliseconds(400));
+    return x * 2;
+}
+
+std::string print(int x) {
+    this_thread::sleep_for(milliseconds(300));
+    return std::to_string(x);
+}
+```
+
+然后会得到如下的时序图：
+
+串行调用的程序：
+![nsys_no_pipeline](nsys_no_pipeline2.png)
+
+流水线化的程序：
+![nsys_pipeline](nsys_pipeline2.png)
+
 
 至此，基于C++标准库实现流水线模式的完整介绍结束，按照惯例，最后给出完整的项目示例代码。
 
