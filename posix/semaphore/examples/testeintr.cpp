@@ -1,5 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "posix_api.hpp"
-#include <stdexcept>
 
 #define	NAME	"testeintr"
 
@@ -18,7 +19,7 @@ int main(int argc, char **argv) {
 	if (sem_wait(sem1) == 0) {
 		printf("sem_wait returned 0?\n");
     } else {
-        throw std::runtime_error("sem_wait error");
+        printf("sem1 sem_wait error\n");
     }
 	Sem_close(sem1);
 
@@ -28,7 +29,7 @@ int main(int argc, char **argv) {
 	if (sem_wait(&sem2) == 0) {
 		printf("sem_wait returned 0?\n");
     } else {
-        throw std::runtime_error("sem_wait error");
+        printf("sem2 sem_wait error\n");
     }
 	Sem_destroy(&sem2);
 
