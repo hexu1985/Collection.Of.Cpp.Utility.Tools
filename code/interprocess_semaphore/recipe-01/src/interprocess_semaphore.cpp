@@ -31,3 +31,11 @@ bool InterprocessSemaphore::try_wait() {
     }
 }
 
+int InterprocessSemaphore::get_value() {
+    int value;
+    {
+        std::unique_lock<InterprocessMutex> lck{mutex_};
+        value = count_;
+    }
+    return value;
+}

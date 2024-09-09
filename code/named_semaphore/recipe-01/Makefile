@@ -1,12 +1,12 @@
 CXX = g++
 CXXFLAGS = -g -Wall -Wextra
-INCLUDES = -Isrc -Iinterprocess_mutex -Iinterprocess_condition
+INCLUDES = -Isrc -Iinterprocess_mutex -Iinterprocess_condition -Iinterprocess_semaphore -Ishared_memory -Iinterprocess_once
 LDFLAGS =
-LDLIBS = -lpthread -lrt
+LDLIBS = -lgflags -lpthread -lrt
 
-PROGS =	prodcons2 prodcons3 prodcons4 
-LIBOBJS = interprocess_mutex.o interprocess_condition.o interprocess_semaphore.o
-VPATH = src interprocess_mutex interprocess_condition
+PROGS =	semcreate semunlink sempost semwait semtrywait semgetvalue prodcons1
+LIBOBJS = named_semaphore.o interprocess_mutex.o interprocess_condition.o interprocess_semaphore.o shared_memory_object.o interprocess_once.o
+VPATH = src interprocess_mutex interprocess_condition interprocess_semaphore shared_memory interprocess_once
 
 .PHONY: all
 all: $(PROGS)
@@ -19,13 +19,25 @@ clean:
 %.o:%.cpp
 	$(CXX) -o $@ -c $^ $(CXXFLAGS) $(INCLUDES)
 
-prodcons2: prodcons2.o $(LIBOBJS)
+semcreate: semcreate.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-prodcons3: prodcons3.o $(LIBOBJS)
+semunlink: semunlink.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-prodcons4: prodcons4.o $(LIBOBJS)
+sempost: sempost.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+semwait: semwait.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+semtrywait: semtrywait.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+semgetvalue: semgetvalue.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+prodcons1: prodcons1.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 

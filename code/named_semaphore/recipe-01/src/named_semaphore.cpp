@@ -38,6 +38,10 @@ bool NamedSemaphore::try_wait() {
     return impl_.get().semaphore.try_wait();
 }
 
+int NamedSemaphore::get_value() {
+    return impl_.get().semaphore.get_value();
+}
+
 bool NamedSemaphore::exists(const char* name) noexcept {
     return SharedMemory<Impl>::exists(name);
 }

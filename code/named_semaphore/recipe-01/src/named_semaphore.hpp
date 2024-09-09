@@ -2,6 +2,7 @@
 
 #include "interprocess_semaphore.hpp"
 #include "shared_memory.hpp"
+#include "interprocess_once.hpp"
 
 class NamedSemaphore {
 public:
@@ -14,6 +15,7 @@ public:
     void post();
     void wait();
     bool try_wait();
+    int get_value();
 
     static bool exists(const char* name) noexcept;
     static bool remove(const char* name) noexcept;
@@ -26,14 +28,14 @@ private:
     NamedSemaphore(const NamedSemaphore&) = delete;
     NamedSemaphore& operator= (const NamedSemaphore&) = delete;
 
-    explicit NamedSemaphore(SharedMemory<Impl>&& impl);
-    NamedSemaphore(SharedMemory<Impl>&& impl, unsigned int value);
-
-private:
     struct Impl {
         InterprocessOnceFlag once_flag;
         InterprocessSemaphore semaphore;
     };
 
+    explicit NamedSemaphore(SharedMemory<Impl>&& impl);
+    NamedSemaphore(SharedMemory<Impl>&& impl, unsigned int value);
+
+private:
     SharedMemory<Impl> impl_;
 };

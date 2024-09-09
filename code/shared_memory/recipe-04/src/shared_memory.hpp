@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include "shared_memory_object.hpp"
 
 template <typename T>

@@ -11,6 +11,7 @@ public:
     void post();
     void wait();
     bool try_wait();
+    int get_value();
 
 private:
     InterprocessMutex mutex_;
