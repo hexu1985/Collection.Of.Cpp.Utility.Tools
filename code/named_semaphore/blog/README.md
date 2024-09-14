@@ -291,7 +291,7 @@ interprocess_call_once函数就是一个大循环：
       所以当前进程将execute_state设置成`Executing`状态，然后调用`fn`，如果调用成功，则把execute_state设置成`Executed`，
       如果`fn`抛出异常，则把execute_state设置成`Not_yet_executed`，然后在把异常rethrow。
 
-至于SpinLockRef类的实现，就是一个自旋锁实现，有兴趣的可以参考书《C++并发编程实战》的5.2.2章节。
+至于SpinLockRef类的实现，就是一个自旋锁实现，有兴趣的可以参考书《C++并发编程实战 (第二版)》的5.2.2章节。
 
 [InterprocessOnceFlag的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_once/recipe-02/src)
 
@@ -387,3 +387,10 @@ mysem_post(mysem_t *sem)
 
 回看NamedSemaphore类实现的依赖关系层级图，以及SharedMemory和InterprocessOnceFlag、InterprocessSemaphore组合实现NamedSemaphore的方式，
 我感觉C++的Template特性结合OOP特性，的确可以写出很优雅又易于维护的代码。
+
+
+### 参考文档：
+
+- 《UNIX网络编程卷2进程间通信(第2版)》
+- 《C++并发编程实战 (第二版)》
+- [C++封装Posix API之共享内存](https://juejin.cn/post/7405182512450846732)
