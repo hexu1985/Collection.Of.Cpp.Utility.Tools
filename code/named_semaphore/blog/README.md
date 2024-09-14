@@ -151,8 +151,143 @@ void NamedSemaphore::post() {
 比如，我们会先看SharedMemory、InterprocessOnceFlag和InterprocessSemaphore类的接口和实现。
 至于剖析到哪一个层面才算尽头呢？就本文来说，最底层会追溯到POSIX接口或C++标准库。
 
-为了不至于迷失在底层类的具体实现中，我先给出NameSemaphore类实现的依赖关系，
+为了不至于迷失在底层类的具体实现中，我先给出NamedSemaphore类实现的依赖关系，
 我这里按层级简单的划分了一下，如下图：
 
 ![named_semaphore_class](named_semaphore_class.png)
+
+以这张图为索引，我将从上到下分别介绍。
+
+首先是，SharedMemory类，针对这个类，我之前有文章完整介绍了实现，这里就不重复介绍了，
+有兴趣的同事可以看一下《C++封装Posix API之共享内存》这篇文章。
+
+[SharedMemory的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/shared_memory/recipe-04/src)
+
+
+接下来我将介绍InterprocessOnceFlag类。
+
+**InterprocessOnceFlag类的介绍**
+
+前面介绍过，在NamedSemaphore类实现里，是通过InterprocessOnceFlag类的对象，来保证
+是为了保证`impl_.semaphore`对象的构造函数被调用且只调用一次。
+
+并且提到InterprocessOnceFlag功能类似于pthread_once函数的功能，那我们就先看看
+InterprocessOnceFlag类的定义和相关接口：
+
+interprocess_once.hpp
+```cpp
+#pragma once
+
+#include <atomic>
+#include <functional>
+
+static_assert(ATOMIC_BOOL_LOCK_FREE == 2, "atomic_bool need lock free");
+
+struct InterprocessOnceFlag {
+    std::atomic_bool lock{false};
+    int execute_state = 0;
+};
+
+void interprocess_call_once(InterprocessOnceFlag& flag, std::function<void()> fn);
+```
+
+InterprocessOnceFlag类包含两个成员变量：lock和execute_state，其中
+lock是个std::atomic_bool类型，用于实现进程间同步锁，所以这里要求std::atomic_bool本身是lock_free的，
+通过下面的编译期检查保证：
+
+```cpp
+static_assert(ATOMIC_BOOL_LOCK_FREE == 2, "atomic_bool need lock free");
+```
+
+通过interprocess_call_once函数，我们将需要执行且只执行一次的函数和InterprocessOnceFlag对象关联起来，
+而这个接口可以看出跟pthread_once非常相似。所以使用上也是非常类似。
+
+接下来我将介绍interprocess_call_once函数的实现：
+
+interprocess_once.cpp
+```cpp
+#include "interprocess_once.hpp"
+
+#include <thread>
+#include <mutex>
+#include <chrono>
+
+using namespace std::literals;
+
+namespace {
+
+class SpinLockRef {
+public:
+    SpinLockRef(std::atomic_bool& flag): flag_(flag) {
+    }
+
+    void lock() {
+        while (flag_.exchange(true, std::memory_order_acquire)) {
+            std::this_thread::yield();
+        }
+    }
+
+    void unlock() {
+        flag_.store(false, std::memory_order_release);
+    }
+
+    bool try_lock() {
+        return !flag_.exchange(true, std::memory_order_acquire);
+    }
+
+private:
+    std::atomic_bool& flag_;
+};
+
+enum class ExecuteState {
+    Not_yet_executed = 0,
+    Executing = 1,
+    Executed = 2,
+};
+
+}   // namespace
+
+void interprocess_call_once(InterprocessOnceFlag& flag, std::function<void()> fn) {
+    SpinLockRef lock(flag.lock);
+    while (true) {
+        std::unique_lock<SpinLockRef> scoped_lock(lock);
+
+        int& execute_state = flag.execute_state;
+        if (execute_state == (int) ExecuteState::Executed) {
+            break;
+        }
+
+        if (execute_state == (int) ExecuteState::Executing) {
+            scoped_lock.unlock();
+            std::this_thread::sleep_for(10us);
+            continue;
+        }
+
+        if (execute_state == (int) ExecuteState::Not_yet_executed) {
+            execute_state = (int) ExecuteState::Executing;
+        }
+
+        try {
+            fn();
+            execute_state = (int) ExecuteState::Executed;
+            break;
+        } catch (...) {
+            execute_state = (int) ExecuteState::Not_yet_executed;
+            throw;  // rethrow
+        }
+    }
+}
+```
+
+interprocess_call_once函数就是一个大循环：
+- 循环里先通过`flag.lock`获取同步锁，这里是通过std::atomic_bool实现了一个自旋锁。
+- 获取到锁的进程会检查`flag.execute_state`，而execute_state会处于三种状态之一：`Not_yet_executed` 、 `Executing` 和 `Executed`
+    + 如果execute_state当前状态是`Executed`，说明一次性函数`fn`已经被正常执行过了（没抛出异常）
+    + 如果execute_state当前状态是`Executing`，说明有另外一个进程正在执行`fn`函数，
+      所以当前进程选择解开同步锁，并sleep一小段时间（这里可以优化），然后进入下一次循环，重新获取同步锁并检查状态
+    + 如果execute_state当前状态是`Not_yet_executed`，说明还没有其他进程执行一次性函数`fn`，
+      所以当前进程将execute_state设置成`Executing`状态，然后调用`fn`，如果调用成功，则把execute_state设置成`Executed`，
+      如果`fn`抛出异常，则把execute_state设置成`Not_yet_executed`，然后在把异常rethrow。
+
+至于SpinLockRef类的实现，就是一个自旋锁实现，有兴趣的可以参考书《C++并发编程实战》的5.2.2章节。
 
