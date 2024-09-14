@@ -147,6 +147,8 @@ void NamedSemaphore::post() {
 
 我们发现该接口就是利用SharedMemory，将调用转发到共享内存上的InterprocessSemaphore::post。
 
+[NamedSemaphore的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/named_semaphore/recipe-01/src)
+
 接下来，我们就会根据类的依赖关系，对实现代码自顶向下的一路剖析下去，
 比如，我们会先看SharedMemory、InterprocessOnceFlag和InterprocessSemaphore类的接口和实现。
 至于剖析到哪一个层面才算尽头呢？就本文来说，最底层会追溯到POSIX接口或C++标准库。
@@ -291,3 +293,97 @@ interprocess_call_once函数就是一个大循环：
 
 至于SpinLockRef类的实现，就是一个自旋锁实现，有兴趣的可以参考书《C++并发编程实战》的5.2.2章节。
 
+[InterprocessOnceFlag的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_once/recipe-02/src)
+
+介绍完InterprocessOnceFlag这条线，就剩下InterprocessSemaphore这条线了。
+
+
+**InterprocessSemaphore类的介绍**
+
+InterprocessSemaphore类包含了信号量的基本功能，而且对应于POSIX的无名信号量。
+照例，我们先看一下类定义：
+
+interprocess_semaphore.hpp
+```cpp
+#pragma once
+
+#include "interprocess_mutex.hpp"
+#include "interprocess_condition.hpp"
+
+class InterprocessSemaphore {
+public:
+    InterprocessSemaphore(unsigned int value);
+    ~InterprocessSemaphore();
+
+    void post();
+    void wait();
+    bool try_wait();
+    int get_value();
+
+private:
+    InterprocessMutex mutex_;
+    InterprocessCondition cond_;
+    unsigned int count_;
+};
+```
+
+从类的定义上我们可以看出，接口基本是NamedSemaphore的子集，所以接口含义就不重复叙述了。
+在来看成员变量，`count_`维护计数器，而`mutex_` 和 `cond_`用来实现并发同步。
+InterprocessSemaphore类的成员函数实现，这里也就不赘述了，基本上是把
+《UNIX网络编程卷2  进程间通信  (第2版)》这本书中的10.15章节中的代码翻译成C++版本而已，
+不过有一个地方与原书不太一样，就是InterprocessSemaphore::post接口的实现：
+
+```cpp
+void InterprocessSemaphore::post() {
+    std::unique_lock<InterprocessMutex> lck{mutex_};
+    cond_.notify_one();
+    count_++;
+}
+```
+
+对比原书的实现：
+
+```c
+int
+mysem_post(mysem_t *sem)
+{
+    int     n;
+
+    if ( (n = pthread_mutex_lock(&sem->sem_mutex)) != 0) {
+        errno = n;
+        return(-1);
+    }
+    if (sem->sem_count == 0)
+        pthread_cond_signal(&sem->sem_cond);
+    sem->sem_count++;
+    pthread_mutex_unlock(&sem->sem_mutex);
+    return(0);
+}
+```
+
+原书只有在当前计数器为0时，才触发条件变量的通知，而我的C++实现会每次post都触发条件变量的通知，
+读者可能会觉得原书的实现性能更好（避免不必要的条件变量通知），但其实原书的实现在某些极端情况下，
+造成有些wait的进程不会被唤醒（为什么？），读者可以思考一下；）
+
+而InterprocessSemaphore类依赖的InterprocessMutex类和InterprocessCondition类就是简单的posix接口封装：
+- InterprocessMutex类封装了`pthread_mutex*`相关接口
+- InterprocessCondition封装了`pthread_cond*`相关接口
+
+这块读者可能又会问了，为什么不用std::mutex和std::condition_variable呢？其实答案就在
+《UNIX网络编程卷2  进程间通信  (第2版)》这本书中的10.15章节中的代码中，
+因为InterprocessMutex和InterprocessCondition要在共享内存上，支持进程间共享，
+这点std::mutex和std::condition_variable没有保证，也不会保证。
+而`pthread_mutex_t` 和 `pthread_cond_t ` 通过设置 `PTHREAD_PROCESS_SHARED`属性来支持进程间共享。
+
+
+[InterprocessSemaphore的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_semaphore/recipe-01/src)
+[InterprocessMutex的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_mutex/recipe-01/src)
+[InterprocessCondition的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_condition/recipe-01/src)
+
+
+至此，Posix信号量的C++类设计与实现全部介绍完了，照例，最后给出完整的工程代码
+[完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/named_semaphore/recipe-01)
+
+
+回看NamedSemaphore类实现的依赖关系层级图，以及SharedMemory和InterprocessOnceFlag、InterprocessSemaphore组合实现NamedSemaphore的方式，
+我感觉C++的Template特性结合OOP特性，的确可以写出很优雅又易于维护的代码。
