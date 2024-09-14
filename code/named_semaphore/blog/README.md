@@ -1,14 +1,14 @@
-## Posix信号量的C++接口设计与实现
+## Posix信号量的C++类设计与实现
 
-本文介绍一种Posix信号量的实现，以及对应C++类封装和接口。
+本文介绍Posix信号量的一种实现，以及对应C++类的接口与实现。
 
-信号量的实现原理主要参考《UNIX网络编程卷2  进程间通信  (第2版)》这本书中的
-10.15章节，使用内存映射I/O实现信号量。不过底层改成了基于共享内存的实现，
-而共享内存部分，则是复用了《C++封装Posix API之共享内存》文章中SharedMemory模板类。
-除此之外，C++类封装的Posix信号量接口，参考了boost库的类和接口命名。
+信号量的实现原理主要参考了《UNIX网络编程卷2  进程间通信  (第2版)》这本书中的
+10.15章节，书中是使用内存映射I/O实现信号量，而我这里是改成了基于共享内存的实现，
+而共享内存的功能部分，则是复用了《C++封装Posix API之共享内存》文章中SharedMemory模板类。
+除此之外，C++类封装的Posix信号量接口命名，参考了boost库的信号量类的接口命名。
 
 
-出于完整性的考虑，我还是会给出Posix信号量的基本介绍，完整的介绍可以参考《UNIX网络编程卷2  进程间通信  (第2版)》这本书。
+出于完整性的考虑，我还是会给出Posix信号量的基本介绍，更详细的说明可以参考《UNIX网络编程卷2  进程间通信  (第2版)》这本书。
 
 **POSIX信号量**
 
@@ -81,7 +81,7 @@ private:
 
 我们根据NamedSemaphore类的头文件可以看出支持以下接口：
 - 首先NamedSemaphore类支持默认构造，也就是说一个空的信号量，在空的信号量上的任何操作（成员函数）都是未定义的。
-- 静态成员函数create_only、open_or_create、open_only，简单的工厂函数，创建或打开有名信号量，对应于POSIX的sem_open接口。
+- 静态成员函数create_only、open_or_create、open_only，是简单的工厂函数，用于创建或打开有名信号量，对应于POSIX的sem_open接口。
 - 移动构造函数和移动赋值运算符，配合工厂函数，创建和移动有名信号量
 - 成员函数wait和try_wait，实现等待操作（wait），对应于POSIX的sem_wait、sem_trywait接口。
 - 成员函数post，发送操作（post），对应于POSIX的sem_post接口。
@@ -147,10 +147,12 @@ void NamedSemaphore::post() {
 
 我们发现该接口就是利用SharedMemory，将调用转发到共享内存上的InterprocessSemaphore::post。
 
-接下来，我们就会具体看SharedMemory、InterprocessOnceFlag和InterprocessSemaphore类的接口和实现。
-由于InterprocessSemaphore
+接下来，我们就会根据类的依赖关系，对实现代码自顶向下的一路剖析下去，
+比如，我们会先看SharedMemory、InterprocessOnceFlag和InterprocessSemaphore类的接口和实现。
+至于剖析到哪一个层面才算尽头呢？就本文来说，最底层会追溯到POSIX接口或C++标准库。
 
-NameSemaphore类实现的依赖关系，如下图：
+为了不至于迷失在底层类的具体实现中，我先给出NameSemaphore类实现的依赖关系，
+我这里按层级简单的划分了一下，如下图：
 
 ![named_semaphore_class](named_semaphore_class.png)
 
