@@ -89,8 +89,68 @@ private:
 - 静态成员函数exists，判断指定有名信号量是否存在。
 - 镜头成员函数remove，删除指定有名信号量，对应于POSIX的sem_unlink接口。
 
+然后我们看看NamedSemaphore的实现，首先是成员变量，NamedSemaphore类就包含一个成员变量`impl_`，
+这个成员变量是一个`SharedMemory<Impl>`类型的对象，而Impl是一个嵌套在NamedSemaphore类中的结构体，
+该结构体又包含两个成员变量：once_flag和semaphore，semaphore是一个InterprocessSemaphore类的对象，
+这个类对应于无名信号量（支持进程间共享），once_flag是InterprocessOnceFlag类的对象，
+目的是防止多进程创建同名的有名信号量时的条件竞争，具体的说，
+是为了保证`impl_.semaphore`对象的构造函数被调用且只调用一次，功能类似于pthread_once函数的功能，
+但是要支持多进程环境。
 
-首先，给出NameSemaphore类实现的依赖关系，如下图：
+NamedSemaphore类的完整实现代码，这里就不贴出来了（文章最后会给出完整工程代码的github链接），
+我们只给出两个片段来说明NamedSemaphore实现的基本思路，其他成员函数的实现类似。
+
+首先，给出创建一个新的NamedSemaphore的过程和实现步骤，
+一般创建一个新的NamedSemaphore的客户代码类似如下：
+
+```cpp
+// 只创建
+NamedSemaphore sem{NamedSemaphore::create_only(FLAGS_name.c_str(), FLAGS_initial_value)};
+
+// 创建或打开
+NamedSemaphore sem{NamedSemaphore::open_or_create(FLAGS_name.c_str(), FLAGS_initial_value)};
+```
+
+这段用户代码，先调用了NamedSemaphore::create_only（或者NamedSemaphore::open_or_create）创建一个
+NamedSemaphore对象，并通过NamedSemaphore的移动构造函数，把资源转移到sem对象。
+
+我们以看一下NamedSemaphore里的相关函数的实现：
+
+```cpp
+NamedSemaphore NamedSemaphore::create_only(const char* name, unsigned int value) {
+    return NamedSemaphore{SharedMemory<Impl>::create_only(name), value};
+}
+
+NamedSemaphore NamedSemaphore::open_or_create(const char* name, unsigned int value) {
+    return NamedSemaphore{SharedMemory<Impl>::open_or_create(name), value};
+}
+
+NamedSemaphore::NamedSemaphore(SharedMemory<Impl>&& impl, unsigned int value): impl_(std::move(impl)) {
+    InterprocessOnceFlag& once_flag = impl_.get().once_flag;
+    InterprocessSemaphore* semaphore = &impl_.get().semaphore;
+    interprocess_call_once(once_flag, [semaphore, value]() { new (semaphore) InterprocessSemaphore(value); });
+}
+```
+
+NamedSemaphore::create_only（或者NamedSemaphore::open_or_create）做的事情就是
+先创建了共享内存`SharedMemory<Impl>`对象，然后把`SharedMemory<Impl>`对象move给NamedSemaphore的一个私有构造函数，
+这个私有构造函数就是利`impl_.once_flag`（InterprocessOnceFlag）的功能，保证`impl_.semaphore`被构造，并且只被构造一回。
+
+
+然后我们再看看信号量的发送操作（post）接口实现：
+
+```cpp
+void NamedSemaphore::post() {
+    return impl_.get().semaphore.post();
+}
+```
+
+我们发现该接口就是利用SharedMemory，将调用转发到共享内存上的InterprocessSemaphore::post。
+
+接下来，我们就会具体看SharedMemory、InterprocessOnceFlag和InterprocessSemaphore类的接口和实现。
+由于InterprocessSemaphore
+
+NameSemaphore类实现的依赖关系，如下图：
 
 ![named_semaphore_class](named_semaphore_class.png)
 
