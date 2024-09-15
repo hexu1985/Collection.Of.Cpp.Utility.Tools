@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -Wall -Wextra
-INCLUDES = -Isrc -Iinterprocess_mutex -Iinterprocess_condition -Iinterprocess_semaphore -Ishared_memory -Iinterprocess_once
+INCLUDES = -Isrc -Iinterprocess_mutex -Iinterprocess_condition -Iinterprocess_semaphore -Ishared_memory -Iinterprocess_once -I.
 LDFLAGS =
 LDLIBS = -lgflags -lpthread -lrt
 
