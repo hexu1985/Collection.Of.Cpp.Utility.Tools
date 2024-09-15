@@ -28,6 +28,8 @@ $ ./semcreate --name "test" --initial_value 3 --check_exists
 terminate called after throwing an instance of 'std::system_error'
   what():  sem_open error for test: File exists
 已放弃 (核心已转储)
+$ ./semgetvalue --name test
+value = 3
 ```
 
 **删除信号量**
