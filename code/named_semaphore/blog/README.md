@@ -1,4 +1,4 @@
-## Posix信号量的C++类设计与实现
+## C++封装Posix API之信号量
 
 本文介绍Posix信号量的一种实现，以及对应C++类的接口与实现。
 
@@ -147,7 +147,7 @@ void NamedSemaphore::post() {
 
 我们发现该接口就是利用SharedMemory，将调用转发到共享内存上的InterprocessSemaphore::post。
 
-[NamedSemaphore的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/named_semaphore/recipe-01/src)
+[NamedSemaphore的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/named_semaphore/recipe-01)
 
 接下来，我们就会根据类的依赖关系，对实现代码自顶向下的一路剖析下去，
 比如，我们会先看SharedMemory、InterprocessOnceFlag和InterprocessSemaphore类的接口和实现。
@@ -163,7 +163,7 @@ void NamedSemaphore::post() {
 首先是，SharedMemory类，针对这个类，我之前有文章完整介绍了实现，这里就不重复介绍了，
 有兴趣的同事可以看一下《C++封装Posix API之共享内存》这篇文章。
 
-[SharedMemory的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/shared_memory/recipe-04/src)
+[SharedMemory的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/shared_memory/recipe-04)
 
 
 接下来我将介绍InterprocessOnceFlag类。
@@ -293,7 +293,7 @@ interprocess_call_once函数就是一个大循环：
 
 至于SpinLockRef类的实现，就是一个自旋锁实现，有兴趣的可以参考书《C++并发编程实战 (第二版)》的5.2.2章节。
 
-[InterprocessOnceFlag的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_once/recipe-02/src)
+[InterprocessOnceFlag的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_once/recipe-02)
 
 介绍完InterprocessOnceFlag这条线，就剩下InterprocessSemaphore这条线了。
 
@@ -376,10 +376,61 @@ mysem_post(mysem_t *sem)
 而`pthread_mutex_t` 和 `pthread_cond_t ` 通过设置 `PTHREAD_PROCESS_SHARED`属性来支持进程间共享。
 
 
-[InterprocessSemaphore的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_semaphore/recipe-01/src)
-[InterprocessMutex的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_mutex/recipe-01/src)
-[InterprocessCondition的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_condition/recipe-01/src)
+[InterprocessSemaphore的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_semaphore/recipe-01)
+[InterprocessMutex的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_mutex/recipe-01)
+[InterprocessCondition的完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/interprocess_condition/recipe-01)
 
+
+接下来的最后，我会给出使用NamedSemaphore的示例代码，
+示例代码的原始版本来源于《UNIX网络编程卷2  进程间通信  (第2版)》这本书中的10.5章节，
+大家有兴趣可以自己去对比原始代码。
+
+这里只给出示例代码列表：
+
+- semcreate.cpp
+- semgetvalue.cpp
+- sempost.cpp
+- semtrywait.cpp
+- semunlink.cpp
+- semwait.cpp
+
+编译后的运行，也可以对比书中10.5.6例子，进行验证。
+
+这里给出示例程序简单的调用序列：
+
+```
+$ ./semcreate --helpshort
+semcreate:
+usage: ./semcreate [--check_exists] [--name NAME] [--initial_value INITIAL_VALUE]
+
+create semaphore
+
+
+  Flags from semcreate.cpp:
+    -check_exists (check semaphore already exists) type: bool default: false
+    -initial_value (initial value) type: uint32 default: 1
+    -name (semaphore name) type: string default: "sem_test"
+$ ls /dev/shm/
+$ ./semcreate --name "sem_test" --initial_value 1
+$ ls /dev/shm/
+sem_test
+$ ./semgetvalue --name "sem_test"
+value = 1
+$ ./semcreate --name "sem_test" --check_exists --initial_value 3
+terminate called after throwing an instance of 'std::system_error'
+  what():  shm_open error for sem_test: File exists
+已放弃 (核心已转储)
+$ ./semwait --name "sem_test"
+pid 5353 has semaphore
+$ ./semgetvalue --name "sem_test"
+value = 0
+$ ./semwait --name "sem_test" &
+[1] 5360
+$ ./sempost --name "sem_test"
+pid 5360 has semaphore
+[1]+  已完成               ./semwait --name "sem_test"
+$
+```
 
 至此，Posix信号量的C++类设计与实现全部介绍完了，照例，最后给出完整的工程代码
 [完整的工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/named_semaphore/recipe-01)
