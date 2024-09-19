@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.cnblogs.com/fishily/p/14431499.html -->
+<html lang="zh-cn" style="--olcb-folder-code-block-max-height: 80vh; --cnb-code-bg: rgb(245, 245, 245); --cnb-code-font-size: 12px; --cnb-code-color: rgb(68, 68, 68);"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <meta name="keywords" content="C/C++">
+    <meta name="description" content="开源日志库spdlog的使用心得 ​	所有大型项目中都需要实现日志功能。此功能看似简单实则不然，实现一个高速、稳定、功能完善的日志中心是每一个大型项目的必经之路。spdlog是目前Github上一款基于C/C++的开源日志库。它有以下特点： 速度非常快 只包含头文件 无需依赖第三方库 支持跨平台 -">
+    <meta property="og:description" content="开源日志库spdlog的使用心得 ​	所有大型项目中都需要实现日志功能。此功能看似简单实则不然，实现一个高速、稳定、功能完善的日志中心是每一个大型项目的必经之路。spdlog是目前Github上一款基于C/C++的开源日志库。它有以下特点： 速度非常快 只包含头文件 无需依赖第三方库 支持跨平台 -">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园</title>
+    <link rel="canonical" href="https://www.cnblogs.com/fishily/p/14431499.html">
+    <link rel="shortcut icon" id="favicon" href="https://assets.cnblogs.com/favicon.svg?v=2" type="image/svg+xml">
+    
+    <style>#home :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs), :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs) {background: rgb(245, 245, 245);
+        padding: 12px;
+        border: 0.8px solid rgb(204, 204, 204);
+        border-radius: 3px;
+        border-color: transparent;
+        color: rgb(68, 68, 68);
+        font-family: "Courier New", sans-serif;
+        font-size: 12px</style><link rel="stylesheet" href="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/blog-common.min.css">
+    
+
+    <link id="MainCss" rel="stylesheet" href="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/bundle-book-2.min.css">
+        <link id="highlighter-theme-cnblogs" type="text/css" rel="stylesheet" href="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/cnblogs.css">
+    
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/bundle-book-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/fishily/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/fishily/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/fishily/wlwmanifest.xml">
+    <script>
+        var currentBlogId = 580601;
+        var currentBlogApp = 'fishily';
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'BOOK';
+        var visitorUserId = '';
+        var hasCustomScript = false;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;
+    </script>
+        <script>
+            window.currentPostId = 14431499;
+            window.currentPostDateAdded = '2021-02-22 17:13';
+        </script>
+    <script src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/jquery-3.3.1.min.js"></script>
+    <script src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/blog-common.min.js"></script><style>.medium-zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 300ms;
+  will-change: opacity;
+}
+
+.medium-zoom--opened .medium-zoom-overlay {
+  cursor: pointer;
+  cursor: zoom-out;
+  opacity: 1;
+}
+
+.medium-zoom-image {
+  cursor: pointer;
+  cursor: zoom-in;
+  /*
+    The `transition` is marked as "!important" for the animation to happen
+    even though it's overriden by another inline `transition` style attribute.
+
+    This is problematic with frameworks that generate inline styles on their
+    images (e.g. Gatsby).
+
+    See https://github.com/francoischalifour/medium-zoom/issues/110
+   */
+  transition: transform 300ms cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+
+.medium-zoom-image--hidden {
+  visibility: hidden;
+}
+
+.medium-zoom-image--opened {
+  position: relative;
+  cursor: pointer;
+  cursor: zoom-out;
+  will-change: transform;
+}
+</style><script id="hljs-script" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/highlight.min.js" type="text/javascript" async=""></script>
+    
+<meta property="og:image" content="https://assets.cnblogs.com/logo_square.png"></head>
+<body class="skin-book has-navbar hljs-engine">
+    <a name="top"></a>
+        <div id="imagebar" class="imagebar-mobile imagebar-text-mobile formobile">
+                <a href="https://www.cnblogs.com/cmt/p/18302049" onclick="countCreativeClicks(&#39;M2-博客园-求救信&#39;)" rel="nofollow">
+                    <img src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/35695-20240914121709121-516873353.jpg" alt="" onload="countCreativeImpressionsOnMobile(&#39;M2-博客园-求救信&#39;)">
+                    <span id="m2_impression" style="display:none"></span>
+                </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/logo.svg" alt="博客园Logo">
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                    <li><a href="https://cnblogs.vip/donate">捐助</a></li>
+                <li>
+                    <a href="https://news.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-news&#39;)">新闻</a>
+                </li>
+                <li>
+                    <a href="https://q.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-q&#39;)">博问</a>
+                </li>
+                <li>
+                    <a href="https://ing.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-ing&#39;)">闪存</a>
+                </li>
+                <li><a href="https://www.cnblogs.com/cmt/p/18341478">赞助商</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off">
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/search.svg" alt="搜索">
+                            <img class="hidden focus-visible" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/enter.svg" alt="搜索">
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById(&#39;zzk_search_input&#39;).value)">
+                                <div class="keyword-wrapper">
+                                    <img src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/search.svg" alt="搜索">
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, &#39;fishily&#39;, document.getElementById(&#39;zzk_search_input&#39;).value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/search.svg" alt="搜索">
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔" style="display: none;">
+                        <img id="new_post_icon" class="navbar-icon" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/newpost.svg" alt="写随笔">
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客" style="display: none;">
+                        <img id="myblog_icon" class="navbar-icon" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/myblog.svg" alt="我的博客">
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息" style="display: none;">
+                        <img id="msg_icon" class="navbar-icon" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/message.svg" alt="短消息">
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/lite-mode-on.svg" alt="简洁模式">
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown" style="display: none;">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/avatar-default.svg" alt="用户头像">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/lite-mode-check.svg" class="hide" style="display: none;"><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup" style="display: inline;">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()" style="display: inline;">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <script type="text/javascript">
+	try {
+		if (screen.availWidth > 1200) {
+			document.getElementById("MainCss").href = '/skins/book/bundle-book-2.min.css';
+		}
+	} catch (e) { }
+</script>
+<header>
+    <div id="header">
+        <div id="HeaderTitle">
+            <div id="Title">
+                <a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/fishily">fishily1993</a>
+
+            </div>
+            <div id="subTitle"></div>
+        </div>
+    </div>
+</header>
+
+
+<div id="main">
+	<div id="post_detail">
+    <div class="post">
+        <h2>
+            <a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/fishily/p/14431499.html" title="发布于 2021-02-22 17:13">
+    <span role="heading" aria-level="2">【C++】开源日志库spdlog的使用心得</span>
+    
+
+</a><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button>
+
+        </h2>
+        <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<h2 id="开源日志库spdlog的使用心得">开源日志库spdlog的使用心得<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p>​	所有大型项目中都需要实现日志功能。此功能看似简单实则不然，实现一个高速、稳定、功能完善的日志中心是每一个大型项目的必经之路。spdlog是目前Github上一款基于C/C++的开源日志库。它有以下特点：</p>
+<ul>
+<li>
+<p>速度非常快</p>
+</li>
+<li>
+<p>只包含头文件</p>
+</li>
+<li>
+<p>无需依赖第三方库</p>
+</li>
+<li>
+<p>支持跨平台 - Linux / Windows on 32/64 bits / Mac OS</p>
+</li>
+<li>
+<p>支持多线程</p>
+</li>
+<li>
+<p>可对日志文件进行循环输出</p>
+</li>
+<li>
+<p>可每日生成日志文件</p>
+</li>
+<li>
+<p>支持控制台日志输出</p>
+</li>
+<li>
+<p>可选的异步日志</p>
+</li>
+<li>
+<p>支持日志输出级别</p>
+</li>
+<li>
+<p>可自定义日志格式</p>
+<p>实际使用下来确实比较舒服。首先spdlog不需要编译，引入头文件就行，用起来非常简单。其次它的循环日志文件和异步打印日志这两个功能也非常好用，让整个日志功能变得非常的优雅。</p>
+</li>
+</ul>
+<h3 id="最简单的使用场景">最简单的使用场景<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>这种场景下日志直接在控制台输出，一般不会用这个的，比较的低级。但是可以看出spdlog的格式化输出形式和传统的C/C++不太相像，更偏向于Python一点。实际用起来也更简单。</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-c++ highlighter-hljs hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/spdlog.h"</span></span>
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>
+{
+    spdlog::info(<span class="hljs-string">"Hello, {}!"</span>, <span class="hljs-string">"World"</span>);
+}
+</code></pre>
+<h3 id="单一日志文件的使用场景">单一日志文件的使用场景<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>my_logger作为日志的生产者可以初始化为一个全局变量。这种用法也不会常用，功能太少。</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-c++ highlighter-hljs hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/spdlog.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/basic_file_sink.h"</span> <span class="hljs-comment">// support for basic file logging</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span>, <span class="hljs-type">char</span>* [])</span>
+{
+    try 
+    {
+        <span class="hljs-keyword">auto</span> my_logger = spdlog::basic_logger_mt(<span class="hljs-string">"basic_logger"</span>, <span class="hljs-string">"logs/basic.txt"</span>);
+        my_logger-&gt;info(<span class="hljs-string">"Hello {}"</span>, <span class="hljs-string">"world"</span>);
+    }
+    catch (<span class="hljs-type">const</span> spdlog::spdlog_ex&amp; ex)
+    {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Log initialization failed: "</span> &lt;&lt; ex.what() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    }
+}
+</code></pre>
+<h3 id="循环日志文件的使用场景">循环日志文件的使用场景<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>​	这种场景就比较常见了。首先日志不能一直不限量的增长，达到一定量必须分割为多文件；其次日志文件的数量也不能无限增长，否则日志量一大会把硬盘撑爆。循环日志文件能轻易解决以上两个问题。</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-c++ highlighter-hljs hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/spdlog.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/rotating_file_sink.h"</span> <span class="hljs-comment">// support for rotating file logging</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span>, <span class="hljs-type">char</span>* [])</span>
+{
+    try 
+    {
+        <span class="hljs-keyword">auto</span> file_logger = spdlog::rotating_logger_mt(<span class="hljs-string">"file_logger"</span>, <span class="hljs-string">"myfilename"</span>, 
+                                                      <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">5</span>, <span class="hljs-number">10</span>);
+	    file_logger-&gt;set_level(spdlog::level::debug);
+        <span class="hljs-keyword">while</span> (i &lt; <span class="hljs-number">1000000</span>)
+        {
+            file_logger-&gt;debug(<span class="hljs-string">"Async message #{}"</span>, i);
+            i++;
+        }
+    }
+    catch (<span class="hljs-type">const</span> spdlog::spdlog_ex&amp; ex)
+    {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Log initialization failed: "</span> &lt;&lt; ex.what() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    }
+}
+</code></pre>
+<p>区别于单一文件，循环日志的生产者类是rotating_logger_mt。rotating_logger_mt初始化的时候需要4个参数。</p>
+<ol>
+<li>生产者的名字，自定义即可；</li>
+<li>日志文件路径，相对和绝对均可；</li>
+<li>单一文件的大小，超过了设置大小就生成一个新的文件。上面代码中设置为5MB；</li>
+<li>保留文件数量，超过数量的文件会直接删掉以节省空间。正常使用的时候此数字大一些较好。</li>
+</ol>
+<p>代码中生成100万条日志，数据大约是65MB。那么在根目录下就会出现10个日志文件，后缀名由1~9。最初的3个文件则会被删除。</p>
+<h3 id="异步打印日志文件">异步打印日志文件<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>​	大型项目中经常有很多场景是对时间有着严苛要求的，此时异步调用打印日志功能就显得十分重要了。spdlog实现异步打印日志的功能也是非常地简单。</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-c++ highlighter-hljs hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/spdlog.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/async.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/rotating_file_sink.h"</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>{
+    spdlog::init_thread_pool(<span class="hljs-number">10000</span>, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">auto</span> file_logger = spdlog::rotating_logger_mt&lt;spdlog::async_factory&gt;(<span class="hljs-string">"file_logger"</span>, <span class="hljs-string">"mylogs"</span>, <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">5</span>, <span class="hljs-number">100</span>);
+    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;
+    file_logger-&gt;set_level(spdlog::level::debug);
+    <span class="hljs-keyword">while</span> (i &lt; <span class="hljs-number">1000000</span>)
+    {
+        file_logger-&gt;debug(<span class="hljs-string">"Async message #{}"</span>, i);
+        i++;
+    }
+    spdlog::drop_all();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>​	在初始化的时候使用异步工厂spdlog::async_factory进行初始化即可。</p>
+<h3 id="其他功能">其他功能<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>​	spdlog除了以上功能，还可以按天分割文件，多源写入同条日志，自定义日志格式等功能。</p>
+<h3 id="缺点">缺点<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>​	目前这个库有一大缺陷就是不支持日志压缩，要知道项目中如果打开了Debug级别的日志，日志量可能是非常恐怖的，如果分割文件的时候不能压缩文件将是对硬盘空间的极大浪费（日志压缩率一般在95%左右）。但是既然是开源项目，自己改源代码也是可以的。</p>
+
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo">
+
+
+<div id="BlogPostCategory">
+    分类: 
+            <a href="https://www.cnblogs.com/fishily/category/1655445.html" target="_blank">C/C++</a>
+</div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(14431499,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;4630a6cc-fdc1-4209-c5d5-08d7ba6fa5c3&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_wechat" href="javascript:void(0);" onclick="shareManager.wechatShare()">微信分享</a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/fishily/" target="_blank"><img src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/20200226135129.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/fishily/">fishily1993</a>
+            <br>
+            <a href="https://home.cnblogs.com/u/fishily/followers/">粉丝 - <span class="follower-count">1</span></a>
+            <a href="https://home.cnblogs.com/u/fishily/followees/">关注 - <span class="following-count">0</span></a><br>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow" class="follow-tip">
+                <a href="javascript:void(0);" onclick="follow(&#39;4630a6cc-fdc1-4209-c5d5-08d7ba6fa5c3&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(14431499,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(14431499,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+        <div id="vip_tip"><a class="tip" href="https://cnblogs.vip/" target="_blank">升级成为会员</a></div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script>
+</div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/fishily/p/14421323.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/fishily/p/14421323.html" data-featured-image="" title="发布于 2021-02-20 15:13">【音视频】【Linux】CentOS 7系统安装FFMPEG</a>
+
+</div>
+</div>
+        <p class="postfoot">
+            posted on 
+<span id="post-date" data-last-update-days="1304.936422831066" data-date-created="BlogServer.Application.Dto.BlogPost.BlogPostDto" data-date-updated="2021-02-22 17:13" aria-expanded="false">2021-02-22 17:13</span>&nbsp;
+<a href="https://www.cnblogs.com/fishily">fishily1993</a>&nbsp;
+阅读(<span id="post_view_count">7656</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14431499" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14431499);return false;">收藏</a>&nbsp;
+<a href="javascript:void(0)" onclick="reportManager.report({ currentUserId: &#39;&#39;, targetType: &#39;blogPost&#39;, targetId: &#39;14431499&#39;, targetLink: &#39;https://www.cnblogs.com/fishily/p/14431499.html&#39;, title: &#39;【C++】开源日志库spdlog的使用心得&#39; })">举报</a>
+
+        </p>
+    </div>
+</div>
+
+
+<script>
+    var cb_entryId = 14431499, cb_entryCreatedDate = '2021-02-22 17:13', cb_postType = 1, cb_postTitle = '【C++】开源日志库spdlog的使用心得';
+    var allowComments = true, cb_blogId = 580601, cb_blogApp = 'fishily', cb_blogUserGuid = '4630a6cc-fdc1-4209-c5d5-08d7ba6fa5c3';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");    
+</script>
+<a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+            <a class="comment-nav-left forpc" href="https://cnblogs.vip/" target="_blank">会员力量，点亮园子希望</a>
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="https://www.cnblogs.com/fishily/p/14431499.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/fishily/p/14431499.html#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container"><div class="login_tips">
+    登录后才能查看或发表评论，立即 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return account.login(&#39;!comments&#39;);">登录</a> 或者
+    <a href="https://www.cnblogs.com/">逛逛</a> 博客园首页
+</div>
+</div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"><a href="https://www.cnblogs.com/cmt/p/18401581" target="_blank" onclick="gtag(&#39;event&#39;, &#39;click&#39;, {&#39;event_category&#39;: &#39;ad&#39;, &#39;event_label&#39;: &#39;T2-博客园-终身会员&#39;})">【推荐】秋天希望的田野，九月最后的救园：终身会员计划</a><br><a href="http://ishell.cc/" target="_blank" onclick="gtag(&#39;event&#39;, &#39;click&#39;, {&#39;event_category&#39;: &#39;ad&#39;, &#39;event_label&#39;: &#39;T2-IShell&#39;})">【推荐】轻量又高性能的 SSH 工具 IShell：AI 加持，快人一步</a><br><a href="http://www.uccpsoft.com/index.htm" target="_blank" onclick="gtag(&#39;event&#39;, &#39;click&#39;, {&#39;event_category&#39;: &#39;ad&#39;, &#39;event_label&#39;: &#39;T2-UCanCode&#39;})">【推荐】100%开源！大型工业跨平台软件C++源码提供，建模，组态！</a><br><a href="https://click.aliyun.com/m/1000396435/" target="_blank" onclick="gtag(&#39;event&#39;, &#39;click&#39;, {&#39;event_category&#39;: &#39;ad&#39;, &#39;event_label&#39;: &#39;T2-阿里云-超值优品季&#39;})">【推荐】2024阿里云超值优品季，精心为您准备的上云首选必备产品</a><br></div>
+    <div id="opt_under_post"></div>
+        <div id="blog_c1" class="under-post-card">
+            <a href="https://www.cnblogs.com/cmt/p/18302049" rel="nofollow" target="_blank" onclick="countCreativeClicks(&#39;C1-博客园-求救信&#39;)">
+                <img src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/35695-20240914114555421-1162088530.jpg" onload="countCreativeImpressions(&#39;C1-博客园-求救信&#39;)" alt="">
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+        </div>
+    <div id="under_post_card1"><div class="under-post-card">
+<b>编辑推荐：</b>
+<br>
+
+· <a href="https://www.cnblogs.com/liwen01/p/18417869" target="_blank">WiFi基础(四)：WiFi 工作原理及 WiFi 接入过程</a>
+    <br>
+· <a href="https://www.cnblogs.com/pengjiali/p/18409870" target="_blank">移动开发成长记 —— 大话小程序</a>
+    <br>
+· <a href="https://www.cnblogs.com/shanyou/p/18415013" target="_blank">.NET 的 Native AOT 现在是什么样的？</a>
+    <br>
+· <a href="https://www.cnblogs.com/wang_yb/p/18414129" target="_blank">全能还是专精？关于技术通才与技术专家的思考</a>
+    <br>
+· <a href="https://www.cnblogs.com/kangao/p/18414480" target="_blank">记一次 公司 .NET 项目部署在 Linux 环境压测时 内存暴涨分析</a>
+    <br>
+</div></div>
+    <div id="under_post_card2"><div class="itnews under-post-card">
+    <b>阅读排行：</b>
+    <br>
+ ·          <a href="https://www.cnblogs.com/shanyou/p/18417597" target="_blank">示例项目dotnet/eshop 和 dotnet/eshopsupport</a>
+        <br>
+ ·          <a href="https://www.cnblogs.com/1312mn/p/18408636" target="_blank">.NET 开源工业级移动端仓库管理系统</a>
+        <br>
+ ·          <a href="https://www.cnblogs.com/12lisu/p/18417984" target="_blank">这10种分布式ID，太绝了！</a>
+        <br>
+ ·          <a href="https://www.cnblogs.com/cyzf/p/18417965" target="_blank">.net8 使用JWT鉴权（附当前源码）</a>
+        <br>
+ ·          <a href="https://www.cnblogs.com/liwen01/p/18417869" target="_blank">WiFi基础(四)：WiFi工作原理及WiFi接入过程</a>
+        <br>
+</div></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+                setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+                LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+
+
+	<p id="footer">
+	Powered by: 
+	<br>
+	
+	<a href="https://www.cnblogs.com/" id="footer_site_link">博客园</a>
+	<br>
+	Copyright © 2024 fishily1993
+<br><span id="poweredby">Powered by .NET 8.0 on Kubernetes</span>
+
+</p>
+
+
+</div>
+<div id="rightmenu">
+	
+		<div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2024/08/19&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2024年9月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2024/10/19&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <tr>
+        <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+        <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+        <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+        <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+        <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+        <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+        <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+    </tr>
+            <tr>
+                        <td class="CalWeekendDay" align="center">
+                            1
+                        </td>
+                        <td class="" align="center">
+                            2
+                        </td>
+                        <td class="" align="center">
+                            3
+                        </td>
+                        <td class="" align="center">
+                            4
+                        </td>
+                        <td class="" align="center">
+                            5
+                        </td>
+                        <td class="" align="center">
+                            6
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        7
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            8
+                        </td>
+                            <td class="" align="center">
+                                9
+                            </td>
+                            <td class="" align="center">
+                                10
+                            </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            14
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            15
+                        </td>
+                            <td class="" align="center">
+                                16
+                            </td>
+                            <td class="" align="center">
+                                17
+                            </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="CalTodayDay" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            21
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            22
+                        </td>
+                            <td class="" align="center">
+                                23
+                            </td>
+                            <td class="" align="center">
+                                24
+                            </td>
+                            <td class="" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            28
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            29
+                        </td>
+                            <td class="" align="center">
+                                30
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                1
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            5
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            6
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                7
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                8
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                9
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                10
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                11
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            12
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>
+		
+<h3>导航</h3>
+<ul>
+			<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+			<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/fishily/">
+首页</a>
+</li>
+			<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+			<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/fishily1993">
+联系</a></li>
+			<li>
+
+</li>
+			<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		
+<h3>统计</h3>
+<ul>
+    <li>随笔 - 9</li>
+    <li>文章 - 0</li>
+    <li>评论 - 0</li>
+    <li>阅读 - 
+<span title="总阅读数: 13237">
+13237</span></li>
+</ul>
+
+
+		
+<div id="sidebar_c3"></div>
+		<div id="blog-sidecolumn"><!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    
+</div>
+
+<!-- 常用链接 -->
+<div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+    <li><a href="https://www.cnblogs.com/fishily/p/" title="我的博客的随笔列表">我的随笔</a></li>
+<li><a href="https://www.cnblogs.com/fishily/MyComments.html" title="我的发表过的评论列表">我的评论</a></li>
+<li><a href="https://www.cnblogs.com/fishily/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li>
+<li><a href="https://www.cnblogs.com/fishily/comments" title="我的博客的评论列表">最新评论</a></li>
+<li><a href="https://www.cnblogs.com/fishily/tag/" title="我的博客的标签列表">我的标签</a></li>
+
+</ul>
+</div>
+
+<!-- 最新随笔 -->
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block"></div>
+
+<!-- 积分与排名 -->
+
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+
+    <h3>
+        
+    <a class="sidebar-card-title-a" href="https://www.cnblogs.com/fishily/post-categories">随笔分类</a>
+
+
+
+    </h3>
+    <ul>
+            <li data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/fishily/category/1655445.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">C/C++(6)</a>
+ 
+            </li>
+                        
+            <li data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/fishily/category/1661747.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">Golang(1)</a>
+ 
+            </li>
+                        
+            <li data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/fishily/category/1933463.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">音视频(2)</a>
+ 
+            </li>
+                        
+        
+    </ul>
+    <h3>
+        
+随笔档案
+
+
+    </h3>
+    <ul>
+            <li data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/fishily/p/archive/2021/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年2月(3)</a>
+ 
+            </li>
+                        
+            <li data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/fishily/p/archive/2020/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年7月(1)</a>
+ 
+            </li>
+                        
+            <li data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/fishily/p/archive/2020/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年3月(2)</a>
+ 
+            </li>
+                        
+            <li data-category-list-item-visible="true" style="display: block">
+                
+<a href="https://www.cnblogs.com/fishily/p/archive/2020/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年2月(3)</a>
+ 
+            </li>
+                        
+        
+    </ul>
+</div>
+
+<!-- 最新评论 -->
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+<div id="topview_posts_wrap">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/fishily/most-viewed" class="sidebar-card-title-a">
+    阅读排行榜
+</a>
+
+    </h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/fishily/p/14431499.html">
+                            1. 【C++】开源日志库spdlog的使用心得(7653)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/fishily/p/14416471.html">
+                            2. 【音视频】AMR-WB音频在RTP协议和文件存储中的格式(2441)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/fishily/p/12376736.html">
+                            3. 【数据结构】C++语言无锁环形队列的实现(969)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/fishily/p/12366969.html">
+                            4. C++命名规范——谷歌规范(631)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/fishily/p/13385104.html">
+                            5. 【C++】一个实用的日志分析工具(598)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div></div>
+
+<!-- 评论排行榜 -->
+<div id="sidebar_topcommentedposts" class="sidebar-block"></div>
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block"></div></div>
+                    <script>loadBlogSideColumn();</script>
+	
+</div>
+			
+			
+			
+			
+			 
+
+	
+
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8AOXHS93SCdEnLt5HW8VuxQ4HNGl1HkQFx4sSgotu4-UNmzon5ZKHoYald-zGeha0P84MfWJF_Lg4IazJGMFPGu9-WVmHnXwaoVsT9X5q_2gB0Vbhf2e2GwLIJavnn_yYy69sSryVgugX7eT5qjYGfs">
+    <script async="" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/js"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer="" src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/hm.js"></script>
+
+
+<div style="z-index: 998; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; flex-direction: column; align-items: center; justify-content: center">
+<div style="background: #fff;padding: 30px; margin: 30px; border-radius: 16px;">
+  <div style="width: 200px; height: 200px; background: rgba(255, 255, 255, 0.8); position: absolute; top: -100px; right: -100px; border-radius: 100px"></div>
+  <div style="text-align: center; font-size: 18px; margin-bottom: 10px;">点击右上角即可分享</div>
+  <img src="./【C++】开源日志库spdlog的使用心得 - fishily1993 - 博客园_files/35695-20230906145857937-1471873834.gif" alt="微信分享提示">
+</div>   
+    </div><button class="charm-bar-item charm-bar-handle hidden" type="button" title="显示工具栏"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="logo">
+  <style>
+    .main {
+      fill: #FFF;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .main {
+        fill: #59E8EB;
+      }
+    }
+  </style>
+  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g transform="translate(-240.000000, -192.000000)">
+      <g id="VIP_3_line" transform="translate(240.000000, 192.000000)">
+        <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"></path>
+        <path class="main" d="M2.33789,4.86283 C1.86918,4.02957 2.47132,3 3.42736,3 L9.70837,3 C10.2488,3 10.7475,3.29076 11.0138,3.7611 L12.9999,7.26995 L14.986,3.7611 C15.2523,3.29076 15.7509,3 16.2914,3 L20.5724,3 C21.5285,3 22.1306,4.02957 21.6619,4.86282 L13.0894,20.1029 C12.6115,20.9525 11.3883,20.9525 10.9104,20.1029 L2.33789,4.86283 Z M4.70974,5 L11.9999,17.9603 L19.29,5 L16.5829,5 L12.9999,11.3301 L9.41685,5 L4.70974,5 Z"></path>
+      </g>
+    </g>
+  </g>
+</svg> </button><div class="charm-bar-wrapper"><div class="charm-bar-main"><div class="charm-bar-panel inactive hidden"></div><div class="charm-bar"><a class="charm-bar-item tongyi" target="_blank" title="博客园会员" href="https://www.cnblogs.com/cmt/p/18302049">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="logo">
+        <style>
+          .main {
+            fill: #FFF;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            .main {
+              fill: #59E8EB;
+            }
+          }
+        </style>
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g transform="translate(-240.000000, -192.000000)">
+            <g id="VIP_3_line" transform="translate(240.000000, 192.000000)">
+              <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"></path>
+              <path class="main" d="M2.33789,4.86283 C1.86918,4.02957 2.47132,3 3.42736,3 L9.70837,3 C10.2488,3 10.7475,3.29076 11.0138,3.7611 L12.9999,7.26995 L14.986,3.7611 C15.2523,3.29076 15.7509,3 16.2914,3 L20.5724,3 C21.5285,3 22.1306,4.02957 21.6619,4.86282 L13.0894,20.1029 C12.6115,20.9525 11.3883,20.9525 10.9104,20.1029 L2.33789,4.86283 Z M4.70974,5 L11.9999,17.9603 L19.29,5 L16.5829,5 L12.9999,11.3301 L9.41685,5 L4.70974,5 Z"></path>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <svg viewBox="0 0 499 120" width="110" height="40" fill="#fff" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"><path d="M.502 81.25c3.712-2.432 9.088-6.144 16.384-11.392 7.296-5.248 12.16-8.832 14.72-10.88l1.024 7.808 1.024 6.528c-1.536 1.152-6.144 4.736-13.696 10.624-6.272 4.864-11.136 8.704-14.848 11.52L.502 81.25zm1.664-60.544H60.79v14.592H2.166V20.706zm69.376 13.312l4.224-15.616h39.296v15.616h-43.52zM38.39 57.442c2.176-2.688 4.224-5.76 6.4-8.96 2.176-3.328 4.224-6.528 6.016-9.6l9.856 7.04a254.37 254.37 0 01-6.4 10.112c-2.176 3.456-4.352 6.528-6.272 9.216l-9.6-7.808zM10.742 38.754c2.688 3.712 4.992 6.656 6.656 9.088l3.456 4.992a70.834 70.834 0 013.072 4.48l-9.984 7.808C9.59 57.954 5.366 51.554 1.398 45.794l9.344-7.04zm32 26.752c3.2 2.56 6.784 5.504 10.752 8.96 3.968 3.328 7.68 6.4 11.008 9.088l-8.448 11.008c-2.944-2.816-6.528-6.016-10.624-9.472-3.968-3.584-7.552-6.784-10.752-9.472l8.064-10.112zm7.04-65.28c1.408 1.28 4.48 4.48 9.344 9.472.64.64 1.152 1.152 1.536 1.664a7.335 7.335 0 011.408 1.408l-8.064 8.192a839.703 839.703 0 00-3.328-3.712c-1.536-1.664-3.072-3.2-4.608-4.736-1.408-1.536-2.816-2.944-4.096-4.352L49.782.226zm-32.64 102.272c2.176 0 3.712-.128 4.736-.512 1.024-.384 1.664-.896 2.048-1.792.384-.896.64-2.176.64-3.968V2.274H39.03v101.12c0 5.12-1.28 8.704-3.84 10.752-2.432 2.176-6.784 3.2-13.056 3.2H9.462l-2.688-14.848h10.368zm37.76-52.992c4.736-7.04 8.704-14.848 11.904-23.424 3.2-8.576 5.632-17.28 7.04-25.856l13.952 3.072C85.622 13.922 82.55 23.906 78.71 33.25c-3.712 9.216-9.088 19.584-16.128 31.232l-7.68-14.976zm-3.84 57.344c11.008-7.552 19.456-14.976 25.344-22.4 5.888-7.424 10.112-15.488 12.672-24.192 2.688-8.704 4.608-19.712 5.76-33.024h13.312c-1.28 15.744-3.584 29.056-7.04 39.936-3.456 10.88-8.32 20.48-14.592 28.672s-14.72 16-25.088 23.424L51.062 106.85zm25.472-75.136c.64 11.008 2.432 20.736 5.12 29.184a72.453 72.453 0 0012.672 23.04c5.632 6.784 12.928 13.184 22.016 18.944l-8.832 15.616c-9.216-7.296-16.768-14.848-22.528-22.528-5.76-7.808-10.112-16-13.312-24.704-3.072-8.704-5.12-18.432-6.272-29.312l11.136-10.24zM128.374 94.434l57.728-5.888-.128 14.72-56.192 6.528-1.408-15.36zm14.848-59.776h31.232v13.824h-31.232V34.658zm.128 27.904h31.232V76.13H143.35V62.562zm95.744-39.68c-.384 13.568-.896 27.776-1.408 42.496-.512 14.72-.896 25.856-1.28 33.152-.128 4.48-.896 7.808-2.304 10.24-1.28 2.432-3.328 4.096-6.144 4.992-2.688 1.024-6.528 1.536-11.52 1.536H204.79l-2.816-14.464h8.704c3.328 0 5.76-.256 7.296-.64 1.536-.512 2.56-1.408 3.2-2.56.64-1.152.896-3.072 1.024-5.632.256-5.632.64-16.64 1.28-32.896.384-12.416.64-19.584.64-21.632h-38.656V22.882h53.632zm-61.44 83.968c4.736-5.888 8.32-11.264 10.752-16 2.432-4.736 4.096-10.88 5.248-18.176 1.152-7.296 1.92-17.536 2.304-30.592.128-3.2.256-11.008.384-23.424 0-5.248 0-11.392.128-18.304h14.592c-.128 4.864-.256 11.52-.384 19.84s-.256 16-.512 23.168c-.512 14.336-1.408 25.728-2.816 34.048-1.28 8.32-3.456 15.616-6.4 21.888-2.944 6.144-7.424 12.928-13.312 20.224l-9.984-12.672zM135.414 5.218h45.824v86.144h-14.08V19.81h-17.664v76.544h-14.08V5.218zM269.174 99.298h88.064v13.312h-88.064V99.298zm16.768-73.088h56.96v12.928h-56.96V26.21zm-5.376 21.76h66.944v12.672h-66.944V47.97zm35.2 6.528h12.928v23.68c0 1.408.256 2.304.64 2.816.384.384 1.28.64 2.432.64h1.792c1.152 0 2.048-.128 2.688-.256.64-.256 1.024-.64 1.152-1.28.256-.64.384-1.792.512-3.2.128-.768.128-1.664.128-2.56v-6.4l10.368 1.792c0 1.664 0 3.712-.128 6.016-.128 2.176-.128 4.224-.256 5.888-.256 3.072-.768 5.504-1.536 7.296-.64 1.664-1.792 2.944-3.456 3.84-1.664.768-3.84 1.152-6.656 1.152h-9.088c-4.096 0-7.04-1.024-8.832-2.944-1.792-1.92-2.688-5.376-2.688-10.112V54.498zm-36.864 32c3.456-2.176 6.144-4.224 8.064-6.144 1.92-2.048 3.456-4.224 4.48-6.528 1.024-2.432 1.664-5.376 2.048-8.832.128-1.536.128-4.48.256-8.704h13.568c-.128 4.48-.256 7.68-.384 9.6-.384 4.992-1.28 9.344-2.56 12.8a28.99 28.99 0 01-5.76 9.472c-2.56 2.816-6.016 5.76-10.368 8.96l-9.344-10.624zM261.11 3.81h105.728v114.688h-14.72V18.146H276.47v100.352h-15.36V3.81zM491.254 7.01v15.232L451.19 49.25v50.304c0 4.48-.64 8.064-1.792 10.496-1.152 2.432-3.2 4.224-6.016 5.248-2.816 1.152-6.784 1.664-11.904 1.664h-17.664l-3.2-16.128h15.36c2.688 0 4.48-.128 5.632-.512 1.152-.384 1.92-1.152 2.304-2.048.384-1.024.64-2.688.64-4.992V41.698l31.104-19.584h-70.4V7.01h96zm6.784 45.952v15.104H385.91V52.962h112.128z" fill-rule="nonzero"></path></svg>
+      </a><button class="charm-bar-item" type="button" title="隐藏工具栏"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"></path>
+</svg>
+</button></div></div></div></body></html>
