@@ -1,7 +1,7 @@
 
 RM = rm -f
 CXX = g++
-CXXFLAGS = -Wall -g #-std=c++11
+CXXFLAGS = -Wall -g -std=c++17
 INCLUDES =
 LDFLAGS =
 LDPATH =
