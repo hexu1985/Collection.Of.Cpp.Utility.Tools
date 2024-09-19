@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html class="theme-next mist use-motion" lang="zh-Hans"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="JSON%20for%20Modern%20C++_files/jquery.css" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="JSON%20for%20Modern%20C++_files/css.css" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="JSON%20for%20Modern%20C++_files/font-awesome.css" rel="stylesheet" type="text/css">
+
+<link href="JSON%20for%20Modern%20C++_files/main.css" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://blog.guorongfei.com/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://blog.guorongfei.com/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://blog.guorongfei.com/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://blog.guorongfei.com/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C/CPP,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JSON应该算是目前网络数据交换格式的事实标准，似乎没有那一种语言不存在支持这种数 据格式的库，C++也不例外。不过JSON虽然和语言无关，但是它毕竟源于动态语言，所以 在C++中，很多JSON库接口都不太自然。C++11引入的universal initialization和initializer list让一个拥有自然的接口的JSON库成为可能。这篇文章介绍的就是这样 一个库——JSON fo">
+<meta name="keywords" content="C/CPP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 常用库 —— JSON for Modern C++">
+<meta property="og:url" content="http://blog.guorongfei.com/2017/05/14/json-for-modern-cpp-note/index.html">
+<meta property="og:site_name" content="时习之">
+<meta property="og:description" content="JSON应该算是目前网络数据交换格式的事实标准，似乎没有那一种语言不存在支持这种数 据格式的库，C++也不例外。不过JSON虽然和语言无关，但是它毕竟源于动态语言，所以 在C++中，很多JSON库接口都不太自然。C++11引入的universal initialization和initializer list让一个拥有自然的接口的JSON库成为可能。这篇文章介绍的就是这样 一个库——JSON fo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oqb1kuipb.bkt.clouddn.com/json-container-2017-5-14">
+<meta property="og:updated_time" content="2018-08-25T15:28:46.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++ 常用库 —— JSON for Modern C++">
+<meta name="twitter:description" content="JSON应该算是目前网络数据交换格式的事实标准，似乎没有那一种语言不存在支持这种数 据格式的库，C++也不例外。不过JSON虽然和语言无关，但是它毕竟源于动态语言，所以 在C++中，很多JSON库接口都不太自然。C++11引入的universal initialization和initializer list让一个拥有自然的接口的JSON库成为可能。这篇文章介绍的就是这样 一个库——JSON fo">
+<meta name="twitter:image" content="http://oqb1kuipb.bkt.clouddn.com/json-container-2017-5-14">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.guorongfei.com/2017/05/14/json-for-modern-cpp-note/">
+
+
+
+
+
+  <title>C++ 常用库 —— JSON for Modern C++ | 时习之</title>
+  
+
+
+
+
+
+
+
+
+<style type="text/css">.fancybox-margin{margin-right:17px;}</style></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="http://blog.guorongfei.com/" class="brand" rel="start" style="opacity: 1;">
+        <span class="logo-line-before"><i class="" style="transform: translateX(100%);"></i></span>
+        <span class="site-title" style="opacity: 1; top: 0px;">时习之</span>
+        <span class="logo-line-after"><i class="" style="transform: translateX(-100%);"></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle" style="opacity: 1; top: 0px;">学而时习之，不亦说乎</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://blog.guorongfei.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://blog.guorongfei.com/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://blog.guorongfei.com/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search" style="opacity: 1; transform: translateY(0px);">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://blog.guorongfei.com/2017/05/14/json-for-modern-cpp-note/">
+
+    <span itemprop="author" itemscope="" itemtype="http://schema.org/Person" hidden="">
+      <meta itemprop="name" content="郭荣飞">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/avatar.jpg">
+    </span>
+
+    <span itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization" hidden="">
+      <meta itemprop="name" content="时习之">
+    </span>
+
+    
+      <header class="post-header" style="opacity: 1; display: block; transform: translateY(0px);">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++ 常用库 —— JSON for Modern C++</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-14T19:48:29+08:00">
+                2017-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/05/14/json-for-modern-cpp-note/" class="leancloud_visitors" data-flag-title="C++ 常用库 —— JSON for Modern C++">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数:</span>
+               
+                 <span class="leancloud-visitors-count">4354</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody" style="opacity: 1; display: block; transform: translateY(0px);">
+
+      
+      
+
+      
+        <p><code>JSON</code>应该算是目前网络数据交换格式的事实标准，似乎没有那一种语言不存在支持这种数
+据格式的库，C++也不例外。不过<code>JSON</code>虽然和语言无关，但是它毕竟源于动态语言，所以
+在C++中，很多<code>JSON</code>库接口都不太自然。<code>C++11</code>引入的<code>universal initialization</code>和<code>initializer list</code>让一个拥有自然的接口的<code>JSON</code>库成为可能。这篇文章介绍的就是这样
+一个库——<a href="https://github.com/nlohmann/json" target="_blank" rel="noopener">JSON for Modern C++</a>。我第一次见到这个库的时候有了使用动态语言的
+感觉。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">json <span class="built_in">array</span> = {<span class="string">"hello"</span>, <span class="number">1</span>, <span class="number">2.5</span>, <span class="literal">false</span>, <span class="literal">true</span>, {<span class="number">1</span>, <span class="number">2</span>}};</span><br></pre></td></tr></tbody></table></figure>
+<p>你没有看错，上面写的真的是<code>C++</code>的代码不是<code>Python</code>。这篇文章会介绍关于这个神奇的
+<code>JSON</code>库的一些使用和实现上的细节，一起看看吧。</p>
+<a id="more"></a>
+<h1 id="JSON-的基础知识"><a href="#JSON-的基础知识" class="headerlink" title="JSON 的基础知识"></a>JSON 的基础知识</h1><p>下面这段话来自<code>JSON</code>的<a href="http://www.json.org/json-zh.html" target="_blank" rel="noopener">官方文档</a>：</p>
+<blockquote>
+<p>JSON建构于两种结构：</p>
+<ul>
+<li>“名称/值”对的集合（A collection of name/value pairs）。不同的语言中，它被理
+解为对象（object），纪录（record），结构（struct），字典（dictionary），哈希
+表（hash table），有键列表（keyed list），或者关联数组 （associative array）
+。</li>
+<li>值的有序列表（An ordered list of values）。在大部分语言中，它被理解为数组（
+array）。</li>
+</ul>
+</blockquote>
+<p>另外一个比较重要的点是，<code>JSON</code>中的值可以是下面几种：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string, number, true, false, object, array, null</span><br></pre></td></tr></tbody></table></figure>
+<p>结合上面的定义你会发现，这是一种递归的定义，比如数组是值的有序列表，而值又可以是
+数组，所以这是一种无穷的结构。</p>
+<h1 id="JSON-值在静态语言中的表示-——-nlohmann-json"><a href="#JSON-值在静态语言中的表示-——-nlohmann-json" class="headerlink" title="JSON 值在静态语言中的表示 —— nlohmann::json"></a>JSON 值在静态语言中的表示 —— nlohmann::json</h1><p>前面提到一个<code>JSON</code>值可以是<code>string, number, true, false, object, array, null</code>中的
+任意一种，但是C++是一种静态类型语言，任何值都有它固定的类型，一个值不能既是int又
+是double。</p>
+<p>解决这个问题的关键点在于抽象，也就是《C++沉思录》中反复提到的一个概念——用类抽象
+一个概念。<code>nlohmann::json</code>这个类抽象的概念就是<code>JSON</code>的值。也就是说从静态语言的角
+度考虑问题，所有这些值都有同一个类型：<code>nlohmann::json</code>：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">json string_value = <span class="string">"The quick brown fox jumps over the lazy dog."</span>;</span><br><span class="line">json number_value = <span class="number">1</span>;</span><br><span class="line">json boolean_value = <span class="literal">true</span>;</span><br><span class="line">json array_value = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>};</span><br><span class="line">json object_value = {{<span class="string">"age"</span>: <span class="number">21</span>}};</span><br></pre></td></tr></tbody></table></figure>
+<p>当然因为<code>json</code>本身也是一个类型，所以我们可以声明一个存放<code>json</code>的array和object。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">json json_array = {</span><br><span class="line">    json(<span class="number">1</span>),</span><br><span class="line">    json(<span class="string">"The quick brown fox jumps over the lazy dog."</span>),</span><br><span class="line">    json(<span class="literal">true</span>),</span><br><span class="line">    json({<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>})</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">json json_object = {</span><br><span class="line">    {<span class="string">"object"</span>: {</span><br><span class="line">            {<span class="string">"subobject"</span>: <span class="number">1</span>}</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>这样一来就变成了值的递归了，可以扩展成为一个无穷的结构。</p>
+<p><em>需要注意的是，上面例子中显式的构造 json 对象是没有必要的，因为这些构造函数都不
+是 explicit 构造函数，支持隐式转化，上面这样写只是为了方便问题的说明。</em></p>
+<h2 id="JSON-值的实际类型"><a href="#JSON-值的实际类型" class="headerlink" title="JSON 值的实际类型"></a>JSON 值的实际类型</h2><p>当然无论我们如何抽象，它终究无法逃离C++作为一种静态类型语言的核心，我们可以让
+<code>json</code> 类即表示<code>number</code>又表示<code>array</code>但是在底层的实现上我们终究无法让一个变量的类
+型动态的改变，即便现在 C++11 支持 <code>auto</code> 也是如此。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> json_value = <span class="number">0</span>;</span><br><span class="line">json_value = <span class="string">"string"</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>上面这种语法在目前的 C++ 中是不合法的。在<a href="https://github.com/nlohmann/json" target="_blank" rel="noopener">JSON for Modern C++</a>的底层实现上
+，它为<code>JSON</code>中的每一种<code>value</code>类型都设定了对应的C++类型，其中默认值如下：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- object:       std::map</span><br><span class="line">- array:        std::vector</span><br><span class="line">- string:       std::string</span><br><span class="line">- number:       std::uint64_t 和 std::int64_t 和 double</span><br><span class="line">- true, false:  bool</span><br><span class="line">- null:         nullptr_t</span><br></pre></td></tr></tbody></table></figure>
+<p>注意上面的 <code>number</code> 使用了三个不同的值是因为在<a href="https://github.com/nlohmann/json" target="_blank" rel="noopener">JSON for Modern C++</a>内部
+<code>number</code>其实被细分成了<code>number_integer</code>、<code>number_unsigned</code>、<code>number_float</code>三种。</p>
+<p>我们看到的<code>nlohmann::json</code>这个类型实际上是一个别名：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">using json = basic_json&lt;&gt;;</span><br></pre></td></tr></tbody></table></figure>
+<p>也就是说它实际上是模板类<code>basic_json&lt;&gt;</code>使用默认的模板参数时实例化出来的类型。而
+<code>basic_json</code>这个模板类的声明如下：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;</span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U, <span class="keyword">typename</span> V, <span class="keyword">typename</span>... Args&gt; <span class="class"><span class="keyword">class</span> <span class="title">ObjectType</span> = <span class="title">std</span>:</span>:<span class="built_in">map</span>,</span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> U, <span class="keyword">typename</span>... Args&gt; <span class="class"><span class="keyword">class</span> <span class="title">ArrayType</span> = <span class="title">std</span>:</span>:<span class="built_in">vector</span>,</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">StringType</span> = <span class="title">std</span>:</span>:<span class="built_in">string</span>,</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">BooleanType</span> = <span class="title">bool</span>,</span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">NumberIntegerType</span> = <span class="title">std</span>:</span>:<span class="keyword">int64_t</span>,</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">NumberUnsignedType</span> = <span class="title">std</span>:</span>:<span class="keyword">uint64_t</span>,</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">NumberFloatType</span> = <span class="title">double</span>,</span></span><br><span class="line"><span class="class">    <span class="title">template</span>&lt;typename U&gt; <span class="title">class</span> <span class="title">AllocatorType</span> = <span class="title">std</span>:</span>:allocator,</span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> SFINAE = <span class="keyword">void</span>&gt; class JSONSerializer = adl_serializer</span><br><span class="line">    &gt;</span><br><span class="line">class basic_json;</span><br></pre></td></tr></tbody></table></figure>
+<p>这个模板类有9个模板参数，其中前面7个就是用于表示<code>JSON value</code>的实际类型。
+<code>ObjectType</code>和<code>ArrayType</code>这两个模板参数的语法叫做<code>模板的模板参数</code>也就是说，
+<code>ObjectType</code>这个模板参数匹配的实际是另一个模板，这个模板至少有<code>U, V</code>两个模板参数
+和<code>Args</code>表示的其他可选模板参数，需要注意的是，<code>U, V, Args</code>对于 <code>basic_json</code> 来说
+是没有意义的，因为它 <code>ObjectType</code> 的模板参数，不是 <code>basic_json</code> 的模板参数，语法
+上可以省略它们（这和函数的声明可以省略名字相通）。</p>
+<p>实际上如果你愿意，你可以替换掉其中的一些类型，比如你想要用<code>std::deque</code>表示
+<code>array</code>那么你可以定义你自己的类型<code>JSON</code>类型如下：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">using MyJson = nlohmann::basic_json&lt;std::map, std::deque&gt;;</span><br></pre></td></tr></tbody></table></figure>
+<p>不过目前来看，我们似乎没有办法使用<code>std::unordered_map</code>作为<code>ObjectType</code>，这好像是
+一个库本身的问题<a href="https://github.com/nlohmann/json/issues/164" target="_blank" rel="noopener">std::unorderd_map cannot be used as ObjectType #164</a>，</p>
+<p>在 <code>basic_json</code> 中值的实际类型根据模板参数被定义成了下面这几种：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">object_t</span> = ObjectType&lt;StringType,</span><br><span class="line">      basic_json,</span><br><span class="line">      <span class="built_in">std</span>::less&lt;StringType&gt;,</span><br><span class="line">      AllocatorType&lt;<span class="built_in">std</span>::pair&lt;<span class="keyword">const</span> StringType,</span><br><span class="line">      basic_json&gt;&gt;&gt;;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">array_t</span> = ArrayType&lt;basic_json, AllocatorType&lt;basic_json&gt;&gt;;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">string_t</span> = StringType;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">boolean_t</span> = BooleanType;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">number_integer_t</span> = NumberIntegerType;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">number_unsigned_t</span> = NumberUnsignedType;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">number_float_t</span> = NumberFloatType;</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="类型判断"><a href="#类型判断" class="headerlink" title="类型判断"></a>类型判断</h2><p><code>nlohmann::json</code>提供了下列这些借口来判断内部实际的值是什么类型。</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">is_primitive , is_structured , is_null , is_boolean , is_number ,</span><br><span class="line">is_number_integer , is_number_unsigned , is_number_float , is_object , is_array</span><br><span class="line">, is_string</span><br></pre></td></tr></tbody></table></figure>
+<p>其中 <code>is_structured</code> 是指 <code>is_object() or is_array()</code>，<code>is_primitive</code> 则是指
+<code>is_null() or is_string() or is_boolean() or is_number();</code></p>
+<p>在 <code>basic_json</code> 内部有一个成员变量：<code>m_type</code>，它的类型是一个枚举类：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">value_t</span> :</span> <span class="keyword">uint8_t</span></span><br><span class="line">{</span><br><span class="line">    null,            <span class="comment">///&lt; null value</span></span><br><span class="line">    object,          <span class="comment">///&lt; object (unordered set of name/value pairs)</span></span><br><span class="line">    <span class="built_in">array</span>,           <span class="comment">///&lt; array (ordered collection of values)</span></span><br><span class="line">    <span class="built_in">string</span>,          <span class="comment">///&lt; string value</span></span><br><span class="line">    boolean,         <span class="comment">///&lt; boolean value</span></span><br><span class="line">    number_integer,  <span class="comment">///&lt; number value (signed integer)</span></span><br><span class="line">    number_unsigned, <span class="comment">///&lt; number value (unsigned integer)</span></span><br><span class="line">    number_float,    <span class="comment">///&lt; number value (floating-point)</span></span><br><span class="line">    discarded        <span class="comment">///&lt; discarded by the the parser callback function</span></span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>其中 <code>discarded</code> 这种类型只存在与解析的过程中，实际的 <code>json</code> 值不会是这种类型。</p>
+<h2 id="值的存储"><a href="#值的存储" class="headerlink" title="值的存储"></a>值的存储</h2><p>在 <code>basic_json</code> 定义了一个成员变量<code>m_value</code>，用于存储实际的值，为了能够让
+<code>m_value</code>可以表示多种类型的数据，它的类型被定义成了一个<code>union</code>。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> json_value</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">object_t</span>* object;</span><br><span class="line">    <span class="keyword">array_t</span>* <span class="built_in">array</span>;</span><br><span class="line">    <span class="keyword">string_t</span>* <span class="built_in">string</span>;</span><br><span class="line">    <span class="keyword">boolean_t</span> boolean;</span><br><span class="line">    <span class="keyword">number_integer_t</span> number_integer;</span><br><span class="line">    <span class="keyword">number_unsigned_t</span> number_unsigned;</span><br><span class="line">    <span class="keyword">number_float_t</span> number_float;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 其他一些构造函数</span></span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>我们都知道 <code>union</code> 的<code>size</code>是由<code>size</code>最大的那个成员变量决定的，为了能够节省空间
+，<code>object</code>, <code>array</code>, <code>string</code> 这三种类型的之实际上是使用指针来存储的。</p>
+<h1 id="类型的自动转换"><a href="#类型的自动转换" class="headerlink" title="类型的自动转换"></a>类型的自动转换</h1><p>如果单说<code>JSON</code>值的抽象，一个中等水平的程序员都可以做到，<a href="https://github.com/nlohmann/json" target="_blank" rel="noopener">JSON for Modern
+C++</a>真正厉害的地方在于它的自动转换，正是这些自动转换让我们觉得它的API自然
+而顺手。</p>
+<h2 id="C-中的自动类型转换"><a href="#C-中的自动类型转换" class="headerlink" title="C++ 中的自动类型转换"></a>C++ 中的自动类型转换</h2><p>先说一下自动类型转换，在C++中，类型之间的自动转换分为两种：</p>
+<ol>
+<li><p>非 <code>explicit</code> 的单参数构造函数（逻辑上单参即可，多参数但是后面都有默认参数也
+可以），它可以用于把其他类型自动转换成本类型，比如我们最常见的 <code>const char*</code>
+到 <code>std::string</code> 转换。</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::string hello = "hello";</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><code>operator Type()</code>操作符，这种函数可以用于把本类型自动转换成<code>Type</code>类型。比如下
+面这个例子：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class Widget {</span><br><span class="line">public:</span><br><span class="line">    Widget(const std::string&amp; name) : name_(name) {}</span><br><span class="line"></span><br><span class="line">    operator std::string() {</span><br><span class="line">        return name_;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    std::string name_;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">Widget widget = "btn";</span><br><span class="line">std::string btn = widget;</span><br></pre></td></tr></tbody></table></figure>
+</li>
+</ol>
+<h2 id="数据自动转换为-nlohmann-json"><a href="#数据自动转换为-nlohmann-json" class="headerlink" title="数据自动转换为 nlohmann::json"></a>数据自动转换为 <code>nlohmann::json</code></h2><p>如前所述，这是通过非 <code>explicit</code> 单参构造函数实现的，<code>basic_json</code> 定义了很多这一
+类的构造函数，其中最强大的一个莫过于下面这个：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> CompatibleType, <span class="keyword">typename</span> U = detail::<span class="keyword">uncvref_t</span>&lt;CompatibleType&gt;,</span><br><span class="line">         detail::<span class="keyword">enable_if_t</span>&lt;<span class="keyword">not</span> <span class="built_in">std</span>::is_base_of&lt;<span class="built_in">std</span>::istream, U&gt;::value <span class="keyword">and</span></span><br><span class="line">                             <span class="keyword">not</span> <span class="built_in">std</span>::is_same&lt;U, <span class="keyword">basic_json_t</span>&gt;::value <span class="keyword">and</span></span><br><span class="line">                             <span class="keyword">not</span> detail::is_basic_json_nested_type&lt;</span><br><span class="line">                                 <span class="keyword">basic_json_t</span>, U&gt;::value <span class="keyword">and</span></span><br><span class="line">                             detail::has_to_json&lt;basic_json, U&gt;::value,</span><br><span class="line">                             <span class="keyword">int</span>&gt; = <span class="number">0</span>&gt;</span><br><span class="line">basic_json(CompatibleType &amp;&amp; val) <span class="keyword">noexcept</span>(<span class="keyword">noexcept</span>(JSONSerializer&lt;U&gt;::to_json(</span><br><span class="line">            <span class="built_in">std</span>::declval&lt;<span class="keyword">basic_json_t</span>&amp;&gt;(), <span class="built_in">std</span>::forward&lt;CompatibleType&gt;(val))))</span><br><span class="line">{</span><br><span class="line">    JSONSerializer&lt;U&gt;::to_json(*<span class="keyword">this</span>, <span class="built_in">std</span>::forward&lt;CompatibleType&gt;(val));</span><br><span class="line">    assert_invariant();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这个构造函数体现了作者极强的模板功底，让人叹服，如果去掉各种细节实际上这个函数调
+用了<code>JSONSerializer&lt;U&gt;::to_json</code>来完成构造。<code>JSONSerializer</code>是<code>basic_json</code>的一个
+模板参数，默认情况下是<code>adl_serializer</code>，<code>ADL</code>是一个非常重要的C++术语，指的是通过
+参数的命名空间查看函数的。</p>
+<p>对于 <code>nlohmann::json</code> 指定的值类型（或者可以自动转换为指定的类型），都会有一个
+<code>to_json</code> 函数的重载，比如对于<code>bool</code>有如下定义：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> BasicJsonType, <span class="keyword">typename</span> T, <span class="keyword">enable_if_t</span>&lt;</span><br><span class="line">             <span class="built_in">std</span>::is_same&lt;T, <span class="keyword">typename</span> BasicJsonType::<span class="keyword">boolean_t</span>&gt;::value, <span class="keyword">int</span>&gt; = <span class="number">0</span>&gt;</span><br><span class="line"><span class="keyword">void</span> to_json(BasicJsonType&amp; j, T b) <span class="keyword">noexcept</span></span><br><span class="line">{</span><br><span class="line">    external_constructor&lt;<span class="keyword">value_t</span>::boolean&gt;::construct(j, b);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>更厉害的是，对于那些不是指定的类型(std::map, std::vector, std::string 等)，它内
+部定义了另一个匿名名字空间中的全局变量<code>to_json</code></p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">constexpr</span> <span class="keyword">const</span> <span class="keyword">auto</span>&amp; to_json = detail::static_const&lt;detail::to_json_fn&gt;::value;</span><br></pre></td></tr></tbody></table></figure>
+<p>去掉各种细节，最终他实际上是<code>to_json_fn</code>这个类的一个变量，这个类重载了函数调用操
+作符。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">to_json_fn</span></span></span><br><span class="line"><span class="class">{</span></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> BasicJsonType, <span class="keyword">typename</span> T&gt;</span><br><span class="line">    auto call(BasicJsonType&amp; j, T&amp;&amp; val, priority_tag&lt;1&gt;) const noexcept(noexcept(to_json(j, std::forward&lt;T&gt;(val))))</span><br><span class="line">    -&gt; <span class="keyword">decltype</span>(to_json(j, <span class="built_in">std</span>::forward&lt;T&gt;(val)), <span class="keyword">void</span>())</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">return</span> to_json(j, <span class="built_in">std</span>::forward&lt;T&gt;(val));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> BasicJsonType, <span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">call</span><span class="params">(BasicJsonType&amp;, T&amp;&amp;, priority_tag&lt;<span class="number">0</span>&gt;)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span></span></span><br><span class="line"><span class="function">    </span>{</span><br><span class="line">        <span class="keyword">static_assert</span>(<span class="keyword">sizeof</span>(BasicJsonType) == <span class="number">0</span>,</span><br><span class="line">                      <span class="string">"could not find to_json() method in T's namespace"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> BasicJsonType, <span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(BasicJsonType&amp; j, T&amp;&amp; val)</span> <span class="keyword">const</span></span></span><br><span class="line">    noexcept(noexcept(std::declval&lt;to_json_fn&gt;().call(j, std::forward&lt;T&gt;(val), priority_tag&lt;1&gt; {})))</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">return</span> call(j, <span class="built_in">std</span>::forward&lt;T&gt;(val), priority_tag&lt;<span class="number">1</span>&gt; {});</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>这个类的设计也是令人拍案叫絕的，首先<code>call</code>这个函数的优先级分派上<code>priority_tag</code>的
+设计非常精妙：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">unsigned</span> N&gt; <span class="class"><span class="keyword">struct</span> <span class="title">priority_tag</span> :</span> priority_tag &lt; N - <span class="number">1</span> &gt; {};</span><br><span class="line"><span class="keyword">template</span>&lt;&gt; <span class="class"><span class="keyword">struct</span> <span class="title">priority_tag</span>&lt;0&gt; {</span>};</span><br></pre></td></tr></tbody></table></figure>
+<p>因为子类可以自动转换为父类，所以匹配上<code>priority_tag&lt;1&gt;</code>优先级高，但是如果不成功
+会有自动调用<code>priority_tag&lt;0&gt;</code>，这里再通过 static_assert 在编译期间给出可读的错误
+信息，实在让人叹为观止。</p>
+<p>当然这些都不是重点，第一个 <code>call</code> 函数会通过 <code>ADL</code> 查找到位于 T 类型同一
+<code>namespace</code>下面的 <code>to_json</code> 函数。也就是说用户定义的任何类型，只要在同一
+<code>namespace</code>下面实现<code>to_json</code>就可以自动转化为 <code>basic_json</code>。每次读到这段代码都会
+有一种膜拜之情油然而生，太牛逼了！</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> ns {</span><br><span class="line">    <span class="comment">// a simple struct to model a person</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">person</span> {</span></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">string</span> address;</span><br><span class="line">        <span class="keyword">int</span> age;</span><br><span class="line">    };</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">to_json</span><span class="params">(json&amp; j, <span class="keyword">const</span> person&amp; p)</span> </span>{</span><br><span class="line">        j = json{{<span class="string">"name"</span>, p.name}, {<span class="string">"address"</span>, p.address}, {<span class="string">"age"</span>, p.age}};</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">from_json</span><span class="params">(<span class="keyword">const</span> json&amp; j, person&amp; p)</span> </span>{</span><br><span class="line">        p.name = j.at(<span class="string">"name"</span>).get&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt;();</span><br><span class="line">        p.address = j.at(<span class="string">"address"</span>).get&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt;();</span><br><span class="line">        p.age = j.at(<span class="string">"age"</span>).get&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">ns::person p {<span class="string">"Ned Flanders"</span>, <span class="string">"744 Evergreen Terrace"</span>, <span class="number">60</span>};</span><br><span class="line">json j = p;</span><br><span class="line">ns::person copy = j;</span><br><span class="line"></span><br><span class="line">assert(copy == p); <span class="comment">// 当然，这里你需要实现 operator==</span></span><br></pre></td></tr></tbody></table></figure>
+<p>有了上面这些构造函数才使得下面这些语句合法合法。</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">json number = 1;</span><br><span class="line">json str = "number";</span><br></pre></td></tr></tbody></table></figure>
+<p>上面这个构造函数基本上是通吃所有值类型的，但是有两个除外，<code>null</code> 和 <code>object</code>，
+<code>basic_json</code>有一个专门处理<code>null</code>的构造函数如下：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">basic_json(std::nullptr_t = nullptr) noexcept;</span><br></pre></td></tr></tbody></table></figure>
+<p>对于<code>object</code>则主要是修正问题，正常情况下，在下面这种情况：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">json value = {</span><br><span class="line">    {<span class="string">"key1"</span>, <span class="number">1</span>},</span><br><span class="line">    {<span class="string">"key2"</span>, <span class="string">"2"</span>},</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>会默认转换成一个<code>array</code>，因为 value 的初始化值其实是一个
+<code>std::initializer_list&lt;basic_json&gt;</code>，其中每一个<code>element</code>都是一个<code>array</code>,但是对于
+上面这种情况实际上应该解析成一个<code>object</code>才对。为了修正这个问题，<code>basic_json</code>还提
+供了另一个构造函数：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">basic_json(<span class="built_in">std</span>::<span class="built_in">initializer_list</span>&lt;basic_json&gt; init,</span><br><span class="line">           <span class="keyword">bool</span> type_deduction = <span class="literal">true</span>,</span><br><span class="line">           <span class="keyword">value_t</span> manual_type = <span class="keyword">value_t</span>::<span class="built_in">array</span>)</span><br><span class="line">{</span><br><span class="line">    <span class="comment">// check if each element is an array with two elements whose first</span></span><br><span class="line">    <span class="comment">// element is a string</span></span><br><span class="line">    <span class="keyword">bool</span> is_an_object = <span class="built_in">std</span>::all_of(init.begin(), init.end(),</span><br><span class="line">                                    [](<span class="keyword">const</span> basic_json &amp; element)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">return</span> element.is_array() <span class="keyword">and</span> element.size() == <span class="number">2</span> <span class="keyword">and</span> element[<span class="number">0</span>].is_string();</span><br><span class="line">    });</span><br><span class="line"></span><br><span class="line">    <span class="comment">// adjust type if type deduction is not wanted</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">not</span> type_deduction)</span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// if array is wanted, do not create an object though possible</span></span><br><span class="line">        <span class="keyword">if</span> (manual_type == <span class="keyword">value_t</span>::<span class="built_in">array</span>)</span><br><span class="line">        {</span><br><span class="line">            is_an_object = <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// if object is wanted but impossible, throw an exception</span></span><br><span class="line">        <span class="keyword">if</span> (manual_type == <span class="keyword">value_t</span>::object <span class="keyword">and</span> <span class="keyword">not</span> is_an_object)</span><br><span class="line">        {</span><br><span class="line">            JSON_THROW(type_error::create(<span class="number">301</span>, <span class="string">"cannot create object from initializer list"</span>));</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (is_an_object)</span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// the initializer list is a list of pairs -&gt; create object</span></span><br><span class="line">        m_type = <span class="keyword">value_t</span>::object;</span><br><span class="line">        m_value = <span class="keyword">value_t</span>::object;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">std</span>::for_each(init.begin(), init.end(), [<span class="keyword">this</span>](<span class="keyword">const</span> basic_json &amp; element)</span><br><span class="line">        {</span><br><span class="line">            m_value.object-&gt;emplace(*(element[<span class="number">0</span>].m_value.<span class="built_in">string</span>), element[<span class="number">1</span>]);</span><br><span class="line">        });</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// the initializer list describes an array -&gt; create array</span></span><br><span class="line">        m_type = <span class="keyword">value_t</span>::<span class="built_in">array</span>;</span><br><span class="line">        m_value.<span class="built_in">array</span> = create&lt;<span class="keyword">array_t</span>&gt;(init);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    assert_invariant();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>可以看出默认情况下，之前的代码会从 <code>array</code> 修正到 <code>object</code>。当然如果你的本意确实
+是创建一个<code>array</code>的话可以使用静态成员函数：<code>json::array</code></p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static basic_json array(std::initializer_list&lt;basic_json&gt; init =</span><br><span class="line">                            std::initializer_list&lt;basic_json&gt;())</span><br><span class="line">{</span><br><span class="line">    return basic_json(init, false, value_t::array);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>此外，为了接口的对称性，还存在一个静态方法<code>json::object</code>用于创建一个对象。</p>
+<h2 id="nlohmann-json-到实际数据类型的自动转换"><a href="#nlohmann-json-到实际数据类型的自动转换" class="headerlink" title="nlohmann::json 到实际数据类型的自动转换"></a><code>nlohmann::json</code> 到实际数据类型的自动转换</h2><p>反方向的转换在<a href="https://github.com/nlohmann/json" target="_blank" rel="noopener">JSON for Modern C++</a>中同样存在，这个转换主要是通过下面这个
+函数来实现的：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt; <span class="keyword">typename</span> ValueType, <span class="keyword">typename</span> <span class="built_in">std</span>::enable_if &lt; ...... , <span class="keyword">int</span> &gt;::type = <span class="number">0</span> &gt;</span><br><span class="line"><span class="keyword">operator</span> ValueType() <span class="keyword">const</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">// delegate the call to get&lt;&gt;() const</span></span><br><span class="line">    <span class="keyword">return</span> get&lt;ValueType&gt;();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这个函数存在让下面这样的语法变得合法：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">nlohmann::json json = {</span><br><span class="line">    {<span class="string">"str"</span>, <span class="string">"hello"</span>},</span><br><span class="line">    {<span class="string">"int"</span>, <span class="number">1</span>},</span><br><span class="line">    {<span class="string">"bool"</span>, <span class="literal">true</span>},</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> sval = json[<span class="string">"str"</span>];</span><br><span class="line"><span class="keyword">int</span> ival = json[<span class="string">"int"</span>];</span><br><span class="line"><span class="keyword">bool</span> bval = json[<span class="string">"bool"</span>];</span><br></pre></td></tr></tbody></table></figure>
+<p>它实际上上的实现和 <code>to_json</code> 类似，不过使用的是<code>from_json</code>。</p>
+<h1 id="从另一个角度看待-nlohmann-json-——-容器"><a href="#从另一个角度看待-nlohmann-json-——-容器" class="headerlink" title="从另一个角度看待 nlohmann::json —— 容器"></a>从另一个角度看待 <code>nlohmann::json</code> —— 容器</h1><p>其实在设计上来说，<code>nlohmann::json</code> 被设计成了一个容器，你可以想象<code>std::map</code>，
+<code>std::vector</code>拥有的那些API，<code>nlohmann::json</code>都存在。但是 <code>nlohmann::json</code> 除了表
+示 <code>object</code> 和 <code>vector</code> 之外还表示 <code>number</code>，<code>true</code>，<code>false</code> 这些值。对于这些类
+型的值来说，容器相关的那些 API 实际上没有真正的意义。从下面这张图可以看出这些相
+关的 API 的具体实现情况：</p>
+<p><a href="http://oqb1kuipb.bkt.clouddn.com/json-container-2017-5-14" class="fancybox fancybox.image" rel="group"><img src="JSON%20for%20Modern%20C++_files/json-container-2017-5-14.json" alt="container"></a></p>
+<h2 id="需要注意的地方"><a href="#需要注意的地方" class="headerlink" title="需要注意的地方"></a>需要注意的地方</h2><p>容器的 API 有 STL 基础的人基本上都非常熟悉，这里不再赘述，有几个和普通容器不对等
+的地方需要大家注意：</p>
+<ol>
+<li><p><code>array</code> 的 index 如果超过大小 operator[]，不会出错，中间缺失的那些index会默认
+创建成空的 <code>json</code>对象。比如：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">json arr = json::array();</span><br><span class="line"></span><br><span class="line">arr[3] = "hello world";</span><br><span class="line">arr[5] = 42;</span><br><span class="line"></span><br><span class="line">std::cout &lt;&lt; arr &lt;&lt; std::endl;</span><br></pre></td></tr></tbody></table></figure>
+<p>最终得到的输出是 <code>[null,null,null,"hello world",null,42]</code></p>
+</li>
+<li><p><code>array</code> 的 <code>operator[]</code> 只能用 <code>sizet_t</code> 调用（包括那些可以默认转换的），而
+<code>object</code> 的 <code>operator[]</code> 只能用 <code>std::string</code> 调用（也包括那些可以默认转换的
+）。否则会出现运行时异常。这种错误目前似乎无法在编译期间检查出来。</p>
+</li>
+</ol>
+<h2 id="basic-json-value"><a href="#basic-json-value" class="headerlink" title="basic_json::value"></a>basic_json::value</h2><p><code>basic_json</code> 除了提供容器常用的接口 <code>operator[]</code> 和 <code>at</code> 之外，还提供了 <code>value</code>
+成员函数用于取对象中的值，当值不存在的时候提供默认值。这个方法和 <code>Python</code> 中的
+or 很像。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retun x <span class="keyword">or</span> <span class="string">"default"</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">json j = {</span><br><span class="line">    {<span class="string">"exist"</span>, <span class="string">"hello"</span>},</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> exist = j.value(<span class="string">"exist"</span>, <span class="string">""</span>);  <span class="comment">// "hello"</span></span><br><span class="line"><span class="keyword">auto</span> noexist = j.value(<span class="string">"noexist"</span>, <span class="string">"world"</span>);  <span class="comment">// "world"</span></span><br></pre></td></tr></tbody></table></figure>
+<p>这个函数对于处理可选参数非常有用。</p>
+<h1 id="吐嘈"><a href="#吐嘈" class="headerlink" title="吐嘈"></a>吐嘈</h1><p>这个库非常强大，实现上也非常的精巧，但是有时候我会觉得，如果把 <code>JSON</code> 的值和
+<code>JSON</code> 这两个概念分开表示可能结构上会清晰一些，让 <code>json</code> 单纯是个容器。当然这都
+是感觉上的东西，实际上作者为什么没有这样做可能有他自己其他方面考虑。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="http://blog.guorongfei.com/tags/C-CPP/" rel="tag"># C/CPP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="http://blog.guorongfei.com/2017/05/14/effective-cpp-coding/" rel="next" title="Linux 高效编程的一些总结">
+                <i class="fa fa-chevron-left"></i> Linux 高效编程的一些总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="http://blog.guorongfei.com/2018/01/30/cpp-library-usage/" rel="prev" title="C++ 轮子系列">
+                C++ 轮子系列 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel" style="">
+        <div class="site-overview" style="max-height: 682.5px;">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="JSON%20for%20Modern%20C++_files/avatar.jpg" alt="郭荣飞">
+            
+              <p class="site-author-name" itemprop="name">郭荣飞</p>
+              <p class="site-description motion-element" itemprop="description">记录成长路上的点点滴滴</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="http://blog.guorongfei.com/archives/">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="http://blog.guorongfei.com/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc" style="max-height: 682.5px;">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JSON-的基础知识"><span class="nav-number">1.</span> <span class="nav-text">JSON 的基础知识</span></a></li><li class="nav-item nav-level-1 active"><a class="nav-link" href="#JSON-值在静态语言中的表示-——-nlohmann-json"><span class="nav-number">2.</span> <span class="nav-text">JSON 值在静态语言中的表示 —— nlohmann::json</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JSON-值的实际类型"><span class="nav-number">2.1.</span> <span class="nav-text">JSON 值的实际类型</span></a></li><li class="nav-item nav-level-2 active active-current"><a class="nav-link" href="#类型判断"><span class="nav-number">2.2.</span> <span class="nav-text">类型判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#值的存储"><span class="nav-number">2.3.</span> <span class="nav-text">值的存储</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型的自动转换"><span class="nav-number">3.</span> <span class="nav-text">类型的自动转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的自动类型转换"><span class="nav-number">3.1.</span> <span class="nav-text">C++ 中的自动类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据自动转换为-nlohmann-json"><span class="nav-number">3.2.</span> <span class="nav-text">数据自动转换为 nlohmann::json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nlohmann-json-到实际数据类型的自动转换"><span class="nav-number">3.3.</span> <span class="nav-text">nlohmann::json 到实际数据类型的自动转换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从另一个角度看待-nlohmann-json-——-容器"><span class="nav-number">4.</span> <span class="nav-text">从另一个角度看待 nlohmann::json —— 容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#需要注意的地方"><span class="nav-number">4.1.</span> <span class="nav-text">需要注意的地方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#basic-json-value"><span class="nav-number">4.2.</span> <span class="nav-text">basic_json::value</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#吐嘈"><span class="nav-number">5.</span> <span class="nav-text">吐嘈</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">© <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">郭荣飞</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io/">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 — <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top back-to-top-on">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/index.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/fastclick.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/jquery.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/velocity_002.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/velocity.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/jquery_002.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/utils.js"></script>
+
+  <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/motion.js"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/scrollspy.js"></script>
+<script type="text/javascript" src="JSON%20for%20Modern%20C++_files/post-details.js"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="JSON%20for%20Modern%20C++_files/bootstrap.js"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="JSON%20for%20Modern%20C++_files/av-core-mini-0.js"></script>
+  <script>AV.initialize("V1PJeRmlN6tlfaIb6xQuuPF1-gzGzoHsz", "qGVK83JNhrlzwAxp4nqbD6iC");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+
+</body></html>
