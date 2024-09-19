@@ -1,0 +1,36 @@
+{
+    "output": {
+        "width": 720,
+        "height": 1080,
+        "frameRate": 20,
+        "crf": 31
+    },
+    "tracks": [
+        {
+            "name": "t1",
+            "pieces": [
+                {
+                    "file": "x.mp4",
+                    "startTime": 2,
+                    "endTime": 6
+                },
+                {
+                    "file": "y.mp4",
+                    "startTime": 9,
+                    "endTime": 13
+                }
+            ]
+        },
+        {
+            "name": "t2",
+            "pieces": [
+                {
+                    "file": "z.mp4",
+                    "startTime": 0,
+                    "endTime": 10
+                }
+            ]
+        }
+    ]
+}
+
