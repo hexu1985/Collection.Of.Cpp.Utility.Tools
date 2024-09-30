@@ -25,7 +25,6 @@ void producer() {
 }
 
 void consumer() {
-    Frame in;
     for (size_t i = 0; i < 20; i++) {
         std::this_thread::sleep_for(200ms);
         if (!frames.has_data()) {

@@ -12,26 +12,28 @@ struct Frame {
     uint8_t  data[kPayloadSize];
 };
 
-RingBuffer<Frame> frames(5);
+RingBuffer<Frame, 5> frames;
 
 void producer() {
+    Frame frame;
     for (size_t i = 0; i < 20; i++) {
-        Frame& out = frames.push();
-        out.index = i;
-        std::fill_n(out.data, sizeof(out.data) - 1, 'a' + i);
-        out.data[sizeof(out.data) - 1] = '\0';
+        frame.index = i;
+        std::fill_n(frame.data, sizeof(frame.data) - 1, 'a' + i);
+        frame.data[sizeof(frame.data) - 1] = '\0';
+        frames.put(frame);
         std::this_thread::sleep_for(100ms);
     }
 }
 
 void consumer() {
+    Frame frame;
     for (size_t i = 0; i < 20; i++) {
         std::this_thread::sleep_for(200ms);
         if (!frames.has_data()) {
             continue;
         }
-        const Frame& in = frames.pull();
-        std::cout << "Frame " << in.index << ": " << in.data << std::endl;
+        frames.get(frame);
+        std::cout << "Frame " << frame.index << ": " << frame.data << std::endl;
     }
 }
 
