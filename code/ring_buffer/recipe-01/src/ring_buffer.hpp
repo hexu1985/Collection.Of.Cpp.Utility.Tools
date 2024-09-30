@@ -23,25 +23,13 @@ public:
     }
 
     const T& pull() {
-        if (is_empty()) {
+        if (!queued) {
             throw std::runtime_error("No data in the ring buffer");
         }
         T& current = objects[read];
         read = (read + 1) % N;
         queued--;
         return current;
-    }
-
-    bool is_empty() {
-        return queued == 0;
-    }
-
-    bool is_full() {
-        return queued == N;
-    }
-
-    size_t size() {
-        return queued;
     }
 
     bool has_data() {
