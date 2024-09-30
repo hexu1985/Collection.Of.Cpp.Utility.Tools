@@ -1,6 +1,6 @@
 #pragma once
 
-template<class T, size_t N>
+template <class T, size_t N>
 class RingBuffer {
 private:
     T objects[N];

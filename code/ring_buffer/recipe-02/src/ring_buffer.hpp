@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-template<class T>
+template <typename T>
 class RingBuffer {
 private:
     struct BufferHead {
