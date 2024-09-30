@@ -1,7 +1,7 @@
 
 CXX = g++
 CXXFLAGS = -g -Wall -Wextra -fsanitize=address -fno-omit-frame-pointer
-INCLUDES = -Isrc
+INCLUDES = -Isrc -Iring_buffer
 LDFLAGS =
 LDLIBS = -lasan
 
