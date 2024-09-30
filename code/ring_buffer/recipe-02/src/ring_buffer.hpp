@@ -40,25 +40,13 @@ public:
     }
 
     const T& pull() {
-        if (is_empty()) {
+        if (!buffer_->queued) {
             throw std::runtime_error("No data in the ring buffer");
         }
         T& current = buffer_->objects[buffer_->read];
         buffer_->read = (buffer_->read + 1) % buffer_->capacity;
         buffer_->queued--;
         return current;
-    }
-
-    bool is_empty() {
-        return buffer_->queued == 0;
-    }
-
-    bool is_full() {
-        return buffer_->queued == buffer_->capacity;
-    }
-
-    size_t size() {
-        return buffer_->queued;
     }
 
     bool has_data() {
