@@ -1,12 +1,13 @@
 #pragma once
 
+#include "shared_memory.hpp"
 #include "interprocess_once.hpp"
 #include "interprocess_ring_buffer.hpp"
 
 template <typename T, size_t N>
 class NamedRingBuffer {
 public:
-    NamedRingBuffer(const char* name) {
+    NamedRingBuffer(const char* name): impl_(name) {
         InterprocessOnceFlag& once_flag = impl_.get().once_flag;
         InterprocessRingBuffer<T, N>* ring_buffer = &impl_.get().ring_buffer;
         interprocess_call_once(once_flag, [ring_buffer]() { new (ring_buffer) InterprocessRingBuffer<T, N>(); });

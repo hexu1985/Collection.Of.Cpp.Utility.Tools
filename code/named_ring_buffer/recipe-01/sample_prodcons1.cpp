@@ -1,18 +1,20 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
-#include "interprocess_ring_buffer.hpp"
+#include <unistd.h>
+#include "named_ring_buffer.hpp"
 
 using namespace std::literals;
 
 const size_t kPayloadSize = 16;
+const char* kRingBufferName = "/sample_ring_buffer";
 
 struct Frame {
     uint32_t index;
     uint8_t  data[kPayloadSize];
 };
 
-InterprocessRingBuffer<Frame, 5> frames;
+NamedRingBuffer<Frame, 5> frames{kRingBufferName};
 
 void producer() {
     Frame frame;
@@ -34,11 +36,9 @@ void consumer() {
 }
 
 int main() {
-    std::thread thr_produce, thr_consume;
-
-    thr_produce = std::thread(consumer);
-    thr_consume = std::thread(producer);
-
-    thr_produce.join();
-    thr_consume.join();
+    if (fork()) {
+        consumer();
+    } else {
+        producer();
+    }
 }

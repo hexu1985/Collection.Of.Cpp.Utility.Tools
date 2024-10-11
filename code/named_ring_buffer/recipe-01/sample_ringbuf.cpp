@@ -1,14 +1,16 @@
 #include <iostream>
 
-#include "interprocess_ring_buffer.hpp"
+#include "named_ring_buffer.hpp"
 
 struct Frame {
     uint32_t index;
-    uint8_t  data[1024];
+    uint8_t  data[64];
 };
 
+const char* kRingBufferName = "/sample_ring_buffer";
+
 int main() {
-    InterprocessRingBuffer<Frame, 10> frames;
+    NamedRingBuffer<Frame, 10> frames{kRingBufferName};
     Frame frame;
 
     if (!frames.try_get(frame)) {
