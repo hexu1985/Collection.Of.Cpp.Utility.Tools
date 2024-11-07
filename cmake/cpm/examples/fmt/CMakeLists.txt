@@ -7,11 +7,11 @@ project(CPMFmtExample)
 include(../cmake/CPM.cmake)
 
 #CPMAddPackage("gh:fmtlib/fmt#7.1.3")
-#CPMAddPackage("https://gitee.com/wangda11/fmt.git/#11.0.2")
-CPMAddPackage(
-    NAME fmt 
-    GIT_REPOSITORY "https://gitee.com/wangda11/fmt.git" 
-    GIT_TAG "11.0.2")
+CPMAddPackage("https://gitee.com/wangda11/fmt.git#11.0.2")
+#CPMAddPackage(
+#    NAME fmt 
+#    GIT_REPOSITORY "https://gitee.com/wangda11/fmt.git" 
+#    GIT_TAG "11.0.2")
 #CPMAddPackage(
 #    NAME fmt
 #    URL "https://mirrors.phigent.io/nfs/pkgs/fmt_7.0.3/x86_64-ubuntu-linux-gcc9.3.0/fmt_7.0.3.tar")

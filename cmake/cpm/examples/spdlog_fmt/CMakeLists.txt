@@ -7,7 +7,7 @@ project(CPMSpdlogExample)
 include(../cmake/CPM.cmake)
 
 #CPMAddPackage("gh:gabime/spdlog@1.8.2")
-CPMAddPackage("https://gitee.com/mirror-luyi/spdlog.git@1.8.2")
+#CPMAddPackage("https://gitee.com/mirror-luyi/spdlog.git@1.8.2")
 
 # spdlog uses fmt and bundles that dependency. If you want to use fmt in your project as well, you
 # can let spdlog reuse fmt from CPM.cmake like this:
@@ -23,6 +23,12 @@ CPMAddPackage("https://gitee.com/mirror-luyi/spdlog.git@1.8.2")
 #
 # cmake-format: on
 
+CPMAddPackage("https://gitee.com/wangda11/fmt.git#7.1.3")
+CPMAddPackage(
+  GIT_REPOSITORY "https://gitee.com/mirror-luyi/spdlog.git"
+  VERSION 1.8.2 
+  OPTIONS "SPDLOG_FMT_EXTERNAL 1" 
+)
 
 # ---- Executable ----
 
