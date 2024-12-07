@@ -1,16 +1,19 @@
 #pragma once
 
 #include <chrono>
+#include <functional>
+#include <array>
+#include <atomic>
 
 template <size_t N>
 class FrameDelayMonitor {
 public:
+    using WarningFunction = std::function<void()>;
+
     struct Config {
         uint32_t expired_threshold_tick_number=10;
         WarningFunction warning_function;
     };
-
-    using WarningFunction = std::function<void()>;
 
     FrameDelayMonitor(int max_counter_size, std::chrono::milliseconds ms_per_tick) {
     }
