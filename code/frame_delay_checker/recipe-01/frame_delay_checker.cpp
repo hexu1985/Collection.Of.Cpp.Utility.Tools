@@ -7,6 +7,13 @@ bool FrameDelayChecker::RegisterFrameDelayCheck(int index, const CheckConfig& co
     if (counters_.count(index)) {
         return false;
     }
+    if (config.expired_threshold_ms <= check_period_ms_) {
+        return false;
+    }
+    if (!config.expired_callback) {
+        return false;
+    }
+
     auto &counter = counters_[index]; 
     counter.expired_threshold_ms = config.expired_threshold_ms;
     counter.expired_callback = counter.expired_callback;
@@ -26,3 +33,42 @@ void FrameDelayChecker::Start() {
 
 void FrameDelayChecker::Stop() {
 }
+
+void FrameDelayChecker::InitialAllCounters() {
+    using std::chrono::steady_clock;
+    current_time_ = steady_clock::now();
+    for (auto& item : counters_) {
+        auto& counter = item.second;
+        counter.latest_frame_time = current_time_;
+    }
+}
+
+void FrameDelayChecker::CheckAndUpdateCounter(Counter& counter) {
+    uint32_t current_frame_count = counter.current_frame_count;
+    if (current_frame_count == counter.latest_frame_count) {
+        auto duration = current_time_ - counter.latest_frame_time;
+        if (duration > counter.expired_threshold_ms) {
+            counter.expired_callback();
+            return;
+        }
+    } else {
+        counter.latest_frame_count = current_frame_count;
+        counter.latest_frame_time = current_time_;
+    }
+}
+
+void FrameDelayChecker::check_rountine() {
+    using std::chrono::steady_clock;
+    using std::this_thread::sleep_until;
+
+    InitialAllCounters();
+    while (!done_) {
+        current_time_ = steady_clock::now();
+        for (auto& item : counters_) {
+            auto& counter = item.second;
+            CheckAndUpdateCounter(counter);
+        }
+        sleep_until(current_time_+check_period_ms_);
+    }
+}
+
