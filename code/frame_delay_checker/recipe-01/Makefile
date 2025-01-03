@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g3 -Wall -Wextra
 LDFLAGS = 
-LDLIBS = 
+LDLIBS = -lpthread
 
 PROGS =	sample_frame_delay_checker1
 

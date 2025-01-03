@@ -16,7 +16,7 @@ bool FrameDelayChecker::RegisterFrameDelayCheck(int index, const CheckConfig& co
 
     auto &counter = counters_[index]; 
     counter.expired_threshold_ms = config.expired_threshold_ms;
-    counter.expired_callback = counter.expired_callback;
+    counter.expired_callback = config.expired_callback;
     return true;
 }
 
@@ -29,9 +29,19 @@ bool FrameDelayChecker::IncreaseFrameCount(int index) {
 }
 
 void FrameDelayChecker::Start() {
+    if (check_thread_.joinable()) {
+        return;
+    }
+    done_ = false;
+    check_thread_ = std::thread(&FrameDelayChecker::check_routine, this);
 }
 
 void FrameDelayChecker::Stop() {
+    if (!check_thread_.joinable()) {
+        return;
+    }
+    done_ = true;
+    check_thread_.join();
 }
 
 void FrameDelayChecker::InitialAllCounters() {
@@ -57,7 +67,7 @@ void FrameDelayChecker::CheckAndUpdateCounter(Counter& counter) {
     }
 }
 
-void FrameDelayChecker::check_rountine() {
+void FrameDelayChecker::check_routine() {
     using std::chrono::steady_clock;
     using std::this_thread::sleep_until;
 

@@ -23,6 +23,9 @@ public:
     void Start(); 
     void Stop();
 
+    FrameDelayChecker(const FrameDelayChecker&) = delete;
+    FrameDelayChecker& operator= (const FrameDelayChecker&) = delete;
+
 private:
     struct Counter {
         std::atomic<uint32_t> current_frame_count{0};
@@ -34,7 +37,7 @@ private:
 
     void InitialAllCounters();
     void CheckAndUpdateCounter(Counter& counter);
-    void check_rountine(); 
+    void check_routine(); 
 
 private:
     std::chrono::milliseconds check_period_ms_ = std::chrono::milliseconds{10};
