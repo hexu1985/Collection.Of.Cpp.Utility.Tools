@@ -7,7 +7,7 @@ project(CPMFmtExample)
 include(../cmake/CPM.cmake)
 
 #CPMAddPackage("gh:fmtlib/fmt#7.1.3")
-CPMAddPackage("https://gitee.com/wangda11/fmt.git#11.0.2")
+CPMAddPackage("https://gitee.com/mirrors/fmt.git#11.0.2")
 #CPMAddPackage(
 #    NAME fmt 
 #    GIT_REPOSITORY "https://gitee.com/wangda11/fmt.git" 
