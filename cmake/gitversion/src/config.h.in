@@ -1,0 +1,10 @@
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
+
+#define PROJECT_VERSION "@GITVERSION_VERSION@"
+#define GIT_COMMITID    "@GITVERSION_COMMITID@"
+#define GIT_BRANCH      "@GITVERSION_BRANCH@"
+#define BUILD_TIME      "@BUILD_TIME@"
+#define BUILD_NO        "@GITVERSION_BUILD_NUMBER@"
+
+#endif
