@@ -23,7 +23,7 @@ include(../cmake/CPM.cmake)
 #
 # cmake-format: on
 
-CPMAddPackage("https://gitee.com/wangda11/fmt.git#7.1.3")
+CPMAddPackage("https://gitee.com/mirrors/fmt.git#7.1.3")
 CPMAddPackage(
   GIT_REPOSITORY "https://gitee.com/mirror-luyi/spdlog.git"
   VERSION 1.8.2 
