@@ -19,6 +19,7 @@ public:
         if (worker_thread.joinable()) {
             return;
         }
+        done = false;
         worker_thread = std::thread(&SimpleDataSink::worker_routine, this);
     }
 

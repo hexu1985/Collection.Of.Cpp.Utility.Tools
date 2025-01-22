@@ -17,6 +17,7 @@ public:
         if (worker.joinable()) {
             return;
         }
+        done = false;
         worker = std::thread(&SimpleDataSource::worker_thread,this);
     }
 
@@ -66,6 +67,7 @@ public:
         if (worker.joinable()) {
             return;
         }
+        done = false;
         worker = std::thread(&SimpleDataFilter::worker_thread,this);
     }
 
@@ -115,6 +117,7 @@ public:
         if (worker.joinable()) {
             return;
         }
+        done = false;
         worker = std::thread(&SimpleDataSink::worker_thread,this);
     }
 
