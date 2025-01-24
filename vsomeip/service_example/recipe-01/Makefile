@@ -5,7 +5,7 @@ RM = rm -f
 CXX = clang++
 CXXFLAGS = -g -O3 -mavx2 -Wall -pedantic
 INCLUDES = -I$(VSOMEIP_DIR)/include
-LDLIBS = -lvsomeip3 -pthread 
+LDLIBS = -lvsomeip3 -lpthread 
 LDFLAGS = -Wl,-rpath,$(VSOMEIP_DIR)/lib -Wl,--enable-new-dtags -L$(VSOMEIP_DIR)/lib
 VPATH = 
 
