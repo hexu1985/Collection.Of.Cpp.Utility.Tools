@@ -9,7 +9,7 @@ LDLIBS = -lvsomeip3 -lpthread
 LDFLAGS = -Wl,-rpath,$(VSOMEIP_DIR)/lib -Wl,--enable-new-dtags -L$(VSOMEIP_DIR)/lib
 VPATH = 
 
-PROGS = service_example
+PROGS = service-example
 
 all: $(PROGS)
 	@echo "PROGS = $(PROGS)" 
@@ -17,6 +17,6 @@ all: $(PROGS)
 clean:
 	$(RM) $(PROGS)
 
-service_example: service_example.cpp
+service-example: service-example.cpp
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(INCLUDES) $(LDFLAGS) $(LDLIBS)
 

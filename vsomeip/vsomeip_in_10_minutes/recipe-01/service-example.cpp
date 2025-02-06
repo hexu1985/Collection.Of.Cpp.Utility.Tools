@@ -1,5 +1,3 @@
-/*service-example.cpp*/
-
 #include <vsomeip/vsomeip.hpp>
 
 std::shared_ptr< vsomeip::application > app;
@@ -10,4 +8,3 @@ int main() {
     app->init();
     app->start();
 }
-
