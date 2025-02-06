@@ -12,4 +12,3 @@ int main() {
     app->offer_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
     app->start();
 }
-
