@@ -83,4 +83,3 @@ int main() {
     std::thread sender(run);
     app->start();
 }
-

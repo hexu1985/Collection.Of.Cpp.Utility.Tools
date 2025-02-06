@@ -10,8 +10,8 @@ std::shared_ptr< vsomeip::application > app;
 
 void on_availability(vsomeip::service_t _service, vsomeip::instance_t _instance, bool _is_available) {
     std::cout << "Service ["
-            << std::setw(4) << std::setfill('0') << std::hex << _service << "." << _instance
-            << "] is " << (_is_available ? "available." : "NOT available.")  << std::endl;
+        << std::setw(4) << std::setfill('0') << std::hex << _service << "." << _instance
+        << "] is " << (_is_available ? "available." : "NOT available.")  << std::endl;
 }
 
 int main() {
