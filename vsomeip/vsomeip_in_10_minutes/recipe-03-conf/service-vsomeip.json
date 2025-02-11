@@ -1,5 +1,5 @@
 {
-    "unicast" : "10.31.2.98",
+    "unicast" : "192.168.50.161",
     "logging" :
     { 
         "level" : "debug",
