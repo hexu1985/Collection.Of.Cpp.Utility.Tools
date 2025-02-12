@@ -8,26 +8,12 @@
 #include <vsomeip/vsomeip.hpp>
 #include "hello_world_client.hpp"
 
-#ifndef VSOMEIP_ENABLE_SIGNAL_HANDLING
-hello_world_client *hw_cl_ptr(nullptr);
-    void handle_signal(int _signal) {
-        if (hw_cl_ptr != nullptr &&
-                (_signal == SIGINT || _signal == SIGTERM))
-            hw_cl_ptr->stop();
-    }
-#endif
-
 int main(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
 
     hello_world_client hw_cl;
-#ifndef VSOMEIP_ENABLE_SIGNAL_HANDLING
-    hw_cl_ptr = &hw_cl;
-    signal(SIGINT, handle_signal);
-    signal(SIGTERM, handle_signal);
-#endif
     if (hw_cl.init()) {
         hw_cl.start();
         return 0;
