@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 # usage: ./streamer [--help] [--client] [--host HOST] [--port PORT]
-./streamer --host "0.0.0.0" --port 9999
+./streamer --client --host "192.168.50.161" --port 9999
