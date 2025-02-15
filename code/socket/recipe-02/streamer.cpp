@@ -2,7 +2,6 @@
 #include <iostream>
 #include <functional>
 #include <sstream>
-#include <tuple>
 
 #include <gflags/gflags.h>
 
@@ -12,12 +11,6 @@ DEFINE_string(host, "127.0.0.1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
 DEFINE_bool(client, false, "run as the client");
 
-std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
-{
-    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
-    return out;
-}
-
 std::string usage(const char* prog) {
     std::ostringstream os;
     os << "\nusage: " << prog << " [--help] [--client] [--host HOST] [--port PORT]\n\n"
@@ -25,14 +18,14 @@ std::string usage(const char* prog) {
     return os.str();
 }
 
-void server(const std::tuple<std::string, uint16_t>& address) {
+void server(const SocketAddress& address) {
     Socket sock(AF_INET, SOCK_STREAM);
     sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
     sock.Bind(address);
     sock.Listen(1);
     std::cout << "Run this script in another window with '--client' to connect\n";
     std::cout << "Listening at " << sock.Getsockname() << "\n";
-    std::tuple<std::string, uint16_t> sockname;
+    SocketAddress sockname;
     Socket sc = sock.Accept(&sockname);
     std::cout << "Accepted connection from " << sockname << "\n";
     sc.Shutdown(SHUT_WR);
@@ -52,7 +45,7 @@ void server(const std::tuple<std::string, uint16_t>& address) {
     sock.Close();
 }
 
-void client(const std::tuple<std::string, uint16_t>& address) {
+void client(const SocketAddress& address) {
     Socket sock(AF_INET, SOCK_STREAM);
     sock.Connect(address);
     sock.Shutdown(SHUT_RD);
@@ -66,9 +59,9 @@ int main(int argc, char* argv[]) {
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    std::function<void(const std::tuple<std::string, uint16_t>&)> function;
+    std::function<void(const SocketAddress&)> function;
     function = FLAGS_client ? &client : &server;
-    function(std::make_tuple(FLAGS_host, FLAGS_port));
+    function(SocketAddress(FLAGS_host, FLAGS_port));
 
     return 0;
 }

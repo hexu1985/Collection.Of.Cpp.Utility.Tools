@@ -2,7 +2,6 @@
 #include <iostream>
 #include <functional>
 #include <sstream>
-#include <tuple>
 #include <map>
 
 #include <gflags/gflags.h>
@@ -34,12 +33,6 @@ static bool ValidateRole(const char* name, const std::string& value) {
 // 使用全局 static 变量来注册函数，static 变量会在 main 函数开始时就调用
 static const bool role_dummy = gflags::RegisterFlagValidator(&FLAGS_role, &ValidateRole);
 
-std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
-{
-    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
-    return out;
-}
-
 std::string usage(const char* prog) {
     std::ostringstream os;
     os << "\nusage: " << prog << " [--help] [--role client|server] [--host HOST] [--port PORT]\n\n"
@@ -69,7 +62,7 @@ void server(const char* interface, uint16_t port) {
     std::cout << "Listening at " << sock.Getsockname() << "\n";
     while (true) {
         std::cout << "Waiting to accept a new connection\n";
-        std::tuple<std::string, uint16_t> sockname;
+        SocketAddress sockname;
         Socket sc = sock.Accept(&sockname);
         std::cout << "We have accepted a connection from " << sockname << "\n";
         std::cout << "  Socket name: " << sc.Getsockname() << "\n";
