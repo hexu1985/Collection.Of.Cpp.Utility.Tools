@@ -2,8 +2,8 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netdb.h>
 #include <unistd.h>
+#include <netdb.h>
 #include <errno.h>
 #include <cstring>
 #include <iostream>
@@ -237,7 +237,7 @@ std::string Socket::Recv(size_t len, int flags) {
     std::unique_ptr<char[]> buf(new char[len]);
     auto n = recv(sockfd_, buf.get(), len, flags);
     if (n < 0) {
-        throw SocketError(errno, "Recv error()");
+        throw SocketError(errno, "Recv() error");
     } 
     return std::string(buf.get(), n);
 }
@@ -251,7 +251,7 @@ void Socket::Setsockopt(int level, int optname, int optval) {
 size_t Socket::Send(const void* buf, size_t len, int flags) {
     auto n = send(sockfd_, buf, len, flags);
     if (n < 0) {
-        throw SocketError(errno, "Send error()");
+        throw SocketError(errno, "Send() error");
     }
     return n;
 }
