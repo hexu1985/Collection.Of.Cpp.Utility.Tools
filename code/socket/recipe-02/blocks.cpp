@@ -6,12 +6,16 @@
 
 #include <gflags/gflags.h>
 
-#define FMT_HEADER_ONLY
-#include "fmt/format.h"
-
 #include "Socket.hpp"
 
+#if __cplusplus >= 202002L
+#include <format>
+using std::format;
+#else
+#define FMT_HEADER_ONLY
+#include "fmt/format.h"
 using fmt::format;
+#endif
 
 DEFINE_string(host, "127.0.0.1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
