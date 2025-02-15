@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
 
     std::function<void(const SocketAddress&)> function;
     function = FLAGS_client ? &client : &server;
-    function(SocketAddress(FLAGS_host, FLAGS_port));
+    function(SocketAddress{FLAGS_host, FLAGS_port});
 
     return 0;
 }
