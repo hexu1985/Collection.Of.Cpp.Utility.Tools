@@ -7,6 +7,7 @@
 
 #include <tuple>
 #include <string>
+#include <string_view>
 
 class Socket {
 public:
@@ -24,7 +25,7 @@ public:
         Connect(std::get<0>(address).c_str(), std::get<1>(address));
     }
 
-    void sendall(StringView data);
+    void sendall(std::string_view data);
 
     void Close();
 
@@ -46,7 +47,7 @@ public:
     void Setsockopt(int level, int optname, int value);
 
     size_t Send(const void* buf, size_t len, int flags=0);
-    size_t Send(StringView data, int flags=0) {
+    size_t Send(std::string_view data, int flags=0) {
         return Send(data.data(), data.size(), flags);
     }
 
