@@ -49,7 +49,7 @@ std::string get_block(Socket& sock) {
 void put_block(Socket& sock, const std::string& message) {
     uint32_t block_length = message.length();
     block_length = htonl(block_length);
-    sock.Send(&block_length, sizeof(block_length));
+    sock.Send(std::string_view{(char*) &block_length, sizeof(block_length)});
     sock.Send(message);
 }
 
