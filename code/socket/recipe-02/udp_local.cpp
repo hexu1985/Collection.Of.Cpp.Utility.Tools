@@ -26,12 +26,6 @@ const size_t MAX_BYTES = 65535;
 DEFINE_uint32(port, 1060, "TCP port number");
 DEFINE_string(role, "", "which role to play");
 
-std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
-{
-    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
-    return out;
-}
-
 static bool ValidateRole(const char* name, const std::string& value) {
     if (value == "client" || value == "server") {
         return true;
@@ -53,13 +47,13 @@ std::string usage(const char* prog) {
 
 void server(uint16_t port) {
     Socket sock(AF_INET, SOCK_DGRAM);
-    sock.Bind("127.0.0.1", port);
+    sock.Bind(SocketAddress{"127.0.0.1", port});
     std::cout << "Listening at " << sock.Getsockname() << "\n";
     SocketAddress address;
     std::string data;
     while (true) {
-        data = sock.Recvfrom(MAX_BYTES, address);
-        std::cout << "The client at " << address.to_string() << " says " << data << "\n";
+        data = sock.Recvfrom(MAX_BYTES, &address);
+        std::cout << "The client at " << address << " says " << data << "\n";
         data = format("Your data was {} bytes long", data.length());
         sock.Sendto(data, address);
     }
@@ -68,11 +62,11 @@ void server(uint16_t port) {
 void client(uint16_t port) {
     Socket sock(AF_INET, SOCK_DGRAM);
     std::string data = format("The time is {}", std::chrono::system_clock::now());
-    sock.Sendto(data, "127.0.0.1", port);
+    sock.Sendto(data, SocketAddress{"127.0.0.1", port});
     std::cout << "The OS assigned me the address " << sock.Getsockname() << "\n";
     SocketAddress address;
-    data = sock.Recvfrom(MAX_BYTES, address);
-    std::cout << "The server " << address.to_string() << " replied " << data << "\n";
+    data = sock.Recvfrom(MAX_BYTES, &address);
+    std::cout << "The server " << address << " replied " << data << "\n";
     sock.Close();
 }
 

@@ -8,7 +8,7 @@ LDFLAGS = -L$(GFLAGS_DIR)/lib
 LDLIBS = -lgflags
 
 PROGS =	streamer streamer6 blocks tcp_sixteen byteorder udp_local
-LIBOBJS = SocketException.o Socket.o SocketUtility.o SocketAddress.o
+LIBOBJS = SocketException.o Socket.o SocketUtility.o #SocketAddress.o
 
 .PHONY: all
 all: $(PROGS)

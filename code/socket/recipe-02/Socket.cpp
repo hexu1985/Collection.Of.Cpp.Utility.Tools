@@ -1,5 +1,4 @@
 #include "Socket.hpp"
-#include "SocketUtility.hpp"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -20,7 +19,27 @@ using std::format;
 using fmt::format;
 #endif
 
+std::ostream& operator<< (std::ostream& out, const SocketAddress& address) {
+    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
+    return out;
+}
+
 namespace {
+
+std::shared_ptr<addrinfo> Getaddrinfo(
+        const char *host, const char *serv,
+        const struct addrinfo *hints) {
+    struct addrinfo* res = nullptr;
+    int n = 0;
+    if ((n = getaddrinfo(host, serv, hints, &res)) != 0) {
+        throw GAIError(n, format("Getaddrinfo error for {}, {}",
+                    (host == NULL) ? "(no hostname)" : host,
+                    (serv == NULL) ? "(no service name)" : serv));
+    }
+
+    auto deleter = [](struct addrinfo* res) { if (res) freeaddrinfo(res); };
+    return std::shared_ptr<struct addrinfo>(res, deleter);
+}
 
 ssize_t                     /* Write "n" bytes to a descriptor. */
 writen(int fd, const void *vptr, size_t n)
@@ -46,6 +65,51 @@ writen(int fd, const void *vptr, size_t n)
 }
 /* end writen */
 
+void Inet_pton(int family, const char *strptr, void *addrptr) {
+    int		n;
+
+	if ( (n = inet_pton(family, strptr, addrptr)) < 0) {
+        throw SocketError(errno, format("inet_pton error for {}", strptr));     /* errno set */
+    } else if (n == 0) {
+        throw std::runtime_error(format("inet_pton error for {}", strptr));     /* errno not set */
+    }
+
+	/* nothing to return */
+}
+
+std::string Inet_ntop(int family, const void *addrptr) {
+    char buf[INET6_ADDRSTRLEN] = {0};
+    const char* ptr;
+    if ((ptr = inet_ntop(family, addrptr, buf, sizeof(buf))) == NULL) {
+        throw SocketError(errno, "Inet_ntop() error");
+    }
+    return ptr;
+}
+
+SocketAddress sock_ntop(const struct sockaddr *sa, socklen_t salen) {
+    std::string host;
+    uint16_t port;
+    switch (sa->sa_family) {
+    case AF_INET: {
+        struct sockaddr_in *sin = (struct sockaddr_in *) sa;
+        host = Inet_ntop(AF_INET, &sin->sin_addr);
+        port = ntohs(sin->sin_port);
+        break;
+    }
+
+    case AF_INET6: {
+        struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *) sa;
+        host = Inet_ntop(AF_INET6, &sin6->sin6_addr);
+        port = ntohs(sin6->sin6_port); 
+        break;
+    }
+
+    default:
+        std::cerr << format("sock_ntop: unknown AF_xxx: {}, len {}", sa->sa_family, salen) << "\n";
+    }
+    return SocketAddress{std::move(host), port};
+}
+
 }   // namespace
 
 Socket::Socket(int family, int type, int protocol): family_(family) {
@@ -67,20 +131,21 @@ Socket::~Socket() {
     }
 }
 
-void Socket::Connect(const char* host, uint16_t port) {
+void Socket::Connect(const SocketAddress& address) {
     addrinfo hints{};
     hints.ai_family = family_;
 
+    auto [host, port] = address;
     std::string serv = std::to_string(port);
-    auto servinfo = Getaddrinfo(host, serv.c_str(), &hints);
+    auto servinfo = Getaddrinfo(host.c_str(), serv.c_str(), &hints);
 
     if (connect(sockfd_, servinfo->ai_addr, servinfo->ai_addrlen) < 0) {
         throw SocketError(errno, format("Connect({}, {}) error", host, port));
     }
 }
 
-void Socket::sendall(std::string_view data) {
-    if (writen(sockfd_, data.data(), data.size()) != data.size()) {
+void Socket::sendall(std::string_view buffer) {
+    if (writen(sockfd_, buffer.data(), buffer.size()) != buffer.size()) {
         throw SocketError(errno, "sendall() error");
     }
 }
@@ -98,21 +163,24 @@ void Socket::Close() {
     sockfd_ = -1;
 }
 
-void Socket::Bind(const char* host, uint16_t port) {
-    struct sockaddr_storage address;
-    memset(&address, 0, sizeof(address));
+void Socket::Bind(const SocketAddress& address) {
+    const char* host = std::get<0>(address).c_str();
+    uint16_t port = std::get<1>(address);
+
+    struct sockaddr_storage storage;
+    memset(&storage, 0, sizeof(storage));
 
     struct sockaddr* sa = nullptr;
     socklen_t salen = 0;
     if (family_ == AF_INET) {
-        struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(&address);
+        struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(&storage);
         sin->sin_family = family_;
         sin->sin_port = htons(port);
         Inet_pton(family_, host, &sin->sin_addr);
         sa = reinterpret_cast<struct sockaddr*>(sin);
         salen = sizeof(struct sockaddr_in);
     } else if (family_ == AF_INET6) {
-        struct sockaddr_in6* sin6 = reinterpret_cast<struct sockaddr_in6*>(&address);
+        struct sockaddr_in6* sin6 = reinterpret_cast<struct sockaddr_in6*>(&storage);
         sin6->sin6_family = family_;
         sin6->sin6_port = htons(port);
         Inet_pton(family_, host, &sin6->sin6_addr);
@@ -133,7 +201,7 @@ void Socket::Listen(int backlog) {
     }
 }
 
-std::tuple<std::string, uint16_t> Socket::Getsockname() {
+SocketAddress Socket::Getsockname() {
     struct sockaddr_storage address;
     memset(&address, 0, sizeof(address));
 
@@ -147,12 +215,12 @@ std::tuple<std::string, uint16_t> Socket::Getsockname() {
     return sock_ntop(sa, salen);
 }
 
-Socket Socket::Accept(std::tuple<std::string, uint16_t>* peername) {
-    struct sockaddr_storage address;
-    memset(&address, 0, sizeof(address));
+Socket Socket::Accept(SocketAddress* address) {
+    struct sockaddr_storage storage;
+    memset(&storage, 0, sizeof(storage));
 
-    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&address);
-    socklen_t salen = sizeof(address);
+    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&storage);
+    socklen_t salen = sizeof(storage);
 
     int n;
 again:
@@ -167,8 +235,8 @@ again:
     sock.sockfd_ = n;
     sock.family_ = family_;
 
-    if (peername) {
-        *peername = sock_ntop(sa, salen);
+    if (address) {
+        *address = sock_ntop(sa, salen);
     }
 
     return sock;
@@ -189,7 +257,10 @@ void Socket::Setsockopt(int level, int optname, int optval) {
     }
 }
 
-size_t Socket::Send(const void* buf, size_t len, int flags) {
+size_t Socket::Send(std::string_view buffer, int flags) {
+    const void* buf = buffer.data();
+    size_t len = buffer.size();
+
     auto n = send(sockfd_, buf, len, flags);
     if (n < 0) {
         throw SocketError(errno, "Send() error");
@@ -197,7 +268,7 @@ size_t Socket::Send(const void* buf, size_t len, int flags) {
     return n;
 }
 
-std::tuple<std::string, uint16_t> Socket::Getpeername() {
+SocketAddress Socket::Getpeername() {
     struct sockaddr_storage address;
     memset(&address, 0, sizeof(address));
 
@@ -211,37 +282,36 @@ std::tuple<std::string, uint16_t> Socket::Getpeername() {
     return sock_ntop(sa, salen);
 }
 
-std::string Socket::Recvfrom(size_t len, int flags, SocketAddress& src_addr) {
-    src_addr.clean();
-    struct sockaddr* addr = src_addr.addr_ptr(); 
-    socklen_t* addrlen = src_addr.addr_len_ptr();
+std::string Socket::Recvfrom(size_t len, int flags, SocketAddress* address) {
+    struct sockaddr_storage storage;
+    memset(&storage, 0, sizeof(storage));
+
+    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&storage);
+    socklen_t salen = sizeof(storage);
 
     std::unique_ptr<char[]> buf(new char[len]);
-    ssize_t n = recvfrom(sockfd_, buf.get(), len, flags, addr, addrlen);
+    ssize_t n = recvfrom(sockfd_, buf.get(), len, flags, sa, &salen);
     if (n < 0) {
         throw SocketError(errno, "Recvfrom() error");
     }
+
+    if (address) {
+        *address = sock_ntop(sa, salen);
+    }
+
     return std::string(buf.get(), n);
 }
 
-size_t Socket::Sendto(const void* buf, size_t len, int flags, const SocketAddress& dest_addr) {
-    const struct sockaddr* addr = dest_addr.addr_ptr(); 
-    socklen_t addrlen = *dest_addr.addr_len_ptr(); 
-
-    ssize_t n = sendto(sockfd_, buf, len, flags, addr, addrlen);
-    if (n < 0) {
-        throw SocketError(errno, format("Sendto({}) error", dest_addr.to_string()));
-    }
-    return n;
-}
-
-size_t Socket::Sendto(const void* buf, size_t len, int flags, const char* host, uint16_t port) {
+size_t Socket::Sendto(std::string_view buffer, int flags, const SocketAddress& address) {
     addrinfo hints{};
     hints.ai_family = family_;
 
+    auto [host, port] = address;
     std::string serv = std::to_string(port);
-    auto servinfo = Getaddrinfo(host, serv.c_str(), &hints);
+    auto servinfo = Getaddrinfo(host.c_str(), serv.c_str(), &hints);
 
+    const void* buf = buffer.data();
+    size_t len = buffer.size();
     ssize_t n = sendto(sockfd_, buf, len, flags, servinfo->ai_addr, servinfo->ai_addrlen);
     if (n < 0) {
         throw SocketError(errno, format("Sendto({}, {}) error", host, port));
