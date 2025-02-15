@@ -8,20 +8,29 @@
 
 #include <gflags/gflags.h>
 
+#include "Socket.hpp"
+
+#if __cplusplus >= 202002L
+#include <format>
+using std::format;
+#else
 #define FMT_HEADER_ONLY
 #include "fmt/format.h"
 #include "fmt/ranges.h"
 #include "fmt/chrono.h"
-
-#include "Socket.hpp"
-
 using fmt::format;
-using fmt::print;
+#endif
 
 const size_t MAX_BYTES = 65535;
 
 DEFINE_uint32(port, 1060, "TCP port number");
 DEFINE_string(role, "", "which role to play");
+
+std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
+{
+    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
+    return out;
+}
 
 static bool ValidateRole(const char* name, const std::string& value) {
     if (value == "client" || value == "server") {
@@ -45,12 +54,12 @@ std::string usage(const char* prog) {
 void server(uint16_t port) {
     Socket sock(AF_INET, SOCK_DGRAM);
     sock.Bind("127.0.0.1", port);
-    print("Listening at {}\n", sock.Getsockname());
+    std::cout << "Listening at " << sock.Getsockname() << "\n";
     SocketAddress address;
     std::string data;
     while (true) {
         data = sock.Recvfrom(MAX_BYTES, address);
-        print("The client at {} says {}\n", address.to_string(), data);
+        std::cout << "The client at " << address.to_string() << " says " << data << "\n";
         data = format("Your data was {} bytes long", data.length());
         sock.Sendto(data, address);
     }
@@ -60,10 +69,10 @@ void client(uint16_t port) {
     Socket sock(AF_INET, SOCK_DGRAM);
     std::string data = format("The time is {}", std::chrono::system_clock::now());
     sock.Sendto(data, "127.0.0.1", port);
-    print("The OS assigned me the address {}\n", sock.Getsockname());
+    std::cout << "The OS assigned me the address " << sock.Getsockname() << "\n";
     SocketAddress address;
     data = sock.Recvfrom(MAX_BYTES, address);
-    print("The server {} replied {}\n", address.to_string(), data);
+    std::cout << "The server " << address.to_string() << " replied " << data << "\n";
     sock.Close();
 }
 

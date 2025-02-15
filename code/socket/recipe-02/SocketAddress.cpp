@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <sstream>
+#include <iostream>
 
 SocketAddress::SocketAddress() {
     memset(&addr_, 0x0, sizeof(addr_));
@@ -25,4 +26,9 @@ std::string SocketAddress::to_string() const {
     std::ostringstream os;
     os << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
     return os.str();
+}
+
+std::ostream& operator<< (std::ostream& out, const SocketAddress& address) {
+    out << address.to_string();
+    return out;
 }

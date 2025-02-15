@@ -2,6 +2,7 @@
 
 #include <sys/socket.h>
 #include <string>
+#include <iosfwd>
 
 class SocketAddress {
 public:
@@ -32,3 +33,6 @@ private:
     struct sockaddr_storage addr_;
     socklen_t addr_len_ = 0;
 };
+
+std::ostream& operator<< (std::ostream& out, const SocketAddress& address);
+
