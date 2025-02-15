@@ -1,8 +1,8 @@
 ### BSD socket API封装
 
 项目依赖：
+- C++17
 - fmtlib
-- abseil
 - gflags（示例代码依赖）
 
 函数命名规则：
