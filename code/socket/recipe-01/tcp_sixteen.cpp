@@ -3,6 +3,7 @@
 #include <functional>
 #include <sstream>
 #include <tuple>
+#include <map>
 
 #include <gflags/gflags.h>
 
@@ -88,15 +89,14 @@ void client(const char* host, uint16_t port) {
 }
 
 int main(int argc, char* argv[]) {
+    std::map<std::string, std::function<void(const char*, uint16_t)>> choices = {
+        {"client", &client}, {"server", &server}
+    };
+
     gflags::SetUsageMessage(usage(argv[0]));
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    std::function<void(const char*, uint16_t)> function;
-    if (FLAGS_role == "client") {
-        function = &client;
-    } else {
-        function = &server;
-    }
+    auto function = choices[FLAGS_role];
     function(FLAGS_host.c_str(), FLAGS_port);
 
     return 0;

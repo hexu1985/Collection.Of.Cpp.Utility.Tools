@@ -1,11 +1,11 @@
 
-ABSEIL_DIR=$(HOME)/local/abseil
+GFLAGS_DIR=$(HOME)/local/gflags
 
 CXX = g++
-CXXFLAGS = -g3 -Wall -Wextra
-INCLUDES = -I$(ABSEIL_DIR)/include
-LDFLAGS = -L$(ABSEIL_DIR)/lib
-LDLIBS = -lgflags -labsl_string_view
+CXXFLAGS = -g3 -Wall -Wextra -std=c++20
+INCLUDES = -I$(GFLAGS_DIR)/include
+LDFLAGS = -L$(GFLAGS_DIR)/lib
+LDLIBS = -lgflags
 
 PROGS =	streamer streamer6 blocks tcp_sixteen byteorder udp_local
 LIBOBJS = SocketException.o Socket.o SocketUtility.o SocketAddress.o

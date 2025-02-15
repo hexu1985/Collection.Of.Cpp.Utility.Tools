@@ -94,11 +94,7 @@ int main(int argc, char* argv[]) {
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
     std::function<void(const std::tuple<std::string, uint16_t>&)> function;
-    if (FLAGS_client) {
-        function = &client;
-    } else {
-        function = &server;
-    }
+    function = FLAGS_client ? &client : &server;
     function(std::make_tuple(FLAGS_host, FLAGS_port));
 
     return 0;

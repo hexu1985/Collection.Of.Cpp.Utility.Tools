@@ -8,12 +8,10 @@
 
 #define FMT_HEADER_ONLY
 #include "fmt/format.h"
-#include "fmt/ranges.h"
 
 #include "Socket.hpp"
 
 using fmt::format;
-using fmt::print;
 
 DEFINE_string(host, "127.0.0.1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
@@ -63,18 +61,18 @@ void server(const std::tuple<std::string, uint16_t>& address) {
     sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
     sock.Bind(address);
     sock.Listen(1);
-    print("Run this script in another window with \"-c\" to connect\n");
-    print("Listening at {}\n", sock.Getsockname());
+    std::cout << "Run this script in another window with '--client' to connect\n";
+    std::cout << "Listening at " << sock.Getsockname() << "\n";
     std::tuple<std::string, uint16_t> sockname;
     Socket sc = sock.Accept(&sockname);
-    print("Accepted connection from {}\n", sockname);
+    std::cout << "Accepted connection from " << sockname << "\n";
     sc.Shutdown(SHUT_WR);
     while (true) {
         auto block = get_block(sc);
         if (block.empty()) {
             break;
         }
-        print("Block says: {}\n", block);
+        std::cout << "Block says: " << block << "\n";
     }
     sc.Close();
     sock.Close();

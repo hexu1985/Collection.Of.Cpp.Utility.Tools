@@ -9,12 +9,10 @@
 
 #define FMT_HEADER_ONLY
 #include "fmt/format.h"
-#include "fmt/ranges.h"
 
 #include "Socket.hpp"
 
 using fmt::format;
-using fmt::print;
 
 DEFINE_string(host, "127.0.0.1", "IP address the client sends to");
 DEFINE_uint32(port, 1060, "TCP port number");
@@ -31,6 +29,12 @@ static bool ValidateRole(const char* name, const std::string& value) {
 
 // 使用全局 static 变量来注册函数，static 变量会在 main 函数开始时就调用
 static const bool role_dummy = gflags::RegisterFlagValidator(&FLAGS_role, &ValidateRole);
+
+std::ostream& operator<< (std::ostream& out, const std::tuple<std::string, uint16_t>& address)
+{
+    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
+    return out;
+}
 
 std::string usage(const char* prog) {
     std::ostringstream os;
@@ -58,29 +62,29 @@ void server(const char* interface, uint16_t port) {
     sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
     sock.Bind(interface, port);
     sock.Listen(1);
-    print("Listening at {}\n", sock.Getsockname());
+    std::cout << "Listening at " << sock.Getsockname() << "\n";
     while (true) {
-        print("Waiting to accept a new connection\n");
+        std::cout << "Waiting to accept a new connection\n";
         std::tuple<std::string, uint16_t> sockname;
         Socket sc = sock.Accept(&sockname);
-        print("We have accepted a connection from {}\n", sockname);
-        print("  Socket name: {}\n", sc.Getsockname());
-        print("  Socket peer: {}\n", sc.Getpeername());
+        std::cout << "We have accepted a connection from " << sockname << "\n";
+        std::cout << "  Socket name: " << sc.Getsockname() << "\n";
+        std::cout << "  Socket peer: " << sc.Getpeername() << "\n";
         auto message = recvall(sc, 16);
-        print("  Incoming sixteen-octet message: {}\n", message); 
+        std::cout << "  Incoming sixteen-octet message: " << message << "\n";
         sc.sendall("Farewell, client");
         sc.Close();
-        print("  Reply sent, socket closed\n");
+        std::cout << "  Reply sent, socket closed\n";
     }
 }
 
 void client(const char* host, uint16_t port) {
     Socket sock(AF_INET, SOCK_STREAM);
     sock.Connect(host, port);
-    print("Client has been assigned socket name {}\n", sock.Getsockname());
+    std::cout << "Client has been assigned socket name " << sock.Getsockname() << "\n";
     sock.sendall("Hi there, server");
     auto reply = recvall(sock, 16);
-    print("The server said {}\n", reply);
+    std::cout << "The server said " << reply << "\n";
     sock.Close();
 }
 

@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <iostream>
 #include "SocketUtility.hpp"
 
 using namespace std;
@@ -7,11 +7,11 @@ int main(int argc, char **argv)
 {
     auto endian = check_byte_order();
     if (endian == ByteOrder::big_endian) {
-        printf("big-endian\n");
+        std::cout << "big-endian\n";
     } else if (endian == ByteOrder::little_endian) {
-        printf("little-endian\n");
+        std::cout << "little-endian\n";
     } else {
-        printf("unknown\n");
+        std::cout << "unknown\n";
     }
 
     return 0;

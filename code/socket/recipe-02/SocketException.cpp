@@ -9,7 +9,7 @@
 
 namespace {
 
-std::string Strerror(StringView msg, int error_code) {
+std::string Strerror(std::string_view msg, int error_code) {
     std::ostringstream os;
     os << msg;
     if (error_code) {
@@ -18,7 +18,7 @@ std::string Strerror(StringView msg, int error_code) {
     return os.str();
 }
 
-std::string Gai_strerror(StringView msg, int error_code) {
+std::string Gai_strerror(std::string_view msg, int error_code) {
     std::ostringstream os;
     os << msg;
     if (error_code) {
@@ -29,17 +29,17 @@ std::string Gai_strerror(StringView msg, int error_code) {
 
 }   // namespace
 
-SocketError::SocketError(int error_code, StringView msg): 
+SocketError::SocketError(int error_code, std::string_view msg): 
     std::runtime_error(Strerror(msg, error_code)), 
     error_code_(error_code) {
 }
 
-SocketError::SocketError(StringView msg): SocketError(0, msg) {}
+SocketError::SocketError(std::string_view msg): SocketError(0, msg) {}
 
-GAIError::GAIError(int error_code, StringView msg): 
+GAIError::GAIError(int error_code, std::string_view msg): 
     std::runtime_error(Gai_strerror(msg, error_code)),
     error_code_(error_code) {
 }
 
-GAIError::GAIError(StringView msg): GAIError(0, msg) {}
+GAIError::GAIError(std::string_view msg): GAIError(0, msg) {}
 
