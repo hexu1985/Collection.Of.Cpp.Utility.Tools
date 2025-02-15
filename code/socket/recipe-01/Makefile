@@ -2,7 +2,7 @@
 GFLAGS_DIR=$(HOME)/local/gflags
 
 CXX = g++
-CXXFLAGS = -g3 -Wall -Wextra -std=c++20
+CXXFLAGS = -g3 -Wall -Wextra #-std=c++20
 INCLUDES = -I$(GFLAGS_DIR)/include
 LDFLAGS = -L$(GFLAGS_DIR)/lib
 LDLIBS = -lgflags

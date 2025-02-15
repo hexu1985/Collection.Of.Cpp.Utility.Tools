@@ -5,14 +5,19 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <errno.h>
+#include <cstring>
 #include <iostream>
 
 #include <memory>
 
+#if __cplusplus >= 202002L
+#include <format>
+using std::format;
+#else
 #define FMT_HEADER_ONLY
 #include "fmt/format.h"
-
 using fmt::format;
+#endif
 
 namespace {
 
