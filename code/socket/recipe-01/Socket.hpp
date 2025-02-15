@@ -8,6 +8,9 @@
 #include <tuple>
 #include <string>
 #include <string_view>
+#include <iosfwd>
+
+using SocketAddress = std::tuple<std::string, int32_t>;
 
 class Socket {
 public:
@@ -21,7 +24,7 @@ public:
     ~Socket();
 
     void Connect(const char* host, uint16_t port);
-    void Connect(const std::tuple<std::string, uint16_t>& address) {
+    void Connect(const SocketAddress& address) {
         Connect(std::get<0>(address).c_str(), std::get<1>(address));
     }
 
@@ -32,15 +35,15 @@ public:
     void Shutdown(int how);
 
     void Bind(const char* host, uint16_t port);
-    void Bind(const std::tuple<std::string, uint16_t>& address) {
+    void Bind(const SocketAddress& address) {
         Bind(std::get<0>(address).c_str(), std::get<1>(address));
     }
 
     void Listen(int backlog);
 
-    std::tuple<std::string, uint16_t> Getsockname();
+    SocketAddress Getsockname();
 
-    Socket Accept(std::tuple<std::string, uint16_t>* peername=nullptr);
+    Socket Accept(SocketAddress* peername=nullptr);
 
     std::string Recv(size_t len, int flags=0);
 
@@ -51,7 +54,7 @@ public:
         return Send(data.data(), data.size(), flags);
     }
 
-    std::tuple<std::string, uint16_t> Getpeername();
+    SocketAddress Getpeername();
 
 private:
     Socket() = default;
@@ -61,4 +64,5 @@ private:
     int family_=-1;
 };
 
+std::ostream& operator<< (std::ostream& out, const SocketAddress& address);
 

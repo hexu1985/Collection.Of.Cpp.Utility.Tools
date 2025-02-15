@@ -19,6 +19,11 @@ using std::format;
 using fmt::format;
 #endif
 
+std::ostream& operator<< (std::ostream& out, const SocketAddress& address) {
+    out << "(" << std::get<0>(address) << ", " << std::get<1>(address) << ")";
+    return out;
+}
+
 namespace {
 
 std::shared_ptr<addrinfo> Getaddrinfo(
@@ -81,7 +86,7 @@ std::string Inet_ntop(int family, const void *addrptr) {
     return ptr;
 }
 
-std::tuple<std::string, uint16_t> sock_ntop(const struct sockaddr *sa, socklen_t salen) {
+SocketAddress sock_ntop(const struct sockaddr *sa, socklen_t salen) {
     std::string host;
     uint16_t port;
     switch (sa->sa_family) {
@@ -102,7 +107,7 @@ std::tuple<std::string, uint16_t> sock_ntop(const struct sockaddr *sa, socklen_t
     default:
         std::cerr << format("sock_ntop: unknown AF_xxx: {}, len {}", sa->sa_family, salen) << "\n";
     }
-    return std::make_tuple(std::move(host), port);
+    return SocketAddress(std::move(host), port);
 }
 
 }   // namespace
@@ -192,7 +197,7 @@ void Socket::Listen(int backlog) {
     }
 }
 
-std::tuple<std::string, uint16_t> Socket::Getsockname() {
+SocketAddress Socket::Getsockname() {
     struct sockaddr_storage address;
     memset(&address, 0, sizeof(address));
 
@@ -206,7 +211,7 @@ std::tuple<std::string, uint16_t> Socket::Getsockname() {
     return sock_ntop(sa, salen);
 }
 
-Socket Socket::Accept(std::tuple<std::string, uint16_t>* peername) {
+Socket Socket::Accept(SocketAddress* peername) {
     struct sockaddr_storage address;
     memset(&address, 0, sizeof(address));
 
@@ -256,7 +261,7 @@ size_t Socket::Send(const void* buf, size_t len, int flags) {
     return n;
 }
 
-std::tuple<std::string, uint16_t> Socket::Getpeername() {
+SocketAddress Socket::Getpeername() {
     struct sockaddr_storage address;
     memset(&address, 0, sizeof(address));
 
