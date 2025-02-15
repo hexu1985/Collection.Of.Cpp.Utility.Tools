@@ -23,10 +23,7 @@ public:
 
     ~Socket();
 
-    void Connect(const char* host, uint16_t port);
-    void Connect(const SocketAddress& address) {
-        Connect(std::get<0>(address).c_str(), std::get<1>(address));
-    }
+    void Connect(const SocketAddress& address); 
 
     void sendall(std::string_view data);
 
@@ -34,16 +31,13 @@ public:
 
     void Shutdown(int how);
 
-    void Bind(const char* host, uint16_t port);
-    void Bind(const SocketAddress& address) {
-        Bind(std::get<0>(address).c_str(), std::get<1>(address));
-    }
+    void Bind(const SocketAddress& address); 
 
     void Listen(int backlog);
 
     SocketAddress Getsockname();
 
-    Socket Accept(SocketAddress* peername=nullptr);
+    Socket Accept(SocketAddress* address=nullptr);
 
     std::string Recv(size_t len, int flags=0);
 

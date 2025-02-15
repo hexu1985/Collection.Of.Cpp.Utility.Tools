@@ -107,7 +107,7 @@ SocketAddress sock_ntop(const struct sockaddr *sa, socklen_t salen) {
     default:
         std::cerr << format("sock_ntop: unknown AF_xxx: {}, len {}", sa->sa_family, salen) << "\n";
     }
-    return SocketAddress(std::move(host), port);
+    return SocketAddress{std::move(host), port};
 }
 
 }   // namespace
@@ -131,12 +131,13 @@ Socket::~Socket() {
     }
 }
 
-void Socket::Connect(const char* host, uint16_t port) {
+void Socket::Connect(const SocketAddress& address) {
     addrinfo hints{};
     hints.ai_family = family_;
 
+    auto [host, port] = address;
     std::string serv = std::to_string(port);
-    auto servinfo = Getaddrinfo(host, serv.c_str(), &hints);
+    auto servinfo = Getaddrinfo(host.c_str(), serv.c_str(), &hints);
 
     if (connect(sockfd_, servinfo->ai_addr, servinfo->ai_addrlen) < 0) {
         throw SocketError(errno, format("Connect({}, {}) error", host, port));
@@ -162,21 +163,24 @@ void Socket::Close() {
     sockfd_ = -1;
 }
 
-void Socket::Bind(const char* host, uint16_t port) {
-    struct sockaddr_storage address;
-    memset(&address, 0, sizeof(address));
+void Socket::Bind(const SocketAddress& address) {
+    const char* host = std::get<0>(address).c_str();
+    uint16_t port = std::get<1>(address);
+
+    struct sockaddr_storage storage;
+    memset(&storage, 0, sizeof(storage));
 
     struct sockaddr* sa = nullptr;
     socklen_t salen = 0;
     if (family_ == AF_INET) {
-        struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(&address);
+        struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(&storage);
         sin->sin_family = family_;
         sin->sin_port = htons(port);
         Inet_pton(family_, host, &sin->sin_addr);
         sa = reinterpret_cast<struct sockaddr*>(sin);
         salen = sizeof(struct sockaddr_in);
     } else if (family_ == AF_INET6) {
-        struct sockaddr_in6* sin6 = reinterpret_cast<struct sockaddr_in6*>(&address);
+        struct sockaddr_in6* sin6 = reinterpret_cast<struct sockaddr_in6*>(&storage);
         sin6->sin6_family = family_;
         sin6->sin6_port = htons(port);
         Inet_pton(family_, host, &sin6->sin6_addr);
@@ -211,12 +215,12 @@ SocketAddress Socket::Getsockname() {
     return sock_ntop(sa, salen);
 }
 
-Socket Socket::Accept(SocketAddress* peername) {
-    struct sockaddr_storage address;
-    memset(&address, 0, sizeof(address));
+Socket Socket::Accept(SocketAddress* address) {
+    struct sockaddr_storage storage;
+    memset(&storage, 0, sizeof(storage));
 
-    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&address);
-    socklen_t salen = sizeof(address);
+    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&storage);
+    socklen_t salen = sizeof(storage);
 
     int n;
 again:
@@ -231,8 +235,8 @@ again:
     sock.sockfd_ = n;
     sock.family_ = family_;
 
-    if (peername) {
-        *peername = sock_ntop(sa, salen);
+    if (address) {
+        *address = sock_ntop(sa, salen);
     }
 
     return sock;

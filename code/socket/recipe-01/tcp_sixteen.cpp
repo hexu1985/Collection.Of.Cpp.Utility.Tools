@@ -57,7 +57,7 @@ std::string recvall(Socket& sock, size_t length) {
 void server(const char* interface, uint16_t port) {
     Socket sock(AF_INET, SOCK_STREAM);
     sock.Setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
-    sock.Bind(interface, port);
+    sock.Bind(SocketAddress{interface, port});
     sock.Listen(1);
     std::cout << "Listening at " << sock.Getsockname() << "\n";
     while (true) {
@@ -77,7 +77,7 @@ void server(const char* interface, uint16_t port) {
 
 void client(const char* host, uint16_t port) {
     Socket sock(AF_INET, SOCK_STREAM);
-    sock.Connect(host, port);
+    sock.Connect(SocketAddress{host, port});
     std::cout << "Client has been assigned socket name " << sock.Getsockname() << "\n";
     sock.sendall("Hi there, server");
     auto reply = recvall(sock, 16);
