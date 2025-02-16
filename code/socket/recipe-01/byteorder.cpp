@@ -1,8 +1,6 @@
 #include <iostream>
 #include "SocketUtility.hpp"
 
-using namespace std;
-
 int main(int argc, char **argv)
 {
     auto endian = check_byte_order();

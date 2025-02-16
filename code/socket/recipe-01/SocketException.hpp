@@ -14,11 +14,23 @@ protected:
     int error_code_=0;
 };
 
-// getaddrinfo error
-class GAIError: public std::runtime_error {
+// gethostbyname error
+class HostError: public std::runtime_error {
 public:
-    GAIError(int error_code, std::string_view msg);
-    GAIError(std::string_view msg);
+    HostError(int error_code, std::string_view msg);
+    HostError(std::string_view msg);
+
+    int ErrorCode() { return error_code_; }
+
+protected:
+    int error_code_=0;
+};
+
+// getaddrinfo error
+class AddrInfoError: public std::runtime_error {
+public:
+    AddrInfoError(int error_code, std::string_view msg);
+    AddrInfoError(std::string_view msg);
 
     int ErrorCode() { return error_code_; }
 

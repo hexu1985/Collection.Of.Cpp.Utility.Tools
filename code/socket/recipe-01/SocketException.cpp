@@ -18,6 +18,15 @@ std::string Strerror(std::string_view msg, int error_code) {
     return os.str();
 }
 
+std::string Hstrerror(std::string_view msg, int error_code) {
+    std::ostringstream os;
+    os << msg;
+    if (error_code) {
+        os << ": " << hstrerror(error_code);
+    }
+    return os.str();
+}
+
 std::string Gai_strerror(std::string_view msg, int error_code) {
     std::ostringstream os;
     os << msg;
@@ -36,10 +45,17 @@ SocketError::SocketError(int error_code, std::string_view msg):
 
 SocketError::SocketError(std::string_view msg): SocketError(0, msg) {}
 
-GAIError::GAIError(int error_code, std::string_view msg): 
+HostError::HostError(int error_code, std::string_view msg): 
+    std::runtime_error(Hstrerror(msg, error_code)),
+    error_code_(error_code) {
+}
+
+HostError::HostError(std::string_view msg): HostError(0, msg) {}
+
+AddrInfoError::AddrInfoError(int error_code, std::string_view msg): 
     std::runtime_error(Gai_strerror(msg, error_code)),
     error_code_(error_code) {
 }
 
-GAIError::GAIError(std::string_view msg): GAIError(0, msg) {}
+AddrInfoError::AddrInfoError(std::string_view msg): AddrInfoError(0, msg) {}
 
