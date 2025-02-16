@@ -8,7 +8,7 @@ LDFLAGS = -L$(GFLAGS_DIR)/lib
 LDLIBS = -lgflags
 
 PROGS =	streamer streamer6 blocks tcp_sixteen byteorder \
-		local_machine_info
+		local_machine_info udp_local
 LIBOBJS = SocketException.o Socket.o SocketUtility.o
 
 .PHONY: all
@@ -38,5 +38,8 @@ byteorder: byteorder.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 local_machine_info: local_machine_info.o $(LIBOBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+udp_local: udp_local.o $(LIBOBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 

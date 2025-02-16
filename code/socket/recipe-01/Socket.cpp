@@ -144,8 +144,8 @@ void Socket::Connect(const SocketAddress& address) {
     }
 }
 
-void Socket::sendall(std::string_view data) {
-    if (writen(sockfd_, data.data(), data.size()) != data.size()) {
+void Socket::sendall(std::string_view buffer) {
+    if (writen(sockfd_, buffer.data(), buffer.size()) != buffer.size()) {
         throw SocketError(errno, "sendall() error");
     }
 }
@@ -282,3 +282,39 @@ SocketAddress Socket::Getpeername() {
     return sock_ntop(sa, salen);
 }
 
+std::string Socket::Recvfrom(size_t len, int flags, SocketAddress* address) {
+    struct sockaddr_storage storage;
+    memset(&storage, 0, sizeof(storage));
+
+    struct sockaddr* sa = reinterpret_cast<struct sockaddr*>(&storage);
+    socklen_t salen = sizeof(storage);
+
+    std::unique_ptr<char[]> buf(new char[len]);
+    ssize_t n = recvfrom(sockfd_, buf.get(), len, flags, sa, &salen);
+    if (n < 0) {
+        throw SocketError(errno, "Recvfrom() error");
+    }
+
+    if (address) {
+        *address = sock_ntop(sa, salen);
+    }
+
+    return std::string(buf.get(), n);
+}
+
+size_t Socket::Sendto(std::string_view buffer, int flags, const SocketAddress& address) {
+    addrinfo hints{};
+    hints.ai_family = family_;
+
+    auto [host, port] = address;
+    std::string serv = std::to_string(port);
+    auto servinfo = Getaddrinfo(host.c_str(), serv.c_str(), &hints);
+
+    const void* buf = buffer.data();
+    size_t len = buffer.size();
+    ssize_t n = sendto(sockfd_, buf, len, flags, servinfo->ai_addr, servinfo->ai_addrlen);
+    if (n < 0) {
+        throw SocketError(errno, format("Sendto({}, {}) error", host, port));
+    }
+    return n;
+}

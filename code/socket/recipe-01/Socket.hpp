@@ -25,7 +25,7 @@ public:
 
     void Connect(const SocketAddress& address); 
 
-    void sendall(std::string_view data);
+    void sendall(std::string_view buffer);
 
     void Close();
 
@@ -46,6 +46,16 @@ public:
     size_t Send(std::string_view buffer, int flags=0); 
 
     SocketAddress Getpeername();
+
+    std::string Recvfrom(size_t len, int flags, SocketAddress* address=nullptr);
+    std::string Recvfrom(size_t len, SocketAddress* address=nullptr) {
+        return Recvfrom(len, 0, address);
+    }
+
+    size_t Sendto(std::string_view buffer, int flags, const SocketAddress& address); 
+    size_t Sendto(std::string_view buffer, const SocketAddress& address) {
+        return Sendto(buffer, 0, address);
+    }
 
 private:
     Socket() = default;

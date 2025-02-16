@@ -43,3 +43,6 @@ target_link_libraries(byteorder wrapsocket gflags)
 
 add_executable(local_machine_info local_machine_info.cpp)
 target_link_libraries(local_machine_info wrapsocket gflags)
+
+add_executable(udp_local udp_local.cpp)
+target_link_libraries(udp_local wrapsocket gflags)
