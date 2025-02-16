@@ -12,6 +12,4 @@
 版本记录：
 - [版本一](recipe-01)
     + 简单的TCP接口支持
-- [版本二](recipe-02)
-    + 新增简单的UDP接口支持
-    + 新增SocketAddress类
+    + 简单的UDP接口支持
