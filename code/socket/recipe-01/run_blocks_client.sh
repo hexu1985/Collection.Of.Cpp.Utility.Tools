@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-server_host="0.0.0.0"
+server_host="127.0.0.1"
 server_port=9999
 
 while getopts p: opt
@@ -17,5 +17,5 @@ then
    server_host=$1
 fi 
 
-# usage: ./streamer [--help] [--client] [--host HOST] [--port PORT]
-./streamer --host "${server_host}" --port "${server_port}"
+# usage: ./blocks [--help] [--client] [--host HOST] [--port PORT]
+./blocks --client --host "${server_host}" --port "${server_port}"

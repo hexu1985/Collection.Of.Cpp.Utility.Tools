@@ -17,5 +17,5 @@ then
    server_host=$1
 fi 
 
-# usage: ./streamer [--help] [--client] [--host HOST] [--port PORT]
-./streamer --host "${server_host}" --port "${server_port}"
+# usage: ./blocks [--help] [--client] [--host HOST] [--port PORT]
+./blocks --host "${server_host}" --port "${server_port}"
