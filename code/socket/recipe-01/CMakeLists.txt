@@ -46,3 +46,7 @@ target_link_libraries(local_machine_info wrapsocket gflags)
 
 add_executable(udp_local udp_local.cpp)
 target_link_libraries(udp_local wrapsocket gflags)
+
+add_executable(remote_machine_info remote_machine_info.cpp)
+target_link_libraries(remote_machine_info wrapsocket gflags)
+
