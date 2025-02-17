@@ -2,6 +2,8 @@
 #include "SocketException.hpp"
 #include <unistd.h>
 #include <netdb.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <cstdint>
 
@@ -59,3 +61,18 @@ std::string Gethostbyname(const std::string& hostname) {
 
     return Inet_ntop(AF_INET, (struct in_addr *)hptr->h_addr_list[0]);
 }
+
+uint32_t Inet_aton(const std::string& ip_string) {
+    in_addr in;
+    if (!inet_aton(ip_string.c_str(), &in)) {
+        throw SocketError(format("Inet_aton error for {}", ip_string));
+    }
+    return in.s_addr;
+}
+
+std::string Inet_ntoa(uint32_t packed_ip) {
+    in_addr in;
+    in.s_addr = packed_ip;
+    return inet_ntoa(in);
+}
+
