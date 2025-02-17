@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <cstdint>
+#include <arpa/inet.h>
 
 enum class ByteOrder {
     unknown = 0,
@@ -14,6 +14,6 @@ ByteOrder check_byte_order();
 std::string Gethostname();
 std::string Gethostbyname(const std::string& hostname);
 
-uint32_t Inet_aton(const std::string& ip_string);
-std::string Inet_ntoa(uint32_t packed_ip);
+in_addr_t Inet_aton(const std::string& ip_string);
+std::string Inet_ntoa(in_addr_t packed_ip);
 
