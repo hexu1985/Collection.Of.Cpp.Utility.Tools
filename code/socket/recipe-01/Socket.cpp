@@ -32,9 +32,9 @@ std::shared_ptr<addrinfo> Getaddrinfo(
     struct addrinfo* res = nullptr;
     int n = 0;
     if ((n = getaddrinfo(host, serv, hints, &res)) != 0) {
-        throw GAIError(n, format("Getaddrinfo error for {}, {}",
+        throw GAIError(format("Getaddrinfo error for {}, {}",
                     (host == NULL) ? "(no hostname)" : host,
-                    (serv == NULL) ? "(no service name)" : serv));
+                    (serv == NULL) ? "(no service name)" : serv), n);
     }
 
     auto deleter = [](struct addrinfo* res) { if (res) freeaddrinfo(res); };
@@ -69,9 +69,9 @@ void Inet_pton(int family, const char *strptr, void *addrptr) {
     int		n;
 
 	if ( (n = inet_pton(family, strptr, addrptr)) < 0) {
-        throw OSError(errno, format("inet_pton error for {}", strptr));     /* errno set */
+        throw OSError(format("inet_pton error for {}", strptr), errno);     /* errno set */
     } else if (n == 0) {
-        throw std::runtime_error(format("inet_pton error for {}", strptr));     /* errno not set */
+        throw SocketException(format("inet_pton error for {}", strptr));     /* errno not set */
     }
 
 	/* nothing to return */
@@ -81,7 +81,7 @@ std::string Inet_ntop(int family, const void *addrptr) {
     char buf[INET6_ADDRSTRLEN] = {0};
     const char* ptr;
     if ((ptr = inet_ntop(family, addrptr, buf, sizeof(buf))) == NULL) {
-        throw OSError(errno, "Inet_ntop() error");
+        throw OSError("Inet_ntop() error", errno);
     }
     return ptr;
 }
@@ -115,8 +115,7 @@ SocketAddress sock_ntop(const struct sockaddr *sa, socklen_t salen) {
 Socket::Socket(int family, int type, int protocol): family_(family) {
     sockfd_ = socket(family, type, protocol);
     if (sockfd_ < 0) {
-        throw OSError(errno, 
-                format("Socket({}, {}, {}) error", family, type, protocol));
+        throw OSError(format("Socket({}, {}, {}) error", family, type, protocol), errno);
     }
 }
 
@@ -140,25 +139,25 @@ void Socket::Connect(const SocketAddress& address) {
     auto servinfo = Getaddrinfo(host.c_str(), serv.c_str(), &hints);
 
     if (connect(sockfd_, servinfo->ai_addr, servinfo->ai_addrlen) < 0) {
-        throw OSError(errno, format("Connect({}, {}) error", host, port));
+        throw OSError(format("Connect({}, {}) error", host, port), errno);
     }
 }
 
 void Socket::sendall(std::string_view buffer) {
     if (writen(sockfd_, buffer.data(), buffer.size()) != buffer.size()) {
-        throw OSError(errno, "sendall() error");
+        throw OSError("sendall() error", errno);
     }
 }
 
 void Socket::Shutdown(int how) {
     if (shutdown(sockfd_, how) < 0) {
-        throw OSError(errno, format("Shutdown({}) error", how));
+        throw OSError(format("Shutdown({}) error", how), errno);
     }
 }
 
 void Socket::Close() {
     if (close(sockfd_) < 0) {
-        throw OSError(errno, "Close() error");
+        throw OSError("Close() error", errno);
     }
     sockfd_ = -1;
 }
@@ -187,17 +186,17 @@ void Socket::Bind(const SocketAddress& address) {
         sa = reinterpret_cast<struct sockaddr*>(sin6);
         salen = sizeof(struct sockaddr_in6);
     } else {
-        throw std::runtime_error(format("Bind({}, {}) error: unsupport family type", host, port));
+        throw SocketException(format("Bind({}, {}) error: unsupport family type", host, port));
     }
 
     if (bind(sockfd_, sa, salen) < 0) {
-        throw OSError(errno, format("Bind({}, {})", host, port));
+        throw OSError(format("Bind({}, {})", host, port), errno);
     }
 }
 
 void Socket::Listen(int backlog) {
     if (listen(sockfd_, backlog) < 0) {
-        throw OSError(errno, format("Listen({}) error", backlog));
+        throw OSError(format("Listen({}) error", backlog), errno);
     }
 }
 
@@ -209,7 +208,7 @@ SocketAddress Socket::Getsockname() {
     socklen_t salen = sizeof(address);
 
     if (getsockname(sockfd_, sa, &salen) < 0) {
-        throw OSError(errno, "Getsockname() error");
+        throw OSError("Getsockname() error", errno);
     }
 
     return sock_ntop(sa, salen);
@@ -228,7 +227,7 @@ again:
         if (errno == EPROTO || errno == ECONNABORTED)
             goto again;
         else
-            throw OSError(errno, "Accept() error");
+            throw OSError("Accept() error", errno);
     }
 
     Socket sock;
@@ -246,14 +245,14 @@ std::string Socket::Recv(size_t len, int flags) {
     std::unique_ptr<char[]> buf(new char[len]);
     auto n = recv(sockfd_, buf.get(), len, flags);
     if (n < 0) {
-        throw OSError(errno, "Recv() error");
+        throw OSError("Recv() error", errno);
     } 
     return std::string(buf.get(), n);
 }
 
 void Socket::Setsockopt(int level, int optname, int optval) {
     if (setsockopt(sockfd_, level, optname, &optval, sizeof(optval)) < 0) {
-        throw OSError(errno, format("Setsockopt({}, {}, {})", level, optname, optval));
+        throw OSError(format("Setsockopt({}, {}, {})", level, optname, optval), errno);
     }
 }
 
@@ -263,7 +262,7 @@ size_t Socket::Send(std::string_view buffer, int flags) {
 
     auto n = send(sockfd_, buf, len, flags);
     if (n < 0) {
-        throw OSError(errno, "Send() error");
+        throw OSError("Send() error", errno);
     }
     return n;
 }
@@ -276,7 +275,7 @@ SocketAddress Socket::Getpeername() {
     socklen_t salen = sizeof(address);
 
     if (getpeername(sockfd_, sa, &salen) < 0) {
-        throw OSError(errno, "Getpeername() error");
+        throw OSError("Getpeername() error", errno);
     }
 
     return sock_ntop(sa, salen);
@@ -292,7 +291,7 @@ std::string Socket::Recvfrom(size_t len, int flags, SocketAddress* address) {
     std::unique_ptr<char[]> buf(new char[len]);
     ssize_t n = recvfrom(sockfd_, buf.get(), len, flags, sa, &salen);
     if (n < 0) {
-        throw OSError(errno, "Recvfrom() error");
+        throw OSError("Recvfrom() error", errno);
     }
 
     if (address) {
@@ -314,7 +313,7 @@ size_t Socket::Sendto(std::string_view buffer, int flags, const SocketAddress& a
     size_t len = buffer.size();
     ssize_t n = sendto(sockfd_, buf, len, flags, servinfo->ai_addr, servinfo->ai_addrlen);
     if (n < 0) {
-        throw OSError(errno, format("Sendto({}, {}) error", host, port));
+        throw OSError(format("Sendto({}, {}) error", host, port), errno);
     }
     return n;
 }

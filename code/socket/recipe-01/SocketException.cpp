@@ -7,55 +7,65 @@
 #include <string.h>
 #include <sstream>
 
-namespace {
+SocketException::SocketException(std::string_view msg, int error_code): 
+    error_code_(error_code), msg_(msg) {
+}
 
-std::string Strerror(std::string_view msg, int error_code) {
-    std::ostringstream os;
-    os << msg;
-    if (error_code) {
-        os << ": " << strerror(error_code);
+SocketException::~SocketException() {
+}
+
+std::string SocketException::get_error_code_detail() const {
+    return {};
+}
+
+const char* SocketException::what() const noexcept {
+    if (error_code_ == 0) {
+        return msg_.c_str();
     }
-    return os.str();
-}
-
-std::string Hstrerror(std::string_view msg, int error_code) {
-    std::ostringstream os;
-    os << msg;
-    if (error_code) {
-        os << ": " << hstrerror(error_code);
+    if (what_.empty()) {
+        std::ostringstream os;
+        os << msg_ << ", error_code(" << error_code_ << ")"; 
+        std::string error_code_detail = get_error_code_detail();
+        if (!error_code_detail.empty()) {
+            os << ": " << error_code_detail;
+        }
     }
-    return os.str();
+    return what_.c_str();
 }
 
-std::string Gai_strerror(std::string_view msg, int error_code) {
-    std::ostringstream os;
-    os << msg;
-    if (error_code) {
-        os << ": " << gai_strerror(error_code);
-    }
-    return os.str();
+OSError::OSError(std::string_view msg, int error_code): 
+    SocketException(msg, error_code) {
 }
 
-}   // namespace
-
-OSError::OSError(int error_code, std::string_view msg): 
-    std::runtime_error(Strerror(msg, error_code)), 
-    error_code_(error_code) {
+OSError::~OSError() {
 }
 
-OSError::OSError(std::string_view msg): OSError(0, msg) {}
-
-HError::HError(int error_code, std::string_view msg): 
-    std::runtime_error(Hstrerror(msg, error_code)),
-    error_code_(error_code) {
+std::string OSError::get_error_code_detail() const {
+    std::string error_code_detail = strerror(error_code_);
+    return error_code_detail;
 }
 
-HError::HError(std::string_view msg): HError(0, msg) {}
-
-GAIError::GAIError(int error_code, std::string_view msg): 
-    std::runtime_error(Gai_strerror(msg, error_code)),
-    error_code_(error_code) {
+HError::HError(std::string_view msg, int error_code): 
+    SocketException(msg, error_code) {
 }
 
-GAIError::GAIError(std::string_view msg): GAIError(0, msg) {}
+HError::~HError() {
+}
+
+std::string HError::get_error_code_detail() const {
+    std::string error_code_detail = hstrerror(error_code_);
+    return error_code_detail;
+}
+
+GAIError::GAIError(std::string_view msg, int error_code): 
+    SocketException(msg, error_code) {
+}
+
+GAIError::~GAIError() {
+}
+
+std::string GAIError::get_error_code_detail() const {
+    std::string error_code_detail = gai_strerror(error_code_);
+    return error_code_detail;
+}
 
