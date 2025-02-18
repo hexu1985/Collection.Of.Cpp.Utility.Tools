@@ -32,7 +32,7 @@ std::shared_ptr<addrinfo> Getaddrinfo(
     struct addrinfo* res = nullptr;
     int n = 0;
     if ((n = getaddrinfo(host, serv, hints, &res)) != 0) {
-        throw AddrInfoError(n, format("Getaddrinfo error for {}, {}",
+        throw GAIError(n, format("Getaddrinfo error for {}, {}",
                     (host == NULL) ? "(no hostname)" : host,
                     (serv == NULL) ? "(no service name)" : serv));
     }

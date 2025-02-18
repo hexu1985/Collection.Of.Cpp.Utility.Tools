@@ -52,10 +52,10 @@ HError::HError(int error_code, std::string_view msg):
 
 HError::HError(std::string_view msg): HError(0, msg) {}
 
-AddrInfoError::AddrInfoError(int error_code, std::string_view msg): 
+GAIError::GAIError(int error_code, std::string_view msg): 
     std::runtime_error(Gai_strerror(msg, error_code)),
     error_code_(error_code) {
 }
 
-AddrInfoError::AddrInfoError(std::string_view msg): AddrInfoError(0, msg) {}
+GAIError::GAIError(std::string_view msg): GAIError(0, msg) {}
 

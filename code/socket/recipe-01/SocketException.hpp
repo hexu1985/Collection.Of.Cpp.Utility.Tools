@@ -27,10 +27,10 @@ protected:
 };
 
 // getaddrinfo error
-class AddrInfoError: public std::runtime_error {
+class GAIError: public std::runtime_error {
 public:
-    AddrInfoError(int error_code, std::string_view msg);
-    AddrInfoError(std::string_view msg);
+    GAIError(int error_code, std::string_view msg);
+    GAIError(std::string_view msg);
 
     int ErrorCode() { return error_code_; }
 
