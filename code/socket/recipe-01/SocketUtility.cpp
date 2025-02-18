@@ -56,7 +56,7 @@ std::string Gethostname() {
 std::string Gethostbyname(const std::string& hostname) {
 	struct hostent* hptr = gethostbyname(hostname.c_str());
     if (!hptr) {
-        throw HostError(h_errno, format("Gethostbyname error for {}", hostname));
+        throw HError(h_errno, format("Gethostbyname error for {}", hostname));
     }
 
     return Inet_ntop(AF_INET, (struct in_addr *)hptr->h_addr_list[0]);

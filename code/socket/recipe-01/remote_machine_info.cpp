@@ -7,7 +7,7 @@ void get_remote_machine_info() {
     try {
         std::cout << "IP address of " << remote_host 
             << ": " << Gethostbyname(remote_host) << "\n";
-    } catch (const HostError& e) {
+    } catch (const HError& e) {
         std::cout << remote_host << ": " << e.what() << "\n";
     }
 }

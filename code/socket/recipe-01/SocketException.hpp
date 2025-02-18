@@ -15,10 +15,10 @@ protected:
 };
 
 // gethostbyname error
-class HostError: public std::runtime_error {
+class HError: public std::runtime_error {
 public:
-    HostError(int error_code, std::string_view msg);
-    HostError(std::string_view msg);
+    HError(int error_code, std::string_view msg);
+    HError(std::string_view msg);
 
     int ErrorCode() { return error_code_; }
 

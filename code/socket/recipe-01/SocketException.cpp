@@ -45,12 +45,12 @@ SocketError::SocketError(int error_code, std::string_view msg):
 
 SocketError::SocketError(std::string_view msg): SocketError(0, msg) {}
 
-HostError::HostError(int error_code, std::string_view msg): 
+HError::HError(int error_code, std::string_view msg): 
     std::runtime_error(Hstrerror(msg, error_code)),
     error_code_(error_code) {
 }
 
-HostError::HostError(std::string_view msg): HostError(0, msg) {}
+HError::HError(std::string_view msg): HError(0, msg) {}
 
 AddrInfoError::AddrInfoError(int error_code, std::string_view msg): 
     std::runtime_error(Gai_strerror(msg, error_code)),
