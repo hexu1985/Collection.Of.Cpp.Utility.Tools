@@ -24,11 +24,12 @@ const char* SocketException::what() const noexcept {
     }
     if (what_.empty()) {
         std::ostringstream os;
-        os << msg_ << ", error_code(" << error_code_ << ")"; 
+        os << msg_ << "(" << error_code_ << ")"; 
         std::string error_code_detail = get_error_code_detail();
         if (!error_code_detail.empty()) {
             os << ": " << error_code_detail;
         }
+        what_ = std::move(os.str());
     }
     return what_.c_str();
 }
