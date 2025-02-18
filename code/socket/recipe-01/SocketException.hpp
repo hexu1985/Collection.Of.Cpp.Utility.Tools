@@ -3,10 +3,10 @@
 #include <stdexcept>
 #include <string_view>
 
-class SocketError: public std::runtime_error {
+class OSError: public std::runtime_error {
 public:
-    SocketError(int error_code, std::string_view msg);
-    SocketError(std::string_view msg);
+    OSError(int error_code, std::string_view msg);
+    OSError(std::string_view msg);
 
     int ErrorCode() { return error_code_; }
 

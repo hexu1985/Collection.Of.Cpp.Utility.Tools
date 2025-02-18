@@ -69,7 +69,7 @@ void Inet_pton(int family, const char *strptr, void *addrptr) {
     int		n;
 
 	if ( (n = inet_pton(family, strptr, addrptr)) < 0) {
-        throw SocketError(errno, format("inet_pton error for {}", strptr));     /* errno set */
+        throw OSError(errno, format("inet_pton error for {}", strptr));     /* errno set */
     } else if (n == 0) {
         throw std::runtime_error(format("inet_pton error for {}", strptr));     /* errno not set */
     }
@@ -81,7 +81,7 @@ std::string Inet_ntop(int family, const void *addrptr) {
     char buf[INET6_ADDRSTRLEN] = {0};
     const char* ptr;
     if ((ptr = inet_ntop(family, addrptr, buf, sizeof(buf))) == NULL) {
-        throw SocketError(errno, "Inet_ntop() error");
+        throw OSError(errno, "Inet_ntop() error");
     }
     return ptr;
 }
@@ -115,7 +115,7 @@ SocketAddress sock_ntop(const struct sockaddr *sa, socklen_t salen) {
 Socket::Socket(int family, int type, int protocol): family_(family) {
     sockfd_ = socket(family, type, protocol);
     if (sockfd_ < 0) {
-        throw SocketError(errno, 
+        throw OSError(errno, 
                 format("Socket({}, {}, {}) error", family, type, protocol));
     }
 }
@@ -140,25 +140,25 @@ void Socket::Connect(const SocketAddress& address) {
     auto servinfo = Getaddrinfo(host.c_str(), serv.c_str(), &hints);
 
     if (connect(sockfd_, servinfo->ai_addr, servinfo->ai_addrlen) < 0) {
-        throw SocketError(errno, format("Connect({}, {}) error", host, port));
+        throw OSError(errno, format("Connect({}, {}) error", host, port));
     }
 }
 
 void Socket::sendall(std::string_view buffer) {
     if (writen(sockfd_, buffer.data(), buffer.size()) != buffer.size()) {
-        throw SocketError(errno, "sendall() error");
+        throw OSError(errno, "sendall() error");
     }
 }
 
 void Socket::Shutdown(int how) {
     if (shutdown(sockfd_, how) < 0) {
-        throw SocketError(errno, format("Shutdown({}) error", how));
+        throw OSError(errno, format("Shutdown({}) error", how));
     }
 }
 
 void Socket::Close() {
     if (close(sockfd_) < 0) {
-        throw SocketError(errno, "Close() error");
+        throw OSError(errno, "Close() error");
     }
     sockfd_ = -1;
 }
@@ -191,13 +191,13 @@ void Socket::Bind(const SocketAddress& address) {
     }
 
     if (bind(sockfd_, sa, salen) < 0) {
-        throw SocketError(errno, format("Bind({}, {})", host, port));
+        throw OSError(errno, format("Bind({}, {})", host, port));
     }
 }
 
 void Socket::Listen(int backlog) {
     if (listen(sockfd_, backlog) < 0) {
-        throw SocketError(errno, format("Listen({}) error", backlog));
+        throw OSError(errno, format("Listen({}) error", backlog));
     }
 }
 
@@ -209,7 +209,7 @@ SocketAddress Socket::Getsockname() {
     socklen_t salen = sizeof(address);
 
     if (getsockname(sockfd_, sa, &salen) < 0) {
-        throw SocketError(errno, "Getsockname() error");
+        throw OSError(errno, "Getsockname() error");
     }
 
     return sock_ntop(sa, salen);
@@ -228,7 +228,7 @@ again:
         if (errno == EPROTO || errno == ECONNABORTED)
             goto again;
         else
-            throw SocketError(errno, "Accept() error");
+            throw OSError(errno, "Accept() error");
     }
 
     Socket sock;
@@ -246,14 +246,14 @@ std::string Socket::Recv(size_t len, int flags) {
     std::unique_ptr<char[]> buf(new char[len]);
     auto n = recv(sockfd_, buf.get(), len, flags);
     if (n < 0) {
-        throw SocketError(errno, "Recv() error");
+        throw OSError(errno, "Recv() error");
     } 
     return std::string(buf.get(), n);
 }
 
 void Socket::Setsockopt(int level, int optname, int optval) {
     if (setsockopt(sockfd_, level, optname, &optval, sizeof(optval)) < 0) {
-        throw SocketError(errno, format("Setsockopt({}, {}, {})", level, optname, optval));
+        throw OSError(errno, format("Setsockopt({}, {}, {})", level, optname, optval));
     }
 }
 
@@ -263,7 +263,7 @@ size_t Socket::Send(std::string_view buffer, int flags) {
 
     auto n = send(sockfd_, buf, len, flags);
     if (n < 0) {
-        throw SocketError(errno, "Send() error");
+        throw OSError(errno, "Send() error");
     }
     return n;
 }
@@ -276,7 +276,7 @@ SocketAddress Socket::Getpeername() {
     socklen_t salen = sizeof(address);
 
     if (getpeername(sockfd_, sa, &salen) < 0) {
-        throw SocketError(errno, "Getpeername() error");
+        throw OSError(errno, "Getpeername() error");
     }
 
     return sock_ntop(sa, salen);
@@ -292,7 +292,7 @@ std::string Socket::Recvfrom(size_t len, int flags, SocketAddress* address) {
     std::unique_ptr<char[]> buf(new char[len]);
     ssize_t n = recvfrom(sockfd_, buf.get(), len, flags, sa, &salen);
     if (n < 0) {
-        throw SocketError(errno, "Recvfrom() error");
+        throw OSError(errno, "Recvfrom() error");
     }
 
     if (address) {
@@ -314,7 +314,7 @@ size_t Socket::Sendto(std::string_view buffer, int flags, const SocketAddress& a
     size_t len = buffer.size();
     ssize_t n = sendto(sockfd_, buf, len, flags, servinfo->ai_addr, servinfo->ai_addrlen);
     if (n < 0) {
-        throw SocketError(errno, format("Sendto({}, {}) error", host, port));
+        throw OSError(errno, format("Sendto({}, {}) error", host, port));
     }
     return n;
 }

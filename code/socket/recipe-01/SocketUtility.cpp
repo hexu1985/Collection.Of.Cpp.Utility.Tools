@@ -22,7 +22,7 @@ std::string Inet_ntop(int family, const void *addrptr) {
     char buf[INET6_ADDRSTRLEN] = {0};
     const char* ptr;
     if ((ptr = inet_ntop(family, addrptr, buf, sizeof(buf))) == NULL) {
-        throw SocketError(errno, "Inet_ntop() error");
+        throw OSError(errno, "Inet_ntop() error");
     }
     return ptr;
 }
@@ -48,7 +48,7 @@ std::string Gethostname() {
     constexpr int max_host_name_len = 128;
     char host_name[max_host_name_len] = {0};
     if (gethostname(host_name, max_host_name_len) < 0) {
-        throw SocketError(errno, "Gethostname() error");
+        throw OSError(errno, "Gethostname() error");
     }
     return host_name;
 }
@@ -65,7 +65,7 @@ std::string Gethostbyname(const std::string& hostname) {
 uint32_t Inet_aton(const std::string& ip_string) {
     in_addr in;
     if (!inet_aton(ip_string.c_str(), &in)) {
-        throw SocketError(format("Inet_aton error for {}", ip_string));
+        throw OSError(format("Inet_aton error for {}", ip_string));
     }
     return in.s_addr;
 }

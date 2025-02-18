@@ -38,12 +38,12 @@ std::string Gai_strerror(std::string_view msg, int error_code) {
 
 }   // namespace
 
-SocketError::SocketError(int error_code, std::string_view msg): 
+OSError::OSError(int error_code, std::string_view msg): 
     std::runtime_error(Strerror(msg, error_code)), 
     error_code_(error_code) {
 }
 
-SocketError::SocketError(std::string_view msg): SocketError(0, msg) {}
+OSError::OSError(std::string_view msg): OSError(0, msg) {}
 
 HError::HError(int error_code, std::string_view msg): 
     std::runtime_error(Hstrerror(msg, error_code)),
