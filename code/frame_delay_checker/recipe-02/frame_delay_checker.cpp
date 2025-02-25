@@ -10,13 +10,14 @@ bool FrameDelayChecker::RegisterFrameDelayCheck(int index, const CheckConfig& co
     if (config.expired_threshold_ms <= check_period_ms_) {
         return false;
     }
-    if (!config.expired_callback) {
+    if (!config.expired_callback || !config.resumed_callback) {
         return false;
     }
 
     auto &counter = counters_[index]; 
     counter.expired_threshold_ms = config.expired_threshold_ms;
     counter.expired_callback = config.expired_callback;
+    counter.resumed_callback = config.resumed_callback;
     return true;
 }
 
@@ -54,19 +55,22 @@ void FrameDelayChecker::InitialAllCounters() {
 }
 
 void FrameDelayChecker::CheckAndUpdateCounter(Counter& counter) {
-    if (counter.current_frame_count == 0) {
-        return;
-    }
     uint32_t current_frame_count = counter.current_frame_count;
     if (current_frame_count == counter.latest_frame_count) {
         auto duration = current_time_ - counter.latest_frame_time;
         if (duration > counter.expired_threshold_ms) {
-            counter.expired_callback();
-            return;
+            if (!counter.expired) {
+                counter.expired = true;
+                counter.expired_callback();
+            }
         }
     } else {
         counter.latest_frame_count = current_frame_count;
         counter.latest_frame_time = current_time_;
+        if (counter.expired) {
+            counter.expired = false;
+            counter.resumed_callback();
+        }
     }
 }
 

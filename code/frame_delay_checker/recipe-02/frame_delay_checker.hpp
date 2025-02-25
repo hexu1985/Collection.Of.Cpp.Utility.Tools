@@ -8,11 +8,12 @@
 
 class FrameDelayChecker {
 public:
-    using ExpiredCallback = std::function<void()>;
+    using Callback = std::function<void()>;
 
     struct CheckConfig {
         std::chrono::milliseconds expired_threshold_ms{};
-        ExpiredCallback expired_callback;
+        Callback expired_callback;
+        Callback resumed_callback;
     };
 
     FrameDelayChecker(std::chrono::milliseconds check_period_ms);
@@ -32,7 +33,9 @@ private:
         uint32_t latest_frame_count{0};
         std::chrono::steady_clock::time_point latest_frame_time{};
         std::chrono::milliseconds expired_threshold_ms{};
-        ExpiredCallback expired_callback{};
+        bool expired = false;
+        Callback expired_callback;
+        Callback resumed_callback;
     };
 
     void InitialAllCounters();
