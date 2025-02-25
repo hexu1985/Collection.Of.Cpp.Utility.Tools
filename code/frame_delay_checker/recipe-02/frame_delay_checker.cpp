@@ -54,6 +54,9 @@ void FrameDelayChecker::InitialAllCounters() {
 }
 
 void FrameDelayChecker::CheckAndUpdateCounter(Counter& counter) {
+    if (counter.current_frame_count == 0) {
+        return;
+    }
     uint32_t current_frame_count = counter.current_frame_count;
     if (current_frame_count == counter.latest_frame_count) {
         auto duration = current_time_ - counter.latest_frame_time;
