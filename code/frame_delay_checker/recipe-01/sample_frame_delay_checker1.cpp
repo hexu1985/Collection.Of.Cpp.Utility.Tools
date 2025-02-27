@@ -1,6 +1,7 @@
 #include "frame_delay_checker.hpp"
 #include <chrono>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 using namespace std::chrono;
@@ -9,11 +10,32 @@ using namespace std::this_thread;
 const int counter1 = 1;
 const int counter2 = 2;
 
+void print_message(const std::string& message) {
+    // 获取当前系统时间
+    auto now = std::chrono::system_clock::now();
+
+    // 将时间转换为 time_t，以便使用 C 标准库函数进行格式化
+    auto now_time_t = std::chrono::system_clock::to_time_t(now);
+
+    // 将 time_t 转换为 tm 结构体，以便获取年、月、日、时、分、秒等信息
+    std::tm now_tm = *std::localtime(&now_time_t);
+
+    // 获取毫秒部分
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now.time_since_epoch()) % 1000;
+
+    // 打印时间，精确到毫秒
+    std::cout << std::put_time(&now_tm, "%Y-%m-%d %H:%M:%S")
+              << '.' << std::setfill('0') << std::setw(3) << milliseconds.count() 
+              << ": " << message
+              << std::endl;
+}
+
 void warning1(milliseconds interval_ms) {
     static system_clock::time_point latest_time{};
     auto now = system_clock::now();
     if (now - latest_time > interval_ms) {
-        std::cout << "warning1()\n";
+        print_message("warning1()");
         latest_time = now;
     }
 }
@@ -22,7 +44,7 @@ void warning2(milliseconds interval_ms) {
     static system_clock::time_point latest_time{};
     auto now = system_clock::now();
     if (now - latest_time > interval_ms) {
-        std::cout << "warning2()\n";
+        print_message("warning2()");
         latest_time = now;
     }
 }
