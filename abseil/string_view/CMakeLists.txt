@@ -6,7 +6,7 @@ project(string_view)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(abseil-cpp)
+find_package(absl REQUIRED)
 
 add_executable(string_view1 string_view1.cpp)
 target_link_libraries(string_view1 absl::strings)

@@ -1,9 +1,9 @@
 
-ABSEIL_DIR=$(HOME)/local/abseil
+ABSEIL_DIR=$(HOME)/local/abseil-cpp
 
 RM = rm -f
 CXX = g++
-CXXFLAGS = -Wall 
+CXXFLAGS = -Wall -std=c++17
 INCLUDES = -I$(ABSEIL_DIR)/include
 LDFLAGS = -labsl_string_view
 LDPATH = -L$(ABSEIL_DIR)/lib
