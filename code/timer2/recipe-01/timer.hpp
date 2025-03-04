@@ -7,8 +7,6 @@
 #include <memory>
 
 class Timer {
-    std::atomic<bool> active{true};
-
 public:
     using Callback = std::function<void ()>;
     using Interval = std::chrono::milliseconds;
@@ -24,10 +22,7 @@ public:
         pimpl->interval = interval;
         pimpl->type = type;
 
-        std::weak_ptr<Impl> timer{pimpl};
-        std::thread t([timer]() {
-            auto pimpl = timer.lock();
-            if (!pimpl) return;
+        std::thread t([pimpl=pimpl]() {
             do {
                 if (pimpl->done.load()) return;
                 std::this_thread::sleep_for(pimpl->interval);
