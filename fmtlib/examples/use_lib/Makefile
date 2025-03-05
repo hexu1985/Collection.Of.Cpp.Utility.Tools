@@ -1,20 +1,24 @@
+FMTLIB_DIR = $(HOME)/local/fmtlib
 
-FMTLIB_ROOT = $(HOME)/local/fmtlib
-RM = rm -f
 CXX = g++
-CXXFLAGS = -Wall 
-INCLUDES = -I../include -I$(FMTLIB_ROOT)/include
-LDFLAGS = -lfmt
-LDPATH = -L$(FMTLIB_ROOT)/lib
+CXXFLAGS = -Wall -std=c++11 -I$(FMTLIB_DIR)/include
+LDFLAGS = -Wl,-rpath,$(FMTLIB_DIR)/lib -Wl,--enable-new-dtags -L$(FMTLIB_DIR)/lib
+LDLIBS = -lfmt
 
 SOURCES = $(shell ls *.cpp)
-PROGS = $(SOURCES:%.cpp=%)
+OBJECTS = $(patsubst %.cpp,%.o,$(SOURCES))
+PROGRAMS = $(patsubst %.cpp,%,$(SOURCES))
 
-all: $(PROGS)
-	@echo "PROGS = $(PROGS)" 
+.PHONY: all 
+all: $(PROGRAMS)
 
+$(PROGRAMS): %: %.o
+	$(CXX) $(LDFLAGS) -o $@ $< $(LDLIBS)
+
+$(OBJECTS): %.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: clean
 clean:
-	$(RM) $(PROGS)
+	rm -f $(OBJECTS) $(PROGRAMS)
 
-%: %.cpp
-	$(CXX) -o $@ $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH)
