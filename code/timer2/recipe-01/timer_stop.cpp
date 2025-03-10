@@ -8,13 +8,18 @@ void say_hello() {
 }
 
 int main() {
-    auto timer = Timer{say_hello, std::chrono::seconds{5}};
-    print_message("Timer started, but we will cancel it.");
+    auto timer = Timer{say_hello, std::chrono::seconds{1}, Timer::repeat};
+    print_message("Timer started, but we will cancel it after 3s.");
+    std::this_thread::sleep_for(std::chrono::seconds{3});
+    print_message("Now we stop the timer.");
     timer.stop();
+    print_message("Wait for 3s, and check timer status.");
+    std::this_thread::sleep_for(std::chrono::seconds{3});
     if (!timer.isRunning()) {
         print_message("Timer cancelled.");
     }
-    std::this_thread::sleep_for(std::chrono::seconds{10});
     print_message("Program exit.");
+
+    return 0;
 }
 

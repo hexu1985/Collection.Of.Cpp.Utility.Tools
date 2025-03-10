@@ -1,20 +1,21 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++17
+LDFLAGS = 
+LDLIBS = -lpthread
 
 SOURCES = $(shell ls *.cpp)
-OBJECTS = $(patsubst %.cpp,%.o,$(SOURCES))
 PROGRAMS = $(patsubst %.cpp,%,$(SOURCES))
 
 .PHONY: all 
 all: $(PROGRAMS)
 
 $(PROGRAMS): %: %.o
-	$(CXX) -o $@ $<
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-$(OBJECTS): %.o: %.cpp
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: clean
 clean:
-	rm -f $(OBJECTS) $(PROGRAMS)
+	rm -f *.o $(PROGRAMS)
 
