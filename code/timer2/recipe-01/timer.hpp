@@ -9,7 +9,7 @@
 class Timer {
 public:
     using Callback = std::function<void ()>;
-    using Interval = std::chrono::milliseconds;
+    using Interval = std::chrono::microseconds;
 
     enum Type {
         once = 1,
