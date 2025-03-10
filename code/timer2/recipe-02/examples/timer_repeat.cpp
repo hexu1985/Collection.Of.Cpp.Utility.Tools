@@ -3,16 +3,14 @@
 #include <chrono>
 #include <thread>
 
-void say_hello() {
+void repeat_hello() {
     print_message("Hello, World!");
 }
 
 int main() {
-    auto timer = Timer{say_hello, std::chrono::seconds{3}};
-    print_message("Timer started, waiting for it to trigger...");
+    auto timer = Timer{repeat_hello, std::chrono::seconds{2}, Timer::repeat};
+    print_message("Repeating timer started...");
     while (timer.isRunning()) {
-        print_message("Timer is running...");
         std::this_thread::sleep_for(std::chrono::seconds{1});
     }
-    print_message("Timer is not running.");
 }
