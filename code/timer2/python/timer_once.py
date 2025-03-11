@@ -1,13 +1,24 @@
+#!/usr/bin/env python3
+
 import threading
 import datetime
+import time
+
+def print_message(message):
+    print(f"{datetime.datetime.now()}: {message}")
 
 def say_hello():
-    print("{}: Hello, World!".format(datetime.datetime.now()))
+    print_message("Hello, World!")
 
-# 创建一个 Timer，5 秒后执行 say_hello 函数
-timer = threading.Timer(5.0, say_hello)
+def main():
+    timer = threading.Timer(3.0, say_hello)
+    timer.start()
+    
+    print_message("Timer started, waiting for it to trigger...")
+    while timer.is_alive():
+        print_message("Timer is active...")
+        time.sleep(1)
+    print_message("Timer is not active.");
 
-# 启动定时器
-timer.start()
-
-print("{}: Timer started, waiting for it to trigger...".format(datetime.datetime.now()))
+if __name__ == "__main__":
+    main()

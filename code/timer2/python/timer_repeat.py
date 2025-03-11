@@ -1,16 +1,21 @@
+#!/usr/bin/env python3
+
 import threading
 import datetime
+import time
+
+def print_message(message):
+    print(f"{datetime.datetime.now()}: {message}")
 
 def repeat_hello():
-    print("{}: Hello, World!".format(datetime.datetime.now()))
-    # 重新启动定时器
+    print_message("Hello, World!");
     timer = threading.Timer(2.0, repeat_hello)
     timer.start()
 
-# 创建一个 Timer，2 秒后执行 repeat_hello 函数
-timer = threading.Timer(2.0, repeat_hello)
+def main():
+    timer = threading.Timer(2.0, repeat_hello)
+    timer.start()
+    print_message("Repeating timer started...");
 
-# 启动定时器
-timer.start()
-
-print("{}: Repeating timer started...".format(datetime.datetime.now()))
+if __name__ == "__main__":
+    main()
