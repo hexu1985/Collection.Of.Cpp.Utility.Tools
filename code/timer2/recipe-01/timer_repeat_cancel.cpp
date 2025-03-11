@@ -3,24 +3,24 @@
 #include <chrono>
 #include <thread>
 
-void say_hello() {
+void repeat_hello(Timer timer) {
+    static int count{0};
+    ++count;
+    print_message(std::to_string(count));
     print_message("Hello, World!");
+    if (count >= 5) {
+        print_message("cancel myself");
+        timer.cancel();
+    }
 }
 
 int main() {
     Timer timer;
-    timer.start(say_hello, std::chrono::seconds{3});
-    print_message("Timer started, waiting for it to trigger...");
-
-    std::this_thread::sleep_for(std::chrono::seconds{1});
-    print_message("Now we will cancel it.");
-    timer.cancel();
-
+    timer.start(std::bind(&repeat_hello, timer), std::chrono::seconds{2}, Timer::repeat);
+    print_message("Repeating timer started...");
     while (timer.isActive()) {
-        print_message("Timer is active...");
         std::this_thread::sleep_for(std::chrono::seconds{1});
     }
     std::this_thread::sleep_for(std::chrono::seconds{2});
     print_message("Timer cancelled.");
 }
-
