@@ -40,7 +40,7 @@ private:
     std::condition_variable timer_list_cond_;
     TimePoint current_expire_time_point_;
     std::thread timer_check_thread_;
-    std::atomic<bool> is_stopped_{false};
+    std::atomic<bool> stopped_{false};
 };
 
 void TimerManager::start() {
@@ -48,7 +48,7 @@ void TimerManager::start() {
         return;
     }
 
-    is_stopped_ = false;
+    stopped_ = false;
     timer_check_thread_ = std::thread{&TimerManager::check_timer_loop, this};
 }
 
@@ -57,7 +57,7 @@ void TimerManager::stop() {
         return;
     }
 
-    is_stopped_ = true;
+    stopped_ = true;
     timer_list_cond_.notify_one();
     timer_check_thread_.join();
 }
@@ -72,7 +72,7 @@ void TimerManager::check_timer_once() {
 
     while (timer_list_.empty()) {
         timer_list_cond_.wait(lock);
-        if (is_stopped_) return;        // thread cancel check point
+        if (stopped_) return;        // thread cancel check point
     }
 
     // pop first timer of timer_list_
@@ -89,7 +89,7 @@ void TimerManager::check_timer_once() {
                 expired = true;
                 break;
             }
-            if (is_stopped_) return;        // thread cancel check point
+            if (stopped_) return;        // thread cancel check point
         }
         if (!expired) {     // perhaps an new timer insert into the timer_list_
             insert_timer(timer);
@@ -112,7 +112,7 @@ void TimerManager::check_timer_once() {
 }
 
 void TimerManager::check_timer_loop() {
-    while (!is_stopped_) {
+    while (!stopped_) {
         check_timer_once();
     }
 }
