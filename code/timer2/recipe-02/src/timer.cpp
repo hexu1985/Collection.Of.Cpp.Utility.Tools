@@ -167,8 +167,11 @@ private:
     }
 };
 
-Timer::Timer(Callback function, Interval interval, Type type) {
+Timer::Timer() {
     pimpl_ = std::make_shared<Impl>();
+}
+
+void Timer::start(Callback function, Interval interval, Type type) {
     pimpl_->function = function;
     pimpl_->interval = interval;
     pimpl_->type = type;
@@ -177,7 +180,7 @@ Timer::Timer(Callback function, Interval interval, Type type) {
     TimerManagerSingleton::getInstance().insert(pimpl_);
 }
 
-void Timer::stop() {
+void Timer::cancel() {
     pimpl_->active = false;
 }
 

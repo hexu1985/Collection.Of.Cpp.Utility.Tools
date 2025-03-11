@@ -15,8 +15,9 @@ public:
         repeat = 2,
     };
 
-    Timer(Callback function, Interval interval, Type type=once); 
-    void stop(); 
+    Timer(); 
+    void start(Callback function, Interval interval, Type type=once); 
+    void cancel(); 
     bool isActive(); 
 
 private:
