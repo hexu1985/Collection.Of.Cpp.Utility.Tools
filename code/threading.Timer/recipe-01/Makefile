@@ -1,7 +1,7 @@
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -g3
+CXXFLAGS = -Wall -std=c++17 -fsanitize=address -fno-omit-frame-pointer
 LDFLAGS = 
-LDLIBS = -lpthread
+LDLIBS = -lasan -lpthread
 
 HEADERS = $(shell ls *.hpp)
 SOURCES = $(shell ls *.cpp)
