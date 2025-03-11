@@ -10,9 +10,9 @@ void say_hello() {
 int main() {
     auto timer = Timer{say_hello, std::chrono::seconds{3}};
     print_message("Timer started, waiting for it to trigger...");
-    while (timer.isRunning()) {
-        print_message("Timer is running...");
+    while (timer.isActive()) {
+        print_message("Timer is active...");
         std::this_thread::sleep_for(std::chrono::seconds{1});
     }
-    print_message("Timer is not running.");
+    print_message("Timer is not active.");
 }

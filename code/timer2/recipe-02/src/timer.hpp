@@ -17,7 +17,7 @@ public:
 
     Timer(Callback function, Interval interval, Type type=once); 
     void stop(); 
-    bool isRunning(); 
+    bool isActive(); 
 
 private:
     std::shared_ptr<Impl> pimpl_;

@@ -181,7 +181,7 @@ void Timer::stop() {
     pimpl_->active = false;
 }
 
-bool Timer::isRunning() {
+bool Timer::isActive() {
     return pimpl_->active;
 }
 

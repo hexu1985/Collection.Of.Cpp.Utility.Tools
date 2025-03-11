@@ -15,7 +15,7 @@ int main() {
     timer.stop();
     print_message("Wait for 3s, and check timer status.");
     std::this_thread::sleep_for(std::chrono::seconds{3});
-    if (!timer.isRunning()) {
+    if (!timer.isActive()) {
         print_message("Timer cancelled.");
     }
     print_message("Program exit.");

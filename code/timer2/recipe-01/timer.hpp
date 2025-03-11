@@ -24,22 +24,22 @@ public:
 
         std::thread t([pimpl=pimpl]() {
             do {
-                if (pimpl->done.load()) return;
+                if (pimpl->active.load()) return;
                 std::this_thread::sleep_for(pimpl->interval);
-                if (pimpl->done.load()) return;
+                if (pimpl->active.load()) return;
                 pimpl->function();
             } while (pimpl->type == repeat);
-            pimpl->done.store(true);
+            pimpl->active.store(true);
         });
         t.detach();
     }
 
     void stop() {
-        pimpl->done.store(true);
+        pimpl->active.store(true);
     }
 
-    bool isRunning() {
-        return !pimpl->done.load();
+    bool isActive() {
+        return !pimpl->active.load();
     }
 
 private:
@@ -47,7 +47,7 @@ private:
         Callback function;
         Interval interval;
         Type type;
-        std::atomic<bool> done{false};
+        std::atomic<bool> active{false};
     };
 
     std::shared_ptr<Impl> pimpl;

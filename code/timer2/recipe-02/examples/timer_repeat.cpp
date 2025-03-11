@@ -10,7 +10,7 @@ void repeat_hello() {
 int main() {
     auto timer = Timer{repeat_hello, std::chrono::seconds{2}, Timer::repeat};
     print_message("Repeating timer started...");
-    while (timer.isRunning()) {
+    while (timer.isActive()) {
         std::this_thread::sleep_for(std::chrono::seconds{1});
     }
 }
