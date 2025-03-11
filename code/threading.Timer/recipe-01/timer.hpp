@@ -16,17 +16,16 @@ public:
         repeat = 2,
     };
 
-    void start(Callback function, Interval interval, Type type=once) {
-        if (isActive()) {
-            return;
-        }
-
+    Timer(Callback function, Interval interval, Type type=once) {
         pimpl = std::make_shared<Impl>();
         pimpl->function = function;
         pimpl->interval = interval;
         pimpl->type = type;
-        pimpl->active.store(true);
+        pimpl->active.store(false);
+    }
 
+    void start() {
+        pimpl->active.store(true);
         std::thread t([pimpl=pimpl]() {
             do {
                 if (!pimpl->active.load()) return;
@@ -40,15 +39,11 @@ public:
     }
 
     void cancel() {
-        if (!isActive()) {
-            return;
-        }
         pimpl->active.store(false);
-        pimpl.reset(); 
     }
 
     bool isActive() {
-        return pimpl && pimpl->active.load();
+        return pimpl->active.load();
     }
 
 private:

@@ -8,8 +8,8 @@ void repeat_hello() {
 }
 
 int main() {
-    Timer timer;
-    timer.start(repeat_hello, std::chrono::seconds{2}, Timer::repeat);
+    auto timer = Timer{repeat_hello, std::chrono::seconds{2}, Timer::repeat};
+    timer.start();
     print_message("Repeating timer started...");
     while (timer.isActive()) {
         std::this_thread::sleep_for(std::chrono::seconds{1});
