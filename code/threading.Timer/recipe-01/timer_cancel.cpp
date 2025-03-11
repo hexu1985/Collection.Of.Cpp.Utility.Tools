@@ -1,28 +1,26 @@
-// c++ program to explain the
-// use of cancel() method in Timer class
-
 #include "timer.hpp"
-#include <functional>
-#include <iostream>
+#include "print_message.hpp"
+#include <chrono>
+#include <thread>
 
-void helper_function(int i) {
-    std::cout << "Value printed=" << i << std::endl;
+void say_hello() {
+    print_message("Hello, World!");
 }
 
-int main()
-{
-    auto timer1 = Timer(3, std::bind(helper_function, 9));
-    std::cout << "Starting the timer object\n";
-    std::cout << std::endl;
+int main() {
+    Timer timer;
+    timer.start(say_hello, std::chrono::seconds{3});
+    print_message("Timer started, waiting for it to trigger...");
 
-    // Starting the function after 3 seconds
-    timer1.start();
+    std::this_thread::sleep_for(std::chrono::seconds{1});
+    print_message("Now we will cancel it.");
+    timer.cancel();
 
-    std::cout << "This gets printed before the helper_function as helper_function starts after 3 seconds\n";
-    std::cout << std::endl;
-
-    // This cancels the thread when 3 seconds 
-    // have not passed
-    timer1.cancel();
-    std::cout << "Thread1 cancelled, helper_function is not executed\n";
+    while (timer.isActive()) {
+        print_message("Timer is active...");
+        std::this_thread::sleep_for(std::chrono::seconds{1});
+    }
+    std::this_thread::sleep_for(std::chrono::seconds{2});
+    print_message("Timer cancelled.");
 }
+

@@ -4,21 +4,40 @@
 #include <chrono>
 #include <atomic>
 #include <functional>
+#include <memory>
 
 class Timer {
 public:
-    typedef std::function<void ()> Callback;
+    using Callback = std::function<void ()>;
+    using Interval = std::chrono::microseconds;
 
-    Timer(int interval, Callback function) {
-        pimpl = std::make_shared<Impl>(interval, function);
+    enum Type {
+        once = 1,
+        repeat = 2,
+    };
+
+    Timer() {
+        pimpl = std::make_shared<Impl>();
     }
 
-    void start() {
+    void start(Callback function, Interval interval, Type type=once) {
+        if (isActive()) {
+            return;
+        }
+
+        pimpl->function = function;
+        pimpl->interval = interval;
+        pimpl->type = type;
+        pimpl->active.store(true);
+
         std::thread t([pimpl=pimpl]() {
-            if(!pimpl->active.load()) return;
-            std::this_thread::sleep_for(std::chrono::seconds(pimpl->interval));
-            if(!pimpl->active.load()) return;
-            pimpl->function();
+            do {
+                if (!pimpl->active.load()) return;
+                std::this_thread::sleep_for(pimpl->interval);
+                if (!pimpl->active.load()) return;
+                pimpl->function();
+            } while (pimpl->type == repeat);
+            pimpl->active.store(false);
         });
         t.detach();
     }
@@ -27,16 +46,17 @@ public:
         pimpl->active.store(false);
     }
 
+    bool isActive() {
+        return pimpl->active.load();
+    }
+
 private:
     struct Impl {
-        Impl(int interval_, Callback function_): interval(interval_), function(function_) {}
-
-        int interval;
         Callback function;
-        std::atomic<bool> active{true};
+        Interval interval;
+        Type type;
+        std::atomic<bool> active{false};
     };
 
-private:
     std::shared_ptr<Impl> pimpl;
 };
-

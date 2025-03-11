@@ -1,34 +1,22 @@
 CXX = g++
-CXXFLAGS = -g3 -Wall -Wextra -DDEBUG
-INCLUDE = 
+CXXFLAGS = -Wall -std=c++17 -g3
 LDFLAGS = 
 LDLIBS = -lpthread
 
-PROGS =	alarm_start alarm_start2 timer_cancel timer_cancel2 timer_repeat timer_once
+HEADERS = $(shell ls *.hpp)
+SOURCES = $(shell ls *.cpp)
+PROGRAMS = $(patsubst %.cpp,%,$(SOURCES))
 
-.PHONY: all
-all: $(PROGS)
-	@echo "build OK!"
+.PHONY: all 
+all: $(PROGRAMS)
 
+$(PROGRAMS): %: %.o 
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+%.o: %.cpp $(HEADERS)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: clean
 clean:
-	@$(RM) $(PROGS) *.o
-	@echo "clean OK!"
-
-alarm_start: alarm_start.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-alarm_start2: alarm_start2.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-timer_cancel: timer_cancel.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-timer_cancel2: timer_cancel2.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-timer_repeat: timer_repeat.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-
-timer_once: timer_once.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+	rm -f *.o $(PROGRAMS)
 

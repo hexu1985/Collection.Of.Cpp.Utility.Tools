@@ -1,14 +1,19 @@
 #include "timer.hpp"
-#include <stdio.h>
+#include "print_message.hpp"
+#include <chrono>
+#include <thread>
 
-void hello() {
-    printf("hello, world\n");
+void say_hello() {
+    print_message("Hello, World!");
 }
 
 int main() {
-    auto t = Timer(3, hello);
-    t.start();  // after 3 seconds, "hello, world" will be printed
-    int c = getchar();
-    (void) c;
-    return 0;
+    Timer timer;
+    timer.start(say_hello, std::chrono::seconds{3});
+    print_message("Timer started, waiting for it to trigger...");
+    while (timer.isActive()) {
+        print_message("Timer is active...");
+        std::this_thread::sleep_for(std::chrono::seconds{1});
+    }
+    print_message("Timer is not active.");
 }
