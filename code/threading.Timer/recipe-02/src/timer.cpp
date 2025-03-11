@@ -12,7 +12,7 @@ struct Timer::Impl {
     Timer::Callback function;
     Timer::Interval interval;
     Timer::Type type;
-    TimePoint expire_time_point;
+    TimePoint expire_time_point{};
     std::atomic<bool> active{false};
 };
 
@@ -167,15 +167,16 @@ private:
     }
 };
 
-Timer::Timer() {
+Timer::Timer(Callback function, Interval interval, Type type) {
     pimpl_ = std::make_shared<Impl>();
-}
-
-void Timer::start(Callback function, Interval interval, Type type) {
     pimpl_->function = function;
     pimpl_->interval = interval;
     pimpl_->type = type;
-    pimpl_->expire_time_point = Clock::now() + interval;
+    pimpl_->active = false;
+}
+
+void Timer::start() {
+    pimpl_->expire_time_point = Clock::now() + pimpl_->interval;
     pimpl_->active = true;
     TimerManagerSingleton::getInstance().insert(pimpl_);
 }

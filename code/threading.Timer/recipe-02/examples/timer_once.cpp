@@ -8,8 +8,8 @@ void say_hello() {
 }
 
 int main() {
-    Timer timer;
-    timer.start(say_hello, std::chrono::seconds{3});
+    auto timer = Timer{say_hello, std::chrono::seconds{3}};
+    timer.start();
     print_message("Timer started, waiting for it to trigger...");
     while (timer.isActive()) {
         print_message("Timer is active...");
