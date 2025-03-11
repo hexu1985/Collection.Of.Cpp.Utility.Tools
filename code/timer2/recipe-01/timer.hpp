@@ -16,30 +16,38 @@ public:
         repeat = 2,
     };
 
-    Timer(Callback function, Interval interval, Type type=once) {
+    Timer() {
         pimpl = std::make_shared<Impl>();
+    }
+
+    void start(Callback function, Interval interval, Type type=once) {
+        if (isActive()) {
+            return;
+        }
+
         pimpl->function = function;
         pimpl->interval = interval;
         pimpl->type = type;
+        pimpl->active.store(true);
 
         std::thread t([pimpl=pimpl]() {
             do {
-                if (pimpl->active.load()) return;
+                if (!pimpl->active.load()) return;
                 std::this_thread::sleep_for(pimpl->interval);
-                if (pimpl->active.load()) return;
+                if (!pimpl->active.load()) return;
                 pimpl->function();
             } while (pimpl->type == repeat);
-            pimpl->active.store(true);
+            pimpl->active.store(false);
         });
         t.detach();
     }
 
-    void stop() {
-        pimpl->active.store(true);
+    void cancel() {
+        pimpl->active.store(false);
     }
 
     bool isActive() {
-        return !pimpl->active.load();
+        return pimpl->active.load();
     }
 
 private:
@@ -52,5 +60,3 @@ private:
 
     std::shared_ptr<Impl> pimpl;
 };
-
-
