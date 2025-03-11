@@ -9,6 +9,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message( STATUS "CMAKE_PROJECT_NAME = ${CMAKE_PROJECT_NAME}" )
 message( STATUS "PROJECT_SOURCE_DIR = ${PROJECT_SOURCE_DIR}" )
 
+# 启用 AddressSanitizer
+add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp)
 file(GLOB PROGRAMS_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp)
 
