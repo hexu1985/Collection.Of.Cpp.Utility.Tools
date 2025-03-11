@@ -839,10 +839,7 @@ void Timer::set_message(const std::string& message) {
 
 最后的最后，给出文章中提到的所有代码的完整实现链接：
 - 基于thread的C++的Timer类实现，精度秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/alarm/cxx/thread)
-- 基于thread的C++的Timer类实现，精度微秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/threading.Timer/recipe-03)
 - 基于条件变量的C++的Timer类实现，精度秒级，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/alarm/cxx/cond)
-- 基于条件变量的C++的Timer类实现，精度秒级，并增加了AlarmLooper的stop接口，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/threading.Timer/recipe-02)
-- 基于条件变量的C++的Timer类实现，精度微秒级，并增加了AlarmLooper的stop接口，[工程代码](https://github.com/hexu1985/Collection.Of.Cpp.Utility.Tools/tree/master/code/threading.Timer/recipe-04)
 
 **2024/02/08日追加内容：**  
 一般的Timer的接口都是支持一次性(alarm once)和周期性(alarm period)两种模式的，python的threading.Timer接口显然只支持alarm once模式，
