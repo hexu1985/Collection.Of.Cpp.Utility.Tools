@@ -26,3 +26,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
         message(FATAL_ERROR "Compiler doesn't support C++11")
     endif()
 endif()
+
+message(STATUS "Configuring HelloWorld publisher/subscriber example...")
+file(GLOB DDS_HELLOWORLD_SOURCES_CXX "src/*.cxx")
+
