@@ -64,11 +64,9 @@ sudo unzip -d /opt/gradle /tmp/gradle-*.zip
 ```
 
 ### 4. 配置环境变量
-编辑 `~/.bashrc` 或 `/etc/profile.d/gradle.sh`：
+编辑 `~/.bashrc` 追加如下代码：
 ```bash
-echo "export PATH=/opt/gradle/gradle-7.6.4/bin:\$PATH" | sudo tee /etc/profile.d/gradle.sh
-sudo chmod +x /etc/profile.d/gradle.sh
-source /etc/profile.d/gradle.sh
+export PATH=$PATH:/opt/gradle/gradle-7.6.4/bin
 ```
 
 ### 5. 验证安装

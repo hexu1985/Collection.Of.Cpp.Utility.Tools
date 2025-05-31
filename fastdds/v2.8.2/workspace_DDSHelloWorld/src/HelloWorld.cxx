@@ -36,9 +36,9 @@ using namespace eprosima::fastcdr::exception;
 
 HelloWorld::HelloWorld()
 {
-    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@43bd930a
+    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@cb0ed20
     m_index = 0;
-    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@553a3d88
+    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@23fe1d71
     m_message ="";
 
 }
