@@ -17,7 +17,7 @@
  *
  */
 
-#include "HelloWorldPubSubTypes.hpp"
+#include "HelloWorldPubSubTypes.h"
 
 #include <chrono>
 #include <thread>
