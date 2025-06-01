@@ -1,6 +1,8 @@
 fast-dds文档
 https://fast-dds.docs.eprosima.com/en/v2.8.2/
 
+4.1.1. 了解FastDDS、FastRTPS 的底层实现原理
+https://www.yuque.com/yuefeng-95ahz/blogs/hm3a7zg8zvnoc2wk?singleDoc#
 
 https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html
 
