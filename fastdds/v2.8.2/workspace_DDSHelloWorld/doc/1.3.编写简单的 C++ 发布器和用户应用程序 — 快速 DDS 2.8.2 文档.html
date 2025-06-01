@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-Hans"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1.3.编写简单的 C++ 发布器和用户应用程序 — 快速 DDS 2.8.2 文档</title>
+  
+
+  
+  <style type="text/css">:root, :host {
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+  --fa-font-light: normal 300 1em/1 "Font Awesome 6 Pro";
+  --fa-font-thin: normal 100 1em/1 "Font Awesome 6 Pro";
+  --fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-regular: normal 400 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-light: normal 300 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-thin: normal 100 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+  --fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-light: normal 300 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-thin: normal 100 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-duotone-solid: normal 900 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-regular: normal 400 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-light: normal 300 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-thin: normal 100 1em/1 "Font Awesome 6 Sharp Duotone";
+}
+
+svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+  overflow: visible;
+  box-sizing: content-box;
+}
+
+.svg-inline--fa {
+  display: var(--fa-display, inline-block);
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+}
+.svg-inline--fa.fa-2xs {
+  vertical-align: 0.1em;
+}
+.svg-inline--fa.fa-xs {
+  vertical-align: 0em;
+}
+.svg-inline--fa.fa-sm {
+  vertical-align: -0.0714285705em;
+}
+.svg-inline--fa.fa-lg {
+  vertical-align: -0.2em;
+}
+.svg-inline--fa.fa-xl {
+  vertical-align: -0.25em;
+}
+.svg-inline--fa.fa-2xl {
+  vertical-align: -0.3125em;
+}
+.svg-inline--fa.fa-pull-left {
+  margin-right: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-pull-right {
+  margin-left: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-li {
+  width: var(--fa-li-width, 2em);
+  top: 0.25em;
+}
+.svg-inline--fa.fa-fw {
+  width: var(--fa-fw-width, 1.25em);
+}
+
+.fa-layers svg.svg-inline--fa {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.fa-layers-counter, .fa-layers-text {
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+}
+
+.fa-layers {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -0.125em;
+  width: 1em;
+}
+.fa-layers svg.svg-inline--fa {
+  transform-origin: center center;
+}
+
+.fa-layers-text {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.fa-layers-counter {
+  background-color: var(--fa-counter-background-color, #ff253a);
+  border-radius: var(--fa-counter-border-radius, 1em);
+  box-sizing: border-box;
+  color: var(--fa-inverse, #fff);
+  line-height: var(--fa-counter-line-height, 1);
+  max-width: var(--fa-counter-max-width, 5em);
+  min-width: var(--fa-counter-min-width, 1.5em);
+  overflow: hidden;
+  padding: var(--fa-counter-padding, 0.25em 0.5em);
+  right: var(--fa-right, 0);
+  text-overflow: ellipsis;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-counter-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-bottom-right {
+  bottom: var(--fa-bottom, 0);
+  right: var(--fa-right, 0);
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom right;
+}
+
+.fa-layers-bottom-left {
+  bottom: var(--fa-bottom, 0);
+  left: var(--fa-left, 0);
+  right: auto;
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom left;
+}
+
+.fa-layers-top-right {
+  top: var(--fa-top, 0);
+  right: var(--fa-right, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-top-left {
+  left: var(--fa-left, 0);
+  right: auto;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top left;
+}
+
+.fa-1x {
+  font-size: 1em;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa-3x {
+  font-size: 3em;
+}
+
+.fa-4x {
+  font-size: 4em;
+}
+
+.fa-5x {
+  font-size: 5em;
+}
+
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
+}
+
+.fa-8x {
+  font-size: 8em;
+}
+
+.fa-9x {
+  font-size: 9em;
+}
+
+.fa-10x {
+  font-size: 10em;
+}
+
+.fa-2xs {
+  font-size: 0.625em;
+  line-height: 0.1em;
+  vertical-align: 0.225em;
+}
+
+.fa-xs {
+  font-size: 0.75em;
+  line-height: 0.0833333337em;
+  vertical-align: 0.125em;
+}
+
+.fa-sm {
+  font-size: 0.875em;
+  line-height: 0.0714285718em;
+  vertical-align: 0.0535714295em;
+}
+
+.fa-lg {
+  font-size: 1.25em;
+  line-height: 0.05em;
+  vertical-align: -0.075em;
+}
+
+.fa-xl {
+  font-size: 1.5em;
+  line-height: 0.0416666682em;
+  vertical-align: -0.125em;
+}
+
+.fa-2xl {
+  font-size: 2em;
+  line-height: 0.03125em;
+  vertical-align: -0.1875em;
+}
+
+.fa-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+.fa-ul {
+  list-style-type: none;
+  margin-left: var(--fa-li-margin, 2.5em);
+  padding-left: 0;
+}
+.fa-ul > li {
+  position: relative;
+}
+
+.fa-li {
+  left: calc(-1 * var(--fa-li-width, 2em));
+  position: absolute;
+  text-align: center;
+  width: var(--fa-li-width, 2em);
+  line-height: inherit;
+}
+
+.fa-border {
+  border-color: var(--fa-border-color, #eee);
+  border-radius: var(--fa-border-radius, 0.1em);
+  border-style: var(--fa-border-style, solid);
+  border-width: var(--fa-border-width, 0.08em);
+  padding: var(--fa-border-padding, 0.2em 0.25em 0.15em);
+}
+
+.fa-pull-left {
+  float: left;
+  margin-right: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-pull-right {
+  float: right;
+  margin-left: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-beat {
+  animation-name: fa-beat;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-bounce {
+  animation-name: fa-bounce;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+}
+
+.fa-fade {
+  animation-name: fa-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-beat-fade {
+  animation-name: fa-beat-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-flip {
+  animation-name: fa-flip;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-shake {
+  animation-name: fa-shake;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin {
+  animation-name: fa-spin;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 2s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin-reverse {
+  --fa-animation-direction: reverse;
+}
+
+.fa-pulse,
+.fa-spin-pulse {
+  animation-name: fa-spin;
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, steps(8));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fa-beat,
+.fa-bounce,
+.fa-fade,
+.fa-beat-fade,
+.fa-flip,
+.fa-pulse,
+.fa-shake,
+.fa-spin,
+.fa-spin-pulse {
+    animation-delay: -1ms;
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+    transition-delay: 0s;
+    transition-duration: 0s;
+  }
+}
+@keyframes fa-beat {
+  0%, 90% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(var(--fa-beat-scale, 1.25));
+  }
+}
+@keyframes fa-bounce {
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  10% {
+    transform: scale(var(--fa-bounce-start-scale-x, 1.1), var(--fa-bounce-start-scale-y, 0.9)) translateY(0);
+  }
+  30% {
+    transform: scale(var(--fa-bounce-jump-scale-x, 0.9), var(--fa-bounce-jump-scale-y, 1.1)) translateY(var(--fa-bounce-height, -0.5em));
+  }
+  50% {
+    transform: scale(var(--fa-bounce-land-scale-x, 1.05), var(--fa-bounce-land-scale-y, 0.95)) translateY(0);
+  }
+  57% {
+    transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+  }
+  64% {
+    transform: scale(1, 1) translateY(0);
+  }
+  100% {
+    transform: scale(1, 1) translateY(0);
+  }
+}
+@keyframes fa-fade {
+  50% {
+    opacity: var(--fa-fade-opacity, 0.4);
+  }
+}
+@keyframes fa-beat-fade {
+  0%, 100% {
+    opacity: var(--fa-beat-fade-opacity, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(var(--fa-beat-fade-scale, 1.125));
+  }
+}
+@keyframes fa-flip {
+  50% {
+    transform: rotate3d(var(--fa-flip-x, 0), var(--fa-flip-y, 1), var(--fa-flip-z, 0), var(--fa-flip-angle, -180deg));
+  }
+}
+@keyframes fa-shake {
+  0% {
+    transform: rotate(-15deg);
+  }
+  4% {
+    transform: rotate(15deg);
+  }
+  8%, 24% {
+    transform: rotate(-18deg);
+  }
+  12%, 28% {
+    transform: rotate(18deg);
+  }
+  16% {
+    transform: rotate(-22deg);
+  }
+  20% {
+    transform: rotate(22deg);
+  }
+  32% {
+    transform: rotate(-12deg);
+  }
+  36% {
+    transform: rotate(12deg);
+  }
+  40%, 100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.fa-rotate-90 {
+  transform: rotate(90deg);
+}
+
+.fa-rotate-180 {
+  transform: rotate(180deg);
+}
+
+.fa-rotate-270 {
+  transform: rotate(270deg);
+}
+
+.fa-flip-horizontal {
+  transform: scale(-1, 1);
+}
+
+.fa-flip-vertical {
+  transform: scale(1, -1);
+}
+
+.fa-flip-both,
+.fa-flip-horizontal.fa-flip-vertical {
+  transform: scale(-1, -1);
+}
+
+.fa-rotate-by {
+  transform: rotate(var(--fa-rotate-angle, 0));
+}
+
+.fa-stack {
+  display: inline-block;
+  vertical-align: middle;
+  height: 2em;
+  position: relative;
+  width: 2.5em;
+}
+
+.fa-stack-1x,
+.fa-stack-2x {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: var(--fa-stack-z-index, auto);
+}
+
+.svg-inline--fa.fa-stack-1x {
+  height: 1em;
+  width: 1.25em;
+}
+.svg-inline--fa.fa-stack-2x {
+  height: 2em;
+  width: 2.5em;
+}
+
+.fa-inverse {
+  color: var(--fa-inverse, #fff);
+}
+
+.sr-only,
+.fa-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:not(:focus),
+.fa-sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.svg-inline--fa .fa-primary {
+  fill: var(--fa-primary-color, currentColor);
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa .fa-secondary {
+  fill: var(--fa-secondary-color, currentColor);
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-primary {
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-secondary {
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa mask .fa-primary,
+.svg-inline--fa mask .fa-secondary {
+  fill: black;
+}</style><link rel="stylesheet" href="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/theme.css" type="text/css">
+  <link rel="stylesheet" href="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/pygments.css" type="text/css">
+  <link rel="stylesheet" href="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/tabs.css" type="text/css">
+  <link rel="stylesheet" href="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/eprosima_rtd_theme.css" type="text/css">
+
+  
+  
+
+  
+  
+
+  
+    <link rel="canonical" href="https://fast-dds.docs.eprosima.com/en/latest/fastdds/getting_started/simple_app/simple_app.html">
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/documentation_options.js"></script>
+        <script src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/jquery.js"></script>
+        <script src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/underscore.js"></script>
+        <script src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/doctools.js"></script>
+        
+    
+    <script type="text/javascript" src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/genindex.html">
+    <link rel="search" title="Search" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/search.html">
+    <link rel="next" title="1.4. Writing a simple Python publisher and subscriber application" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html">
+    <link rel="prev" title="1.1. What is DDS?" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html"> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2023-04-18T14:43:01Z", "builder": "sphinx", "canonical_url": null, "commit": "2abdc712", "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "fastdds/getting_started/simple_app/simple_app", "programming_language": "cpp", "project": "eprosima-fast-rtps", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "UA-37962201-2", "version": "v2.8.2"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async="" type="text/javascript" src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="eprosima-fast-rtps"><meta name="readthedocs-version-slug" content="v2.8.2"><meta name="readthedocs-resolver-filename" content="/fastdds/getting_started/simple_app/simple_app.html"><meta name="readthedocs-http-status" content="200"><script id="ethicaladsjs" type="text/javascript" async="true" src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/ethicalads.min.js"></script><style>[data-ea-publisher].loaded,[data-ea-type].loaded{font-size:14px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-weight:normal;font-style:normal;letter-spacing:0px;vertical-align:baseline;line-height:1.3em}[data-ea-publisher].loaded a,[data-ea-type].loaded a{text-decoration:none}[data-ea-publisher].loaded .ea-pixel,[data-ea-type].loaded .ea-pixel{display:none}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{margin:1em 1em .5em 1em;padding:1em;background:rgba(0,0,0,.03);color:#505050}[data-ea-publisher].loaded .ea-content a:link,[data-ea-type].loaded .ea-content a:link{color:#505050}[data-ea-publisher].loaded .ea-content a:visited,[data-ea-type].loaded .ea-content a:visited{color:#505050}[data-ea-publisher].loaded .ea-content a:hover,[data-ea-type].loaded .ea-content a:hover{color:#373737}[data-ea-publisher].loaded .ea-content a:active,[data-ea-type].loaded .ea-content a:active{color:#373737}[data-ea-publisher].loaded .ea-content a strong,[data-ea-publisher].loaded .ea-content a b,[data-ea-type].loaded .ea-content a strong,[data-ea-type].loaded .ea-content a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a:link,[data-ea-type].loaded .ea-callout a:link{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:visited,[data-ea-type].loaded .ea-callout a:visited{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:hover,[data-ea-type].loaded .ea-callout a:hover{color:#505050}[data-ea-publisher].loaded .ea-callout a:active,[data-ea-type].loaded .ea-callout a:active{color:#505050}[data-ea-publisher].loaded .ea-callout a strong,[data-ea-publisher].loaded .ea-callout a b,[data-ea-type].loaded .ea-callout a strong,[data-ea-type].loaded .ea-callout a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a,[data-ea-type].loaded .ea-callout a{font-size:.8em}[data-ea-publisher].loaded .ea-domain,[data-ea-type].loaded .ea-domain{margin-top:.75em;font-size:.8em;text-align:center;color:#9d9d9d}[data-ea-publisher].loaded.dark .ea-content,[data-ea-type].loaded.dark .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:link,[data-ea-type].loaded.dark .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:visited,[data-ea-type].loaded.dark .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:hover,[data-ea-type].loaded.dark .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a:active,[data-ea-type].loaded.dark .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a strong,[data-ea-publisher].loaded.dark .ea-content a b,[data-ea-type].loaded.dark .ea-content a strong,[data-ea-type].loaded.dark .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-callout a:link,[data-ea-type].loaded.dark .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:visited,[data-ea-type].loaded.dark .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:hover,[data-ea-type].loaded.dark .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a:active,[data-ea-type].loaded.dark .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a strong,[data-ea-publisher].loaded.dark .ea-callout a b,[data-ea-type].loaded.dark .ea-callout a strong,[data-ea-type].loaded.dark .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-domain,[data-ea-type].loaded.dark .ea-domain{color:#909090}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.adaptive .ea-content,[data-ea-type].loaded.adaptive .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:link,[data-ea-type].loaded.adaptive .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:visited,[data-ea-type].loaded.adaptive .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:hover,[data-ea-type].loaded.adaptive .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a:active,[data-ea-type].loaded.adaptive .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a strong,[data-ea-publisher].loaded.adaptive .ea-content a b,[data-ea-type].loaded.adaptive .ea-content a strong,[data-ea-type].loaded.adaptive .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-callout a:link,[data-ea-type].loaded.adaptive .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:visited,[data-ea-type].loaded.adaptive .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:hover,[data-ea-type].loaded.adaptive .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a:active,[data-ea-type].loaded.adaptive .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a strong,[data-ea-publisher].loaded.adaptive .ea-callout a b,[data-ea-type].loaded.adaptive .ea-callout a strong,[data-ea-type].loaded.adaptive .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-domain,[data-ea-type].loaded.adaptive .ea-domain{color:#909090}}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.raised .ea-content,[data-ea-type].loaded.raised .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.bordered .ea-content,[data-ea-type].loaded.bordered .ea-content{border:1px solid rgba(0,0,0,.04);border-radius:3px;box-shadow:none}[data-ea-publisher].loaded.bordered.dark .ea-content,[data-ea-type].loaded.bordered.dark .ea-content{border:1px solid rgba(255,255,255,.07)}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.bordered.adaptive .ea-content,[data-ea-type].loaded.bordered.adaptive .ea-content{border:1px solid rgba(255,255,255,.07)}}[data-ea-publisher].loaded.flat .ea-content,[data-ea-type].loaded.flat .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-type=image].loaded,[data-ea-publisher]:not([data-ea-type]).loaded,.ea-type-image{display:inline-block}[data-ea-type=image].loaded .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content,.ea-type-image .ea-content{max-width:180px;overflow:auto;text-align:center}[data-ea-type=image].loaded .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>a>img,.ea-type-image .ea-content>a>img{width:120px;height:90px;display:inline-block}[data-ea-type=image].loaded .ea-content>.ea-text,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>.ea-text,.ea-type-image .ea-content>.ea-text{margin-top:1em;font-size:1em;text-align:center}[data-ea-type=image].loaded .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded .ea-callout,.ea-type-image .ea-callout{max-width:180px;margin:0em 1em 1em 1em;padding-left:1em;padding-right:1em;font-style:italic;text-align:right}[data-ea-type=image].loaded.horizontal .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content,.ea-type-image.horizontal .ea-content{max-width:320px}[data-ea-type=image].loaded.horizontal .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content>a>img,.ea-type-image.horizontal .ea-content>a>img{float:left;margin-right:1em}[data-ea-type=image].loaded.horizontal .ea-content .ea-text,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content .ea-text,.ea-type-image.horizontal .ea-content .ea-text{margin-top:0em;text-align:left;overflow:auto}[data-ea-type=image].loaded.horizontal .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-callout,.ea-type-image.horizontal .ea-callout{max-width:320px;text-align:right}[data-ea-type=text].loaded,.ea-type-text{font-size:14px}[data-ea-type=text].loaded .ea-content,.ea-type-text .ea-content{text-align:left}[data-ea-type=text].loaded .ea-callout,.ea-type-text .ea-callout{margin:.5em 1em 1em 1em;padding-left:1em;padding-right:1em;text-align:right;font-style:italic}[data-ea-style=stickybox].loaded{position:fixed;bottom:20px;right:20px;z-index:100}[data-ea-style=stickybox].loaded .ea-type-image .ea-stickybox-hide{cursor:pointer;position:absolute;top:.75em;right:.75em;background-color:#fefefe;border:1px solid #088cdb;border-radius:50%;color:#088cdb;font-size:1em;text-align:center;height:1.5em;width:1.5em;line-height:1.4}@media(max-width: 1300px){[data-ea-style=stickybox].loaded{position:static;bottom:0;right:0;margin:auto;text-align:center}[data-ea-style=stickybox].loaded .ea-stickybox-hide{display:none}}@media(min-width: 1301px){[data-ea-style=stickybox].loaded .ea-type-image .ea-content{background:#dcdcdc}[data-ea-style=stickybox].loaded.dark .ea-type-image .ea-content{background:#505050}}@media(min-width: 1301px)and (prefers-color-scheme: dark){[data-ea-style=stickybox].loaded.adaptive .ea-type-image .ea-content{background:#505050}}[data-ea-style=fixedfooter].loaded{position:fixed;bottom:0;left:0;z-index:200;width:100%;max-width:100%}[data-ea-style=fixedfooter].loaded .ea-type-text{width:100%;max-width:100%;display:flex;z-index:200;background:#dcdcdc}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{background-color:inherit;max-width:100%;margin:0;padding:1em;flex:auto}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{max-width:100%;margin:0;padding:1em;flex:initial}@media(max-width: 576px){[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{display:none}}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide{cursor:pointer;color:#505050;padding:1em;flex:initial;margin:auto 0}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide span{padding:.25em;font-size:.8em;font-weight:bold;border:.15em solid #505050;border-radius:.5em;white-space:nowrap}[data-ea-style=fixedfooter].loaded.dark .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.dark .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}@media(prefers-color-scheme: dark){[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}}</style><script src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/%E6%97%A0%E6%A0%87%E9%A2%98" type="text/javascript" async=""></script></head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"> 快速 DDS
+          
+
+          
+          </a>
+
+          
+            
+            
+            
+              <div class="version">
+                v2.8.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索 文档">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="主要导航">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">导言</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html">DDS API 系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#fast-dds-gen">快速DDS-Gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#rtps-wire-protocol">RTPS 线 协议</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#main-features">主要特点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contacts-and-commercial-support">联系和商业支持</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contributing-to-the-documentation">为文件做出贡献</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#structure-of-the-documentation">文件结构</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装 手册</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_linux.html">1.Linux 安装从二进制文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_windows.html">2.二进制文件的Windows安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_linux.html">3.Linux 安装来自来源</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_windows.html">4.来自源的Windows安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_mac.html">5.Mac OS 安装来自源</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/configuration/cmake_options.html">6.CMake 选项</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">快速 DDS</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="toctree-expand"></span>1.入门</a><ul class="">
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html">1.1.什么是DDS?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html#what-is-rtps">1.2.什么是RTPS?</a></li>
+<li class="toctree-l2 current"><a class="reference internal current" href="#"><span class="toctree-expand"></span>1.3.编写简单的 C++ 发布商和订阅应用程序</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#background">1.3.1.背景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">1.3.2.先决条件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-application-workspace">1.3.3.创建应用程序工作区</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-linked-libraries-and-its-dependencies"><span class="toctree-expand"></span>1.3.4.导入链接的库及其依赖项</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation-from-binaries-and-manual-installation">1.3.4.1.从二进制文件和手动安装安装</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#colcon-installation">1.3.4.2.Colcon 安装</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-the-cmake-project">1.3.5.配置 CMake 项目</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-the-topic-data-type"><span class="toctree-expand"></span>1.3.6.构建主题数据类型</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cmakelists-txt">1.3.6.1。CMakeLists.txt 网站</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#write-the-fast-dds-publisher"><span class="toctree-expand"></span>1.3.7.撰写 Fast DDS 发布商</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examining-the-code">1.3.7.1。检查代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">1.3.7.2.CMakeLists.txt 网站</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#write-the-fast-dds-subscriber"><span class="toctree-expand"></span>1.3.8.编写快速 DDS 订阅者</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.3.8.1。检查代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">1.3.8.2.CMakeLists.txt 网站</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#putting-all-together">1.3.9.把所有放在一起</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summary">1.3.10.摘要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">1.3.11.下一步</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html">1.4.编写一个简单的 Python 发布者和订阅者应用程序</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/library_overview/library_overview.html">2.图书馆概况</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/dds_layer.html">3.DDS 层</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/rtps_layer/rtps_layer.html">4.RTPS 层</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/discovery/discovery.html">5.发现</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/transport/transport.html">6.传输层</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/persistence/persistence.html">7.坚持 服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/security/security.html">8.安全</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/logging/intro.html">9.伐木</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/statistics/statistics.html">10.统计 模块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/xml_configuration/xml_configuration.html">11.XML 配置文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/env_vars/env_vars.html">12.环境变量</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/property_policies/property_policies.html">13.PropertyPolicyQos 选项</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dynamic_types/dynamic_types.html">14.动态主题类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/use_cases/use_cases.html">15.典型用例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/ros2/ros2.html">16.ROS 2 使用快速 DDS 中间件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/api_reference.html">17.C++ API 参考</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/python_api_reference/python_api_reference.html">18.Python API 参考</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">快速DDS-Gen</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/introduction/introduction.html">1.导言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/usage/usage.html">2.使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html">3.构建发布/订阅应用程序</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/python_bindings/python_bindings.html">4.构建 Python 辅助库</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/dataTypes/dataTypes.html">5.通过 IDL 定义数据类型</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">快速 DDS CLI</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddscli/cli/cli.html">1.CLI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Docker 图片</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/docker/docker.html">1.Docker 图片</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">发行 说明</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html">2.8.2(EOL)版本</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html#previous-versions">以前的版本</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="顶级导航">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars" data-moz-translations-id="0"></i>
+          <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" data-moz-translations-id="1">Fast DDS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="面包屑导航">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"></a> »</li>
+        
+          <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="section-number">1.</span>入门</a> »</li>
+        
+      <li><span class="section-number">1.3.</span>编写简单的 C++ 发布商和订阅应用程序</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/eProsima/Fast-DDS-docs/blob/v2.8.2/docs/fastdds/getting_started/simple_app/simple_app.rst" class="fa fa-github"> 在 GitHub 上编辑</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="writing-a-simple-c-publisher-and-subscriber-application">
+<span id="writing-pubsub-app"></span><h1><span class="section-number">1.3. </span>编写简单的 C++ 发布商和订阅应用程序<a class="headerlink" href="#writing-a-simple-c-publisher-and-subscriber-application" title="Permalink 到这个标题">¶</a></h1>
+<p>本节详细介绍如何与发布商和订阅者创建简单的快速 DDS 应用程序
+一步一步地使用C++ API。
+也可以自行生成与本节中实现的类似示例,方法是使用以下方法:
+<em>eProsima Fast </em>DDS-Gen 工具。
+<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html#fastddsgen-pubsub-app"><span class="std std-ref">Building a publish/subscribe application</span></a>这种附加方法在构建发布/订阅应用程序中进行了解释。</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#background" id="id5">背景</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id6">先决条件</a></p></li>
+<li><p><a class="reference internal" href="#create-the-application-workspace" id="id7">创建应用程序工作区</a></p></li>
+<li><p><a class="reference internal" href="#import-linked-libraries-and-its-dependencies" id="id8">导入链接的库及其依赖项</a></p>
+<ul>
+<li><p><a class="reference internal" href="#installation-from-binaries-and-manual-installation" id="id9">从二进制文件和手动安装安装</a></p></li>
+<li><p><a class="reference internal" href="#colcon-installation" id="id10">Colcon 安装</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#configure-the-cmake-project" id="id11">配置 CMake 项目</a></p></li>
+<li><p><a class="reference internal" href="#build-the-topic-data-type" id="id12">构建主题数据类型</a></p>
+<ul>
+<li><p><a class="reference internal" href="#cmakelists-txt" id="id13">CMakeLists.txt 网站</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#write-the-fast-dds-publisher" id="id14">撰写 Fast DDS 发布商</a></p>
+<ul>
+<li><p><a class="reference internal" href="#examining-the-code" id="id15">检查代码</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id16">CMakeLists.txt 网站</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#write-the-fast-dds-subscriber" id="id17">编写快速 DDS 订阅者</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id18">检查代码</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id19">CMakeLists.txt 网站</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#putting-all-together" id="id20">把所有放在一起</a></p></li>
+<li><p><a class="reference internal" href="#summary" id="id21">摘要</a></p></li>
+<li><p><a class="reference internal" href="#next-steps" id="id22">下一步</a></p></li>
+</ul>
+</div>
+<div class="section" id="background">
+<h2><span class="section-number">1.3.1. </span>背景<a class="headerlink" href="#background" title="Permalink 到这个标题">¶</a></h2>
+<p>DDS是一种以数据为中心的通信中间件,实现DCPS模型。
+该模型基于发布商的开发,数据生成元素;和订户,一个
+数据消耗元素。
+这些实体通过主题进行通信,该主题是绑定两个DDS实体的元素。
+发布者在主题下生成信息,订阅者订阅同一主题以接收信息。</p>
+</div>
+<div class="section" id="prerequisites">
+<h2><span class="section-number">1.3.2. </span>先决条件<a class="headerlink" href="#prerequisites" title="Permalink 到这个标题">¶</a></h2>
+<p>首先,您需要遵循安装手册中概述的步骤来安装
+<em>eProsima Fast</em> DDS及其所有依赖项。
+您还需要完成安装手册中概述的安装步骤
+<em>eProsima Fast </em>DDS-Gen 工具。此外,本教程中提供的所有命令都为Linux概述
+环境。</p>
+</div>
+<div class="section" id="create-the-application-workspace">
+<h2><span class="section-number">1.3.3. </span>创建应用程序工作区<a class="headerlink" href="#create-the-application-workspace" title="Permalink 到这个标题">¶</a></h2>
+<p>应用程序工作区在项目结束时将具有以下结构。
+档案<code class="docutils literal notranslate"><span class="pre">build/DDSHelloWorldPublisher</span></code>和<code class="docutils literal notranslate"><span class="pre">build/DDSHelloWorldSubscriber</span></code>是 Publisher 应用程序和
+订阅者申请。</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">.</span>
+<span class="go">└── workspace_DDSHelloWorld</span>
+<span class="go">    ├── build</span>
+<span class="go">    │&nbsp;&nbsp; ├── CMakeCache.txt</span>
+<span class="go">    │&nbsp;&nbsp; ├── CMakeFiles</span>
+<span class="go">    │&nbsp;&nbsp; ├── cmake_install.cmake</span>
+<span class="go">    │&nbsp;&nbsp; ├── DDSHelloWorldPublisher</span>
+<span class="go">    │&nbsp;&nbsp; ├── DDSHelloWorldSubscriber</span>
+<span class="go">    │&nbsp;&nbsp; └── Makefile</span>
+<span class="go">    ├── CMakeLists.txt</span>
+<span class="go">    └── src</span>
+<span class="go">        ├── HelloWorld.cxx</span>
+<span class="go">        ├── HelloWorld.h</span>
+<span class="go">        ├── HelloWorld.idl</span>
+<span class="go">        ├── HelloWorldPublisher.cpp</span>
+<span class="go">        ├── HelloWorldPubSubTypes.cxx</span>
+<span class="go">        ├── HelloWorldPubSubTypes.h</span>
+<span class="go">        └── HelloWorldSubscriber.cpp</span>
+</pre></div>
+</div>
+<p>让我们先创建目录树。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>workspace_DDSHelloWorld<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>workspace_DDSHelloWorld
+mkdir<span class="w"> </span>src<span class="w"> </span>build
+</pre></div>
+</div>
+</div>
+<div class="section" id="import-linked-libraries-and-its-dependencies">
+<h2><span class="section-number">1.3.4. </span>导入链接的库及其依赖项<a class="headerlink" href="#import-linked-libraries-and-its-dependencies" title="Permalink 到这个标题">¶</a></h2>
+<p>DDS 应用程序需要 Fast DDS 和 Fast CDR 库。
+根据安装过程遵循的流程,这些库可用于我们的 DDS 应用程序
+会略有不同。</p>
+<div class="section" id="installation-from-binaries-and-manual-installation">
+<h3><span class="section-number">1.3.4.1. </span>从二进制文件和手动安装安装<a class="headerlink" href="#installation-from-binaries-and-manual-installation" title="Permalink 到这个标题">¶</a></h3>
+<p>如果我们从二进制文件或手动安装中遵循了安装,这些库已经可访问
+从工作空间。
+在 Linux 上,可以在目录中找到头文件<cite>/usr/include/fastrtps/</cite>和
+<cite>/usr/include/fastcdr/</cite>分别为 Fast DDS 和 Fast CDR。两者的编译库可以在
+目录<cite>/usr/lib/</cite>. .</p>
+</div>
+<div class="section" id="colcon-installation">
+<h3><span class="section-number">1.3.4.2. </span>Colcon 安装<a class="headerlink" href="#colcon-installation" title="Permalink 到这个标题">¶</a></h3>
+<p>从Colcon安装中,有几种方法可以导入库。
+如果库需要仅用于当前会话,请运行以下命令。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>&lt;path/to/Fast-DDS/workspace&gt;/install/setup.bash
+</pre></div>
+</div>
+<p>可以通过将快速 DDS 安装目录添加到您的任何会话中访问它们。 
+<code class="docutils literal notranslate"><span class="pre">$PATH</span></code>shell 配置文件中的变量,当前用户运行以下命令。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'source &lt;path/to/Fast-DDS/workspace&gt;/install/setup.bash'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+<p>这将设置每个用户登录后的环境。</p>
+</div>
+</div>
+<div class="section" id="configure-the-cmake-project">
+<h2><span class="section-number">1.3.5. </span>配置 CMake 项目<a class="headerlink" href="#configure-the-cmake-project" title="Permalink 到这个标题">¶</a></h2>
+<p>我们将使用CMake工具来管理项目的建设。
+使用首选文本编辑器,创建一个名为CMakeLists.txt的新文件,并复制和粘贴以下代码片段。
+将此文件保存在工作区的根目录中。如果你遵循这些步骤,它应该
+成文<cite>工作区_DDSHelloWorld</cite>. .</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.12.4</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s">CMAKE_VERSION</span><span class="w"> </span><span class="s">VERSION_LESS</span><span class="w"> </span><span class="s">3.0</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">cmake_policy</span><span class="p">(</span><span class="s">SET</span><span class="w"> </span><span class="s">CMP0048</span><span class="w"> </span><span class="s">NEW</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">project</span><span class="p">(</span><span class="s">DDSHelloWorld</span><span class="p">)</span>
+
+<span class="c"># Find requirements</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s">fastcdr_FOUND</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">find_package</span><span class="p">(</span><span class="s">fastcdr</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s">fastrtps_FOUND</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">find_package</span><span class="p">(</span><span class="s">fastrtps</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="c"># Set C++11</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">CheckCXXCompilerFlag</span><span class="p">)</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_COMPILER_IS_GNUCXX</span><span class="w"> </span><span class="s">OR</span><span class="w"> </span><span class="s">CMAKE_COMPILER_IS_CLANG</span><span class="w"> </span><span class="s">OR</span>
+<span class="w">        </span><span class="s">CMAKE_CXX_COMPILER_ID</span><span class="w"> </span><span class="s">MATCHES</span><span class="w"> </span><span class="s2">"Clang"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">check_cxx_compiler_flag</span><span class="p">(</span><span class="s">-std=c++11</span><span class="w"> </span><span class="s">SUPPORTS_CXX11</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s">SUPPORTS_CXX11</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-std=c++11</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">else</span><span class="p">()</span>
+<span class="w">        </span><span class="nb">message</span><span class="p">(</span><span class="s">FATAL_ERROR</span><span class="w"> </span><span class="s2">"Compiler doesn't support C++11"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>在每个部分中,我们将完成此文件以包含特定生成的文件。</p>
+</div>
+<div class="section" id="build-the-topic-data-type">
+<h2><span class="section-number">1.3.6. </span>构建主题数据类型<a class="headerlink" href="#build-the-topic-data-type" title="Permalink 到这个标题">¶</a></h2>
+<p><em>eProsima Fast </em>DDS-Gen 是一个 Java 应用程序,它使用在 a 中定义的数据类型生成源代码。
+接口描述语言(IDL)文件。这个应用程序可以做两件不同的事情:</p>
+<ol class="arabic simple">
+<li><p>为您的自定义主题生成 C++ 定义。</p></li>
+<li><p>生成一个使用主题数据的函数式示例。</p></li>
+</ol>
+<p>将在本教程中遵循的前者。
+要查看后者的应用示例,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html#fastddsgen-pubsub-app"><span class="std std-ref">example</span></a>您可以查看其他示例。
+有关更多详细信息,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/introduction/introduction.html#fastddsgen-intro"><span class="std std-ref">请参阅介绍。</span></a>
+对于此项目,我们将使用 Fast DDS-Gen 应用程序来定义将发送的消息的数据类型。
+由出版商和订阅者接收。</p>
+<p>在工作区目录中,执行以下命令:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>src<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>touch<span class="w"> </span>HelloWorld.idl
+</pre></div>
+</div>
+<p>这在 HelloWorld.idl 文件中创建了 HelloWorld.idl 文件。<cite>src</cite>目录。
+在文本编辑器中打开文件,复制并粘贴以下代码片段。</p>
+<div class="highlight-idl notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>HelloWorld
+{
+<span class="w">    </span>unsigned<span class="w"> </span><span class="nb">long</span><span class="w"> </span>index;
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="nb">message</span>;
+};
+</pre></div>
+</div>
+<p>通过这样做,我们定义了<code class="docutils literal notranslate"><span class="pre">HelloWorld</span></code>数据类型,<em>它有两个元素:类型索引</em> 
+<code class="docutils literal notranslate"><span class="pre">uint32_t</span></code><em>和类型的消息</em><code class="docutils literal notranslate"><span class="pre">std::string</span></code>. .
+剩下的就是生成在C++11中实现这种数据类型的源代码。
+要执行此操作,请从以下命令运行以下命令:<code class="docutils literal notranslate"><span class="pre">src</span></code>目录。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;path/to/Fast<span class="w"> </span>DDS-Gen&gt;/scripts/fastddsgen<span class="w"> </span>HelloWorld.idl
+</pre></div>
+</div>
+<p>这必须生成以下文件:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>HelloWorld.cxx:HelloWorld 类型定义。</p></li>
+<li><p>HelloWorld.h: HelloWorld.cxx 的页面文件。</p></li>
+<li><p>HelloWorldPubSubTypes.cxx: HelloWorld 类型的序列化和反序列化代码。</p></li>
+<li><p>HelloWorldPubSubTypes.h: HelloWorldPubSubTypes.cxx 的页眉文件。</p></li>
+</ul>
+</div></blockquote>
+<div class="section" id="cmakelists-txt">
+<h3><span class="section-number">1.3.6.1。 </span>CMakeLists.txt 网站<a class="headerlink" href="#cmakelists-txt" title="Permalink 到这个标题">¶</a></h3>
+<p>在您之前创建的 CMakeList.txt 文件的末尾包括以下代码片段。
+这包括我们刚刚创建的文件。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>message<span class="o">(</span>STATUS<span class="w"> </span><span class="s2">"Configuring HelloWorld publisher/subscriber example..."</span><span class="o">)</span>
+file<span class="o">(</span>GLOB<span class="w"> </span>DDS_HELLOWORLD_SOURCES_CXX<span class="w"> </span><span class="s2">"src/*.cxx"</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="write-the-fast-dds-publisher">
+<h2><span class="section-number">1.3.7. </span>撰写 Fast DDS 发布商<a class="headerlink" href="#write-the-fast-dds-publisher" title="Permalink 到这个标题">¶</a></h2>
+<p>从<cite>src</cite>在工作区中的目录,运行以下命令下载 HelloWorldPublisher.cpp 文件。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>-O<span class="w"> </span>HelloWorldPublisher.cpp<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://raw.githubusercontent.com/eProsima/Fast-RTPS-docs/master/code/Examples/C++/DDSHelloWorld/src/HelloWorldPublisher.cpp
+</pre></div>
+</div>
+<p>这是发布者应用程序的 C++ 源代码。
+将发送10个出版物,主题<cite>HelloWorldTopic 的</cite>. .</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).</span>
+<span class="linenos">  2</span><span class="c1">//</span>
+<span class="linenos">  3</span><span class="c1">// Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="linenos">  4</span><span class="c1">// you may not use this file except in compliance with the License.</span>
+<span class="linenos">  5</span><span class="c1">// You may obtain a copy of the License at</span>
+<span class="linenos">  6</span><span class="c1">//</span>
+<span class="linenos">  7</span><span class="c1">//     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="linenos">  8</span><span class="c1">//</span>
+<span class="linenos">  9</span><span class="c1">// Unless required by applicable law or agreed to in writing, software</span>
+<span class="linenos"> 10</span><span class="c1">// distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="linenos"> 11</span><span class="c1">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="linenos"> 12</span><span class="c1">// See the License for the specific language governing permissions and</span>
+<span class="linenos"> 13</span><span class="c1">// limitations under the License.</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span><span class="cm">/**</span>
+<span class="linenos"> 16</span><span class="cm"> * @file HelloWorldPublisher.cpp</span>
+<span class="linenos"> 17</span><span class="cm"> *</span>
+<span class="linenos"> 18</span><span class="cm"> */</span>
+<span class="linenos"> 19</span>
+<span class="linenos"> 20</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"HelloWorldPubSubTypes.h"</span>
+<span class="linenos"> 21</span>
+<span class="linenos"> 22</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="linenos"> 23</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipant.hpp&gt;</span>
+<span class="linenos"> 24</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/topic/TypeSupport.hpp&gt;</span>
+<span class="linenos"> 25</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/Publisher.hpp&gt;</span>
+<span class="linenos"> 26</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriter.hpp&gt;</span>
+<span class="linenos"> 27</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriterListener.hpp&gt;</span>
+<span class="linenos"> 28</span>
+<span class="linenos"> 29</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">eprosima</span><span class="o">::</span><span class="nn">fastdds</span><span class="o">::</span><span class="nn">dds</span><span class="p">;</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldPublisher</span>
+<span class="linenos"> 32</span><span class="p">{</span>
+<span class="linenos"> 33</span><span class="k">private</span><span class="o">:</span>
+<span class="linenos"> 34</span>
+<span class="linenos"> 35</span><span class="w">    </span><span class="n">HelloWorld</span><span class="w"> </span><span class="n">hello_</span><span class="p">;</span>
+<span class="linenos"> 36</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="n">DomainParticipant</span><span class="o">*</span><span class="w"> </span><span class="n">participant_</span><span class="p">;</span>
+<span class="linenos"> 38</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="n">Publisher</span><span class="o">*</span><span class="w"> </span><span class="n">publisher_</span><span class="p">;</span>
+<span class="linenos"> 40</span>
+<span class="linenos"> 41</span><span class="w">    </span><span class="n">Topic</span><span class="o">*</span><span class="w"> </span><span class="n">topic_</span><span class="p">;</span>
+<span class="linenos"> 42</span>
+<span class="linenos"> 43</span><span class="w">    </span><span class="n">DataWriter</span><span class="o">*</span><span class="w"> </span><span class="n">writer_</span><span class="p">;</span>
+<span class="linenos"> 44</span>
+<span class="linenos"> 45</span><span class="w">    </span><span class="n">TypeSupport</span><span class="w"> </span><span class="n">type_</span><span class="p">;</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">PubListener</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">DataWriterListener</span>
+<span class="linenos"> 48</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 49</span><span class="w">    </span><span class="k">public</span><span class="o">:</span>
+<span class="linenos"> 50</span>
+<span class="linenos"> 51</span><span class="w">        </span><span class="n">PubListener</span><span class="p">()</span>
+<span class="linenos"> 52</span><span class="w">            </span><span class="o">:</span><span class="w"> </span><span class="n">matched_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 53</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 54</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 55</span>
+<span class="linenos"> 56</span><span class="w">        </span><span class="o">~</span><span class="n">PubListener</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 57</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 58</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 59</span>
+<span class="linenos"> 60</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">on_publication_matched</span><span class="p">(</span>
+<span class="linenos"> 61</span><span class="w">                </span><span class="n">DataWriter</span><span class="o">*</span><span class="p">,</span>
+<span class="linenos"> 62</span><span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="n">PublicationMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 63</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 64</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos"> 65</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 66</span><span class="w">                </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="linenos"> 67</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 68</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 69</span><span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="linenos"> 70</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 71</span><span class="w">                </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="linenos"> 72</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 73</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 74</span><span class="w">            </span><span class="k">else</span>
+<span class="linenos"> 75</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 76</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="linenos"> 77</span><span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for PublicationMatchedStatus current count change."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 78</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 79</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 80</span>
+<span class="linenos"> 81</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_int</span><span class="w"> </span><span class="n">matched_</span><span class="p">;</span>
+<span class="linenos"> 82</span>
+<span class="linenos"> 83</span><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">listener_</span><span class="p">;</span>
+<span class="linenos"> 84</span>
+<span class="linenos"> 85</span><span class="k">public</span><span class="o">:</span>
+<span class="linenos"> 86</span>
+<span class="linenos"> 87</span><span class="w">    </span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="linenos"> 88</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 89</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">publisher_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 90</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 91</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">writer_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 92</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="linenos"> 93</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 94</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos"> 95</span>
+<span class="linenos"> 96</span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="linenos"> 97</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 98</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 99</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">100</span><span class="w">            </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">delete_datawriter</span><span class="p">(</span><span class="n">writer_</span><span class="p">);</span>
+<span class="linenos">101</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">102</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">103</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">104</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_publisher</span><span class="p">(</span><span class="n">publisher_</span><span class="p">);</span>
+<span class="linenos">105</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">106</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">107</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">108</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="linenos">109</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">110</span><span class="w">        </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">111</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">112</span>
+<span class="linenos">113</span><span class="w">    </span><span class="c1">//!Initialize the publisher</span>
+<span class="linenos">114</span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">init</span><span class="p">()</span>
+<span class="linenos">115</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">116</span><span class="w">        </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">117</span><span class="w">        </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">(</span><span class="s">"HelloWorld"</span><span class="p">);</span>
+<span class="linenos">118</span>
+<span class="linenos">119</span><span class="w">        </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="linenos">120</span><span class="w">        </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_publisher"</span><span class="p">);</span>
+<span class="linenos">121</span><span class="w">        </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+<span class="linenos">122</span>
+<span class="linenos">123</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">124</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">125</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">126</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">127</span>
+<span class="linenos">128</span><span class="w">        </span><span class="c1">// Register the Type</span>
+<span class="linenos">129</span><span class="w">        </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">130</span>
+<span class="linenos">131</span><span class="w">        </span><span class="c1">// Create the publications Topic</span>
+<span class="linenos">132</span><span class="w">        </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+<span class="linenos">133</span>
+<span class="linenos">134</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">135</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">136</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">137</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">138</span>
+<span class="linenos">139</span><span class="w">        </span><span class="c1">// Create the Publisher</span>
+<span class="linenos">140</span><span class="w">        </span><span class="n">publisher_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_publisher</span><span class="p">(</span><span class="n">PUBLISHER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="linenos">141</span>
+<span class="linenos">142</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">143</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">144</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">145</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">146</span>
+<span class="linenos">147</span><span class="w">        </span><span class="c1">// Create the DataWriter</span>
+<span class="linenos">148</span><span class="w">        </span><span class="n">writer_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">create_datawriter</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAWRITER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+<span class="linenos">149</span>
+<span class="linenos">150</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">151</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">152</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">153</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">154</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos">155</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">156</span>
+<span class="linenos">157</span><span class="w">    </span><span class="c1">//!Send a publication</span>
+<span class="linenos">158</span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">publish</span><span class="p">()</span>
+<span class="linenos">159</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">160</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">matched_</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">161</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">162</span><span class="w">            </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">163</span><span class="w">            </span><span class="n">writer_</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">);</span>
+<span class="linenos">164</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos">165</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">166</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">167</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">168</span>
+<span class="linenos">169</span><span class="w">    </span><span class="c1">//!Run the Publisher</span>
+<span class="linenos">170</span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">run</span><span class="p">(</span>
+<span class="linenos">171</span><span class="w">            </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">172</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">173</span><span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples_sent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">174</span><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">samples_sent</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">175</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">176</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publish</span><span class="p">())</span>
+<span class="linenos">177</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos">178</span><span class="w">                </span><span class="n">samples_sent</span><span class="o">++</span><span class="p">;</span>
+<span class="linenos">179</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="linenos">180</span><span class="w">                            </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" SENT"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">181</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos">182</span><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1000</span><span class="p">));</span>
+<span class="linenos">183</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">184</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">185</span><span class="p">};</span>
+<span class="linenos">186</span>
+<span class="linenos">187</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="linenos">188</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="linenos">189</span><span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="linenos">190</span><span class="p">{</span>
+<span class="linenos">191</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting publisher."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">192</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="linenos">193</span>
+<span class="linenos">194</span><span class="w">    </span><span class="n">HelloWorldPublisher</span><span class="o">*</span><span class="w"> </span><span class="n">mypub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPublisher</span><span class="p">();</span>
+<span class="linenos">195</span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="linenos">196</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">197</span><span class="w">        </span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="linenos">198</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">199</span>
+<span class="linenos">200</span><span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mypub</span><span class="p">;</span>
+<span class="linenos">201</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">202</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="examining-the-code">
+<h3><span class="section-number">1.3.7.1。 </span>检查代码<a class="headerlink" href="#examining-the-code" title="Permalink 到这个标题">¶</a></h3>
+<p>在文件的开头,我们有一个Doxygen样式注释块<code class="docutils literal notranslate"><span class="pre">@file</span></code>字段告诉我们名称
+档案。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
+<span class="cm"> * @file HelloWorldPublisher.cpp</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+</pre></div>
+</div>
+<p>以下是C ++标头的包含。
+第一个包括 HelloWorldPubSubTypes.h 文件,其中包含该文件的序列化和反序列化功能。
+我们在上一节中定义的数据类型。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"HelloWorldPubSubTypes.h"</span>
+</pre></div>
+</div>
+<p>下一个块包括允许使用快速DDS API的C ++标头文件。</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantfactory.html#_CPPv4N8eprosima7fastdds3dds24DomainParticipantFactoryE" title="eprosima : : fastdds : : : dds : : : : : dds : : : : : : dds "><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DomainParticipantFactory</span></code></a>. .
+允许创建和销毁 DomainParticipant 对象。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipant.html#_CPPv4N8eprosima7fastdds3dds17DomainParticipantE" title="eprosima : : fastdds : : : : ds : : : 主区 参与"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DomainParticipant</span></code></a>. .
+作为所有其他实体对象的容器,以及作为发布者,订阅者的工厂,
+主题对象。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/typesupport.html#_CPPv4N8eprosima7fastdds3dds11TypeSupportE" title="eprosima : : fastdds : : : dds : : typeSupport"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">TypeSupport</span></code></a>. .
+为参与者提供序列化、反序列化和获取密钥的函数。
+具体数据类型。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/publisher_class.html#_CPPv4N8eprosima7fastdds3dds9PublisherE" title="eprosima : : fastdds : : 密码 : : 发布"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Publisher</span></code></a>. .
+它是负责创建 DataWriters 的对象。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriter.html#_CPPv4N8eprosima7fastdds3dds10DataWriterE" title="eprosima : : fastdds : : : dds : : 数据写作者"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataWriter</span></code></a>. .
+允许应用程序设置在给定 Topic 下发布的数据值。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListenerE" title="eprosima : : fastdds : : : dds : : 数据转换器"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataWriterListener</span></code></a>. .
+允许重新定义 DataWriterListener 的函数。</p></li>
+</ul>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipant.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/topic/TypeSupport.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/Publisher.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriter.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriterListener.hpp&gt;</span>
+</pre></div>
+</div>
+<p>接下来,我们定义包含我们将要使用的eProsima Fast DDS类和函数的命名空间
+我们的应用。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">eprosima</span><span class="o">::</span><span class="nn">fastdds</span><span class="o">::</span><span class="nn">dds</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>下一行创建<code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code>实现一个出版商的类。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldPublisher</span>
+</pre></div>
+</div>
+<p>继续该类的私人数据成员,<code class="docutils literal notranslate"><span class="pre">hello_</span></code>数据成员被定义为一个对象。
+ <code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorld</span></code>定义数据类型的类
+我们使用 IDL 文件创建。
+接下来,与参与者、发布者、主题、DataWriter 和数据类型相对应的私有数据成员是
+定义。
+因<code class="docutils literal notranslate"><span class="pre">type_</span></code>对象<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/typesupport.html#_CPPv4N8eprosima7fastdds3dds11TypeSupportE" title="eprosima : : fastdds : : : dds : : typeSupport"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">TypeSupport</span></code></a>class 是用于注册主题数据类型的对象
+在 DomainParticipant 中。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">private</span><span class="o">:</span>
+
+<span class="w">    </span><span class="n">HelloWorld</span><span class="w"> </span><span class="n">hello_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">DomainParticipant</span><span class="o">*</span><span class="w"> </span><span class="n">participant_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Publisher</span><span class="o">*</span><span class="w"> </span><span class="n">publisher_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Topic</span><span class="o">*</span><span class="w"> </span><span class="n">topic_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">DataWriter</span><span class="o">*</span><span class="w"> </span><span class="n">writer_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">TypeSupport</span><span class="w"> </span><span class="n">type_</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>然后,<code class="xref py py-class docutils literal notranslate"><span class="pre">PubListener</span></code>class 定义来自 herieping from the<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListenerE" title="eprosima : : fastdds : : : dds : : 数据转换器"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataWriterListener</span></code></a>班级。
+此类覆盖默认的 DataWriter 侦听器回调,允许在发生例数时执行例程。
+事件。
+被推翻的回调 
+<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListener22on_publication_matchedEP10DataWriterRK24PublicationMatchedStatus" title="eprosima : : fastdds : : : 数据 翻译 Listener : : on_publication_matched"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_publication_matched()</span></code></a>允许定义一系列操作时,一个新的 DataReader
+检测到正在侦听 DataWriter 发布的主题。
+因<code class="xref py py-func docutils literal notranslate"><span class="pre">info.current_count_change()</span></code>检测与 DataReaders 匹配的这些更改
+数据处理。
+这是一个成员在<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/core/status/matchedstatus.html#_CPPv4N8eprosima7fastdds3dds13MatchedStatusE" title="eprosima : : fastdds : : : dts : : 匹配状态"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">MatchedStatus</span></code></a>允许跟踪订阅状态变化的结构。
+最后,<code class="docutils literal notranslate"><span class="pre">listener_</span></code>类的对象被定义为一个实例<code class="xref py py-class docutils literal notranslate"><span class="pre">PubListener</span></code>. .</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PubListener</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">DataWriterListener</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+
+<span class="w">    </span><span class="n">PubListener</span><span class="p">()</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">matched_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">PubListener</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">on_publication_matched</span><span class="p">(</span>
+<span class="w">            </span><span class="n">DataWriter</span><span class="o">*</span><span class="p">,</span>
+<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="n">PublicationMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="w">                    </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for PublicationMatchedStatus current count change."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_int</span><span class="w"> </span><span class="n">matched_</span><span class="p">;</span>
+
+<span class="p">}</span><span class="w"> </span><span class="n">listener_</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>公共构造器和析构器<code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code>类定义如下。
+构造函数初始化类的私有数据成员<code class="docutils literal notranslate"><span class="pre">nullptr</span></code>除了 TypeSupport
+object,该对象被初始化为<code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPubSubType</span></code>班级。
+类析构函数会删除这些数据成员,从而清理系统内存。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">publisher_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">writer_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">delete_datawriter</span><span class="p">(</span><span class="n">writer_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_publisher</span><span class="p">(</span><span class="n">publisher_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>继续履行公共成员职能<code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code>class,代码的下一个片段定义
+公共出版商的初始化成员函数。
+此函数执行几个操作:</p>
+<ol class="arabic simple">
+<li><p>初始化 HelloWorld 类型的内容<code class="docutils literal notranslate"><span class="pre">hello_</span></code>结构成员。</p></li>
+<li><p>通过 DomainParticipant 的 QoS 为参与者分配名称。</p></li>
+<li><p>使用<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantfactory.html#_CPPv4N8eprosima7fastdds3dds24DomainParticipantFactoryE" title="eprosima : : fastdds : : : dds : : : : : dds : : : : : : dds "><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DomainParticipantFactory</span></code></a>创造参与者。</p></li>
+<li><p>注册 IDL 中定义的数据类型。</p></li>
+<li><p>为出版物创建主题。</p></li>
+<li><p>创建出版商。</p></li>
+<li><p>使用之前创建的侦听器创建 DataWriter。</p></li>
+</ol>
+<p>如您所见,除参与者名称外,所有实体的 QoS 配置都是默认配置。
+(<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantqos.html#_CPPv4N8eprosima7fastdds3dds23PARTICIPANT_QOS_DEFAULTE" title="eprosima : : fastdds : : : participant_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">PARTICIPANT_QOS_DEFAULT</span></code></a>,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/publisherqos.html#_CPPv4N8eprosima7fastdds3dds21PUBLISHER_QOS_DEFAULTE" title="eprosima : : fastdds : : pullisher_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">PUBLISHER_QOS_DEFAULT</span></code></a>,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/topicqos.html#_CPPv4N8eprosima7fastdds3dds17TOPIC_QOS_DEFAULTE" title="eprosima : : fastdds : : : dds : : TOPIC_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">TOPIC_QOS_DEFAULT</span></code></a>,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterqos.html#_CPPv4N8eprosima7fastdds3dds22DATAWRITER_QOS_DEFAULTE" title="eprosima : : fastdds : : : dds : : DATAWRITER_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">DATAWRITER_QOS_DEFAULT</span></code></a>。
+每个 DDS 实体的 QoS 的默认值可以在以下内容中检查:
+<a class="reference external" href="https://www.omg.org/spec/DDS/About-DDS/">DDS标准。</a></p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Initialize the publisher</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">init</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">(</span><span class="s">"HelloWorld"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="w">    </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_publisher"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Register the Type</span>
+<span class="w">    </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Create the publications Topic</span>
+<span class="w">    </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the Publisher</span>
+<span class="w">    </span><span class="n">publisher_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_publisher</span><span class="p">(</span><span class="n">PUBLISHER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the DataWriter</span>
+<span class="w">    </span><span class="n">writer_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">create_datawriter</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAWRITER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>使出版,公共成员功能<code class="docutils literal notranslate"><span class="pre">publish()</span></code>正在实施。
+在 DataWriter 的侦听器回调中,它表示 DataWriter 已与 DataReader 匹配
+收听出版主题,数据成员<code class="docutils literal notranslate"><span class="pre">matched_</span></code>已更新。它包含 DataReaders 的数量
+发现。
+因此,当发现第一个 DataReader 时,应用程序开始发布。
+这只是<cite>写作</cite>DataWriter 对象的更改。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Send a publication</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">publish</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">matched_</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">writer_</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>public <em>run</em> 函数执行发布给定次数的操作,在两者之间等待 1 秒
+出版物。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Run the Publisher</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples_sent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">samples_sent</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publish</span><span class="p">())</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">samples_sent</span><span class="o">++</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" SENT"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1000</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>最后,HelloWorldPublisher 被初始化并运行。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting publisher."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">HelloWorldPublisher</span><span class="o">*</span><span class="w"> </span><span class="n">mypub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPublisher</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mypub</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3><span class="section-number">1.3.7.2. </span>CMakeLists.txt 网站<a class="headerlink" href="#id1" title="Permalink 到这个标题">¶</a></h3>
+<p>包括您之前创建的 CMakeList.txt 文件的末尾,以下代码片段。这增加了所有来源
+构建可执行文件所需的文件,并将可执行文件和库链接在一起。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>add_executable<span class="o">(</span>DDSHelloWorldPublisher<span class="w"> </span>src/HelloWorldPublisher.cpp<span class="w"> </span><span class="si">${</span><span class="nv">DDS_HELLOWORLD_SOURCES_CXX</span><span class="si">}</span><span class="o">)</span>
+target_link_libraries<span class="o">(</span>DDSHelloWorldPublisher<span class="w"> </span>fastrtps<span class="w"> </span>fastcdr<span class="o">)</span>
+</pre></div>
+</div>
+<p>在这一点上,该项目已准备好构建,编译和运行发布者应用程序。
+从工作区中的构建目录中,运行以下命令。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+./DDSHelloWorldPublisher
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="write-the-fast-dds-subscriber">
+<h2><span class="section-number">1.3.8. </span>编写快速 DDS 订阅者<a class="headerlink" href="#write-the-fast-dds-subscriber" title="Permalink 到这个标题">¶</a></h2>
+<p>从<cite>src</cite>在工作区中的目录,执行以下命令下载 HelloWorldSubscriber.cpp 文件。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>-O<span class="w"> </span>HelloWorldSubscriber.cpp<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://raw.githubusercontent.com/eProsima/Fast-RTPS-docs/master/code/Examples/C++/DDSHelloWorld/src/HelloWorldSubscriber.cpp
+</pre></div>
+</div>
+<p>这是订阅者应用程序的 C++ 源代码。
+应用程序运行一个订阅者,直到它收到主题下的10个样本<cite>HelloWorldTopic 的</cite>. .
+此时,订阅者停止。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).</span>
+<span class="linenos">  2</span><span class="c1">//</span>
+<span class="linenos">  3</span><span class="c1">// Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="linenos">  4</span><span class="c1">// you may not use this file except in compliance with the License.</span>
+<span class="linenos">  5</span><span class="c1">// You may obtain a copy of the License at</span>
+<span class="linenos">  6</span><span class="c1">//</span>
+<span class="linenos">  7</span><span class="c1">//     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="linenos">  8</span><span class="c1">//</span>
+<span class="linenos">  9</span><span class="c1">// Unless required by applicable law or agreed to in writing, software</span>
+<span class="linenos"> 10</span><span class="c1">// distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="linenos"> 11</span><span class="c1">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="linenos"> 12</span><span class="c1">// See the License for the specific language governing permissions and</span>
+<span class="linenos"> 13</span><span class="c1">// limitations under the License.</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span><span class="cm">/**</span>
+<span class="linenos"> 16</span><span class="cm"> * @file HelloWorldSubscriber.cpp</span>
+<span class="linenos"> 17</span><span class="cm"> *</span>
+<span class="linenos"> 18</span><span class="cm"> */</span>
+<span class="linenos"> 19</span>
+<span class="linenos"> 20</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"HelloWorldPubSubTypes.h"</span>
+<span class="linenos"> 21</span>
+<span class="linenos"> 22</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="linenos"> 23</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipant.hpp&gt;</span>
+<span class="linenos"> 24</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/topic/TypeSupport.hpp&gt;</span>
+<span class="linenos"> 25</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/Subscriber.hpp&gt;</span>
+<span class="linenos"> 26</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/DataReader.hpp&gt;</span>
+<span class="linenos"> 27</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/DataReaderListener.hpp&gt;</span>
+<span class="linenos"> 28</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/qos/DataReaderQos.hpp&gt;</span>
+<span class="linenos"> 29</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/SampleInfo.hpp&gt;</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">eprosima</span><span class="o">::</span><span class="nn">fastdds</span><span class="o">::</span><span class="nn">dds</span><span class="p">;</span>
+<span class="linenos"> 32</span>
+<span class="linenos"> 33</span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldSubscriber</span>
+<span class="linenos"> 34</span><span class="p">{</span>
+<span class="linenos"> 35</span><span class="k">private</span><span class="o">:</span>
+<span class="linenos"> 36</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="n">DomainParticipant</span><span class="o">*</span><span class="w"> </span><span class="n">participant_</span><span class="p">;</span>
+<span class="linenos"> 38</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="n">Subscriber</span><span class="o">*</span><span class="w"> </span><span class="n">subscriber_</span><span class="p">;</span>
+<span class="linenos"> 40</span>
+<span class="linenos"> 41</span><span class="w">    </span><span class="n">DataReader</span><span class="o">*</span><span class="w"> </span><span class="n">reader_</span><span class="p">;</span>
+<span class="linenos"> 42</span>
+<span class="linenos"> 43</span><span class="w">    </span><span class="n">Topic</span><span class="o">*</span><span class="w"> </span><span class="n">topic_</span><span class="p">;</span>
+<span class="linenos"> 44</span>
+<span class="linenos"> 45</span><span class="w">    </span><span class="n">TypeSupport</span><span class="w"> </span><span class="n">type_</span><span class="p">;</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">SubListener</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">DataReaderListener</span>
+<span class="linenos"> 48</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 49</span><span class="w">    </span><span class="k">public</span><span class="o">:</span>
+<span class="linenos"> 50</span>
+<span class="linenos"> 51</span><span class="w">        </span><span class="n">SubListener</span><span class="p">()</span>
+<span class="linenos"> 52</span><span class="w">            </span><span class="o">:</span><span class="w"> </span><span class="n">samples_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 53</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 54</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 55</span>
+<span class="linenos"> 56</span><span class="w">        </span><span class="o">~</span><span class="n">SubListener</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 57</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 58</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 59</span>
+<span class="linenos"> 60</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">on_subscription_matched</span><span class="p">(</span>
+<span class="linenos"> 61</span><span class="w">                </span><span class="n">DataReader</span><span class="o">*</span><span class="p">,</span>
+<span class="linenos"> 62</span><span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="n">SubscriptionMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 63</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 64</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos"> 65</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 66</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 67</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 68</span><span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="linenos"> 69</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 70</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 71</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 72</span><span class="w">            </span><span class="k">else</span>
+<span class="linenos"> 73</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 74</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="linenos"> 75</span><span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for SubscriptionMatchedStatus current count change"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 76</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 77</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 78</span>
+<span class="linenos"> 79</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">on_data_available</span><span class="p">(</span>
+<span class="linenos"> 80</span><span class="w">                </span><span class="n">DataReader</span><span class="o">*</span><span class="w"> </span><span class="n">reader</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 81</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 82</span><span class="w">            </span><span class="n">SampleInfo</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
+<span class="linenos"> 83</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">take_next_sample</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ReturnCode_t</span><span class="o">::</span><span class="n">RETCODE_OK</span><span class="p">)</span>
+<span class="linenos"> 84</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 85</span><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">valid_data</span><span class="p">)</span>
+<span class="linenos"> 86</span><span class="w">                </span><span class="p">{</span>
+<span class="linenos"> 87</span><span class="w">                    </span><span class="n">samples_</span><span class="o">++</span><span class="p">;</span>
+<span class="linenos"> 88</span><span class="w">                    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="linenos"> 89</span><span class="w">                                </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" RECEIVED."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 90</span><span class="w">                </span><span class="p">}</span>
+<span class="linenos"> 91</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 92</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 93</span>
+<span class="linenos"> 94</span><span class="w">        </span><span class="n">HelloWorld</span><span class="w"> </span><span class="n">hello_</span><span class="p">;</span>
+<span class="linenos"> 95</span>
+<span class="linenos"> 96</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_int</span><span class="w"> </span><span class="n">samples_</span><span class="p">;</span>
+<span class="linenos"> 97</span>
+<span class="linenos"> 98</span><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">listener_</span><span class="p">;</span>
+<span class="linenos"> 99</span>
+<span class="linenos">100</span><span class="k">public</span><span class="o">:</span>
+<span class="linenos">101</span>
+<span class="linenos">102</span><span class="w">    </span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="linenos">103</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">104</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">subscriber_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">105</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">106</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">reader_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">107</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="linenos">108</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">109</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">110</span>
+<span class="linenos">111</span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="linenos">112</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">113</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">114</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">115</span><span class="w">            </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">delete_datareader</span><span class="p">(</span><span class="n">reader_</span><span class="p">);</span>
+<span class="linenos">116</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">117</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">118</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">119</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="linenos">120</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">121</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">122</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">123</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_subscriber</span><span class="p">(</span><span class="n">subscriber_</span><span class="p">);</span>
+<span class="linenos">124</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">125</span><span class="w">        </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">126</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">127</span>
+<span class="linenos">128</span><span class="w">    </span><span class="c1">//!Initialize the subscriber</span>
+<span class="linenos">129</span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">init</span><span class="p">()</span>
+<span class="linenos">130</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">131</span><span class="w">        </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="linenos">132</span><span class="w">        </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_subscriber"</span><span class="p">);</span>
+<span class="linenos">133</span><span class="w">        </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+<span class="linenos">134</span>
+<span class="linenos">135</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">136</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">137</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">138</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">139</span>
+<span class="linenos">140</span><span class="w">        </span><span class="c1">// Register the Type</span>
+<span class="linenos">141</span><span class="w">        </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">142</span>
+<span class="linenos">143</span><span class="w">        </span><span class="c1">// Create the subscriptions Topic</span>
+<span class="linenos">144</span><span class="w">        </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+<span class="linenos">145</span>
+<span class="linenos">146</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">147</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">148</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">149</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">150</span>
+<span class="linenos">151</span><span class="w">        </span><span class="c1">// Create the Subscriber</span>
+<span class="linenos">152</span><span class="w">        </span><span class="n">subscriber_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_subscriber</span><span class="p">(</span><span class="n">SUBSCRIBER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="linenos">153</span>
+<span class="linenos">154</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">155</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">156</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">157</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">158</span>
+<span class="linenos">159</span><span class="w">        </span><span class="c1">// Create the DataReader</span>
+<span class="linenos">160</span><span class="w">        </span><span class="n">reader_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">create_datareader</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAREADER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+<span class="linenos">161</span>
+<span class="linenos">162</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">163</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">164</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">165</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">166</span>
+<span class="linenos">167</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos">168</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">169</span>
+<span class="linenos">170</span><span class="w">    </span><span class="c1">//!Run the Subscriber</span>
+<span class="linenos">171</span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">run</span><span class="p">(</span>
+<span class="linenos">172</span><span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">173</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">174</span><span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">samples_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">175</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">176</span><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+<span class="linenos">177</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">178</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">179</span><span class="p">};</span>
+<span class="linenos">180</span>
+<span class="linenos">181</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="linenos">182</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="linenos">183</span><span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="linenos">184</span><span class="p">{</span>
+<span class="linenos">185</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting subscriber."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">186</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="linenos">187</span>
+<span class="linenos">188</span><span class="w">    </span><span class="n">HelloWorldSubscriber</span><span class="o">*</span><span class="w"> </span><span class="n">mysub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldSubscriber</span><span class="p">();</span>
+<span class="linenos">189</span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="linenos">190</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">191</span><span class="w">        </span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="linenos">192</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">193</span>
+<span class="linenos">194</span><span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mysub</span><span class="p">;</span>
+<span class="linenos">195</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">196</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h3><span class="section-number">1.3.8.1。 </span>检查代码<a class="headerlink" href="#id2" title="Permalink 到这个标题">¶</a></h3>
+<p>由于发布者和订阅者应用程序的源代码大多相同,因此本文档将重点关注
+在它们之间的主要区别上,省略了代码中已经解释过的部分。</p>
+<p>按照与发布者解释相同的结构,第一步是包含 C++ 头文件。
+在这些文件中,包含发布者类的文件被订阅者类和数据写入器类替换为
+数据阅读器类。</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/subscriber_class.html#_CPPv4N8eprosima7fastdds3dds10SubscriberE" title="eprosima : : fastdds : : 订阅者 : : 订阅者"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Subscriber</span></code></a>. .
+它是负责创建和配置 DataReaders 的对象。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareader.html#_CPPv4N8eprosima7fastdds3dds10DataReaderE" title="eprosima : : fastdds : : dds : : 数据阅读器"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataReader</span></code></a>. .
+是负责实际接收数据的对象。
+它在应用程序中注册主题(TopicDescription),该主题标识要读取和读取的数据。
+访问订阅者收到的数据。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderlistener.html#_CPPv4N8eprosima7fastdds3dds18DataReaderListenerE" title="eprosima : : fastdds : : adds : : : 数据阅读器"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataReaderListener</span></code></a>. .
+这是分配给数据阅读器的侦听器。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderqos.html#_CPPv4N8eprosima7fastdds3dds13DataReaderQosE" title="eprosima : : fastdds : : : dds : : : 数据阅读器Qos"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataReaderQoS</span></code></a>. .
+定义 DataReader 的 QoS 的结构。</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/sampleinfo.html#_CPPv4N8eprosima7fastdds3dds10SampleInfoE" title="eprosima : : fastdds : : : sampleInfo"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">SampleInfo</span></code></a>. .
+是伴随每个样本“阅读”或“获取”的信息。</p></li>
+</ul>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/SampleInfo.hpp&gt;</span>
+</pre></div>
+</div>
+<p>下一行定义<code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldSubscriber</span></code>实现订阅者的类。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldSubscriber</span>
+</pre></div>
+</div>
+<p>从类的私有数据成员开始,值得一提的是数据阅读器的实现
+听众。
+类的私人数据成员将是参与者、订阅者、主题、数据阅读器和
+数据类型。
+与数据写入器的情况一样,侦听器在事件发生时实现要执行的回调
+发生。
+SubListener 的第一个被覆盖的回调是<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderlistener.html#_CPPv4N8eprosima7fastdds3dds18DataReaderListener23on_subscription_matchedEP10DataReaderRKN7fastdds3dds25SubscriptionMatchedStatusE" title="eprosima : : fastdds : : : 数据阅读器 监听 : : on_subscription_matched"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_subscription_matched()</span></code></a>,这是
+模拟<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListener22on_publication_matchedEP10DataWriterRK24PublicationMatchedStatus" title="eprosima : : fastdds : : : 数据 翻译 Listener : : on_publication_matched"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_publication_matched()</span></code></a>DataWriter 的回调。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">on_subscription_matched</span><span class="p">(</span>
+<span class="w">        </span><span class="n">DataReader</span><span class="o">*</span><span class="p">,</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">SubscriptionMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="w">                </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for SubscriptionMatchedStatus current count change"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>第二次被推翻的回调是<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderlistener.html#_CPPv4N8eprosima7fastdds3dds18DataReaderListener17on_data_availableEP10DataReader" title="eprosima : : fastdds : : : dds : : 数据阅读器 监听 : : on_data_available"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_data_available()</span></code></a>. .
+其中,下一个接收到的数据阅读器可以访问的样本被获取和处理以显示其内容。
+正是在这里,对象的<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/sampleinfo.html#_CPPv4N8eprosima7fastdds3dds10SampleInfoE" title="eprosima : : fastdds : : : sampleInfo"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">SampleInfo</span></code></a>定义类,它确定样本是否已经
+被阅读或被带走。
+每次读取样品时,都会增加收到的样本的计数器。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">on_data_available</span><span class="p">(</span>
+<span class="w">        </span><span class="n">DataReader</span><span class="o">*</span><span class="w"> </span><span class="n">reader</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">SampleInfo</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">take_next_sample</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ReturnCode_t</span><span class="o">::</span><span class="n">RETCODE_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">valid_data</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">samples_</span><span class="o">++</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" RECEIVED."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>类的公共构造函数和析构函数定义如下。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">subscriber_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">reader_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">delete_datareader</span><span class="p">(</span><span class="n">reader_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_subscriber</span><span class="p">(</span><span class="n">subscriber_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>接下来是订阅者初始化公共成员功能。
+这与为初始化公共成员函数定义的相同。<code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code>. .
+除参与者名称外,所有实体的 QoS 配置都是默认的 QoS
+(<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantqos.html#_CPPv4N8eprosima7fastdds3dds23PARTICIPANT_QOS_DEFAULTE" title="eprosima : : fastdds : : : participant_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">PARTICIPANT_QOS_DEFAULT</span></code></a>,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/subscriberqos.html#_CPPv4N8eprosima7fastdds3dds22SUBSCRIBER_QOS_DEFAULTE" title="eprosima : : fastdds : : subscriber_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">SUBSCRIBER_QOS_DEFAULT</span></code></a>,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/topicqos.html#_CPPv4N8eprosima7fastdds3dds17TOPIC_QOS_DEFAULTE" title="eprosima : : fastdds : : : dds : : TOPIC_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">TOPIC_QOS_DEFAULT</span></code></a>,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderqos.html#_CPPv4N8eprosima7fastdds3dds22DATAREADER_QOS_DEFAULTE" title="eprosima : : fastdds : : dds : : DATAREADER_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">DATAREADER_QOS_DEFAULT</span></code></a>。
+每个 DDS 实体的 QoS 的默认值可以在以下内容中检查:
+<a class="reference external" href="https://www.omg.org/spec/DDS/About-DDS/">DDS标准。</a></p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Initialize the subscriber</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">init</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="w">    </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_subscriber"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Register the Type</span>
+<span class="w">    </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Create the subscriptions Topic</span>
+<span class="w">    </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the Subscriber</span>
+<span class="w">    </span><span class="n">subscriber_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_subscriber</span><span class="p">(</span><span class="n">SUBSCRIBER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the DataReader</span>
+<span class="w">    </span><span class="n">reader_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">create_datareader</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAREADER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>公共成员功能<code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code>确保订阅者运行,直到收到所有样本。
+此成员函数实现了订阅者的主动等待,具有100ms的睡眠间隔来缓解CPU。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Run the Subscriber</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">samples_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>最后,实现订阅者的参与者被初始化并运行主。</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting subscriber."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">HelloWorldSubscriber</span><span class="o">*</span><span class="w"> </span><span class="n">mysub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldSubscriber</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mysub</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3><span class="section-number">1.3.8.2. </span>CMakeLists.txt 网站<a class="headerlink" href="#id4" title="Permalink 到这个标题">¶</a></h3>
+<p>包括您之前创建的 CMakeList.txt 文件的末尾,以下代码片段。
+这增加了所有来源
+构建可执行文件所需的文件,并将可执行文件和库链接在一起。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>add_executable<span class="o">(</span>DDSHelloWorldSubscriber<span class="w"> </span>src/HelloWorldSubscriber.cpp<span class="w"> </span><span class="si">${</span><span class="nv">DDS_HELLOWORLD_SOURCES_CXX</span><span class="si">}</span><span class="o">)</span>
+target_link_libraries<span class="o">(</span>DDSHelloWorldSubscriber<span class="w"> </span>fastrtps<span class="w"> </span>fastcdr<span class="o">)</span>
+</pre></div>
+</div>
+<p>此时,该项目已准备好构建、编译和运行用户应用程序。
+从工作区中的构建目录中,运行以下命令。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+./DDSHelloWorldSubscriber
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="putting-all-together">
+<h2><span class="section-number">1.3.9. </span>把所有放在一起<a class="headerlink" href="#putting-all-together" title="Permalink 到这个标题">¶</a></h2>
+<p>最后,从构建目录中,从两个终端运行发布器和订阅者应用程序。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./DDSHelloWorldPublisher
+./DDSHelloWorldSubscriber
+</pre></div>
+</div>
+<video autoplay="autoplay" loop="">
+    <source src="1.3.%E7%BC%96%E5%86%99%E7%AE%80%E5%8D%95%E7%9A%84%20C++%20%E5%8F%91%E5%B8%83%E5%99%A8%E5%92%8C%E7%94%A8%E6%88%B7%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%20%E2%80%94%20%E5%BF%AB%E9%80%9F%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/simple_pubsub.mp4">
+    Your browser does not support the video tag.
+</video></div>
+<div class="section" id="summary">
+<h2><span class="section-number">1.3.10. </span>摘要<a class="headerlink" href="#summary" title="Permalink 到这个标题">¶</a></h2>
+<p>在本教程中,您构建了一个发布器和一个订阅者 DDS 应用程序。
+您还了解了如何构建用于源代码编译的 CMake 文件,以及如何包含和使用 Fast DDS
+快速 CDR 库在您的项目。</p>
+</div>
+<div class="section" id="next-steps">
+<h2><span class="section-number">1.3.11. </span>下一步<a class="headerlink" href="#next-steps" title="Permalink 到这个标题">¶</a></h2>
+<p><em>在 eProsima Fast DDS</em> Github 存储库中,您将找到实现 DDS 通信的更复杂的示例。
+多种用例和场景。你可以找到他们。
+<a class="reference external" href="https://github.com/eProsima/Fast-DDS/tree/master/examples/cpp/dds">在这里。</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          <div id="readthedocs-ea-text-footer" class="raised" data-ea-type="text" data-ea-manual="true" data-ea-publisher="readthedocs" data-ea-keywords="c++|dds|eprosima|fastdds|readthedocs-project-56315|readthedocs-project-eprosima-fast-rtps" data-ea-campaign-types="community|house|paid"></div></div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="页脚导航">
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html" class="btn btn-neutral float-right" title="1.4.编写一个简单的 Python 发布者和订阅者应用程序" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true" data-moz-translations-id="0"></span></a>
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html" class="btn btn-neutral float-left" title="1.1.什么是DDS?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true" data-moz-translations-id="0"></span> Previous</a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>
+        ©版权2019年,eProsima。
+      
+        
+        <span class="commit">修订<code>2abdc712</code>. .</span>
+      
+
+    </p>
+  </div>
+    
+    
+    
+    与 <a href="https://www.sphinx-doc.org/">狮身 </a> 使用A
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    
+    提供: <a href="https://readthedocs.org/">阅读文档</a>. . 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+   
+
+
+<readthedocs-flyout></readthedocs-flyout><readthedocs-notification class="raised toast"></readthedocs-notification><readthedocs-search class="raised floating"></readthedocs-search><readthedocs-hotkeys></readthedocs-hotkeys></body></html>

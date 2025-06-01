@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1.3. Writing a simple C++ publisher and subscriber application — Fast DDS 2.8.2 documentation</title>
+  
+
+  
+  <style type="text/css">:root, :host {
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+  --fa-font-light: normal 300 1em/1 "Font Awesome 6 Pro";
+  --fa-font-thin: normal 100 1em/1 "Font Awesome 6 Pro";
+  --fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-regular: normal 400 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-light: normal 300 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-thin: normal 100 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+  --fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-light: normal 300 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-thin: normal 100 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-duotone-solid: normal 900 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-regular: normal 400 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-light: normal 300 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-thin: normal 100 1em/1 "Font Awesome 6 Sharp Duotone";
+}
+
+svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+  overflow: visible;
+  box-sizing: content-box;
+}
+
+.svg-inline--fa {
+  display: var(--fa-display, inline-block);
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+}
+.svg-inline--fa.fa-2xs {
+  vertical-align: 0.1em;
+}
+.svg-inline--fa.fa-xs {
+  vertical-align: 0em;
+}
+.svg-inline--fa.fa-sm {
+  vertical-align: -0.0714285705em;
+}
+.svg-inline--fa.fa-lg {
+  vertical-align: -0.2em;
+}
+.svg-inline--fa.fa-xl {
+  vertical-align: -0.25em;
+}
+.svg-inline--fa.fa-2xl {
+  vertical-align: -0.3125em;
+}
+.svg-inline--fa.fa-pull-left {
+  margin-right: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-pull-right {
+  margin-left: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-li {
+  width: var(--fa-li-width, 2em);
+  top: 0.25em;
+}
+.svg-inline--fa.fa-fw {
+  width: var(--fa-fw-width, 1.25em);
+}
+
+.fa-layers svg.svg-inline--fa {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.fa-layers-counter, .fa-layers-text {
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+}
+
+.fa-layers {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -0.125em;
+  width: 1em;
+}
+.fa-layers svg.svg-inline--fa {
+  transform-origin: center center;
+}
+
+.fa-layers-text {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.fa-layers-counter {
+  background-color: var(--fa-counter-background-color, #ff253a);
+  border-radius: var(--fa-counter-border-radius, 1em);
+  box-sizing: border-box;
+  color: var(--fa-inverse, #fff);
+  line-height: var(--fa-counter-line-height, 1);
+  max-width: var(--fa-counter-max-width, 5em);
+  min-width: var(--fa-counter-min-width, 1.5em);
+  overflow: hidden;
+  padding: var(--fa-counter-padding, 0.25em 0.5em);
+  right: var(--fa-right, 0);
+  text-overflow: ellipsis;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-counter-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-bottom-right {
+  bottom: var(--fa-bottom, 0);
+  right: var(--fa-right, 0);
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom right;
+}
+
+.fa-layers-bottom-left {
+  bottom: var(--fa-bottom, 0);
+  left: var(--fa-left, 0);
+  right: auto;
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom left;
+}
+
+.fa-layers-top-right {
+  top: var(--fa-top, 0);
+  right: var(--fa-right, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-top-left {
+  left: var(--fa-left, 0);
+  right: auto;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top left;
+}
+
+.fa-1x {
+  font-size: 1em;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa-3x {
+  font-size: 3em;
+}
+
+.fa-4x {
+  font-size: 4em;
+}
+
+.fa-5x {
+  font-size: 5em;
+}
+
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
+}
+
+.fa-8x {
+  font-size: 8em;
+}
+
+.fa-9x {
+  font-size: 9em;
+}
+
+.fa-10x {
+  font-size: 10em;
+}
+
+.fa-2xs {
+  font-size: 0.625em;
+  line-height: 0.1em;
+  vertical-align: 0.225em;
+}
+
+.fa-xs {
+  font-size: 0.75em;
+  line-height: 0.0833333337em;
+  vertical-align: 0.125em;
+}
+
+.fa-sm {
+  font-size: 0.875em;
+  line-height: 0.0714285718em;
+  vertical-align: 0.0535714295em;
+}
+
+.fa-lg {
+  font-size: 1.25em;
+  line-height: 0.05em;
+  vertical-align: -0.075em;
+}
+
+.fa-xl {
+  font-size: 1.5em;
+  line-height: 0.0416666682em;
+  vertical-align: -0.125em;
+}
+
+.fa-2xl {
+  font-size: 2em;
+  line-height: 0.03125em;
+  vertical-align: -0.1875em;
+}
+
+.fa-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+.fa-ul {
+  list-style-type: none;
+  margin-left: var(--fa-li-margin, 2.5em);
+  padding-left: 0;
+}
+.fa-ul > li {
+  position: relative;
+}
+
+.fa-li {
+  left: calc(-1 * var(--fa-li-width, 2em));
+  position: absolute;
+  text-align: center;
+  width: var(--fa-li-width, 2em);
+  line-height: inherit;
+}
+
+.fa-border {
+  border-color: var(--fa-border-color, #eee);
+  border-radius: var(--fa-border-radius, 0.1em);
+  border-style: var(--fa-border-style, solid);
+  border-width: var(--fa-border-width, 0.08em);
+  padding: var(--fa-border-padding, 0.2em 0.25em 0.15em);
+}
+
+.fa-pull-left {
+  float: left;
+  margin-right: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-pull-right {
+  float: right;
+  margin-left: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-beat {
+  animation-name: fa-beat;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-bounce {
+  animation-name: fa-bounce;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+}
+
+.fa-fade {
+  animation-name: fa-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-beat-fade {
+  animation-name: fa-beat-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-flip {
+  animation-name: fa-flip;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-shake {
+  animation-name: fa-shake;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin {
+  animation-name: fa-spin;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 2s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin-reverse {
+  --fa-animation-direction: reverse;
+}
+
+.fa-pulse,
+.fa-spin-pulse {
+  animation-name: fa-spin;
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, steps(8));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fa-beat,
+.fa-bounce,
+.fa-fade,
+.fa-beat-fade,
+.fa-flip,
+.fa-pulse,
+.fa-shake,
+.fa-spin,
+.fa-spin-pulse {
+    animation-delay: -1ms;
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+    transition-delay: 0s;
+    transition-duration: 0s;
+  }
+}
+@keyframes fa-beat {
+  0%, 90% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(var(--fa-beat-scale, 1.25));
+  }
+}
+@keyframes fa-bounce {
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  10% {
+    transform: scale(var(--fa-bounce-start-scale-x, 1.1), var(--fa-bounce-start-scale-y, 0.9)) translateY(0);
+  }
+  30% {
+    transform: scale(var(--fa-bounce-jump-scale-x, 0.9), var(--fa-bounce-jump-scale-y, 1.1)) translateY(var(--fa-bounce-height, -0.5em));
+  }
+  50% {
+    transform: scale(var(--fa-bounce-land-scale-x, 1.05), var(--fa-bounce-land-scale-y, 0.95)) translateY(0);
+  }
+  57% {
+    transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+  }
+  64% {
+    transform: scale(1, 1) translateY(0);
+  }
+  100% {
+    transform: scale(1, 1) translateY(0);
+  }
+}
+@keyframes fa-fade {
+  50% {
+    opacity: var(--fa-fade-opacity, 0.4);
+  }
+}
+@keyframes fa-beat-fade {
+  0%, 100% {
+    opacity: var(--fa-beat-fade-opacity, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(var(--fa-beat-fade-scale, 1.125));
+  }
+}
+@keyframes fa-flip {
+  50% {
+    transform: rotate3d(var(--fa-flip-x, 0), var(--fa-flip-y, 1), var(--fa-flip-z, 0), var(--fa-flip-angle, -180deg));
+  }
+}
+@keyframes fa-shake {
+  0% {
+    transform: rotate(-15deg);
+  }
+  4% {
+    transform: rotate(15deg);
+  }
+  8%, 24% {
+    transform: rotate(-18deg);
+  }
+  12%, 28% {
+    transform: rotate(18deg);
+  }
+  16% {
+    transform: rotate(-22deg);
+  }
+  20% {
+    transform: rotate(22deg);
+  }
+  32% {
+    transform: rotate(-12deg);
+  }
+  36% {
+    transform: rotate(12deg);
+  }
+  40%, 100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.fa-rotate-90 {
+  transform: rotate(90deg);
+}
+
+.fa-rotate-180 {
+  transform: rotate(180deg);
+}
+
+.fa-rotate-270 {
+  transform: rotate(270deg);
+}
+
+.fa-flip-horizontal {
+  transform: scale(-1, 1);
+}
+
+.fa-flip-vertical {
+  transform: scale(1, -1);
+}
+
+.fa-flip-both,
+.fa-flip-horizontal.fa-flip-vertical {
+  transform: scale(-1, -1);
+}
+
+.fa-rotate-by {
+  transform: rotate(var(--fa-rotate-angle, 0));
+}
+
+.fa-stack {
+  display: inline-block;
+  vertical-align: middle;
+  height: 2em;
+  position: relative;
+  width: 2.5em;
+}
+
+.fa-stack-1x,
+.fa-stack-2x {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: var(--fa-stack-z-index, auto);
+}
+
+.svg-inline--fa.fa-stack-1x {
+  height: 1em;
+  width: 1.25em;
+}
+.svg-inline--fa.fa-stack-2x {
+  height: 2em;
+  width: 2.5em;
+}
+
+.fa-inverse {
+  color: var(--fa-inverse, #fff);
+}
+
+.sr-only,
+.fa-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:not(:focus),
+.fa-sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.svg-inline--fa .fa-primary {
+  fill: var(--fa-primary-color, currentColor);
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa .fa-secondary {
+  fill: var(--fa-secondary-color, currentColor);
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-primary {
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-secondary {
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa mask .fa-primary,
+.svg-inline--fa mask .fa-secondary {
+  fill: black;
+}</style><link rel="stylesheet" href="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/theme.css" type="text/css">
+  <link rel="stylesheet" href="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/pygments.css" type="text/css">
+  <link rel="stylesheet" href="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/tabs.css" type="text/css">
+  <link rel="stylesheet" href="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/eprosima_rtd_theme.css" type="text/css">
+
+  
+  
+
+  
+  
+
+  
+    <link rel="canonical" href="https://fast-dds.docs.eprosima.com/en/latest/fastdds/getting_started/simple_app/simple_app.html">
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/documentation_options.js"></script>
+        <script src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/jquery.js"></script>
+        <script src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/underscore.js"></script>
+        <script src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/doctools.js"></script>
+        
+    
+    <script type="text/javascript" src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/genindex.html">
+    <link rel="search" title="Search" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/search.html">
+    <link rel="next" title="1.4. Writing a simple Python publisher and subscriber application" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html">
+    <link rel="prev" title="1.1. What is DDS?" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html"> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2023-04-18T14:43:01Z", "builder": "sphinx", "canonical_url": null, "commit": "2abdc712", "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "fastdds/getting_started/simple_app/simple_app", "programming_language": "cpp", "project": "eprosima-fast-rtps", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "UA-37962201-2", "version": "v2.8.2"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async="" type="text/javascript" src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="eprosima-fast-rtps"><meta name="readthedocs-version-slug" content="v2.8.2"><meta name="readthedocs-resolver-filename" content="/fastdds/getting_started/simple_app/simple_app.html"><meta name="readthedocs-http-status" content="200"><script id="ethicaladsjs" type="text/javascript" async="true" src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/ethicalads.min.js"></script><style>[data-ea-publisher].loaded,[data-ea-type].loaded{font-size:14px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-weight:normal;font-style:normal;letter-spacing:0px;vertical-align:baseline;line-height:1.3em}[data-ea-publisher].loaded a,[data-ea-type].loaded a{text-decoration:none}[data-ea-publisher].loaded .ea-pixel,[data-ea-type].loaded .ea-pixel{display:none}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{margin:1em 1em .5em 1em;padding:1em;background:rgba(0,0,0,.03);color:#505050}[data-ea-publisher].loaded .ea-content a:link,[data-ea-type].loaded .ea-content a:link{color:#505050}[data-ea-publisher].loaded .ea-content a:visited,[data-ea-type].loaded .ea-content a:visited{color:#505050}[data-ea-publisher].loaded .ea-content a:hover,[data-ea-type].loaded .ea-content a:hover{color:#373737}[data-ea-publisher].loaded .ea-content a:active,[data-ea-type].loaded .ea-content a:active{color:#373737}[data-ea-publisher].loaded .ea-content a strong,[data-ea-publisher].loaded .ea-content a b,[data-ea-type].loaded .ea-content a strong,[data-ea-type].loaded .ea-content a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a:link,[data-ea-type].loaded .ea-callout a:link{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:visited,[data-ea-type].loaded .ea-callout a:visited{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:hover,[data-ea-type].loaded .ea-callout a:hover{color:#505050}[data-ea-publisher].loaded .ea-callout a:active,[data-ea-type].loaded .ea-callout a:active{color:#505050}[data-ea-publisher].loaded .ea-callout a strong,[data-ea-publisher].loaded .ea-callout a b,[data-ea-type].loaded .ea-callout a strong,[data-ea-type].loaded .ea-callout a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a,[data-ea-type].loaded .ea-callout a{font-size:.8em}[data-ea-publisher].loaded .ea-domain,[data-ea-type].loaded .ea-domain{margin-top:.75em;font-size:.8em;text-align:center;color:#9d9d9d}[data-ea-publisher].loaded.dark .ea-content,[data-ea-type].loaded.dark .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:link,[data-ea-type].loaded.dark .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:visited,[data-ea-type].loaded.dark .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:hover,[data-ea-type].loaded.dark .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a:active,[data-ea-type].loaded.dark .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a strong,[data-ea-publisher].loaded.dark .ea-content a b,[data-ea-type].loaded.dark .ea-content a strong,[data-ea-type].loaded.dark .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-callout a:link,[data-ea-type].loaded.dark .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:visited,[data-ea-type].loaded.dark .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:hover,[data-ea-type].loaded.dark .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a:active,[data-ea-type].loaded.dark .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a strong,[data-ea-publisher].loaded.dark .ea-callout a b,[data-ea-type].loaded.dark .ea-callout a strong,[data-ea-type].loaded.dark .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-domain,[data-ea-type].loaded.dark .ea-domain{color:#909090}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.adaptive .ea-content,[data-ea-type].loaded.adaptive .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:link,[data-ea-type].loaded.adaptive .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:visited,[data-ea-type].loaded.adaptive .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:hover,[data-ea-type].loaded.adaptive .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a:active,[data-ea-type].loaded.adaptive .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a strong,[data-ea-publisher].loaded.adaptive .ea-content a b,[data-ea-type].loaded.adaptive .ea-content a strong,[data-ea-type].loaded.adaptive .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-callout a:link,[data-ea-type].loaded.adaptive .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:visited,[data-ea-type].loaded.adaptive .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:hover,[data-ea-type].loaded.adaptive .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a:active,[data-ea-type].loaded.adaptive .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a strong,[data-ea-publisher].loaded.adaptive .ea-callout a b,[data-ea-type].loaded.adaptive .ea-callout a strong,[data-ea-type].loaded.adaptive .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-domain,[data-ea-type].loaded.adaptive .ea-domain{color:#909090}}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.raised .ea-content,[data-ea-type].loaded.raised .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.bordered .ea-content,[data-ea-type].loaded.bordered .ea-content{border:1px solid rgba(0,0,0,.04);border-radius:3px;box-shadow:none}[data-ea-publisher].loaded.bordered.dark .ea-content,[data-ea-type].loaded.bordered.dark .ea-content{border:1px solid rgba(255,255,255,.07)}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.bordered.adaptive .ea-content,[data-ea-type].loaded.bordered.adaptive .ea-content{border:1px solid rgba(255,255,255,.07)}}[data-ea-publisher].loaded.flat .ea-content,[data-ea-type].loaded.flat .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-type=image].loaded,[data-ea-publisher]:not([data-ea-type]).loaded,.ea-type-image{display:inline-block}[data-ea-type=image].loaded .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content,.ea-type-image .ea-content{max-width:180px;overflow:auto;text-align:center}[data-ea-type=image].loaded .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>a>img,.ea-type-image .ea-content>a>img{width:120px;height:90px;display:inline-block}[data-ea-type=image].loaded .ea-content>.ea-text,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>.ea-text,.ea-type-image .ea-content>.ea-text{margin-top:1em;font-size:1em;text-align:center}[data-ea-type=image].loaded .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded .ea-callout,.ea-type-image .ea-callout{max-width:180px;margin:0em 1em 1em 1em;padding-left:1em;padding-right:1em;font-style:italic;text-align:right}[data-ea-type=image].loaded.horizontal .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content,.ea-type-image.horizontal .ea-content{max-width:320px}[data-ea-type=image].loaded.horizontal .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content>a>img,.ea-type-image.horizontal .ea-content>a>img{float:left;margin-right:1em}[data-ea-type=image].loaded.horizontal .ea-content .ea-text,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content .ea-text,.ea-type-image.horizontal .ea-content .ea-text{margin-top:0em;text-align:left;overflow:auto}[data-ea-type=image].loaded.horizontal .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-callout,.ea-type-image.horizontal .ea-callout{max-width:320px;text-align:right}[data-ea-type=text].loaded,.ea-type-text{font-size:14px}[data-ea-type=text].loaded .ea-content,.ea-type-text .ea-content{text-align:left}[data-ea-type=text].loaded .ea-callout,.ea-type-text .ea-callout{margin:.5em 1em 1em 1em;padding-left:1em;padding-right:1em;text-align:right;font-style:italic}[data-ea-style=stickybox].loaded{position:fixed;bottom:20px;right:20px;z-index:100}[data-ea-style=stickybox].loaded .ea-type-image .ea-stickybox-hide{cursor:pointer;position:absolute;top:.75em;right:.75em;background-color:#fefefe;border:1px solid #088cdb;border-radius:50%;color:#088cdb;font-size:1em;text-align:center;height:1.5em;width:1.5em;line-height:1.4}@media(max-width: 1300px){[data-ea-style=stickybox].loaded{position:static;bottom:0;right:0;margin:auto;text-align:center}[data-ea-style=stickybox].loaded .ea-stickybox-hide{display:none}}@media(min-width: 1301px){[data-ea-style=stickybox].loaded .ea-type-image .ea-content{background:#dcdcdc}[data-ea-style=stickybox].loaded.dark .ea-type-image .ea-content{background:#505050}}@media(min-width: 1301px)and (prefers-color-scheme: dark){[data-ea-style=stickybox].loaded.adaptive .ea-type-image .ea-content{background:#505050}}[data-ea-style=fixedfooter].loaded{position:fixed;bottom:0;left:0;z-index:200;width:100%;max-width:100%}[data-ea-style=fixedfooter].loaded .ea-type-text{width:100%;max-width:100%;display:flex;z-index:200;background:#dcdcdc}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{background-color:inherit;max-width:100%;margin:0;padding:1em;flex:auto}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{max-width:100%;margin:0;padding:1em;flex:initial}@media(max-width: 576px){[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{display:none}}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide{cursor:pointer;color:#505050;padding:1em;flex:initial;margin:auto 0}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide span{padding:.25em;font-size:.8em;font-weight:bold;border:.15em solid #505050;border-radius:.5em;white-space:nowrap}[data-ea-style=fixedfooter].loaded.dark .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.dark .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}@media(prefers-color-scheme: dark){[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}}</style><script src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/%E6%97%A0%E6%A0%87%E9%A2%98" type="text/javascript" async=""></script></head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"> Fast DDS
+          
+
+          
+          </a>
+
+          
+            
+            
+            
+              <div class="version">
+                v2.8.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html">DDS API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#fast-dds-gen">Fast DDS-Gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#rtps-wire-protocol">RTPS Wire Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#main-features">Main Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contacts-and-commercial-support">Contacts and Commercial support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contributing-to-the-documentation">Contributing to the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#structure-of-the-documentation">Structure of the documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_linux.html">1. Linux installation from binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_windows.html">2. Windows installation from binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_linux.html">3. Linux installation from sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_windows.html">4. Windows installation from sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_mac.html">5. Mac OS installation from sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/configuration/cmake_options.html">6. CMake options</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fast DDS</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="toctree-expand"></span>1. Getting Started</a><ul class="">
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html">1.1. What is DDS?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html#what-is-rtps">1.2. What is RTPS?</a></li>
+<li class="toctree-l2 current"><a class="reference internal current" href="#"><span class="toctree-expand"></span>1.3. Writing a simple C++ publisher and subscriber application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#background">1.3.1. Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">1.3.2. Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-application-workspace">1.3.3. Create the application workspace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-linked-libraries-and-its-dependencies"><span class="toctree-expand"></span>1.3.4. Import linked libraries and its dependencies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation-from-binaries-and-manual-installation">1.3.4.1. Installation from binaries and manual installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#colcon-installation">1.3.4.2. Colcon installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-the-cmake-project">1.3.5. Configure the CMake project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-the-topic-data-type"><span class="toctree-expand"></span>1.3.6. Build the topic data type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cmakelists-txt">1.3.6.1. CMakeLists.txt</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#write-the-fast-dds-publisher"><span class="toctree-expand"></span>1.3.7. Write the Fast DDS publisher</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examining-the-code">1.3.7.1. Examining the code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">1.3.7.2. CMakeLists.txt</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#write-the-fast-dds-subscriber"><span class="toctree-expand"></span>1.3.8. Write the Fast DDS subscriber</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.3.8.1. Examining the code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">1.3.8.2. CMakeLists.txt</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#putting-all-together">1.3.9. Putting all together</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summary">1.3.10. Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">1.3.11. Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html">1.4. Writing a simple Python publisher and subscriber application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/library_overview/library_overview.html">2. Library Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/dds_layer.html">3. DDS Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/rtps_layer/rtps_layer.html">4. RTPS Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/discovery/discovery.html">5. Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/transport/transport.html">6. Transport Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/persistence/persistence.html">7. Persistence Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/security/security.html">8. Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/logging/intro.html">9. Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/statistics/statistics.html">10. Statistics Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/xml_configuration/xml_configuration.html">11. XML profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/env_vars/env_vars.html">12. Environment variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/property_policies/property_policies.html">13. PropertyPolicyQos Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dynamic_types/dynamic_types.html">14. Dynamic Topic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/use_cases/use_cases.html">15. Typical Use-Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/ros2/ros2.html">16. ROS 2 using Fast DDS middleware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/api_reference.html">17. C++ API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/python_api_reference/python_api_reference.html">18. Python API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fast DDS-Gen</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/introduction/introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/usage/usage.html">2. Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html">3. Building a publish/subscribe application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/python_bindings/python_bindings.html">4. Building Python auxiliary libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/dataTypes/dataTypes.html">5. Defining a data type via IDL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fast DDS CLI</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddscli/cli/cli.html">1. CLI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Docker Images</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/docker/docker.html">1. Docker Images</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Release Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html">Version 2.8.2 (EOL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html#previous-versions">Previous versions</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html">Fast DDS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"></a> »</li>
+        
+          <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="section-number">1. </span>Getting Started</a> »</li>
+        
+      <li><span class="section-number">1.3. </span>Writing a simple C++ publisher and subscriber application</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/eProsima/Fast-DDS-docs/blob/v2.8.2/docs/fastdds/getting_started/simple_app/simple_app.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="writing-a-simple-c-publisher-and-subscriber-application">
+<span id="writing-pubsub-app"></span><h1><span class="section-number">1.3. </span>Writing a simple C++ publisher and subscriber application<a class="headerlink" href="#writing-a-simple-c-publisher-and-subscriber-application" title="Permalink to this headline">¶</a></h1>
+<p>This section details how to create a simple Fast DDS application with a publisher and a subscriber
+using C++ API step by step.
+It is also possible to self-generate a similar example to the one implemented in this section by using the
+<em>eProsima Fast DDS-Gen</em> tool.
+This additional approach is explained in <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html#fastddsgen-pubsub-app"><span class="std std-ref">Building a publish/subscribe application</span></a>.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#background" id="id5">Background</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id6">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#create-the-application-workspace" id="id7">Create the application workspace</a></p></li>
+<li><p><a class="reference internal" href="#import-linked-libraries-and-its-dependencies" id="id8">Import linked libraries and its dependencies</a></p>
+<ul>
+<li><p><a class="reference internal" href="#installation-from-binaries-and-manual-installation" id="id9">Installation from binaries and manual installation</a></p></li>
+<li><p><a class="reference internal" href="#colcon-installation" id="id10">Colcon installation</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#configure-the-cmake-project" id="id11">Configure the CMake project</a></p></li>
+<li><p><a class="reference internal" href="#build-the-topic-data-type" id="id12">Build the topic data type</a></p>
+<ul>
+<li><p><a class="reference internal" href="#cmakelists-txt" id="id13">CMakeLists.txt</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#write-the-fast-dds-publisher" id="id14">Write the Fast DDS publisher</a></p>
+<ul>
+<li><p><a class="reference internal" href="#examining-the-code" id="id15">Examining the code</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id16">CMakeLists.txt</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#write-the-fast-dds-subscriber" id="id17">Write the Fast DDS subscriber</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id18">Examining the code</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id19">CMakeLists.txt</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#putting-all-together" id="id20">Putting all together</a></p></li>
+<li><p><a class="reference internal" href="#summary" id="id21">Summary</a></p></li>
+<li><p><a class="reference internal" href="#next-steps" id="id22">Next steps</a></p></li>
+</ul>
+</div>
+<div class="section" id="background">
+<h2><span class="section-number">1.3.1. </span>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>DDS is a data-centric communications middleware that implements the DCPS model.
+This model is based on the development of a publisher, a data generating element; and a subscriber, a
+data consuming element.
+These entities communicate by means of the topic, an element that binds both DDS entities.
+Publishers generate information under a topic and subscribers subscribe to this same topic to receive information.</p>
+</div>
+<div class="section" id="prerequisites">
+<h2><span class="section-number">1.3.2. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>First of all, you need to follow the steps outlined in the Installation Manual for the installation of
+<em>eProsima Fast DDS</em> and all its dependencies.
+You also need to have completed the steps outlined in the Installation Manual for the installation of the
+<em>eProsima Fast DDS-Gen</em> tool. Moreover, all the commands provided in this tutorial are outlined for a Linux
+environment.</p>
+</div>
+<div class="section" id="create-the-application-workspace">
+<h2><span class="section-number">1.3.3. </span>Create the application workspace<a class="headerlink" href="#create-the-application-workspace" title="Permalink to this headline">¶</a></h2>
+<p>The application workspace will have the following structure at the end of the project.
+Files <code class="docutils literal notranslate"><span class="pre">build/DDSHelloWorldPublisher</span></code> and <code class="docutils literal notranslate"><span class="pre">build/DDSHelloWorldSubscriber</span></code> are the Publisher application and
+Subscriber application respectively.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">.</span>
+<span class="go">└── workspace_DDSHelloWorld</span>
+<span class="go">    ├── build</span>
+<span class="go">    │&nbsp;&nbsp; ├── CMakeCache.txt</span>
+<span class="go">    │&nbsp;&nbsp; ├── CMakeFiles</span>
+<span class="go">    │&nbsp;&nbsp; ├── cmake_install.cmake</span>
+<span class="go">    │&nbsp;&nbsp; ├── DDSHelloWorldPublisher</span>
+<span class="go">    │&nbsp;&nbsp; ├── DDSHelloWorldSubscriber</span>
+<span class="go">    │&nbsp;&nbsp; └── Makefile</span>
+<span class="go">    ├── CMakeLists.txt</span>
+<span class="go">    └── src</span>
+<span class="go">        ├── HelloWorld.cxx</span>
+<span class="go">        ├── HelloWorld.h</span>
+<span class="go">        ├── HelloWorld.idl</span>
+<span class="go">        ├── HelloWorldPublisher.cpp</span>
+<span class="go">        ├── HelloWorldPubSubTypes.cxx</span>
+<span class="go">        ├── HelloWorldPubSubTypes.h</span>
+<span class="go">        └── HelloWorldSubscriber.cpp</span>
+</pre></div>
+</div>
+<p>Let’s create the directory tree first.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>workspace_DDSHelloWorld<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>workspace_DDSHelloWorld
+mkdir<span class="w"> </span>src<span class="w"> </span>build
+</pre></div>
+</div>
+</div>
+<div class="section" id="import-linked-libraries-and-its-dependencies">
+<h2><span class="section-number">1.3.4. </span>Import linked libraries and its dependencies<a class="headerlink" href="#import-linked-libraries-and-its-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The DDS application requires the Fast DDS and Fast CDR libraries.
+Depending on the installation procedure followed the process of making these libraries available for our DDS application
+will be slightly different.</p>
+<div class="section" id="installation-from-binaries-and-manual-installation">
+<h3><span class="section-number">1.3.4.1. </span>Installation from binaries and manual installation<a class="headerlink" href="#installation-from-binaries-and-manual-installation" title="Permalink to this headline">¶</a></h3>
+<p>If we have followed the installation from binaries or the manual installation, these libraries are already accessible
+from the workspace.
+On Linux, the header files can be found in directories <cite>/usr/include/fastrtps/</cite> and
+<cite>/usr/include/fastcdr/</cite> for Fast DDS and Fast CDR respectively. The compiled libraries of both can be found in
+the directory <cite>/usr/lib/</cite>.</p>
+</div>
+<div class="section" id="colcon-installation">
+<h3><span class="section-number">1.3.4.2. </span>Colcon installation<a class="headerlink" href="#colcon-installation" title="Permalink to this headline">¶</a></h3>
+<p>From a Colcon installation there are several ways to import the libraries.
+If the libraries need to be available just for the current session, run the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>&lt;path/to/Fast-DDS/workspace&gt;/install/setup.bash
+</pre></div>
+</div>
+<p>They can be made accessible from any session by adding the Fast DDS installation directory to your <code class="docutils literal notranslate"><span class="pre">$PATH</span></code>
+variable in the shell configuration files for the current user running the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'source &lt;path/to/Fast-DDS/workspace&gt;/install/setup.bash'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+<p>This will set up the environment after each of this user’s logins.</p>
+</div>
+</div>
+<div class="section" id="configure-the-cmake-project">
+<h2><span class="section-number">1.3.5. </span>Configure the CMake project<a class="headerlink" href="#configure-the-cmake-project" title="Permalink to this headline">¶</a></h2>
+<p>We will use the CMake tool to manage the building of the project.
+With your preferred text editor, create a new file called CMakeLists.txt and copy and paste the following code snippet.
+Save this file in the root directory of your workspace. If you have followed these steps, it should
+be <cite>workspace_DDSHelloWorld</cite>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.12.4</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s">CMAKE_VERSION</span><span class="w"> </span><span class="s">VERSION_LESS</span><span class="w"> </span><span class="s">3.0</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">cmake_policy</span><span class="p">(</span><span class="s">SET</span><span class="w"> </span><span class="s">CMP0048</span><span class="w"> </span><span class="s">NEW</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">project</span><span class="p">(</span><span class="s">DDSHelloWorld</span><span class="p">)</span>
+
+<span class="c"># Find requirements</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s">fastcdr_FOUND</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">find_package</span><span class="p">(</span><span class="s">fastcdr</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s">fastrtps_FOUND</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">find_package</span><span class="p">(</span><span class="s">fastrtps</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="c"># Set C++11</span>
+<span class="nb">include</span><span class="p">(</span><span class="s">CheckCXXCompilerFlag</span><span class="p">)</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_COMPILER_IS_GNUCXX</span><span class="w"> </span><span class="s">OR</span><span class="w"> </span><span class="s">CMAKE_COMPILER_IS_CLANG</span><span class="w"> </span><span class="s">OR</span>
+<span class="w">        </span><span class="s">CMAKE_CXX_COMPILER_ID</span><span class="w"> </span><span class="s">MATCHES</span><span class="w"> </span><span class="s2">"Clang"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">check_cxx_compiler_flag</span><span class="p">(</span><span class="s">-std=c++11</span><span class="w"> </span><span class="s">SUPPORTS_CXX11</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s">SUPPORTS_CXX11</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">add_compile_options</span><span class="p">(</span><span class="s">-std=c++11</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">else</span><span class="p">()</span>
+<span class="w">        </span><span class="nb">message</span><span class="p">(</span><span class="s">FATAL_ERROR</span><span class="w"> </span><span class="s2">"Compiler doesn't support C++11"</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In each section we will complete this file to include the specific generated files.</p>
+</div>
+<div class="section" id="build-the-topic-data-type">
+<h2><span class="section-number">1.3.6. </span>Build the topic data type<a class="headerlink" href="#build-the-topic-data-type" title="Permalink to this headline">¶</a></h2>
+<p><em>eProsima Fast DDS-Gen</em> is a Java application that generates source code using the data types defined in an
+Interface Description Language (IDL) file. This application can do two different things:</p>
+<ol class="arabic simple">
+<li><p>Generate C++ definitions for your custom topic.</p></li>
+<li><p>Generate a functional example that uses your topic data.</p></li>
+</ol>
+<p>It will be the former that will be followed in this tutorial.
+To see an example of application of the latter you can check this other <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html#fastddsgen-pubsub-app"><span class="std std-ref">example</span></a>.
+See <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/introduction/introduction.html#fastddsgen-intro"><span class="std std-ref">Introduction</span></a> for further details.
+For this project, we will use the Fast DDS-Gen application to define the data type of the messages that will be sent
+by the publishers and received by the subscribers.</p>
+<p>In the workspace directory, execute the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>src<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>touch<span class="w"> </span>HelloWorld.idl
+</pre></div>
+</div>
+<p>This creates the HelloWorld.idl file in the <cite>src</cite> directory.
+Open the file in a text editor and copy and paste the following snippet of code.</p>
+<div class="highlight-idl notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>HelloWorld
+{
+<span class="w">    </span>unsigned<span class="w"> </span><span class="nb">long</span><span class="w"> </span>index;
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="nb">message</span>;
+};
+</pre></div>
+</div>
+<p>By doing this we have defined the <code class="docutils literal notranslate"><span class="pre">HelloWorld</span></code> data type, which has two elements: an <em>index</em> of type <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code>
+and a <em>message</em> of type <code class="docutils literal notranslate"><span class="pre">std::string</span></code>.
+All that remains is to generate the source code that implements this data type in C++11.
+To do this, run the following command from the <code class="docutils literal notranslate"><span class="pre">src</span></code> directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;path/to/Fast<span class="w"> </span>DDS-Gen&gt;/scripts/fastddsgen<span class="w"> </span>HelloWorld.idl
+</pre></div>
+</div>
+<p>This must have generated the following files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>HelloWorld.cxx: HelloWorld type definition.</p></li>
+<li><p>HelloWorld.h: Header file for HelloWorld.cxx.</p></li>
+<li><p>HelloWorldPubSubTypes.cxx: Serialization and Deserialization code for the HelloWorld type.</p></li>
+<li><p>HelloWorldPubSubTypes.h: Header file for HelloWorldPubSubTypes.cxx.</p></li>
+</ul>
+</div></blockquote>
+<div class="section" id="cmakelists-txt">
+<h3><span class="section-number">1.3.6.1. </span>CMakeLists.txt<a class="headerlink" href="#cmakelists-txt" title="Permalink to this headline">¶</a></h3>
+<p>Include the following code snippet at the end of the CMakeList.txt file you created earlier.
+This includes the files we have just created.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>message<span class="o">(</span>STATUS<span class="w"> </span><span class="s2">"Configuring HelloWorld publisher/subscriber example..."</span><span class="o">)</span>
+file<span class="o">(</span>GLOB<span class="w"> </span>DDS_HELLOWORLD_SOURCES_CXX<span class="w"> </span><span class="s2">"src/*.cxx"</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="write-the-fast-dds-publisher">
+<h2><span class="section-number">1.3.7. </span>Write the Fast DDS publisher<a class="headerlink" href="#write-the-fast-dds-publisher" title="Permalink to this headline">¶</a></h2>
+<p>From the <cite>src</cite> directory in the workspace, run the following command to download the HelloWorldPublisher.cpp file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>-O<span class="w"> </span>HelloWorldPublisher.cpp<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://raw.githubusercontent.com/eProsima/Fast-RTPS-docs/master/code/Examples/C++/DDSHelloWorld/src/HelloWorldPublisher.cpp
+</pre></div>
+</div>
+<p>This is the C++ source code for the publisher application.
+It is going to send 10 publications under the topic <cite>HelloWorldTopic</cite>.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).</span>
+<span class="linenos">  2</span><span class="c1">//</span>
+<span class="linenos">  3</span><span class="c1">// Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="linenos">  4</span><span class="c1">// you may not use this file except in compliance with the License.</span>
+<span class="linenos">  5</span><span class="c1">// You may obtain a copy of the License at</span>
+<span class="linenos">  6</span><span class="c1">//</span>
+<span class="linenos">  7</span><span class="c1">//     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="linenos">  8</span><span class="c1">//</span>
+<span class="linenos">  9</span><span class="c1">// Unless required by applicable law or agreed to in writing, software</span>
+<span class="linenos"> 10</span><span class="c1">// distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="linenos"> 11</span><span class="c1">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="linenos"> 12</span><span class="c1">// See the License for the specific language governing permissions and</span>
+<span class="linenos"> 13</span><span class="c1">// limitations under the License.</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span><span class="cm">/**</span>
+<span class="linenos"> 16</span><span class="cm"> * @file HelloWorldPublisher.cpp</span>
+<span class="linenos"> 17</span><span class="cm"> *</span>
+<span class="linenos"> 18</span><span class="cm"> */</span>
+<span class="linenos"> 19</span>
+<span class="linenos"> 20</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"HelloWorldPubSubTypes.h"</span>
+<span class="linenos"> 21</span>
+<span class="linenos"> 22</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="linenos"> 23</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipant.hpp&gt;</span>
+<span class="linenos"> 24</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/topic/TypeSupport.hpp&gt;</span>
+<span class="linenos"> 25</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/Publisher.hpp&gt;</span>
+<span class="linenos"> 26</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriter.hpp&gt;</span>
+<span class="linenos"> 27</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriterListener.hpp&gt;</span>
+<span class="linenos"> 28</span>
+<span class="linenos"> 29</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">eprosima</span><span class="o">::</span><span class="nn">fastdds</span><span class="o">::</span><span class="nn">dds</span><span class="p">;</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldPublisher</span>
+<span class="linenos"> 32</span><span class="p">{</span>
+<span class="linenos"> 33</span><span class="k">private</span><span class="o">:</span>
+<span class="linenos"> 34</span>
+<span class="linenos"> 35</span><span class="w">    </span><span class="n">HelloWorld</span><span class="w"> </span><span class="n">hello_</span><span class="p">;</span>
+<span class="linenos"> 36</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="n">DomainParticipant</span><span class="o">*</span><span class="w"> </span><span class="n">participant_</span><span class="p">;</span>
+<span class="linenos"> 38</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="n">Publisher</span><span class="o">*</span><span class="w"> </span><span class="n">publisher_</span><span class="p">;</span>
+<span class="linenos"> 40</span>
+<span class="linenos"> 41</span><span class="w">    </span><span class="n">Topic</span><span class="o">*</span><span class="w"> </span><span class="n">topic_</span><span class="p">;</span>
+<span class="linenos"> 42</span>
+<span class="linenos"> 43</span><span class="w">    </span><span class="n">DataWriter</span><span class="o">*</span><span class="w"> </span><span class="n">writer_</span><span class="p">;</span>
+<span class="linenos"> 44</span>
+<span class="linenos"> 45</span><span class="w">    </span><span class="n">TypeSupport</span><span class="w"> </span><span class="n">type_</span><span class="p">;</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">PubListener</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">DataWriterListener</span>
+<span class="linenos"> 48</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 49</span><span class="w">    </span><span class="k">public</span><span class="o">:</span>
+<span class="linenos"> 50</span>
+<span class="linenos"> 51</span><span class="w">        </span><span class="n">PubListener</span><span class="p">()</span>
+<span class="linenos"> 52</span><span class="w">            </span><span class="o">:</span><span class="w"> </span><span class="n">matched_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 53</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 54</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 55</span>
+<span class="linenos"> 56</span><span class="w">        </span><span class="o">~</span><span class="n">PubListener</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 57</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 58</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 59</span>
+<span class="linenos"> 60</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">on_publication_matched</span><span class="p">(</span>
+<span class="linenos"> 61</span><span class="w">                </span><span class="n">DataWriter</span><span class="o">*</span><span class="p">,</span>
+<span class="linenos"> 62</span><span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="n">PublicationMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 63</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 64</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos"> 65</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 66</span><span class="w">                </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="linenos"> 67</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 68</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 69</span><span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="linenos"> 70</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 71</span><span class="w">                </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="linenos"> 72</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 73</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 74</span><span class="w">            </span><span class="k">else</span>
+<span class="linenos"> 75</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 76</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="linenos"> 77</span><span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for PublicationMatchedStatus current count change."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 78</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 79</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 80</span>
+<span class="linenos"> 81</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_int</span><span class="w"> </span><span class="n">matched_</span><span class="p">;</span>
+<span class="linenos"> 82</span>
+<span class="linenos"> 83</span><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">listener_</span><span class="p">;</span>
+<span class="linenos"> 84</span>
+<span class="linenos"> 85</span><span class="k">public</span><span class="o">:</span>
+<span class="linenos"> 86</span>
+<span class="linenos"> 87</span><span class="w">    </span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="linenos"> 88</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 89</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">publisher_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 90</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 91</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">writer_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 92</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="linenos"> 93</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 94</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos"> 95</span>
+<span class="linenos"> 96</span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="linenos"> 97</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 98</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos"> 99</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">100</span><span class="w">            </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">delete_datawriter</span><span class="p">(</span><span class="n">writer_</span><span class="p">);</span>
+<span class="linenos">101</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">102</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">103</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">104</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_publisher</span><span class="p">(</span><span class="n">publisher_</span><span class="p">);</span>
+<span class="linenos">105</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">106</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">107</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">108</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="linenos">109</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">110</span><span class="w">        </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">111</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">112</span>
+<span class="linenos">113</span><span class="w">    </span><span class="c1">//!Initialize the publisher</span>
+<span class="linenos">114</span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">init</span><span class="p">()</span>
+<span class="linenos">115</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">116</span><span class="w">        </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">117</span><span class="w">        </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">(</span><span class="s">"HelloWorld"</span><span class="p">);</span>
+<span class="linenos">118</span>
+<span class="linenos">119</span><span class="w">        </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="linenos">120</span><span class="w">        </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_publisher"</span><span class="p">);</span>
+<span class="linenos">121</span><span class="w">        </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+<span class="linenos">122</span>
+<span class="linenos">123</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">124</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">125</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">126</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">127</span>
+<span class="linenos">128</span><span class="w">        </span><span class="c1">// Register the Type</span>
+<span class="linenos">129</span><span class="w">        </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">130</span>
+<span class="linenos">131</span><span class="w">        </span><span class="c1">// Create the publications Topic</span>
+<span class="linenos">132</span><span class="w">        </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+<span class="linenos">133</span>
+<span class="linenos">134</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">135</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">136</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">137</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">138</span>
+<span class="linenos">139</span><span class="w">        </span><span class="c1">// Create the Publisher</span>
+<span class="linenos">140</span><span class="w">        </span><span class="n">publisher_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_publisher</span><span class="p">(</span><span class="n">PUBLISHER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="linenos">141</span>
+<span class="linenos">142</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">143</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">144</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">145</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">146</span>
+<span class="linenos">147</span><span class="w">        </span><span class="c1">// Create the DataWriter</span>
+<span class="linenos">148</span><span class="w">        </span><span class="n">writer_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">create_datawriter</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAWRITER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+<span class="linenos">149</span>
+<span class="linenos">150</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">151</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">152</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">153</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">154</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos">155</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">156</span>
+<span class="linenos">157</span><span class="w">    </span><span class="c1">//!Send a publication</span>
+<span class="linenos">158</span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">publish</span><span class="p">()</span>
+<span class="linenos">159</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">160</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">matched_</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">161</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">162</span><span class="w">            </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">163</span><span class="w">            </span><span class="n">writer_</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">);</span>
+<span class="linenos">164</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos">165</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">166</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">167</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">168</span>
+<span class="linenos">169</span><span class="w">    </span><span class="c1">//!Run the Publisher</span>
+<span class="linenos">170</span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">run</span><span class="p">(</span>
+<span class="linenos">171</span><span class="w">            </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">172</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">173</span><span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples_sent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">174</span><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">samples_sent</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">175</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">176</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publish</span><span class="p">())</span>
+<span class="linenos">177</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos">178</span><span class="w">                </span><span class="n">samples_sent</span><span class="o">++</span><span class="p">;</span>
+<span class="linenos">179</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="linenos">180</span><span class="w">                            </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" SENT"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">181</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos">182</span><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1000</span><span class="p">));</span>
+<span class="linenos">183</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">184</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">185</span><span class="p">};</span>
+<span class="linenos">186</span>
+<span class="linenos">187</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="linenos">188</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="linenos">189</span><span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="linenos">190</span><span class="p">{</span>
+<span class="linenos">191</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting publisher."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">192</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="linenos">193</span>
+<span class="linenos">194</span><span class="w">    </span><span class="n">HelloWorldPublisher</span><span class="o">*</span><span class="w"> </span><span class="n">mypub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPublisher</span><span class="p">();</span>
+<span class="linenos">195</span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="linenos">196</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">197</span><span class="w">        </span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="linenos">198</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">199</span>
+<span class="linenos">200</span><span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mypub</span><span class="p">;</span>
+<span class="linenos">201</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">202</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="examining-the-code">
+<h3><span class="section-number">1.3.7.1. </span>Examining the code<a class="headerlink" href="#examining-the-code" title="Permalink to this headline">¶</a></h3>
+<p>At the beginning of the file we have a Doxygen style comment block with the <code class="docutils literal notranslate"><span class="pre">@file</span></code> field that tells us the name of
+the file.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
+<span class="cm"> * @file HelloWorldPublisher.cpp</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+</pre></div>
+</div>
+<p>Below are the includes of the C++ headers.
+The first one includes the HelloWorldPubSubTypes.h file with the serialization and deserialization functions of the
+data type that we have defined in the previous section.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"HelloWorldPubSubTypes.h"</span>
+</pre></div>
+</div>
+<p>The next block includes the C++ header files that allow the use of the Fast DDS API.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantfactory.html#_CPPv4N8eprosima7fastdds3dds24DomainParticipantFactoryE" title="eprosima::fastdds::dds::DomainParticipantFactory"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DomainParticipantFactory</span></code></a>.
+Allows for the creation and destruction of DomainParticipant objects.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipant.html#_CPPv4N8eprosima7fastdds3dds17DomainParticipantE" title="eprosima::fastdds::dds::DomainParticipant"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DomainParticipant</span></code></a>.
+Acts as a container for all other Entity objects and as a factory for the Publisher, Subscriber,
+and Topic objects.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/typesupport.html#_CPPv4N8eprosima7fastdds3dds11TypeSupportE" title="eprosima::fastdds::dds::TypeSupport"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">TypeSupport</span></code></a>.
+Provides the participant with the functions to serialize, deserialize and get the key of a
+specific data type.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/publisher_class.html#_CPPv4N8eprosima7fastdds3dds9PublisherE" title="eprosima::fastdds::dds::Publisher"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Publisher</span></code></a>.
+It is the object responsible for the creation of DataWriters.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriter.html#_CPPv4N8eprosima7fastdds3dds10DataWriterE" title="eprosima::fastdds::dds::DataWriter"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataWriter</span></code></a>.
+Allows the application to set the value of the data to be published under a given Topic.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListenerE" title="eprosima::fastdds::dds::DataWriterListener"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataWriterListener</span></code></a>.
+Allows the redefinition of the functions of the DataWriterListener.</p></li>
+</ul>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipant.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/topic/TypeSupport.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/Publisher.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriter.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/publisher/DataWriterListener.hpp&gt;</span>
+</pre></div>
+</div>
+<p>Next, we define the namespace that contains the eProsima Fast DDS classes and functions that we are going to use in
+our application.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">eprosima</span><span class="o">::</span><span class="nn">fastdds</span><span class="o">::</span><span class="nn">dds</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The next line creates the <code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code> class that implements a publisher.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldPublisher</span>
+</pre></div>
+</div>
+<p>Continuing with the private data members of the class, the <code class="docutils literal notranslate"><span class="pre">hello_</span></code> data member is defined as an object of the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorld</span></code> class that defines the data type
+we created with the IDL file.
+Next, the private data members corresponding to the participant, publisher, topic, DataWriter and data type are
+defined.
+The <code class="docutils literal notranslate"><span class="pre">type_</span></code> object of the <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/typesupport.html#_CPPv4N8eprosima7fastdds3dds11TypeSupportE" title="eprosima::fastdds::dds::TypeSupport"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">TypeSupport</span></code></a> class is the object that will be used to register the topic data type
+in the DomainParticipant.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">private</span><span class="o">:</span>
+
+<span class="w">    </span><span class="n">HelloWorld</span><span class="w"> </span><span class="n">hello_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">DomainParticipant</span><span class="o">*</span><span class="w"> </span><span class="n">participant_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Publisher</span><span class="o">*</span><span class="w"> </span><span class="n">publisher_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Topic</span><span class="o">*</span><span class="w"> </span><span class="n">topic_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">DataWriter</span><span class="o">*</span><span class="w"> </span><span class="n">writer_</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">TypeSupport</span><span class="w"> </span><span class="n">type_</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Then, the <code class="xref py py-class docutils literal notranslate"><span class="pre">PubListener</span></code> class is defined by inheriting from the <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListenerE" title="eprosima::fastdds::dds::DataWriterListener"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataWriterListener</span></code></a> class.
+This class overrides the default DataWriter listener callbacks, which allows the execution of routines in case of an
+event.
+The overridden callback <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListener22on_publication_matchedEP10DataWriterRK24PublicationMatchedStatus" title="eprosima::fastdds::dds::DataWriterListener::on_publication_matched"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_publication_matched()</span></code></a>
+allows the definition of a series of actions when a new DataReader
+is detected listening to the topic under which the DataWriter is publishing.
+The <code class="xref py py-func docutils literal notranslate"><span class="pre">info.current_count_change()</span></code> detects these changes of DataReaders that are matched to the
+DataWriter.
+This is a member in the <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/core/status/matchedstatus.html#_CPPv4N8eprosima7fastdds3dds13MatchedStatusE" title="eprosima::fastdds::dds::MatchedStatus"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">MatchedStatus</span></code></a> structure that allows tracking changes in the status of subscriptions.
+Finally, the <code class="docutils literal notranslate"><span class="pre">listener_</span></code> object of the class is defined as an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">PubListener</span></code>.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PubListener</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">DataWriterListener</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+
+<span class="w">    </span><span class="n">PubListener</span><span class="p">()</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">matched_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">PubListener</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">on_publication_matched</span><span class="p">(</span>
+<span class="w">            </span><span class="n">DataWriter</span><span class="o">*</span><span class="p">,</span>
+<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="n">PublicationMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">matched_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">total_count</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Publisher unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="w">                    </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for PublicationMatchedStatus current count change."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_int</span><span class="w"> </span><span class="n">matched_</span><span class="p">;</span>
+
+<span class="p">}</span><span class="w"> </span><span class="n">listener_</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The public constructor and destructor of the <code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code> class are defined below.
+The constructor initializes the private data members of the class to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, with the exception of the TypeSupport
+object, that is initialized as an instance of the <code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPubSubType</span></code> class.
+The class destructor removes these data members and thus cleans the system memory.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">publisher_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">writer_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldPublisher</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">delete_datawriter</span><span class="p">(</span><span class="n">writer_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_publisher</span><span class="p">(</span><span class="n">publisher_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Continuing with the public member functions of the <code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code> class, the next snippet of code defines
+the public publisher’s initialization member function.
+This function performs several actions:</p>
+<ol class="arabic simple">
+<li><p>Initializes the content of the HelloWorld type <code class="docutils literal notranslate"><span class="pre">hello_</span></code> structure members.</p></li>
+<li><p>Assigns a name to the participant through the QoS of the DomainParticipant.</p></li>
+<li><p>Uses the <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantfactory.html#_CPPv4N8eprosima7fastdds3dds24DomainParticipantFactoryE" title="eprosima::fastdds::dds::DomainParticipantFactory"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DomainParticipantFactory</span></code></a> to create the participant.</p></li>
+<li><p>Registers the data type defined in the IDL.</p></li>
+<li><p>Creates the topic for the publications.</p></li>
+<li><p>Creates the publisher.</p></li>
+<li><p>Creates the DataWriter with the listener previously created.</p></li>
+</ol>
+<p>As you can see, the QoS configuration for all entities, except for the participant’s name, is the default configuration
+(<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantqos.html#_CPPv4N8eprosima7fastdds3dds23PARTICIPANT_QOS_DEFAULTE" title="eprosima::fastdds::dds::PARTICIPANT_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">PARTICIPANT_QOS_DEFAULT</span></code></a>, <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/publisherqos.html#_CPPv4N8eprosima7fastdds3dds21PUBLISHER_QOS_DEFAULTE" title="eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">PUBLISHER_QOS_DEFAULT</span></code></a>, <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/topicqos.html#_CPPv4N8eprosima7fastdds3dds17TOPIC_QOS_DEFAULTE" title="eprosima::fastdds::dds::TOPIC_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">TOPIC_QOS_DEFAULT</span></code></a>, <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterqos.html#_CPPv4N8eprosima7fastdds3dds22DATAWRITER_QOS_DEFAULTE" title="eprosima::fastdds::dds::DATAWRITER_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">DATAWRITER_QOS_DEFAULT</span></code></a>).
+The default value of the QoS of each DDS Entity can be checked in the
+<a class="reference external" href="https://www.omg.org/spec/DDS/About-DDS/">DDS standard</a>.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Initialize the publisher</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">init</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">(</span><span class="s">"HelloWorld"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="w">    </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_publisher"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Register the Type</span>
+<span class="w">    </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Create the publications Topic</span>
+<span class="w">    </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the Publisher</span>
+<span class="w">    </span><span class="n">publisher_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_publisher</span><span class="p">(</span><span class="n">PUBLISHER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publisher_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the DataWriter</span>
+<span class="w">    </span><span class="n">writer_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">publisher_</span><span class="o">-&gt;</span><span class="n">create_datawriter</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAWRITER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">writer_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To make the publication, the public member function <code class="docutils literal notranslate"><span class="pre">publish()</span></code> is implemented.
+In the DataWriter’s listener callback which states that the DataWriter has matched with a DataReader
+that listens to the publication topic, the data member <code class="docutils literal notranslate"><span class="pre">matched_</span></code> is updated. It contains the number of DataReaders
+discovered.
+Therefore, when the first DataReader has been discovered, the application starts to publish.
+This is simply the <cite>writing</cite> of a change by the DataWriter object.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Send a publication</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">publish</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">matched_</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">writer_</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The public <em>run</em> function executes the action of publishing a given number of times, waiting for 1 second between
+publications.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Run the Publisher</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples_sent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">samples_sent</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">publish</span><span class="p">())</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">samples_sent</span><span class="o">++</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" SENT"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1000</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally, the HelloWorldPublisher is initialized and run in main.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting publisher."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">HelloWorldPublisher</span><span class="o">*</span><span class="w"> </span><span class="n">mypub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPublisher</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mypub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mypub</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3><span class="section-number">1.3.7.2. </span>CMakeLists.txt<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Include at the end of the CMakeList.txt file you created earlier the following code snippet. This adds all the source
+files needed to build the executable, and links the executable and the library together.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>add_executable<span class="o">(</span>DDSHelloWorldPublisher<span class="w"> </span>src/HelloWorldPublisher.cpp<span class="w"> </span><span class="si">${</span><span class="nv">DDS_HELLOWORLD_SOURCES_CXX</span><span class="si">}</span><span class="o">)</span>
+target_link_libraries<span class="o">(</span>DDSHelloWorldPublisher<span class="w"> </span>fastrtps<span class="w"> </span>fastcdr<span class="o">)</span>
+</pre></div>
+</div>
+<p>At this point the project is ready for building, compiling and running the publisher application.
+From the build directory in the workspace, run the following commands.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+./DDSHelloWorldPublisher
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="write-the-fast-dds-subscriber">
+<h2><span class="section-number">1.3.8. </span>Write the Fast DDS subscriber<a class="headerlink" href="#write-the-fast-dds-subscriber" title="Permalink to this headline">¶</a></h2>
+<p>From the <cite>src</cite> directory in the workspace, execute the following command to download the HelloWorldSubscriber.cpp file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>-O<span class="w"> </span>HelloWorldSubscriber.cpp<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://raw.githubusercontent.com/eProsima/Fast-RTPS-docs/master/code/Examples/C++/DDSHelloWorld/src/HelloWorldSubscriber.cpp
+</pre></div>
+</div>
+<p>This is the C++ source code for the subscriber application.
+The application runs a subscriber until it receives 10 samples under the topic <cite>HelloWorldTopic</cite>.
+At this point the subscriber stops.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).</span>
+<span class="linenos">  2</span><span class="c1">//</span>
+<span class="linenos">  3</span><span class="c1">// Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="linenos">  4</span><span class="c1">// you may not use this file except in compliance with the License.</span>
+<span class="linenos">  5</span><span class="c1">// You may obtain a copy of the License at</span>
+<span class="linenos">  6</span><span class="c1">//</span>
+<span class="linenos">  7</span><span class="c1">//     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="linenos">  8</span><span class="c1">//</span>
+<span class="linenos">  9</span><span class="c1">// Unless required by applicable law or agreed to in writing, software</span>
+<span class="linenos"> 10</span><span class="c1">// distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="linenos"> 11</span><span class="c1">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="linenos"> 12</span><span class="c1">// See the License for the specific language governing permissions and</span>
+<span class="linenos"> 13</span><span class="c1">// limitations under the License.</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span><span class="cm">/**</span>
+<span class="linenos"> 16</span><span class="cm"> * @file HelloWorldSubscriber.cpp</span>
+<span class="linenos"> 17</span><span class="cm"> *</span>
+<span class="linenos"> 18</span><span class="cm"> */</span>
+<span class="linenos"> 19</span>
+<span class="linenos"> 20</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"HelloWorldPubSubTypes.h"</span>
+<span class="linenos"> 21</span>
+<span class="linenos"> 22</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="linenos"> 23</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipant.hpp&gt;</span>
+<span class="linenos"> 24</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/topic/TypeSupport.hpp&gt;</span>
+<span class="linenos"> 25</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/Subscriber.hpp&gt;</span>
+<span class="linenos"> 26</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/DataReader.hpp&gt;</span>
+<span class="linenos"> 27</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/DataReaderListener.hpp&gt;</span>
+<span class="linenos"> 28</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/qos/DataReaderQos.hpp&gt;</span>
+<span class="linenos"> 29</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/SampleInfo.hpp&gt;</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">eprosima</span><span class="o">::</span><span class="nn">fastdds</span><span class="o">::</span><span class="nn">dds</span><span class="p">;</span>
+<span class="linenos"> 32</span>
+<span class="linenos"> 33</span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldSubscriber</span>
+<span class="linenos"> 34</span><span class="p">{</span>
+<span class="linenos"> 35</span><span class="k">private</span><span class="o">:</span>
+<span class="linenos"> 36</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="n">DomainParticipant</span><span class="o">*</span><span class="w"> </span><span class="n">participant_</span><span class="p">;</span>
+<span class="linenos"> 38</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="n">Subscriber</span><span class="o">*</span><span class="w"> </span><span class="n">subscriber_</span><span class="p">;</span>
+<span class="linenos"> 40</span>
+<span class="linenos"> 41</span><span class="w">    </span><span class="n">DataReader</span><span class="o">*</span><span class="w"> </span><span class="n">reader_</span><span class="p">;</span>
+<span class="linenos"> 42</span>
+<span class="linenos"> 43</span><span class="w">    </span><span class="n">Topic</span><span class="o">*</span><span class="w"> </span><span class="n">topic_</span><span class="p">;</span>
+<span class="linenos"> 44</span>
+<span class="linenos"> 45</span><span class="w">    </span><span class="n">TypeSupport</span><span class="w"> </span><span class="n">type_</span><span class="p">;</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">SubListener</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">DataReaderListener</span>
+<span class="linenos"> 48</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 49</span><span class="w">    </span><span class="k">public</span><span class="o">:</span>
+<span class="linenos"> 50</span>
+<span class="linenos"> 51</span><span class="w">        </span><span class="n">SubListener</span><span class="p">()</span>
+<span class="linenos"> 52</span><span class="w">            </span><span class="o">:</span><span class="w"> </span><span class="n">samples_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos"> 53</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 54</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 55</span>
+<span class="linenos"> 56</span><span class="w">        </span><span class="o">~</span><span class="n">SubListener</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 57</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 58</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 59</span>
+<span class="linenos"> 60</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">on_subscription_matched</span><span class="p">(</span>
+<span class="linenos"> 61</span><span class="w">                </span><span class="n">DataReader</span><span class="o">*</span><span class="p">,</span>
+<span class="linenos"> 62</span><span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="n">SubscriptionMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 63</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 64</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos"> 65</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 66</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 67</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 68</span><span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="linenos"> 69</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 70</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 71</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 72</span><span class="w">            </span><span class="k">else</span>
+<span class="linenos"> 73</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 74</span><span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="linenos"> 75</span><span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for SubscriptionMatchedStatus current count change"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 76</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 77</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 78</span>
+<span class="linenos"> 79</span><span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">on_data_available</span><span class="p">(</span>
+<span class="linenos"> 80</span><span class="w">                </span><span class="n">DataReader</span><span class="o">*</span><span class="w"> </span><span class="n">reader</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="linenos"> 81</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 82</span><span class="w">            </span><span class="n">SampleInfo</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
+<span class="linenos"> 83</span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">take_next_sample</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ReturnCode_t</span><span class="o">::</span><span class="n">RETCODE_OK</span><span class="p">)</span>
+<span class="linenos"> 84</span><span class="w">            </span><span class="p">{</span>
+<span class="linenos"> 85</span><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">valid_data</span><span class="p">)</span>
+<span class="linenos"> 86</span><span class="w">                </span><span class="p">{</span>
+<span class="linenos"> 87</span><span class="w">                    </span><span class="n">samples_</span><span class="o">++</span><span class="p">;</span>
+<span class="linenos"> 88</span><span class="w">                    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="linenos"> 89</span><span class="w">                                </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" RECEIVED."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos"> 90</span><span class="w">                </span><span class="p">}</span>
+<span class="linenos"> 91</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos"> 92</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 93</span>
+<span class="linenos"> 94</span><span class="w">        </span><span class="n">HelloWorld</span><span class="w"> </span><span class="n">hello_</span><span class="p">;</span>
+<span class="linenos"> 95</span>
+<span class="linenos"> 96</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">atomic_int</span><span class="w"> </span><span class="n">samples_</span><span class="p">;</span>
+<span class="linenos"> 97</span>
+<span class="linenos"> 98</span><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">listener_</span><span class="p">;</span>
+<span class="linenos"> 99</span>
+<span class="linenos">100</span><span class="k">public</span><span class="o">:</span>
+<span class="linenos">101</span>
+<span class="linenos">102</span><span class="w">    </span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="linenos">103</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">104</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">subscriber_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">105</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">106</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">reader_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">107</span><span class="w">        </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="linenos">108</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">109</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">110</span>
+<span class="linenos">111</span><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="linenos">112</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">113</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">114</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">115</span><span class="w">            </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">delete_datareader</span><span class="p">(</span><span class="n">reader_</span><span class="p">);</span>
+<span class="linenos">116</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">117</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">118</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">119</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="linenos">120</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">121</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">122</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">123</span><span class="w">            </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_subscriber</span><span class="p">(</span><span class="n">subscriber_</span><span class="p">);</span>
+<span class="linenos">124</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">125</span><span class="w">        </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">126</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">127</span>
+<span class="linenos">128</span><span class="w">    </span><span class="c1">//!Initialize the subscriber</span>
+<span class="linenos">129</span><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">init</span><span class="p">()</span>
+<span class="linenos">130</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">131</span><span class="w">        </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="linenos">132</span><span class="w">        </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_subscriber"</span><span class="p">);</span>
+<span class="linenos">133</span><span class="w">        </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+<span class="linenos">134</span>
+<span class="linenos">135</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">136</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">137</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">138</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">139</span>
+<span class="linenos">140</span><span class="w">        </span><span class="c1">// Register the Type</span>
+<span class="linenos">141</span><span class="w">        </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="linenos">142</span>
+<span class="linenos">143</span><span class="w">        </span><span class="c1">// Create the subscriptions Topic</span>
+<span class="linenos">144</span><span class="w">        </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+<span class="linenos">145</span>
+<span class="linenos">146</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">147</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">148</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">149</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">150</span>
+<span class="linenos">151</span><span class="w">        </span><span class="c1">// Create the Subscriber</span>
+<span class="linenos">152</span><span class="w">        </span><span class="n">subscriber_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_subscriber</span><span class="p">(</span><span class="n">SUBSCRIBER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+<span class="linenos">153</span>
+<span class="linenos">154</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">155</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">156</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">157</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">158</span>
+<span class="linenos">159</span><span class="w">        </span><span class="c1">// Create the DataReader</span>
+<span class="linenos">160</span><span class="w">        </span><span class="n">reader_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">create_datareader</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAREADER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+<span class="linenos">161</span>
+<span class="linenos">162</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="linenos">163</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">164</span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="linenos">165</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">166</span>
+<span class="linenos">167</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos">168</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">169</span>
+<span class="linenos">170</span><span class="w">    </span><span class="c1">//!Run the Subscriber</span>
+<span class="linenos">171</span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">run</span><span class="p">(</span>
+<span class="linenos">172</span><span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">173</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">174</span><span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">samples_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="linenos">175</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">176</span><span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+<span class="linenos">177</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">178</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">179</span><span class="p">};</span>
+<span class="linenos">180</span>
+<span class="linenos">181</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="linenos">182</span><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="linenos">183</span><span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="linenos">184</span><span class="p">{</span>
+<span class="linenos">185</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting subscriber."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">186</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="linenos">187</span>
+<span class="linenos">188</span><span class="w">    </span><span class="n">HelloWorldSubscriber</span><span class="o">*</span><span class="w"> </span><span class="n">mysub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldSubscriber</span><span class="p">();</span>
+<span class="linenos">189</span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="linenos">190</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">191</span><span class="w">        </span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="linenos">192</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">193</span>
+<span class="linenos">194</span><span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mysub</span><span class="p">;</span>
+<span class="linenos">195</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">196</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h3><span class="section-number">1.3.8.1. </span>Examining the code<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Since the source code of both the publisher and subscriber applications is mostly identical, this document will focus
+on the main differences between them, omitting the parts of the code that have already been explained.</p>
+<p>Following the same structure as in the publisher explanation, the first step is the includes of the C++ header files.
+In these, the files that include the publisher class are replaced by the subscriber class and the data writer class by
+the data reader class.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/subscriber_class.html#_CPPv4N8eprosima7fastdds3dds10SubscriberE" title="eprosima::fastdds::dds::Subscriber"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Subscriber</span></code></a>.
+It is the object responsible for the creation and configuration of DataReaders.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareader.html#_CPPv4N8eprosima7fastdds3dds10DataReaderE" title="eprosima::fastdds::dds::DataReader"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataReader</span></code></a>.
+It is the object responsible for the actual reception of the data.
+It registers in the application the topic (TopicDescription) that identifies the data to be read and
+accesses the data received by the subscriber.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderlistener.html#_CPPv4N8eprosima7fastdds3dds18DataReaderListenerE" title="eprosima::fastdds::dds::DataReaderListener"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataReaderListener</span></code></a>.
+This is the listener assigned to the data reader.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderqos.html#_CPPv4N8eprosima7fastdds3dds13DataReaderQosE" title="eprosima::fastdds::dds::DataReaderQos"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">DataReaderQoS</span></code></a>.
+Structure that defines the QoS of the DataReader.</p></li>
+<li><p><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/sampleinfo.html#_CPPv4N8eprosima7fastdds3dds10SampleInfoE" title="eprosima::fastdds::dds::SampleInfo"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">SampleInfo</span></code></a>.
+It is the information that accompanies each sample that is ‘read’ or ‘taken.’</p></li>
+</ul>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/domain/DomainParticipantFactory.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fastdds/dds/subscriber/SampleInfo.hpp&gt;</span>
+</pre></div>
+</div>
+<p>The next line defines the <code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldSubscriber</span></code> class that implements a subscriber.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HelloWorldSubscriber</span>
+</pre></div>
+</div>
+<p>Starting with the private data members of the class, it is worth mentioning the implementation of the data reader
+listener.
+The private data members of the class will be the participant, the subscriber, the topic, the data reader, and the
+data type.
+As it was the case with the data writer, the listener implements the callbacks to be executed in case an event
+occurs.
+The first overridden callback of the SubListener is the <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderlistener.html#_CPPv4N8eprosima7fastdds3dds18DataReaderListener23on_subscription_matchedEP10DataReaderRKN7fastdds3dds25SubscriptionMatchedStatusE" title="eprosima::fastdds::dds::DataReaderListener::on_subscription_matched"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_subscription_matched()</span></code></a>, which is the
+analog of the <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/publisher/datawriterlistener.html#_CPPv4N8eprosima7fastdds3dds18DataWriterListener22on_publication_matchedEP10DataWriterRK24PublicationMatchedStatus" title="eprosima::fastdds::dds::DataWriterListener::on_publication_matched"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_publication_matched()</span></code></a> callback of the DataWriter.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">on_subscription_matched</span><span class="p">(</span>
+<span class="w">        </span><span class="n">DataReader</span><span class="o">*</span><span class="p">,</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">SubscriptionMatchedStatus</span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber matched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Subscriber unmatched."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">current_count_change</span>
+<span class="w">                </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" is not a valid value for SubscriptionMatchedStatus current count change"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The second overridden callback is <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderlistener.html#_CPPv4N8eprosima7fastdds3dds18DataReaderListener17on_data_availableEP10DataReader" title="eprosima::fastdds::dds::DataReaderListener::on_data_available"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">on_data_available()</span></code></a>.
+In this, the next received sample that the data reader can access is taken and processed to display its content.
+It is here that the object of the <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/sampleinfo.html#_CPPv4N8eprosima7fastdds3dds10SampleInfoE" title="eprosima::fastdds::dds::SampleInfo"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">SampleInfo</span></code></a> class is defined, which determines whether a sample has already
+been read or taken.
+Each time a sample is read, the counter of samples received is increased.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">on_data_available</span><span class="p">(</span>
+<span class="w">        </span><span class="n">DataReader</span><span class="o">*</span><span class="w"> </span><span class="n">reader</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">SampleInfo</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader</span><span class="o">-&gt;</span><span class="n">take_next_sample</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hello_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ReturnCode_t</span><span class="o">::</span><span class="n">RETCODE_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">valid_data</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">samples_</span><span class="o">++</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Message: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">message</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" with index: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hello_</span><span class="p">.</span><span class="n">index</span><span class="p">()</span>
+<span class="w">                        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" RECEIVED."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The public constructor and destructor of the class is defined below.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">participant_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">subscriber_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">topic_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">reader_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">type_</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldPubSubType</span><span class="p">())</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">HelloWorldSubscriber</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">delete_datareader</span><span class="p">(</span><span class="n">reader_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_topic</span><span class="p">(</span><span class="n">topic_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">delete_subscriber</span><span class="p">(</span><span class="n">subscriber_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">delete_participant</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Next comes the subscriber initialization public member function.
+This is the same as the initialization public member function defined for the <code class="xref py py-class docutils literal notranslate"><span class="pre">HelloWorldPublisher</span></code>.
+The QoS configuration for all entities, except for the participant’s name, is the default QoS
+(<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/domain/domainparticipantqos.html#_CPPv4N8eprosima7fastdds3dds23PARTICIPANT_QOS_DEFAULTE" title="eprosima::fastdds::dds::PARTICIPANT_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">PARTICIPANT_QOS_DEFAULT</span></code></a>, <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/subscriberqos.html#_CPPv4N8eprosima7fastdds3dds22SUBSCRIBER_QOS_DEFAULTE" title="eprosima::fastdds::dds::SUBSCRIBER_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">SUBSCRIBER_QOS_DEFAULT</span></code></a>, <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/topic/topicqos.html#_CPPv4N8eprosima7fastdds3dds17TOPIC_QOS_DEFAULTE" title="eprosima::fastdds::dds::TOPIC_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">TOPIC_QOS_DEFAULT</span></code></a>, <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/dds_pim/subscriber/datareaderqos.html#_CPPv4N8eprosima7fastdds3dds22DATAREADER_QOS_DEFAULTE" title="eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">DATAREADER_QOS_DEFAULT</span></code></a>).
+The default value of the QoS of each DDS Entity can be checked in the
+<a class="reference external" href="https://www.omg.org/spec/DDS/About-DDS/">DDS standard</a>.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Initialize the subscriber</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">init</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">DomainParticipantQos</span><span class="w"> </span><span class="n">participantQos</span><span class="p">;</span>
+<span class="w">    </span><span class="n">participantQos</span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="s">"Participant_subscriber"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">participant_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DomainParticipantFactory</span><span class="o">::</span><span class="n">get_instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">create_participant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">participantQos</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">participant_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Register the Type</span>
+<span class="w">    </span><span class="n">type_</span><span class="p">.</span><span class="n">register_type</span><span class="p">(</span><span class="n">participant_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Create the subscriptions Topic</span>
+<span class="w">    </span><span class="n">topic_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_topic</span><span class="p">(</span><span class="s">"HelloWorldTopic"</span><span class="p">,</span><span class="w"> </span><span class="s">"HelloWorld"</span><span class="p">,</span><span class="w"> </span><span class="n">TOPIC_QOS_DEFAULT</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">topic_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the Subscriber</span>
+<span class="w">    </span><span class="n">subscriber_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">participant_</span><span class="o">-&gt;</span><span class="n">create_subscriber</span><span class="p">(</span><span class="n">SUBSCRIBER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">subscriber_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Create the DataReader</span>
+<span class="w">    </span><span class="n">reader_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subscriber_</span><span class="o">-&gt;</span><span class="n">create_datareader</span><span class="p">(</span><span class="n">topic_</span><span class="p">,</span><span class="w"> </span><span class="n">DATAREADER_QOS_DEFAULT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">listener_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reader_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The public member function <code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code> ensures that the subscriber runs until all the samples have been received.
+This member function implements an active wait of the subscriber, with a 100ms sleep interval to ease the CPU.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//!Run the Subscriber</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="n">listener_</span><span class="p">.</span><span class="n">samples_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally, the participant that implements a subscriber is initialized and run in main.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span>
+<span class="w">        </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Starting subscriber."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">HelloWorldSubscriber</span><span class="o">*</span><span class="w"> </span><span class="n">mysub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HelloWorldSubscriber</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">())</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mysub</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">samples</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">mysub</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3><span class="section-number">1.3.8.2. </span>CMakeLists.txt<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Include at the end of the CMakeList.txt file you created earlier the following code snippet.
+This adds all the source
+files needed to build the executable, and links the executable and the library together.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>add_executable<span class="o">(</span>DDSHelloWorldSubscriber<span class="w"> </span>src/HelloWorldSubscriber.cpp<span class="w"> </span><span class="si">${</span><span class="nv">DDS_HELLOWORLD_SOURCES_CXX</span><span class="si">}</span><span class="o">)</span>
+target_link_libraries<span class="o">(</span>DDSHelloWorldSubscriber<span class="w"> </span>fastrtps<span class="w"> </span>fastcdr<span class="o">)</span>
+</pre></div>
+</div>
+<p>At this point the project is ready for building, compiling and running the subscriber application.
+From the build directory in the workspace, run the following commands.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+./DDSHelloWorldSubscriber
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="putting-all-together">
+<h2><span class="section-number">1.3.9. </span>Putting all together<a class="headerlink" href="#putting-all-together" title="Permalink to this headline">¶</a></h2>
+<p>Finally, from the build directory, run the publisher and subscriber applications from two terminals.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./DDSHelloWorldPublisher
+./DDSHelloWorldSubscriber
+</pre></div>
+</div>
+<video autoplay="autoplay" loop="">
+    <source src="1.3.%20Writing%20a%20simple%20C++%20publisher%20and%20subscriber%20application%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/simple_pubsub.mp4">
+    Your browser does not support the video tag.
+</video></div>
+<div class="section" id="summary">
+<h2><span class="section-number">1.3.10. </span>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial you have built a publisher and a subscriber DDS application.
+You have also learned how to build the CMake file for source code compilation, and how to include and use the Fast DDS
+and Fast CDR libraries in your project.</p>
+</div>
+<div class="section" id="next-steps">
+<h2><span class="section-number">1.3.11. </span>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>In the <em>eProsima Fast DDS</em> Github repository you will find more complex examples that implement DDS communication for
+a multitude of use cases and scenarios. You can find them
+<a class="reference external" href="https://github.com/eProsima/Fast-DDS/tree/master/examples/cpp/dds">here</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          <div id="readthedocs-ea-text-footer" class="raised" data-ea-type="text" data-ea-manual="true" data-ea-publisher="readthedocs" data-ea-keywords="c++|dds|eprosima|fastdds|readthedocs-project-56315|readthedocs-project-eprosima-fast-rtps" data-ea-campaign-types="community|house|paid"></div></div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html" class="btn btn-neutral float-right" title="1.4. Writing a simple Python publisher and subscriber application" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html" class="btn btn-neutral float-left" title="1.1. What is DDS?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2019, eProsima.
+      <span class="commit">
+        
+        Revision <code>2abdc712</code>.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org/">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+   
+
+
+<readthedocs-flyout></readthedocs-flyout><readthedocs-notification class="raised toast"></readthedocs-notification><readthedocs-search class="raised floating"></readthedocs-search><readthedocs-hotkeys></readthedocs-hotkeys></body></html>
