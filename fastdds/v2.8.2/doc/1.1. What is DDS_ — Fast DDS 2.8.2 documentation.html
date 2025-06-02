@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1.1. What is DDS? — Fast DDS 2.8.2 documentation</title>
+  
+
+  
+  <style type="text/css">:root, :host {
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+  --fa-font-light: normal 300 1em/1 "Font Awesome 6 Pro";
+  --fa-font-thin: normal 100 1em/1 "Font Awesome 6 Pro";
+  --fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-regular: normal 400 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-light: normal 300 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-thin: normal 100 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+  --fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-light: normal 300 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-thin: normal 100 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-duotone-solid: normal 900 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-regular: normal 400 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-light: normal 300 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-thin: normal 100 1em/1 "Font Awesome 6 Sharp Duotone";
+}
+
+svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+  overflow: visible;
+  box-sizing: content-box;
+}
+
+.svg-inline--fa {
+  display: var(--fa-display, inline-block);
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+}
+.svg-inline--fa.fa-2xs {
+  vertical-align: 0.1em;
+}
+.svg-inline--fa.fa-xs {
+  vertical-align: 0em;
+}
+.svg-inline--fa.fa-sm {
+  vertical-align: -0.0714285705em;
+}
+.svg-inline--fa.fa-lg {
+  vertical-align: -0.2em;
+}
+.svg-inline--fa.fa-xl {
+  vertical-align: -0.25em;
+}
+.svg-inline--fa.fa-2xl {
+  vertical-align: -0.3125em;
+}
+.svg-inline--fa.fa-pull-left {
+  margin-right: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-pull-right {
+  margin-left: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-li {
+  width: var(--fa-li-width, 2em);
+  top: 0.25em;
+}
+.svg-inline--fa.fa-fw {
+  width: var(--fa-fw-width, 1.25em);
+}
+
+.fa-layers svg.svg-inline--fa {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.fa-layers-counter, .fa-layers-text {
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+}
+
+.fa-layers {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -0.125em;
+  width: 1em;
+}
+.fa-layers svg.svg-inline--fa {
+  transform-origin: center center;
+}
+
+.fa-layers-text {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.fa-layers-counter {
+  background-color: var(--fa-counter-background-color, #ff253a);
+  border-radius: var(--fa-counter-border-radius, 1em);
+  box-sizing: border-box;
+  color: var(--fa-inverse, #fff);
+  line-height: var(--fa-counter-line-height, 1);
+  max-width: var(--fa-counter-max-width, 5em);
+  min-width: var(--fa-counter-min-width, 1.5em);
+  overflow: hidden;
+  padding: var(--fa-counter-padding, 0.25em 0.5em);
+  right: var(--fa-right, 0);
+  text-overflow: ellipsis;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-counter-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-bottom-right {
+  bottom: var(--fa-bottom, 0);
+  right: var(--fa-right, 0);
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom right;
+}
+
+.fa-layers-bottom-left {
+  bottom: var(--fa-bottom, 0);
+  left: var(--fa-left, 0);
+  right: auto;
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom left;
+}
+
+.fa-layers-top-right {
+  top: var(--fa-top, 0);
+  right: var(--fa-right, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-top-left {
+  left: var(--fa-left, 0);
+  right: auto;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top left;
+}
+
+.fa-1x {
+  font-size: 1em;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa-3x {
+  font-size: 3em;
+}
+
+.fa-4x {
+  font-size: 4em;
+}
+
+.fa-5x {
+  font-size: 5em;
+}
+
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
+}
+
+.fa-8x {
+  font-size: 8em;
+}
+
+.fa-9x {
+  font-size: 9em;
+}
+
+.fa-10x {
+  font-size: 10em;
+}
+
+.fa-2xs {
+  font-size: 0.625em;
+  line-height: 0.1em;
+  vertical-align: 0.225em;
+}
+
+.fa-xs {
+  font-size: 0.75em;
+  line-height: 0.0833333337em;
+  vertical-align: 0.125em;
+}
+
+.fa-sm {
+  font-size: 0.875em;
+  line-height: 0.0714285718em;
+  vertical-align: 0.0535714295em;
+}
+
+.fa-lg {
+  font-size: 1.25em;
+  line-height: 0.05em;
+  vertical-align: -0.075em;
+}
+
+.fa-xl {
+  font-size: 1.5em;
+  line-height: 0.0416666682em;
+  vertical-align: -0.125em;
+}
+
+.fa-2xl {
+  font-size: 2em;
+  line-height: 0.03125em;
+  vertical-align: -0.1875em;
+}
+
+.fa-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+.fa-ul {
+  list-style-type: none;
+  margin-left: var(--fa-li-margin, 2.5em);
+  padding-left: 0;
+}
+.fa-ul > li {
+  position: relative;
+}
+
+.fa-li {
+  left: calc(-1 * var(--fa-li-width, 2em));
+  position: absolute;
+  text-align: center;
+  width: var(--fa-li-width, 2em);
+  line-height: inherit;
+}
+
+.fa-border {
+  border-color: var(--fa-border-color, #eee);
+  border-radius: var(--fa-border-radius, 0.1em);
+  border-style: var(--fa-border-style, solid);
+  border-width: var(--fa-border-width, 0.08em);
+  padding: var(--fa-border-padding, 0.2em 0.25em 0.15em);
+}
+
+.fa-pull-left {
+  float: left;
+  margin-right: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-pull-right {
+  float: right;
+  margin-left: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-beat {
+  animation-name: fa-beat;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-bounce {
+  animation-name: fa-bounce;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+}
+
+.fa-fade {
+  animation-name: fa-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-beat-fade {
+  animation-name: fa-beat-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-flip {
+  animation-name: fa-flip;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-shake {
+  animation-name: fa-shake;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin {
+  animation-name: fa-spin;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 2s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin-reverse {
+  --fa-animation-direction: reverse;
+}
+
+.fa-pulse,
+.fa-spin-pulse {
+  animation-name: fa-spin;
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, steps(8));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fa-beat,
+.fa-bounce,
+.fa-fade,
+.fa-beat-fade,
+.fa-flip,
+.fa-pulse,
+.fa-shake,
+.fa-spin,
+.fa-spin-pulse {
+    animation-delay: -1ms;
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+    transition-delay: 0s;
+    transition-duration: 0s;
+  }
+}
+@keyframes fa-beat {
+  0%, 90% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(var(--fa-beat-scale, 1.25));
+  }
+}
+@keyframes fa-bounce {
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  10% {
+    transform: scale(var(--fa-bounce-start-scale-x, 1.1), var(--fa-bounce-start-scale-y, 0.9)) translateY(0);
+  }
+  30% {
+    transform: scale(var(--fa-bounce-jump-scale-x, 0.9), var(--fa-bounce-jump-scale-y, 1.1)) translateY(var(--fa-bounce-height, -0.5em));
+  }
+  50% {
+    transform: scale(var(--fa-bounce-land-scale-x, 1.05), var(--fa-bounce-land-scale-y, 0.95)) translateY(0);
+  }
+  57% {
+    transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+  }
+  64% {
+    transform: scale(1, 1) translateY(0);
+  }
+  100% {
+    transform: scale(1, 1) translateY(0);
+  }
+}
+@keyframes fa-fade {
+  50% {
+    opacity: var(--fa-fade-opacity, 0.4);
+  }
+}
+@keyframes fa-beat-fade {
+  0%, 100% {
+    opacity: var(--fa-beat-fade-opacity, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(var(--fa-beat-fade-scale, 1.125));
+  }
+}
+@keyframes fa-flip {
+  50% {
+    transform: rotate3d(var(--fa-flip-x, 0), var(--fa-flip-y, 1), var(--fa-flip-z, 0), var(--fa-flip-angle, -180deg));
+  }
+}
+@keyframes fa-shake {
+  0% {
+    transform: rotate(-15deg);
+  }
+  4% {
+    transform: rotate(15deg);
+  }
+  8%, 24% {
+    transform: rotate(-18deg);
+  }
+  12%, 28% {
+    transform: rotate(18deg);
+  }
+  16% {
+    transform: rotate(-22deg);
+  }
+  20% {
+    transform: rotate(22deg);
+  }
+  32% {
+    transform: rotate(-12deg);
+  }
+  36% {
+    transform: rotate(12deg);
+  }
+  40%, 100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.fa-rotate-90 {
+  transform: rotate(90deg);
+}
+
+.fa-rotate-180 {
+  transform: rotate(180deg);
+}
+
+.fa-rotate-270 {
+  transform: rotate(270deg);
+}
+
+.fa-flip-horizontal {
+  transform: scale(-1, 1);
+}
+
+.fa-flip-vertical {
+  transform: scale(1, -1);
+}
+
+.fa-flip-both,
+.fa-flip-horizontal.fa-flip-vertical {
+  transform: scale(-1, -1);
+}
+
+.fa-rotate-by {
+  transform: rotate(var(--fa-rotate-angle, 0));
+}
+
+.fa-stack {
+  display: inline-block;
+  vertical-align: middle;
+  height: 2em;
+  position: relative;
+  width: 2.5em;
+}
+
+.fa-stack-1x,
+.fa-stack-2x {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: var(--fa-stack-z-index, auto);
+}
+
+.svg-inline--fa.fa-stack-1x {
+  height: 1em;
+  width: 1.25em;
+}
+.svg-inline--fa.fa-stack-2x {
+  height: 2em;
+  width: 2.5em;
+}
+
+.fa-inverse {
+  color: var(--fa-inverse, #fff);
+}
+
+.sr-only,
+.fa-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:not(:focus),
+.fa-sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.svg-inline--fa .fa-primary {
+  fill: var(--fa-primary-color, currentColor);
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa .fa-secondary {
+  fill: var(--fa-secondary-color, currentColor);
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-primary {
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-secondary {
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa mask .fa-primary,
+.svg-inline--fa mask .fa-secondary {
+  fill: black;
+}</style><link rel="stylesheet" href="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/theme.css" type="text/css">
+  <link rel="stylesheet" href="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/pygments.css" type="text/css">
+  <link rel="stylesheet" href="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/tabs.css" type="text/css">
+  <link rel="stylesheet" href="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/eprosima_rtd_theme.css" type="text/css">
+
+  
+  
+
+  
+  
+
+  
+    <link rel="canonical" href="https://fast-dds.docs.eprosima.com/en/latest/fastdds/getting_started/definitions.html">
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/documentation_options.js"></script>
+        <script src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/jquery.js"></script>
+        <script src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/underscore.js"></script>
+        <script src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/doctools.js"></script>
+        
+    
+    <script type="text/javascript" src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/genindex.html">
+    <link rel="search" title="Search" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/search.html">
+    <link rel="next" title="1.3. Writing a simple C++ publisher and subscriber application" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_app/simple_app.html">
+    <link rel="prev" title="1. Getting Started" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2023-04-18T14:43:01Z", "builder": "sphinx", "canonical_url": null, "commit": "2abdc712", "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "fastdds/getting_started/definitions", "programming_language": "cpp", "project": "eprosima-fast-rtps", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "UA-37962201-2", "version": "v2.8.2"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async="" type="text/javascript" src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="eprosima-fast-rtps"><meta name="readthedocs-version-slug" content="v2.8.2"><meta name="readthedocs-resolver-filename" content="/fastdds/getting_started/definitions.html"><meta name="readthedocs-http-status" content="200"><script id="ethicaladsjs" type="text/javascript" async="true" src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/ethicalads.min.js"></script><style>[data-ea-publisher].loaded,[data-ea-type].loaded{font-size:14px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-weight:normal;font-style:normal;letter-spacing:0px;vertical-align:baseline;line-height:1.3em}[data-ea-publisher].loaded a,[data-ea-type].loaded a{text-decoration:none}[data-ea-publisher].loaded .ea-pixel,[data-ea-type].loaded .ea-pixel{display:none}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{margin:1em 1em .5em 1em;padding:1em;background:rgba(0,0,0,.03);color:#505050}[data-ea-publisher].loaded .ea-content a:link,[data-ea-type].loaded .ea-content a:link{color:#505050}[data-ea-publisher].loaded .ea-content a:visited,[data-ea-type].loaded .ea-content a:visited{color:#505050}[data-ea-publisher].loaded .ea-content a:hover,[data-ea-type].loaded .ea-content a:hover{color:#373737}[data-ea-publisher].loaded .ea-content a:active,[data-ea-type].loaded .ea-content a:active{color:#373737}[data-ea-publisher].loaded .ea-content a strong,[data-ea-publisher].loaded .ea-content a b,[data-ea-type].loaded .ea-content a strong,[data-ea-type].loaded .ea-content a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a:link,[data-ea-type].loaded .ea-callout a:link{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:visited,[data-ea-type].loaded .ea-callout a:visited{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:hover,[data-ea-type].loaded .ea-callout a:hover{color:#505050}[data-ea-publisher].loaded .ea-callout a:active,[data-ea-type].loaded .ea-callout a:active{color:#505050}[data-ea-publisher].loaded .ea-callout a strong,[data-ea-publisher].loaded .ea-callout a b,[data-ea-type].loaded .ea-callout a strong,[data-ea-type].loaded .ea-callout a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a,[data-ea-type].loaded .ea-callout a{font-size:.8em}[data-ea-publisher].loaded .ea-domain,[data-ea-type].loaded .ea-domain{margin-top:.75em;font-size:.8em;text-align:center;color:#9d9d9d}[data-ea-publisher].loaded.dark .ea-content,[data-ea-type].loaded.dark .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:link,[data-ea-type].loaded.dark .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:visited,[data-ea-type].loaded.dark .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:hover,[data-ea-type].loaded.dark .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a:active,[data-ea-type].loaded.dark .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a strong,[data-ea-publisher].loaded.dark .ea-content a b,[data-ea-type].loaded.dark .ea-content a strong,[data-ea-type].loaded.dark .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-callout a:link,[data-ea-type].loaded.dark .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:visited,[data-ea-type].loaded.dark .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:hover,[data-ea-type].loaded.dark .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a:active,[data-ea-type].loaded.dark .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a strong,[data-ea-publisher].loaded.dark .ea-callout a b,[data-ea-type].loaded.dark .ea-callout a strong,[data-ea-type].loaded.dark .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-domain,[data-ea-type].loaded.dark .ea-domain{color:#909090}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.adaptive .ea-content,[data-ea-type].loaded.adaptive .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:link,[data-ea-type].loaded.adaptive .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:visited,[data-ea-type].loaded.adaptive .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:hover,[data-ea-type].loaded.adaptive .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a:active,[data-ea-type].loaded.adaptive .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a strong,[data-ea-publisher].loaded.adaptive .ea-content a b,[data-ea-type].loaded.adaptive .ea-content a strong,[data-ea-type].loaded.adaptive .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-callout a:link,[data-ea-type].loaded.adaptive .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:visited,[data-ea-type].loaded.adaptive .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:hover,[data-ea-type].loaded.adaptive .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a:active,[data-ea-type].loaded.adaptive .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a strong,[data-ea-publisher].loaded.adaptive .ea-callout a b,[data-ea-type].loaded.adaptive .ea-callout a strong,[data-ea-type].loaded.adaptive .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-domain,[data-ea-type].loaded.adaptive .ea-domain{color:#909090}}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.raised .ea-content,[data-ea-type].loaded.raised .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.bordered .ea-content,[data-ea-type].loaded.bordered .ea-content{border:1px solid rgba(0,0,0,.04);border-radius:3px;box-shadow:none}[data-ea-publisher].loaded.bordered.dark .ea-content,[data-ea-type].loaded.bordered.dark .ea-content{border:1px solid rgba(255,255,255,.07)}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.bordered.adaptive .ea-content,[data-ea-type].loaded.bordered.adaptive .ea-content{border:1px solid rgba(255,255,255,.07)}}[data-ea-publisher].loaded.flat .ea-content,[data-ea-type].loaded.flat .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-type=image].loaded,[data-ea-publisher]:not([data-ea-type]).loaded,.ea-type-image{display:inline-block}[data-ea-type=image].loaded .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content,.ea-type-image .ea-content{max-width:180px;overflow:auto;text-align:center}[data-ea-type=image].loaded .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>a>img,.ea-type-image .ea-content>a>img{width:120px;height:90px;display:inline-block}[data-ea-type=image].loaded .ea-content>.ea-text,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>.ea-text,.ea-type-image .ea-content>.ea-text{margin-top:1em;font-size:1em;text-align:center}[data-ea-type=image].loaded .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded .ea-callout,.ea-type-image .ea-callout{max-width:180px;margin:0em 1em 1em 1em;padding-left:1em;padding-right:1em;font-style:italic;text-align:right}[data-ea-type=image].loaded.horizontal .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content,.ea-type-image.horizontal .ea-content{max-width:320px}[data-ea-type=image].loaded.horizontal .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content>a>img,.ea-type-image.horizontal .ea-content>a>img{float:left;margin-right:1em}[data-ea-type=image].loaded.horizontal .ea-content .ea-text,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content .ea-text,.ea-type-image.horizontal .ea-content .ea-text{margin-top:0em;text-align:left;overflow:auto}[data-ea-type=image].loaded.horizontal .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-callout,.ea-type-image.horizontal .ea-callout{max-width:320px;text-align:right}[data-ea-type=text].loaded,.ea-type-text{font-size:14px}[data-ea-type=text].loaded .ea-content,.ea-type-text .ea-content{text-align:left}[data-ea-type=text].loaded .ea-callout,.ea-type-text .ea-callout{margin:.5em 1em 1em 1em;padding-left:1em;padding-right:1em;text-align:right;font-style:italic}[data-ea-style=stickybox].loaded{position:fixed;bottom:20px;right:20px;z-index:100}[data-ea-style=stickybox].loaded .ea-type-image .ea-stickybox-hide{cursor:pointer;position:absolute;top:.75em;right:.75em;background-color:#fefefe;border:1px solid #088cdb;border-radius:50%;color:#088cdb;font-size:1em;text-align:center;height:1.5em;width:1.5em;line-height:1.4}@media(max-width: 1300px){[data-ea-style=stickybox].loaded{position:static;bottom:0;right:0;margin:auto;text-align:center}[data-ea-style=stickybox].loaded .ea-stickybox-hide{display:none}}@media(min-width: 1301px){[data-ea-style=stickybox].loaded .ea-type-image .ea-content{background:#dcdcdc}[data-ea-style=stickybox].loaded.dark .ea-type-image .ea-content{background:#505050}}@media(min-width: 1301px)and (prefers-color-scheme: dark){[data-ea-style=stickybox].loaded.adaptive .ea-type-image .ea-content{background:#505050}}[data-ea-style=fixedfooter].loaded{position:fixed;bottom:0;left:0;z-index:200;width:100%;max-width:100%}[data-ea-style=fixedfooter].loaded .ea-type-text{width:100%;max-width:100%;display:flex;z-index:200;background:#dcdcdc}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{background-color:inherit;max-width:100%;margin:0;padding:1em;flex:auto}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{max-width:100%;margin:0;padding:1em;flex:initial}@media(max-width: 576px){[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{display:none}}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide{cursor:pointer;color:#505050;padding:1em;flex:initial;margin:auto 0}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide span{padding:.25em;font-size:.8em;font-weight:bold;border:.15em solid #505050;border-radius:.5em;white-space:nowrap}[data-ea-style=fixedfooter].loaded.dark .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.dark .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}@media(prefers-color-scheme: dark){[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}}</style><script src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/%E6%97%A0%E6%A0%87%E9%A2%98" type="text/javascript" async=""></script></head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"> Fast DDS
+          
+
+          
+          </a>
+
+          
+            
+            
+            
+              <div class="version">
+                v2.8.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html">DDS API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#fast-dds-gen">Fast DDS-Gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#rtps-wire-protocol">RTPS Wire Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#main-features">Main Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contacts-and-commercial-support">Contacts and Commercial support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contributing-to-the-documentation">Contributing to the documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#structure-of-the-documentation">Structure of the documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_linux.html">1. Linux installation from binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_windows.html">2. Windows installation from binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_linux.html">3. Linux installation from sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_windows.html">4. Windows installation from sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_mac.html">5. Mac OS installation from sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/configuration/cmake_options.html">6. CMake options</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fast DDS</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="toctree-expand"></span>1. Getting Started</a><ul class="">
+<li class="toctree-l2 current"><a class="reference internal current" href="#"><span class="toctree-expand"></span>1.1. What is DDS?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-dcps-conceptual-model">1.1.1. The DCPS conceptual model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-rtps">1.2. What is RTPS?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_app/simple_app.html">1.3. Writing a simple C++ publisher and subscriber application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html">1.4. Writing a simple Python publisher and subscriber application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/library_overview/library_overview.html">2. Library Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/dds_layer.html">3. DDS Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/rtps_layer/rtps_layer.html">4. RTPS Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/discovery/discovery.html">5. Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/transport/transport.html">6. Transport Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/persistence/persistence.html">7. Persistence Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/security/security.html">8. Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/logging/intro.html">9. Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/statistics/statistics.html">10. Statistics Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/xml_configuration/xml_configuration.html">11. XML profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/env_vars/env_vars.html">12. Environment variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/property_policies/property_policies.html">13. PropertyPolicyQos Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dynamic_types/dynamic_types.html">14. Dynamic Topic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/use_cases/use_cases.html">15. Typical Use-Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/ros2/ros2.html">16. ROS 2 using Fast DDS middleware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/api_reference.html">17. C++ API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/python_api_reference/python_api_reference.html">18. Python API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fast DDS-Gen</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/introduction/introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/usage/usage.html">2. Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html">3. Building a publish/subscribe application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/python_bindings/python_bindings.html">4. Building Python auxiliary libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/dataTypes/dataTypes.html">5. Defining a data type via IDL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fast DDS CLI</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddscli/cli/cli.html">1. CLI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Docker Images</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/docker/docker.html">1. Docker Images</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Release Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html">Version 2.8.2 (EOL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html#previous-versions">Previous versions</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html">Fast DDS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"></a> »</li>
+        
+          <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="section-number">1. </span>Getting Started</a> »</li>
+        
+      <li><span class="section-number">1.1. </span>What is DDS?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/eProsima/Fast-DDS-docs/blob/v2.8.2/docs/fastdds/getting_started/definitions.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="what-is-dds">
+<span id="id1"></span><h1><span class="section-number">1.1. </span>What is DDS?<a class="headerlink" href="#what-is-dds" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://www.omg.org/spec/DDS/About-DDS/">Data Distribution Service (DDS)</a>
+is a data-centric communication protocol used for distributed software
+application communications.
+It describes the communications Application Programming Interfaces (APIs) and Communication Semantics that enable
+communication between data providers and data consumers.</p>
+<p>Since it is a Data-Centric Publish Subscribe (DCPS) model, three key application entities are defined in its
+implementation: publication entities, which define the information-generating objects and their properties;
+subscription entities, which define the information-consuming objects and their properties; and configuration entities
+that define the types of information that are transmitted as topics, and create the publisher and subscriber with
+its Quality of Service (QoS) properties, ensuring the correct performance of the above entities.</p>
+<p>DDS uses QoS to define the behavioral characteristics of DDS Entities. QoS are comprised of individual QoS policies
+(objects of type deriving from QoSPolicy). These are described in <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/core/policy/policy.html#dds-layer-core-policy"><span class="std std-ref">Policy</span></a>.</p>
+<div class="section" id="the-dcps-conceptual-model">
+<h2><span class="section-number">1.1.1. </span>The DCPS conceptual model<a class="headerlink" href="#the-dcps-conceptual-model" title="Permalink to this headline">¶</a></h2>
+<p>In the DCPS model, four basic elements are defined for the development of a system of communicating applications.</p>
+<ul class="simple">
+<li><p><strong>Publisher</strong>.
+It is the DCPS entity in charge of the creation and configuration of the <strong>DataWriters</strong> it implements.
+The <strong>DataWriter</strong> is the entity in charge of the actual publication of the messages.
+Each one will have an assigned <strong>Topic</strong> under which the messages are published.
+See <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/publisher/publisher.html#dds-layer-publisher"><span class="std std-ref">Publisher</span></a> for further details.</p></li>
+<li><p><strong>Subscriber</strong>.
+It is the DCPS Entity in charge of receiving the data published under the topics to which it subscribes.
+It serves one or more <strong>DataReader</strong> objects, which are responsible for communicating the availability of new data
+to the application.
+See <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/subscriber/subscriber.html#dds-layer-subscriber"><span class="std std-ref">Subscriber</span></a> for further details.</p></li>
+<li><p><strong>Topic</strong>.
+It is the entity that binds publications and subscriptions.
+It is unique within a DDS domain.
+Through the <strong>TopicDescription</strong>, it allows the uniformity of data types of publications and subscriptions.
+See <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/topic/topic.html#dds-layer-topic"><span class="std std-ref">Topic</span></a> for further details.</p></li>
+<li><p><strong>Domain</strong>.
+This is the concept used to link all publishers and subscribers, belonging to one or more applications,
+which exchange data under different topics.
+These individual applications that participate in a domain are called <strong>DomainParticipant</strong>.
+The DDS Domain is identified by a domain ID.
+The DomainParticipant defines the domain ID to specify the DDS domain to which it belongs.
+Two DomainParticipants with different IDs are not aware of each other’s presence in the network.
+Hence, several communication channels can be created.
+This is applied in scenarios where several DDS applications are involved, with their respective DomainParticipants
+communicating with each other, but these applications must not interfere.
+The <strong>DomainParticipant</strong> acts as a container for other DCPS Entities, acts as a factory for
+<strong>Publisher</strong>, <strong>Subscriber</strong> and <strong>Topic</strong> Entities, and provides administrative services in the domain.
+See <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/domain/domain.html#dds-layer-domain"><span class="std std-ref">Domain</span></a> for further details.</p></li>
+</ul>
+<p>These elements are shown in the figure below.</p>
+<div class="figure align-center" id="id3">
+<img alt="../../_images/dds_domain.svg" src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/dds_domain.svg"><p class="caption"><span class="caption-text">DCPS model entities in the DDS Domain.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="what-is-rtps">
+<span id="id2"></span><h1><span class="section-number">1.2. </span>What is RTPS?<a class="headerlink" href="#what-is-rtps" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://www.omg.org/spec/DDSI-RTPS/2.2/PDF">Real-Time Publish Subscribe (RTPS)</a> protocol, developed to
+support DDS applications, is a publication-subscription communication middleware
+over best-effort transports such as UDP/IP. Furthermore, Fast DDS provides support for TCP and
+Shared Memory (SHM) transports.</p>
+<p>It is designed to support both unicast and multicast communications.</p>
+<p>At the top of RTPS, inherited from DDS, the <strong>Domain</strong> can be found, which defines a separate plane of communication.
+Several domains can coexist at the same time independently.
+A domain contains any number of <strong>RTPSParticipants</strong>, that is, elements capable of sending and receiving data.
+To do this, the RTPSParticipants use their <strong>Endpoints</strong>:</p>
+<ul class="simple">
+<li><p><strong>RTPSWriter</strong>: Endpoint able to send data.</p></li>
+<li><p><strong>RTPSReader</strong>: Endpoint able to receive data.</p></li>
+</ul>
+<p>A RTPSParticipant can have any number of writer and reader endpoints.</p>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/_images/rtps_domain.svg"><img alt="../../_images/rtps_domain.svg" height="1561" src="1.1.%20What%20is%20DDS_%20%E2%80%94%20Fast%20DDS%202.8.2%20documentation_files/rtps_domain.svg" width="2911"></a>
+<p class="caption"><span class="caption-text">RTPS high-level architecture</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<p>Communication revolves around <strong>Topics</strong>, which define and label the data being exchanged.
+The topics do not belong to a specific participant.
+The participant, through the RTPSWriters, makes changes in the data published under a topic, and through the RTPSReaders
+receives the data associated with the topics to which it subscribes.
+The communication unit is called <strong>Change</strong>, which represents an update in the data that is written under a Topic.
+<strong>RTPSReaders/RTPSWriters</strong> register these changes on their <strong>History</strong>, a data structure that serves as a cache for
+recent changes.</p>
+<p>In the default configuration of <em>eProsima Fast DDS</em>, when you publish a <cite>change</cite> through a RTPSWriter endpoint, the
+following steps happen behind the scenes:</p>
+<ol class="arabic simple">
+<li><p>The <cite>change</cite> is added to the RTPSWriter’s history cache.</p></li>
+<li><p>The RTPSWriter sends the change to any RTPSReaders it knows about.</p></li>
+<li><p>After receiving data, RTPSReaders update their history cache with the new change.</p></li>
+</ol>
+<p>However, Fast DDS supports numerous configurations that allow you to change the behavior of RTPSWriters/RTPSReaders.
+A modification in the default configuration of the RTPS entities implies a change in the data exchange flow between
+RTPSWriters and RTPSReaders.
+Moreover, by choosing Quality of Service (QoS) policies, you can affect how these history caches are managed in several
+ways, but the communication loop remains the same.
+You can continue reading section <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/rtps_layer/rtps_layer.html#rtps-layer"><span class="std std-ref">RTPS Layer</span></a> to learn more about the implementation of the RTPS protocol in Fast
+DDS.</p>
+</div>
+
+
+           </div>
+           
+          <div id="readthedocs-ea-text-footer" class="raised" data-ea-type="text" data-ea-manual="true" data-ea-publisher="readthedocs" data-ea-keywords="c++|dds|eprosima|fastdds|readthedocs-project-56315|readthedocs-project-eprosima-fast-rtps" data-ea-campaign-types="community|house|paid"></div></div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_app/simple_app.html" class="btn btn-neutral float-right" title="1.3. Writing a simple C++ publisher and subscriber application" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html" class="btn btn-neutral float-left" title="1. Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2019, eProsima.
+      <span class="commit">
+        
+        Revision <code>2abdc712</code>.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org/">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+   
+
+
+<readthedocs-flyout></readthedocs-flyout><readthedocs-notification class="raised toast"></readthedocs-notification><readthedocs-search class="raised floating"></readthedocs-search><readthedocs-hotkeys></readthedocs-hotkeys></body></html>

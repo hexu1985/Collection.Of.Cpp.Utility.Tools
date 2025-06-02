@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-Hans"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1.1.什么是 DDS? - Fast DDS 2.8.2 文档</title>
+  
+
+  
+  <style type="text/css">:root, :host {
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+  --fa-font-light: normal 300 1em/1 "Font Awesome 6 Pro";
+  --fa-font-thin: normal 100 1em/1 "Font Awesome 6 Pro";
+  --fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-regular: normal 400 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-light: normal 300 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-duotone-thin: normal 100 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+  --fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-light: normal 300 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-thin: normal 100 1em/1 "Font Awesome 6 Sharp";
+  --fa-font-sharp-duotone-solid: normal 900 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-regular: normal 400 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-light: normal 300 1em/1 "Font Awesome 6 Sharp Duotone";
+  --fa-font-sharp-duotone-thin: normal 100 1em/1 "Font Awesome 6 Sharp Duotone";
+}
+
+svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+  overflow: visible;
+  box-sizing: content-box;
+}
+
+.svg-inline--fa {
+  display: var(--fa-display, inline-block);
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+}
+.svg-inline--fa.fa-2xs {
+  vertical-align: 0.1em;
+}
+.svg-inline--fa.fa-xs {
+  vertical-align: 0em;
+}
+.svg-inline--fa.fa-sm {
+  vertical-align: -0.0714285705em;
+}
+.svg-inline--fa.fa-lg {
+  vertical-align: -0.2em;
+}
+.svg-inline--fa.fa-xl {
+  vertical-align: -0.25em;
+}
+.svg-inline--fa.fa-2xl {
+  vertical-align: -0.3125em;
+}
+.svg-inline--fa.fa-pull-left {
+  margin-right: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-pull-right {
+  margin-left: var(--fa-pull-margin, 0.3em);
+  width: auto;
+}
+.svg-inline--fa.fa-li {
+  width: var(--fa-li-width, 2em);
+  top: 0.25em;
+}
+.svg-inline--fa.fa-fw {
+  width: var(--fa-fw-width, 1.25em);
+}
+
+.fa-layers svg.svg-inline--fa {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.fa-layers-counter, .fa-layers-text {
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+}
+
+.fa-layers {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -0.125em;
+  width: 1em;
+}
+.fa-layers svg.svg-inline--fa {
+  transform-origin: center center;
+}
+
+.fa-layers-text {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.fa-layers-counter {
+  background-color: var(--fa-counter-background-color, #ff253a);
+  border-radius: var(--fa-counter-border-radius, 1em);
+  box-sizing: border-box;
+  color: var(--fa-inverse, #fff);
+  line-height: var(--fa-counter-line-height, 1);
+  max-width: var(--fa-counter-max-width, 5em);
+  min-width: var(--fa-counter-min-width, 1.5em);
+  overflow: hidden;
+  padding: var(--fa-counter-padding, 0.25em 0.5em);
+  right: var(--fa-right, 0);
+  text-overflow: ellipsis;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-counter-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-bottom-right {
+  bottom: var(--fa-bottom, 0);
+  right: var(--fa-right, 0);
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom right;
+}
+
+.fa-layers-bottom-left {
+  bottom: var(--fa-bottom, 0);
+  left: var(--fa-left, 0);
+  right: auto;
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom left;
+}
+
+.fa-layers-top-right {
+  top: var(--fa-top, 0);
+  right: var(--fa-right, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-top-left {
+  left: var(--fa-left, 0);
+  right: auto;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top left;
+}
+
+.fa-1x {
+  font-size: 1em;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa-3x {
+  font-size: 3em;
+}
+
+.fa-4x {
+  font-size: 4em;
+}
+
+.fa-5x {
+  font-size: 5em;
+}
+
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
+}
+
+.fa-8x {
+  font-size: 8em;
+}
+
+.fa-9x {
+  font-size: 9em;
+}
+
+.fa-10x {
+  font-size: 10em;
+}
+
+.fa-2xs {
+  font-size: 0.625em;
+  line-height: 0.1em;
+  vertical-align: 0.225em;
+}
+
+.fa-xs {
+  font-size: 0.75em;
+  line-height: 0.0833333337em;
+  vertical-align: 0.125em;
+}
+
+.fa-sm {
+  font-size: 0.875em;
+  line-height: 0.0714285718em;
+  vertical-align: 0.0535714295em;
+}
+
+.fa-lg {
+  font-size: 1.25em;
+  line-height: 0.05em;
+  vertical-align: -0.075em;
+}
+
+.fa-xl {
+  font-size: 1.5em;
+  line-height: 0.0416666682em;
+  vertical-align: -0.125em;
+}
+
+.fa-2xl {
+  font-size: 2em;
+  line-height: 0.03125em;
+  vertical-align: -0.1875em;
+}
+
+.fa-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+.fa-ul {
+  list-style-type: none;
+  margin-left: var(--fa-li-margin, 2.5em);
+  padding-left: 0;
+}
+.fa-ul > li {
+  position: relative;
+}
+
+.fa-li {
+  left: calc(-1 * var(--fa-li-width, 2em));
+  position: absolute;
+  text-align: center;
+  width: var(--fa-li-width, 2em);
+  line-height: inherit;
+}
+
+.fa-border {
+  border-color: var(--fa-border-color, #eee);
+  border-radius: var(--fa-border-radius, 0.1em);
+  border-style: var(--fa-border-style, solid);
+  border-width: var(--fa-border-width, 0.08em);
+  padding: var(--fa-border-padding, 0.2em 0.25em 0.15em);
+}
+
+.fa-pull-left {
+  float: left;
+  margin-right: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-pull-right {
+  float: right;
+  margin-left: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-beat {
+  animation-name: fa-beat;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-bounce {
+  animation-name: fa-bounce;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+}
+
+.fa-fade {
+  animation-name: fa-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-beat-fade {
+  animation-name: fa-beat-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-flip {
+  animation-name: fa-flip;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-shake {
+  animation-name: fa-shake;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin {
+  animation-name: fa-spin;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 2s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin-reverse {
+  --fa-animation-direction: reverse;
+}
+
+.fa-pulse,
+.fa-spin-pulse {
+  animation-name: fa-spin;
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, steps(8));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fa-beat,
+.fa-bounce,
+.fa-fade,
+.fa-beat-fade,
+.fa-flip,
+.fa-pulse,
+.fa-shake,
+.fa-spin,
+.fa-spin-pulse {
+    animation-delay: -1ms;
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+    transition-delay: 0s;
+    transition-duration: 0s;
+  }
+}
+@keyframes fa-beat {
+  0%, 90% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(var(--fa-beat-scale, 1.25));
+  }
+}
+@keyframes fa-bounce {
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  10% {
+    transform: scale(var(--fa-bounce-start-scale-x, 1.1), var(--fa-bounce-start-scale-y, 0.9)) translateY(0);
+  }
+  30% {
+    transform: scale(var(--fa-bounce-jump-scale-x, 0.9), var(--fa-bounce-jump-scale-y, 1.1)) translateY(var(--fa-bounce-height, -0.5em));
+  }
+  50% {
+    transform: scale(var(--fa-bounce-land-scale-x, 1.05), var(--fa-bounce-land-scale-y, 0.95)) translateY(0);
+  }
+  57% {
+    transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+  }
+  64% {
+    transform: scale(1, 1) translateY(0);
+  }
+  100% {
+    transform: scale(1, 1) translateY(0);
+  }
+}
+@keyframes fa-fade {
+  50% {
+    opacity: var(--fa-fade-opacity, 0.4);
+  }
+}
+@keyframes fa-beat-fade {
+  0%, 100% {
+    opacity: var(--fa-beat-fade-opacity, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(var(--fa-beat-fade-scale, 1.125));
+  }
+}
+@keyframes fa-flip {
+  50% {
+    transform: rotate3d(var(--fa-flip-x, 0), var(--fa-flip-y, 1), var(--fa-flip-z, 0), var(--fa-flip-angle, -180deg));
+  }
+}
+@keyframes fa-shake {
+  0% {
+    transform: rotate(-15deg);
+  }
+  4% {
+    transform: rotate(15deg);
+  }
+  8%, 24% {
+    transform: rotate(-18deg);
+  }
+  12%, 28% {
+    transform: rotate(18deg);
+  }
+  16% {
+    transform: rotate(-22deg);
+  }
+  20% {
+    transform: rotate(22deg);
+  }
+  32% {
+    transform: rotate(-12deg);
+  }
+  36% {
+    transform: rotate(12deg);
+  }
+  40%, 100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.fa-rotate-90 {
+  transform: rotate(90deg);
+}
+
+.fa-rotate-180 {
+  transform: rotate(180deg);
+}
+
+.fa-rotate-270 {
+  transform: rotate(270deg);
+}
+
+.fa-flip-horizontal {
+  transform: scale(-1, 1);
+}
+
+.fa-flip-vertical {
+  transform: scale(1, -1);
+}
+
+.fa-flip-both,
+.fa-flip-horizontal.fa-flip-vertical {
+  transform: scale(-1, -1);
+}
+
+.fa-rotate-by {
+  transform: rotate(var(--fa-rotate-angle, 0));
+}
+
+.fa-stack {
+  display: inline-block;
+  vertical-align: middle;
+  height: 2em;
+  position: relative;
+  width: 2.5em;
+}
+
+.fa-stack-1x,
+.fa-stack-2x {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: var(--fa-stack-z-index, auto);
+}
+
+.svg-inline--fa.fa-stack-1x {
+  height: 1em;
+  width: 1.25em;
+}
+.svg-inline--fa.fa-stack-2x {
+  height: 2em;
+  width: 2.5em;
+}
+
+.fa-inverse {
+  color: var(--fa-inverse, #fff);
+}
+
+.sr-only,
+.fa-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:not(:focus),
+.fa-sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.svg-inline--fa .fa-primary {
+  fill: var(--fa-primary-color, currentColor);
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa .fa-secondary {
+  fill: var(--fa-secondary-color, currentColor);
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-primary {
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-secondary {
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa mask .fa-primary,
+.svg-inline--fa mask .fa-secondary {
+  fill: black;
+}</style><link rel="stylesheet" href="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/theme.css" type="text/css">
+  <link rel="stylesheet" href="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/pygments.css" type="text/css">
+  <link rel="stylesheet" href="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/tabs.css" type="text/css">
+  <link rel="stylesheet" href="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/eprosima_rtd_theme.css" type="text/css">
+
+  
+  
+
+  
+  
+
+  
+    <link rel="canonical" href="https://fast-dds.docs.eprosima.com/en/latest/fastdds/getting_started/definitions.html">
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/documentation_options.js"></script>
+        <script src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/jquery.js"></script>
+        <script src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/underscore.js"></script>
+        <script src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/doctools.js"></script>
+        
+    
+    <script type="text/javascript" src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/genindex.html">
+    <link rel="search" title="Search" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/search.html">
+    <link rel="next" title="1.3. Writing a simple C++ publisher and subscriber application" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_app/simple_app.html">
+    <link rel="prev" title="1. Getting Started" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2023-04-18T14:43:01Z", "builder": "sphinx", "canonical_url": null, "commit": "2abdc712", "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "fastdds/getting_started/definitions", "programming_language": "cpp", "project": "eprosima-fast-rtps", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "UA-37962201-2", "version": "v2.8.2"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async="" type="text/javascript" src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="eprosima-fast-rtps"><meta name="readthedocs-version-slug" content="v2.8.2"><meta name="readthedocs-resolver-filename" content="/fastdds/getting_started/definitions.html"><meta name="readthedocs-http-status" content="200"><script id="ethicaladsjs" type="text/javascript" async="true" src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/ethicalads.min.js"></script><style>[data-ea-publisher].loaded,[data-ea-type].loaded{font-size:14px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-weight:normal;font-style:normal;letter-spacing:0px;vertical-align:baseline;line-height:1.3em}[data-ea-publisher].loaded a,[data-ea-type].loaded a{text-decoration:none}[data-ea-publisher].loaded .ea-pixel,[data-ea-type].loaded .ea-pixel{display:none}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{margin:1em 1em .5em 1em;padding:1em;background:rgba(0,0,0,.03);color:#505050}[data-ea-publisher].loaded .ea-content a:link,[data-ea-type].loaded .ea-content a:link{color:#505050}[data-ea-publisher].loaded .ea-content a:visited,[data-ea-type].loaded .ea-content a:visited{color:#505050}[data-ea-publisher].loaded .ea-content a:hover,[data-ea-type].loaded .ea-content a:hover{color:#373737}[data-ea-publisher].loaded .ea-content a:active,[data-ea-type].loaded .ea-content a:active{color:#373737}[data-ea-publisher].loaded .ea-content a strong,[data-ea-publisher].loaded .ea-content a b,[data-ea-type].loaded .ea-content a strong,[data-ea-type].loaded .ea-content a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a:link,[data-ea-type].loaded .ea-callout a:link{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:visited,[data-ea-type].loaded .ea-callout a:visited{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:hover,[data-ea-type].loaded .ea-callout a:hover{color:#505050}[data-ea-publisher].loaded .ea-callout a:active,[data-ea-type].loaded .ea-callout a:active{color:#505050}[data-ea-publisher].loaded .ea-callout a strong,[data-ea-publisher].loaded .ea-callout a b,[data-ea-type].loaded .ea-callout a strong,[data-ea-type].loaded .ea-callout a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a,[data-ea-type].loaded .ea-callout a{font-size:.8em}[data-ea-publisher].loaded .ea-domain,[data-ea-type].loaded .ea-domain{margin-top:.75em;font-size:.8em;text-align:center;color:#9d9d9d}[data-ea-publisher].loaded.dark .ea-content,[data-ea-type].loaded.dark .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:link,[data-ea-type].loaded.dark .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:visited,[data-ea-type].loaded.dark .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:hover,[data-ea-type].loaded.dark .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a:active,[data-ea-type].loaded.dark .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a strong,[data-ea-publisher].loaded.dark .ea-content a b,[data-ea-type].loaded.dark .ea-content a strong,[data-ea-type].loaded.dark .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-callout a:link,[data-ea-type].loaded.dark .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:visited,[data-ea-type].loaded.dark .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:hover,[data-ea-type].loaded.dark .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a:active,[data-ea-type].loaded.dark .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a strong,[data-ea-publisher].loaded.dark .ea-callout a b,[data-ea-type].loaded.dark .ea-callout a strong,[data-ea-type].loaded.dark .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-domain,[data-ea-type].loaded.dark .ea-domain{color:#909090}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.adaptive .ea-content,[data-ea-type].loaded.adaptive .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:link,[data-ea-type].loaded.adaptive .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:visited,[data-ea-type].loaded.adaptive .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:hover,[data-ea-type].loaded.adaptive .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a:active,[data-ea-type].loaded.adaptive .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a strong,[data-ea-publisher].loaded.adaptive .ea-content a b,[data-ea-type].loaded.adaptive .ea-content a strong,[data-ea-type].loaded.adaptive .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-callout a:link,[data-ea-type].loaded.adaptive .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:visited,[data-ea-type].loaded.adaptive .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:hover,[data-ea-type].loaded.adaptive .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a:active,[data-ea-type].loaded.adaptive .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a strong,[data-ea-publisher].loaded.adaptive .ea-callout a b,[data-ea-type].loaded.adaptive .ea-callout a strong,[data-ea-type].loaded.adaptive .ea-callout a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-domain,[data-ea-type].loaded.adaptive .ea-domain{color:#909090}}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.raised .ea-content,[data-ea-type].loaded.raised .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.bordered .ea-content,[data-ea-type].loaded.bordered .ea-content{border:1px solid rgba(0,0,0,.04);border-radius:3px;box-shadow:none}[data-ea-publisher].loaded.bordered.dark .ea-content,[data-ea-type].loaded.bordered.dark .ea-content{border:1px solid rgba(255,255,255,.07)}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.bordered.adaptive .ea-content,[data-ea-type].loaded.bordered.adaptive .ea-content{border:1px solid rgba(255,255,255,.07)}}[data-ea-publisher].loaded.flat .ea-content,[data-ea-type].loaded.flat .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-type=image].loaded,[data-ea-publisher]:not([data-ea-type]).loaded,.ea-type-image{display:inline-block}[data-ea-type=image].loaded .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content,.ea-type-image .ea-content{max-width:180px;overflow:auto;text-align:center}[data-ea-type=image].loaded .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>a>img,.ea-type-image .ea-content>a>img{width:120px;height:90px;display:inline-block}[data-ea-type=image].loaded .ea-content>.ea-text,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>.ea-text,.ea-type-image .ea-content>.ea-text{margin-top:1em;font-size:1em;text-align:center}[data-ea-type=image].loaded .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded .ea-callout,.ea-type-image .ea-callout{max-width:180px;margin:0em 1em 1em 1em;padding-left:1em;padding-right:1em;font-style:italic;text-align:right}[data-ea-type=image].loaded.horizontal .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content,.ea-type-image.horizontal .ea-content{max-width:320px}[data-ea-type=image].loaded.horizontal .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content>a>img,.ea-type-image.horizontal .ea-content>a>img{float:left;margin-right:1em}[data-ea-type=image].loaded.horizontal .ea-content .ea-text,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content .ea-text,.ea-type-image.horizontal .ea-content .ea-text{margin-top:0em;text-align:left;overflow:auto}[data-ea-type=image].loaded.horizontal .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-callout,.ea-type-image.horizontal .ea-callout{max-width:320px;text-align:right}[data-ea-type=text].loaded,.ea-type-text{font-size:14px}[data-ea-type=text].loaded .ea-content,.ea-type-text .ea-content{text-align:left}[data-ea-type=text].loaded .ea-callout,.ea-type-text .ea-callout{margin:.5em 1em 1em 1em;padding-left:1em;padding-right:1em;text-align:right;font-style:italic}[data-ea-style=stickybox].loaded{position:fixed;bottom:20px;right:20px;z-index:100}[data-ea-style=stickybox].loaded .ea-type-image .ea-stickybox-hide{cursor:pointer;position:absolute;top:.75em;right:.75em;background-color:#fefefe;border:1px solid #088cdb;border-radius:50%;color:#088cdb;font-size:1em;text-align:center;height:1.5em;width:1.5em;line-height:1.4}@media(max-width: 1300px){[data-ea-style=stickybox].loaded{position:static;bottom:0;right:0;margin:auto;text-align:center}[data-ea-style=stickybox].loaded .ea-stickybox-hide{display:none}}@media(min-width: 1301px){[data-ea-style=stickybox].loaded .ea-type-image .ea-content{background:#dcdcdc}[data-ea-style=stickybox].loaded.dark .ea-type-image .ea-content{background:#505050}}@media(min-width: 1301px)and (prefers-color-scheme: dark){[data-ea-style=stickybox].loaded.adaptive .ea-type-image .ea-content{background:#505050}}[data-ea-style=fixedfooter].loaded{position:fixed;bottom:0;left:0;z-index:200;width:100%;max-width:100%}[data-ea-style=fixedfooter].loaded .ea-type-text{width:100%;max-width:100%;display:flex;z-index:200;background:#dcdcdc}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{background-color:inherit;max-width:100%;margin:0;padding:1em;flex:auto}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{max-width:100%;margin:0;padding:1em;flex:initial}@media(max-width: 576px){[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{display:none}}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide{cursor:pointer;color:#505050;padding:1em;flex:initial;margin:auto 0}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide span{padding:.25em;font-size:.8em;font-weight:bold;border:.15em solid #505050;border-radius:.5em;white-space:nowrap}[data-ea-style=fixedfooter].loaded.dark .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.dark .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}@media(prefers-color-scheme: dark){[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}}</style><script src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/%E6%97%A0%E6%A0%87%E9%A2%98" type="text/javascript" async=""></script></head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"> 快速 DDS
+          
+
+          
+          </a>
+
+          
+            
+            
+            
+              <div class="version">
+                v2.8.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索 文档">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="主要导航">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">导言</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html">DDS API 系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#fast-dds-gen">快速DDS-Gen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#rtps-wire-protocol">RTPS 线 协议</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#main-features">主要特点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contacts-and-commercial-support">联系和商业支持</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#contributing-to-the-documentation">为文件做出贡献</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/02-formalia/titlepage.html#structure-of-the-documentation">文件结构</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装 手册</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_linux.html">1.Linux 安装从二进制文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/binaries/binaries_windows.html">2.二进制文件的Windows安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_linux.html">3.Linux 安装来自来源</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_windows.html">4.来自源的Windows安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/sources/sources_mac.html">5.Mac OS 安装来自源</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/installation/configuration/cmake_options.html">6.CMake 选项</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">快速 DDS</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="toctree-expand"></span>1.入门</a><ul class="">
+<li class="toctree-l2 current"><a class="reference internal current" href="#"><span class="toctree-expand"></span>1.1.什么是DDS?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-dcps-conceptual-model">1.1.1.DCPS概念模型</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-rtps">1.2.什么是RTPS?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_app/simple_app.html">1.3.编写简单的 C++ 发布商和订阅应用程序</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_python_app/simple_python_app.html">1.4.编写一个简单的 Python 发布者和订阅者应用程序</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/library_overview/library_overview.html">2.图书馆概况</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/dds_layer.html">3.DDS 层</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/rtps_layer/rtps_layer.html">4.RTPS 层</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/discovery/discovery.html">5.发现</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/transport/transport.html">6.传输层</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/persistence/persistence.html">7.坚持 服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/security/security.html">8.安全</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/logging/intro.html">9.伐木</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/statistics/statistics.html">10.统计 模块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/xml_configuration/xml_configuration.html">11.XML 配置文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/env_vars/env_vars.html">12.环境变量</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/property_policies/property_policies.html">13.PropertyPolicyQos 选项</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dynamic_types/dynamic_types.html">14.动态主题类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/use_cases/use_cases.html">15.典型用例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/ros2/ros2.html">16.ROS 2 使用快速 DDS 中间件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/api_reference/api_reference.html">17.C++ API 参考</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/python_api_reference/python_api_reference.html">18.Python API 参考</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">快速DDS-Gen</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/introduction/introduction.html">1.导言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/usage/usage.html">2.使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/pubsub_app/pubsub_app.html">3.构建发布/订阅应用程序</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/python_bindings/python_bindings.html">4.构建 Python 辅助库</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddsgen/dataTypes/dataTypes.html">5.通过 IDL 定义数据类型</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">快速 DDS CLI</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastddscli/cli/cli.html">1.CLI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Docker 图片</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/docker/docker.html">1.Docker 图片</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">发行 说明</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html">2.8.2(EOL)版本</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/notes/notes.html#previous-versions">以前的版本</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="顶级导航">
+        
+          
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html">快速 DDS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="面包屑导航">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/index.html" class="icon icon-home"></a> »</li>
+        
+          <li><a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html"><span class="section-number">1.</span>入门</a> »</li>
+        
+      <li><span class="section-number">1.1.</span>什么是DDS?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/eProsima/Fast-DDS-docs/blob/v2.8.2/docs/fastdds/getting_started/definitions.rst" class="fa fa-github"> 在 GitHub 上编辑</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="what-is-dds">
+<span id="id1"></span><h1><span class="section-number">1.1. </span>什么是DDS?<a class="headerlink" href="#what-is-dds" title="Permalink 到这个标题">¶</a></h1>
+<p><a class="reference external" href="https://www.omg.org/spec/DDS/About-DDS/">数据分发服务(DDS)</a>
+一种以数据为中心的通信协议,用于分布式软件
+应用通信。
+它描述了通信应用程序编程接口(API)和通信语义,以实现
+数据提供商与数据消费者之间的通信。</p>
+<p>由于它是以数据为中心的出版订阅(DCPS)模型,因此在其中定义了三个关键应用程序实体。
+实现:发布实体,定义信息生成对象及其属性;
+定义信息消耗对象及其属性的订阅实体;和配置实体
+定义作为主题传输的信息类型,并创建发布者和订阅者
+其服务质量(QoS)属性,确保上述实体的正确性能。</p>
+<p>DDS 使用 QoS 来定义 DDS 实体的行为特征。QoS由个别QoS策略组成
+(源自 QoSpolicy 的类型对象)。这些在政策中描述。<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/core/policy/policy.html#dds-layer-core-policy"><span class="std std-ref">Policy</span></a></p>
+<div class="section" id="the-dcps-conceptual-model">
+<h2><span class="section-number">1.1.1. </span>DCPS概念模型<a class="headerlink" href="#the-dcps-conceptual-model" title="Permalink 到这个标题">¶</a></h2>
+<p>在DCPS模型中,定义了四个基本元素,用于开发通信应用程序系统。</p>
+<ul class="simple">
+<li><p><strong>出版商。</strong>
+它是DCPS实体,<strong>负责创建和配置其实现的DataWriters。</strong>
+<strong>DataWriter</strong> 是负责实际发布消息的实体。
+<strong>每个都将有一个分配的主题</strong>,根据该主题发布消息。
+有关详细信息,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/publisher/publisher.html#dds-layer-publisher"><span class="std std-ref">请参阅发布商。</span></a></p></li>
+<li><p><strong>Subscriber</strong>订阅者。
+它是DCPS实体,负责接收根据其订阅的主题发布的数据。
+它为一个或多个 <strong>DataReader</strong> 对象提供服务,这些对象负责传达新数据的可用性。
+到应用。
+有关详细信息,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/subscriber/subscriber.html#dds-layer-subscriber"><span class="std std-ref">请参阅订阅者。</span></a></p></li>
+<li><p><strong>主题。</strong>
+是绑定出版物和订阅的实体。
+它在DDS域中是独一无二的。
+通过 <strong>TopicDescription</strong>,它允许出版物和订阅的数据类型的统一。
+有关更多详细信息,<a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/topic/topic.html#dds-layer-topic"><span class="std std-ref">请参阅主题。</span></a></p></li>
+<li><p><strong>域名。</strong>
+这是用于链接所有出版商和订阅者的概念,属于一个或多个应用程序,
+在不同主题下交换数据。
+参与域的这些单独应用程序称为 <strong>DomainParticipant</strong>DomainParticipant。
+DDS 域由域 ID 标识。
+DomainParticipant 定义域 ID 以指定它所属的 DDS 域。
+具有不同 ID 的两个 Domain 参与者不知道彼此在网络中的存在。
+因此,可以创建多个通信渠道。
+这适用于涉及多个 DDS 应用程序的场景,以及各自的 DomainParticipant 。
+相互通信,但这些应用程序不得干扰。
+<strong>DomainParticipant</strong> 充当其他 DCPS 实体的容器,充当工厂
+<strong>Publisher</strong><strong>Subscriber</strong><strong>发布者、订阅者和主题实体</strong>,并在域中提供管理服务。
+有关详细信息,请参阅 <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/domain/domain.html#dds-layer-domain"><span class="std std-ref">Domain。</span></a></p></li>
+</ul>
+<p>这些要素如下图所示。</p>
+<div class="figure align-center" id="id3">
+<img alt="...../.../_images/dds_domain.svg" src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/dds_domain.svg"><p class="caption"><span class="caption-text">DDS 域中的 DCPS 模型实体。</span><a class="headerlink" href="#id3" title="永久链接到此图像">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="what-is-rtps">
+<span id="id2"></span><h1><span class="section-number">1.2. </span>什么是RTPS?<a class="headerlink" href="#what-is-rtps" title="Permalink 到这个标题">¶</a></h1>
+<p><a class="reference external" href="https://www.omg.org/spec/DDSI-RTPS/2.2/PDF">实时发布订阅(RTPS)</a>协议,开发到
+支持DDS应用,是一种出版-订阅通信中间件
+超过最佳努力的运输,如UDP / IP。此外,Fast DDS 还支持 TCP 和
+共享内存(SHM)传输。</p>
+<p>它旨在支持单播和多播通信。</p>
+<p>在从 DDS 继承的 RTPS 的顶部,<strong>可以找到域</strong>,它定义了一个单独的通信平面。
+多个领域可以同时独立共存。
+<strong>域包含任意数量的RTPSParticipants</strong>,即能够发送和接收数据的元素。
+为此,RTPSParticipants 使用他们的 <strong>Endpoints</strong>Endpoints :</p>
+<ul class="simple">
+<li><p><strong>RTPSWriter</strong> : 端点能够发送数据。</p></li>
+<li><p><strong>RTPSReader</strong> : 端点能够接收数据。</p></li>
+</ul>
+<p>RTPSParticipant 可以具有任意数量的写入器和读卡器端点。</p>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/_images/rtps_domain.svg"><img alt="...../.../_images/rtps_domain.svg" height="1561" src="1.1.%E4%BB%80%E4%B9%88%E6%98%AF%20DDS_%20-%20Fast%20DDS%202.8.2%20%E6%96%87%E6%A1%A3_files/rtps_domain.svg" width="2911"></a>
+<p class="caption"><span class="caption-text">RTPS 高级架构</span><a class="headerlink" href="#id4" title="永久链接到此图像">¶</a></p>
+</div>
+<p><strong>沟通围绕主题展开</strong>,主题定义和标记正在交换的数据。
+主题不属于特定参与者。
+参与者,通过RTPSWriters,对在主题下发布的数据进行更改,并通过RTPSReaders进行更改
+接收与其订阅的主题相关的数据。
+通信单元称为 <strong>Change</strong>,它表示在 Topic 下写入的数据中的更新。
+<strong>RTPSReaders/RTPSWriters</strong>RTPSReaders/RTPSWriters在其历史记录上注册这些更改,<strong>History</strong>该数据结构可作为缓存
+最近的变化。</p>
+<p>在 <em>eProsima Fast DDS</em> 的默认配置中,当您发布<cite>变化</cite>通过 RTPSWriter 端点,
+以下步骤发生在幕后:</p>
+<ol class="arabic simple">
+<li><p>因<cite>变化</cite>添加到 RTPSWriter 的历史缓存中。</p></li>
+<li><p>RTPSWriter将更改发送给它所知道的任何RTPSReaders。</p></li>
+<li><p>接收数据后,RTPSReaders 会更新其历史记录缓存。</p></li>
+</ol>
+<p>但是,Fast DDS 支持多种配置,允许您更改 RTPSWriters/RTPSReaders 的行为。
+RTPS实体默认配置的修改意味着数据交换流之间的变化
+RTPSWriters 和 RTPSReaders。
+此外,通过选择服务质量(QoS)策略,您可以影响这些历史缓存在几个中的管理方式。
+方式,但通信循环保持不变。
+您可以继续阅读 <a class="reference internal" href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/rtps_layer/rtps_layer.html#rtps-layer"><span class="std std-ref">RTPS 层</span></a>,了解有关快速 RTPS 协议实现的更多信息
+DDS。</p>
+</div>
+
+
+           </div>
+           
+          <div id="readthedocs-ea-text-footer" class="raised" data-ea-type="text" data-ea-manual="true" data-ea-publisher="readthedocs" data-ea-keywords="c++|dds|eprosima|fastdds|readthedocs-project-56315|readthedocs-project-eprosima-fast-rtps" data-ea-campaign-types="community|house|paid"></div></div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="页脚导航">
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_app/simple_app.html" class="btn btn-neutral float-right" title="1.3.编写简单的 C++ 发布商和订阅应用程序" accesskey="n" rel="next">下一个<span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/getting_started.html" class="btn btn-neutral float-left" title="1.入门" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span>以前</a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>
+        ©版权2019年,eProsima。
+      
+        
+        <span class="commit">修订<code>2abdc712</code>. .</span>
+      
+
+    </p>
+  </div>
+    
+    
+    
+    与 <a href="https://www.sphinx-doc.org/">狮身 </a> 使用A
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    
+    提供: <a href="https://readthedocs.org/">阅读文档</a>. . 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+   
+
+
+<readthedocs-flyout></readthedocs-flyout><readthedocs-notification class="raised toast"></readthedocs-notification><readthedocs-search class="raised floating"></readthedocs-search><readthedocs-hotkeys></readthedocs-hotkeys></body></html>

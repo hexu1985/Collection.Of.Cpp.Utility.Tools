@@ -4,6 +4,16 @@ https://fast-dds.docs.eprosima.com/en/v2.8.2/
 4.1.1. 了解FastDDS、FastRTPS 的底层实现原理
 https://www.yuque.com/yuefeng-95ahz/blogs/hm3a7zg8zvnoc2wk?singleDoc#
 
+4.1.2. DDS 通用优化方案
+https://www.yuque.com/yuefeng-95ahz/blogs/greids1v41m78kc4#
+
+RTPS协议（一）概述
+https://zhuanlan.zhihu.com/p/587446620
+
+DDS通信中间件——RTPS规范
+https://zhuanlan.zhihu.com/p/706886784
+
+1. Getting Started
 https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html
 
 
