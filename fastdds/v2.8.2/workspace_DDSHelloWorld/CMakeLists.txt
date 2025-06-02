@@ -36,3 +36,6 @@ file(GLOB DDS_HELLOWORLD_SOURCES_CXX "src/*.cxx")
 
 add_executable(DDSHelloWorldPublisher src/HelloWorldPublisher.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldPublisher fastrtps fastcdr tinyxml2::tinyxml2)
+
+add_executable(DDSHelloWorldSubscriber src/HelloWorldSubscriber.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
+target_link_libraries(DDSHelloWorldSubscriber fastrtps fastcdr tinyxml2::tinyxml2)
