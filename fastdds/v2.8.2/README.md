@@ -16,6 +16,8 @@ https://zhuanlan.zhihu.com/p/706886784
 1. Getting Started
 https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html
 
+3. DDS Layer
+https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/dds_layer.html#dds-layer
 
 
 # 源码编译fastdds，且源码依赖
