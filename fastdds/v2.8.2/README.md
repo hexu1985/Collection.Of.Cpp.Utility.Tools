@@ -13,6 +13,9 @@ https://zhuanlan.zhihu.com/p/587446620
 DDS通信中间件——RTPS规范
 https://zhuanlan.zhihu.com/p/706886784
 
+FastDDS中的QoS
+https://blog.csdn.net/nuist_NJUPT/article/details/129745123
+
 1. Getting Started
 https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions.html
 
