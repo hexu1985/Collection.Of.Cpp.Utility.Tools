@@ -22,6 +22,9 @@ https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/definitions
 3. DDS Layer
 https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/dds_layer/dds_layer.html#dds-layer
 
+分布式实时通信——DDS技术
+https://zhuanlan.zhihu.com/p/192981171
+
 
 # 源码编译fastdds，且源码依赖
 
