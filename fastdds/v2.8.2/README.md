@@ -28,6 +28,9 @@ https://zhuanlan.zhihu.com/p/192981171
 DDS-RTPS协议权威指南
 https://wenku.csdn.net/column/5civg171f1#1.%20DDS-RTPS%E5%8D%8F%E8%AE%AE%E6%A6%82%E8%BF%B0
 
+一文了解DDS实时传输协议及其消息格式
+https://blog.csdn.net/usstmiracle/article/details/134506674
+
 
 # 源码编译fastdds，且源码依赖
 
