@@ -34,6 +34,12 @@ https://blog.csdn.net/usstmiracle/article/details/134506674
 Fast RTPS原理与代码分析(2)：动态发现协议之参与者发现协议PDP
 https://blog.csdn.net/HBS2011/article/details/102520704
 
+Fast RTPS原理与代码分析(3)：动态发现协议之端点发现协议EDP
+https://blog.csdn.net/HBS2011/article/details/102522314
+
+车载消息中间件FastDDS 源码解析（一）FastDDS 介绍和使用
+https://juejin.cn/post/7380268230798966824
+
 # 源码编译fastdds，且源码依赖
 
 1. 准备工作
