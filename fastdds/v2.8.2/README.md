@@ -32,7 +32,7 @@ https://wenku.csdn.net/column/5civg171f1#1.%20DDS-RTPS%E5%8D%8F%E8%AE%AE%E6%A6%8
 https://blog.csdn.net/usstmiracle/article/details/134506674
 
 Fast RTPS原理与代码分析(2)：动态发现协议之参与者发现协议PDP
-https://blog.csdn.net/HBS2011/article/details/102520704?spm=1001.2101.3001.10796
+https://blog.csdn.net/HBS2011/article/details/102520704
 
 # 源码编译fastdds，且源码依赖
 
