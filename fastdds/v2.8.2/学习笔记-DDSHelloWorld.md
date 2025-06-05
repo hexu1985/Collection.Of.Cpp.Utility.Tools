@@ -83,3 +83,21 @@ Fast-DDS/src/cpp/rtps/flowcontrol/FlowControllerImpl.hpp
         }
     }
 ```
+
+### locator类型
+
+dvpn-lib-fastdds/include/fastdds/rtps/common/Locator.h
+```cpp
+/// Reserved locator kind
+#define LOCATOR_KIND_RESERVED 0
+/// UDP over IPv4 locator kind
+#define LOCATOR_KIND_UDPv4 1
+/// UDP over IPv6 locator kind
+#define LOCATOR_KIND_UDPv6 2
+/// TCP over IPv4 kind
+#define LOCATOR_KIND_TCPv4 4
+/// TCP over IPv6 locator kind
+#define LOCATOR_KIND_TCPv6 8
+/// Shared memory locator kind
+#define LOCATOR_KIND_SHM 16
+```
