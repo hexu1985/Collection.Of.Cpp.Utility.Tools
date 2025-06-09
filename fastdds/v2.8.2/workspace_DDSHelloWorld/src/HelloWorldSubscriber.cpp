@@ -31,6 +31,9 @@
 #include <fastdds/dds/subscriber/Subscriber.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
 
+#include <fastdds/dds/log/Log.hpp>
+
+
 using namespace eprosima::fastdds::dds;
 
 class HelloWorldSubscriber
@@ -187,6 +190,14 @@ int main(
         int argc,
         char** argv)
 {
+    // log info
+    Log::SetVerbosity(Log::Kind::Info);
+    //Log::SetCategoryFilter(std::regex("(RTPS_|SECURITY_)"));  // 可选: 设置类别过滤器
+
+    // 启用文件名和行号显示
+    Log::ReportFilenames(true);  // 显示文件名
+    Log::ReportFunctions(true);  // 显示函数名（可选）
+
     std::cout << "Starting subscriber." << std::endl;
     uint32_t samples = 10;
 
