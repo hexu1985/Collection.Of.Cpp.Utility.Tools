@@ -200,3 +200,49 @@ dvpn-lib-fastdds/src/cpp/rtps/flowcontrol/FlowControllerImpl.hpp
     }
 
 ```
+
+--- 
+
+5. DataWriterImpl
+
+
+dvpn-lib-fastdds/src/cpp/fastdds/publisher/DataWriterImpl.cpp
+```cpp
+
+ReturnCode_t DataWriterImpl::perform_create_new_change(
+        ChangeKind_t change_kind,
+        void* data,
+        WriteParams& wparams,
+        const InstanceHandle_t& handle)
+{
+    // Block lowlevel writer
+    auto max_blocking_time = steady_clock::now() +
+            microseconds(::TimeConv::Time_t2MicroSecondsInt64(qos_.reliability().max_blocking_time));
+
+#if HAVE_STRICT_REALTIME
+    std::unique_lock<RecursiveTimedMutex> lock(writer_->getMutex(), std::defer_lock);
+    if (!lock.try_lock_until(max_blocking_time))
+    {
+        return ReturnCode_t::RETCODE_TIMEOUT;
+    }
+#else
+    std::unique_lock<RecursiveTimedMutex> lock(writer_->getMutex());
+#endif // if HAVE_STRICT_REALTIME
+
+    PayloadInfo_t payload;
+    bool was_loaned = check_and_remove_loan(data, payload);
+    if (!was_loaned)
+    {
+        if (!get_free_payload_from_pool(type_->getSerializedSizeProvider(data), payload))
+        {
+            return ReturnCode_t::RETCODE_OUT_OF_RESOURCES;
+        }
+
+        if ((ALIVE == change_kind) && !type_->serialize(data, &payload.payload))
+        {
+            logWarning(DATA_WRITER, "Data serialization returned false");
+            return_payload_to_pool(payload);
+            return ReturnCode_t::RETCODE_ERROR;
+        }
+    }
+```
