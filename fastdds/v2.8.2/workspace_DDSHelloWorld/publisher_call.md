@@ -64,4 +64,26 @@ bool DataWriter::write(void* data)
                                                   DeliveryRetCode StatefulWriter::deliver_sample_to_network( CacheChange_t* change, RTPSMessageGroup& group, LocatorSelectorSender& locator_selector, // Object locked by FlowControllerImpl const std::chrono::time_point<std::chrono::steady_clock>& max_blocking_time)
                                                     - group.add_data(*change, inline_qos)
                                                       bool RTPSMessageGroup::add_data( const CacheChange_t& change, bool expectsInlineQos)
+                                                    - group.~RTPSMessageGroup()
+                                                      RTPSMessageGroup::~RTPSMessageGroup()
+                                                        + send()
+                                                          void RTPSMessageGroup::send()
+                                                            - sender_->send(msgToSend, max_blocking_time_is_set_ ? max_blocking_time_point_ : (std::chrono::steady_clock::now() + std::chrono::hours(24))
+                                                              bool LocatorSelectorSender::send(CDRMessage_t* message, std::chrono::steady_clock::time_point max_blocking_time_point) const
+                                                                + writer_.send_nts(message, *this, max_blocking_time_point);
+                                                                  bool RTPSWriter::send_nts(CDRMessage_t* message, const LocatorSelectorSender& locator_selector, std::chrono::steady_clock::time_point& max_blocking_time_point) const
+                                                                    - RTPSParticipantImpl* participant = getRTPSParticipant();
+                                                                    - participant->sendSync(message, m_guid, locator_selector.locator_selector.begin(), locator_selector.locator_selector.end(), max_blocking_time_point)
+                                                                      template<class LocatorIteratorT>
+                                                                      bool sendSync(CDRMessage_t* msg, const GUID_t& sender_guid, const LocatorIteratorT& destination_locators_begin, const LocatorIteratorT& destination_locators_end, std::chrono::steady_clock::time_point& max_blocking_time_point)
+                                                                        + send_resource->send(msg->buffer, msg->length, &locators_begin, &locators_end, max_blocking_time_point);
+                                                                          bool send(const octet* data, uint32_t dataLength, LocatorsIterator* destination_locators_begin, LocatorsIterator* destination_locators_end, const std::chrono::steady_clock::time_point& max_blocking_time_point) // SenderResource
+                                                                            - send_lambda_(data, dataLength, destination_locators_begin, destination_locators_end, max_blocking_time_point);
+                                                                                + transport.send(data, dataSize, socket_, destination_locators_begin, destination_locators_end, only_multicast_purpose_, whitelisted_, max_blocking_time_point) // in UDPSenderResource::UDPSenderResource
+                                                                                  bool UDPTransportInterface::send( const octet* send_buffer, uint32_t send_buffer_size, eProsimaUDPSocket& socket, fastrtps::rtps::LocatorsIterator* destination_locators_begin, fastrtps::rtps::LocatorsIterator* destination_locators_end, bool only_multicast_purpose, bool whitelisted, const std::chrono::steady_clock::time_point& max_blocking_time_point)
+                                                                                    - send(send_buffer, send_buffer_size, socket, *it, only_multicast_purpose, whitelisted, time_out);
+                                                                                      UDPTransportInterface::send(const octet* send_buffer, uint32_t send_buffer_size, eProsimaUDPSocket& socket, const Locator& remote_locator, bool only_multicast_purpose, bool whitelisted, const std::chrono::microseconds& timeout)
+                                                                                        + bytesSent = getSocketPtr(socket)->send_to(asio::buffer(send_buffer, send_buffer_size), destinationEndpoint, 0, ec);
 
+                                                              
+group.add_data
