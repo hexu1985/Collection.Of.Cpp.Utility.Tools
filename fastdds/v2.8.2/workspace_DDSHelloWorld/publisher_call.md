@@ -48,7 +48,7 @@ bool DataWriter::write(void* data)
                                 + mp_writer->unsent_change_added_to_history(a_change, max_blocking_time);
                                   void StatefulWriter::unsent_change_added_to_history(CacheChange_t* change, const std::chrono::time_point<std::chrono::steady_clock>& max_blocking_time)
                                     - flow_controller_->add_new_sample(this, change, max_blocking_time)
-                                      bool add_new_sample(fastrtps::rtps::RTPSWriter* writer, fastrtps::rtps::CacheChange_t* change, const std::chrono::time_point<std::chrono::steady_clock>& max_blocking_time) override
+                                      bool add_new_sample(fastrtps::rtps::RTPSWriter* writer, fastrtps::rtps::CacheChange_t* change, const std::chrono::time_point<std::chrono::steady_clock>& max_blocking_time) override	// FlowControllerImpl
                                         + add_new_sample_impl(writer, change, max_blocking_time);
                                           template<typename PubMode = PublishMode>
                                           typename std::enable_if<std::is_base_of<FlowControllerPureSyncPublishMode, PubMode>::value, bool>::type
