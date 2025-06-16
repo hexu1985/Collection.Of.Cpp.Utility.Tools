@@ -56,6 +56,8 @@ void UDPChannelResource::perform_listen_operation(Locator input_locator)
                                                       ReadTakeCommand::ReadTakeCommand(DataReaderImpl& reader, LoanableCollection& data_values, SampleInfoSeq& sample_infos, int32_t max_samples, const StateFilter& states, const history_type::instance_info& instance, bool single_instance, bool loop_for_data)
                                                     - cmd.add_instance(should_take);
                                                       bool add_instance(bool take_samples)  // ReadTakeCommand
+                                                        + reader_->begin_sample_access_nts(change, wp, is_future_change)
+                                                          bool StatelessReader::begin_sample_access_nts(CacheChange_t* /*change*/, WriterProxy*& /*wp*/, bool& is_future_change)
                                                         + add_sample(*it, remove_change);
                                                           bool add_sample(const DataReaderCacheChange& item, bool& deserialization_error)   // ReadTakeCommand
                                                             - deserialize_sample(item)
@@ -65,7 +67,9 @@ void UDPChannelResource::perform_listen_operation(Locator input_locator)
                                                         + history_.change_was_processed_nts(change, added);
                                                           void DataReaderHistory::change_was_processed_nts(CacheChange_t* const change, bool is_going_to_be_mark_as_read)
                                                         + reader_->end_sample_access_nts(change, wp, added);
-                                                          void StatefulReader::end_sample_access_nts(CacheChange_t* change, WriterProxy*& wp, bool mark_as_read)
+                                                          void StatelessReader::end_sample_access_nts(CacheChange_t* change, WriterProxy*& wp, bool mark_as_read)
+                                                            - change_read_by_user(change, wp, mark_as_read);
+                                                              void StatelessReader::change_read_by_user(CacheChange_t* change, WriterProxy* /*writer*/, bool mark_as_read)
                                                         + history_.remove_change_sub(change, it);
                                                           bool DataReaderHistory::remove_change_sub(CacheChange_t* change, DataReaderInstance::ChangeCollection::iterator& it)
                                                             - const_iterator chit = find_change_nts(change);
