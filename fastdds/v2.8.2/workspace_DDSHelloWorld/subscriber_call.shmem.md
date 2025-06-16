@@ -1,13 +1,10 @@
 
-void UDPChannelResource::perform_listen_operation(Locator input_locator)
-    - auto& msg = message_buffer();
-      inline fastrtps::rtps::CDRMessage_t& message_buffer() // ChannelResource
-    - Receive(msg.buffer, msg.max_size, msg.length, remote_locator)
-      bool UDPChannelResource::Receive(octet* receive_buffer, uint32_t receive_buffer_capacity, uint32_t& receive_buffer_size, Locator& remote_locator)
-        + size_t bytes = socket()->receive_from(asio::buffer(receive_buffer, receive_buffer_capacity), senderEndpoint)
-        + transport_->endpoint_to_locator(senderEndpoint, remote_locator) 
-          void UDPv4Transport::endpoint_to_locator(ip::udp::endpoint& endpoint, Locator& locator)
-    - message_receiver()->OnDataReceived(msg.buffer, msg.length, input_locator, remote_locator);
+SharedMemChannelResource::perform_listen_operation(Locator input_locator)
+    - message = Receive(remote_locator);
+      virtual std::shared_ptr<SharedMemManager::Buffer> Receive(Locator& remote_locator)    // SharedMemChannelResource
+        + listener_->pop();
+          std::shared_ptr<Buffer> pop() // SharedMemManager
+    - message_receiver()->OnDataReceived(static_cast<fastrtps::rtps::octet*>(message->data()), message->size(), input_locator, remote_locator);
       void ReceiverResource::OnDataReceived(const octet* data, const uint32_t size, const Locator_t& localLocator, const Locator_t& remoteLocator)
         + rcv->processCDRMsg(remoteLocator, localLocator, &msg);
           void MessageReceiver::processCDRMsg(const Locator_t& source_locator, const Locator_t& reception_locator, CDRMessage_t* msg)
@@ -50,32 +47,22 @@ void UDPChannelResource::perform_listen_operation(Locator input_locator)
                                                   ReturnCode_t DataReaderImpl::read_or_take_next_sample(void* data, SampleInfo* info, bool should_take)
                                                     - auto it = history_.lookup_available_instance(HANDLE_NIL, false);
                                                       std::pair<bool, DataReaderHistory::instance_info> DataReaderHistory::lookup_available_instance(const InstanceHandle_t& handle, bool exact)
-                                                    - detail::ReadTakeCommand cmd(*this, data_values, sample_infos, 1, states, it.second, false, false);
-                                                      ReadTakeCommand::ReadTakeCommand(DataReaderImpl& reader, LoanableCollection& data_values, SampleInfoSeq& sample_infos, int32_t max_samples, const StateFilter& states, const history_type::instance_info& instance, bool single_instance, bool loop_for_data)
-                                                    - cmd.add_instance(should_take);
-                                                      bool add_instance(bool take_samples)  // ReadTakeCommand
-                                                        + add_sample(*it, remove_change);
-                                                          bool add_sample(const DataReaderCacheChange& item, bool& deserialization_error)   // ReadTakeCommand
-                                                            - deserialize_sample(item)
+                                                        + cmd.add_instance(should_take);
+                                                          bool add_instance(bool take_samples)  // ReadTakeCommand
+                                                            - add_sample(*it, remove_change);
                                                               bool add_sample(const DataReaderCacheChange& item, bool& deserialization_error)   // ReadTakeCommand
-                                                                + type_->deserialize(payload, data_values_.buffer()[current_slot_])
-                                                                  bool HelloWorldPubSubType::deserialize(SerializedPayload_t* payload, void* data)
-                                                        + history_.change_was_processed_nts(change, added);
-                                                          void DataReaderHistory::change_was_processed_nts(CacheChange_t* const change, bool is_going_to_be_mark_as_read)
-                                                        + reader_->end_sample_access_nts(change, wp, added);
-                                                          void StatefulReader::end_sample_access_nts(CacheChange_t* change, WriterProxy*& wp, bool mark_as_read)
-                                                        + history_.remove_change_sub(change, it);
-                                                          bool DataReaderHistory::remove_change_sub(CacheChange_t* change, DataReaderInstance::ChangeCollection::iterator& it)
-                                                            - const_iterator chit = find_change_nts(change);
-                                                              History::const_iterator History::find_change_nts(CacheChange_t* ch)
-                                                            - ReaderHistory::remove_change_nts(chit);
-                                                              History::iterator ReaderHistory::remove_change_nts(const_iterator removal, bool release)
-                                                        + history_.instance_viewed_nts(instance_->second);
-                                                          void DataReaderHistory::instance_viewed_nts(const InstanceCollection::mapped_type& instance)
-                                                        + next_instance();
-                                                          bool next_instance()  // ReadTakeCommand
-                                                            - history_.check_and_remove_instance(instance_);
-                                                              void DataReaderHistory::check_and_remove_instance(DataReaderHistory::instance_info& instance_info)
-                                                              + instance_info = data_available_instances_.erase(instance_info);
-                                                            - auto result = history_.next_available_instance_nts(handle_, instance_);
+                                                                + !deserialize_sample(item)
+                                                                  bool add_sample(const DataReaderCacheChange& item, bool& deserialization_error)   // ReadTakeCommand
+                                                                    - type_->deserialize(payload, data_values_.buffer()[current_slot_])
+                                                                      bool HelloWorldPubSubType::deserialize(SerializedPayload_t* payload, void* data)
+                                                            - history_.change_was_processed_nts(change, added);
+                                                              void DataReaderHistory::change_was_processed_nts(CacheChange_t* const change, bool is_going_to_be_mark_as_read)
+                                                            - reader_->end_sample_access_nts(change, wp, added);
+                                                              void StatefulReader::end_sample_access_nts(CacheChange_t* change, WriterProxy*& wp, bool mark_as_read)
+                                                            - history_.remove_change_sub(change, it);
+                                                              bool DataReaderHistory::remove_change_sub(CacheChange_t* change, DataReaderInstance::ChangeCollection::iterator& it)
+                                                            - history_.instance_viewed_nts(instance_->second);
+                                                              void DataReaderHistory::instance_viewed_nts(const InstanceCollection::mapped_type& instance)
+                                                            - next_instance();
+                                                              bool next_instance()  // ReadTakeCommand
 
