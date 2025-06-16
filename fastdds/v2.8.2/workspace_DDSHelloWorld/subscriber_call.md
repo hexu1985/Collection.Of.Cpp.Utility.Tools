@@ -29,6 +29,8 @@ void UDPChannelResource::perform_listen_operation(Locator input_locator)
                               void copy_not_memcpy(const CacheChange_t* ch_ptr)     // CacheChange_t
                             - payload_pool_->get_payload(change->serializedPayload, payload_owner, *change_to_add);
                               bool get_payload(SerializedPayload_t& data, IPayloadPool*& data_owner, CacheChange_t& cache_change) override  // TopicPayloadPoolProxy
+                                + inner_pool_->get_payload(data, data_owner, cache_change);
+                                  bool TopicPayloadPool::get_payload(SerializedPayload_t& data, IPayloadPool*& data_owner, CacheChange_t& cache_change)
                             - change_received(change_to_add)
                               bool StatelessReader::change_received(CacheChange_t* change)
                                 + mp_history->received_change(change, 0)
