@@ -39,3 +39,9 @@ target_link_libraries(DDSHelloWorldPublisher fastrtps fastcdr tinyxml2::tinyxml2
 
 add_executable(DDSHelloWorldSubscriber src/HelloWorldSubscriber.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldSubscriber fastrtps fastcdr tinyxml2::tinyxml2)
+
+add_executable(DDSHelloWorldPublisherWithLog src/HelloWorldPublisherWithLog.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
+target_link_libraries(DDSHelloWorldPublisherWithLog fastrtps fastcdr tinyxml2::tinyxml2)
+
+add_executable(DDSHelloWorldSubscriberWithLog src/HelloWorldSubscriberWithLog.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
+target_link_libraries(DDSHelloWorldSubscriberWithLog fastrtps fastcdr tinyxml2::tinyxml2)
