@@ -113,7 +113,36 @@ $ cmake --build build
 $ cmake --install build --prefix ~/local/fast_dds
 ```
 
-注释：eprosima_find_package会自动去支持从特定路径（如 eProsima 的本地安装目录）查找依赖，例如~/fast_dds/install
+注释：eprosima_find_package会自动去支持从特定路径（如 eProsima 的本地安装目录）查找依赖例如~/fast_dds/install
 
 然后所有的头文件和库都被安装到~/fast_dds/install目录下。
+
+# 源码编译fastdds的单元测试
+
+在前面5个步骤的基础上，需要编译googletest
+
+6. 源码编译googletest
+
+fastdds v2.8.2版本依赖googletest的v1.13.x版本
+
+```
+$ cd ~/fast_dds
+$ git clone https://github.com/google/googletest.git
+$ cd googletest
+$ git checkout v1.13.x
+$ cmake -S. -Bbuild
+$ cmake --build build --parallel 4
+$ cmake --install build --prefix ~/fast_dds/install
+```
+
+7. 编译fastdds单元测试
+
+```bash
+$ cd ~/fast_dds
+$ cd Fast-DDS # change to branch 2.8.2
+$ cmake -S. -Bbuild -DCMAKE_INSTALL_PREFIX=~/fast_dds/install \
+    -DEPROSIMA_BUILD_TESTS=ON -DFASTRTPS_API_TESTS=ON \
+    -DGTest_ROOT=~/fast_dds/install -DAsio_INCLUDE_DIR=~/fast_dds/asio-1.18.1/include
+$ cmake --build build -j8
+```
 
