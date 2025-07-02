@@ -38,6 +38,8 @@ echo "-$exclude_filter_str"
 current_file_dir=$( cd $(dirname ${BASH_SOURCE[0]}) && pwd )
 cd ${current_file_dir}
 
+start_time=$(date +%s)
+
 for case_set in ${case_set_array[@]}
 do
     ./BlackboxTests_FastRTPS --gtest_filter="${case_set}:-${exclude_filter_str}"
@@ -49,4 +51,8 @@ do
     fi
 done
 
+end_time=$(date +%s)
+elapsed_time=$((end_time - start_time))
+
 echo -e "\e[1;32m[SUCCESS]: all test pass!\e[0m"
+echo "执行时间: ${elapsed_time}秒"
