@@ -16,7 +16,33 @@ function gen_filter_str {
 }
 
 case_set_array=(
+AcknackQos.*
 Discovery.*
+KeyedTopic.*
+LatencyBudgetQos.*
+LivelinessTests.*
+LogConsumer.*
+PubSubBasic.*
+PubSubHistory.*
+Reliability.*
+ChainingTransportTests.*
+SHM.*
+BlackBox.*
+TransportTCP.*
+DeadlineQos/DeadlineQos.*
+Discovery/Discovery.*
+LifespanQos/LifespanQos.*
+LivelinessQos/LivelinessQos.*
+NetworkConfig/NetworkConfig.*
+PubSubBasic/PubSubBasic.*
+PubSubFlowControllers/PubSubFlowControllers.*
+PubSubFragments/PubSubFragments.*
+PubSubFragmentsLimited/PubSubFragmentsLimited.*
+PubSubHistory/PubSubHistory.*
+RealtimeAllocations/RealtimeAllocations.*
+TransportTCP/TransportTCP.*
+TransportUDP/TransportUDP.*
+Volatile/Volatile.*
 )
 
 exclude_cases=(
