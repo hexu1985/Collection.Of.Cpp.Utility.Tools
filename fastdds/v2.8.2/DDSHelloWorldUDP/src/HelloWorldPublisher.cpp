@@ -84,6 +84,30 @@ private:
             }
         }
 
+        void on_offered_deadline_missed(
+                DataWriter* writer,
+                const OfferedDeadlineMissedStatus& status) override
+        {
+            (void)writer, (void)status;
+            std::cout << "Some data could not be delivered on time" << std::endl;
+        }
+
+        void on_offered_incompatible_qos(
+                DataWriter* /*writer*/,
+                const OfferedIncompatibleQosStatus& status) override
+        {
+            std::cout << "Found a remote Topic with incompatible QoS (QoS ID: " << status.last_policy_id <<
+                ")" << std::endl;
+        }
+
+        void on_liveliness_lost(
+                DataWriter* writer,
+                const LivelinessLostStatus& status) override
+        {
+            (void)writer, (void)status;
+            std::cout << "Liveliness lost. Matched Subscribers will consider us offline" << std::endl;
+        }
+
         std::atomic_int matched_;
 
     } listener_;
