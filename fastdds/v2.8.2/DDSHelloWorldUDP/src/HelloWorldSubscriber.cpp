@@ -97,6 +97,53 @@ private:
             }
         }
 
+        void on_requested_deadline_missed(
+                DataReader* reader,
+                const eprosima::fastrtps::RequestedDeadlineMissedStatus& info) override
+        {
+            (void)reader, (void)info;
+            std::cout << "Some data was not received on time" << std::endl;
+        }
+
+        void on_liveliness_changed(
+                DataReader* reader,
+                const eprosima::fastrtps::LivelinessChangedStatus& info) override
+        {
+            (void)reader;
+            if (info.alive_count_change == 1)
+            {
+                std::cout << "A matched DataWriter has become active" << std::endl;
+            }
+            else if (info.not_alive_count_change == 1)
+            {
+                std::cout << "A matched DataWriter has become inactive" << std::endl;
+            }
+        }
+
+        void on_sample_rejected(
+                DataReader* reader,
+                const eprosima::fastrtps::SampleRejectedStatus& info) override
+        {
+            (void)reader, (void)info;
+            std::cout << "A received data sample was rejected" << std::endl;
+        }
+
+        void on_requested_incompatible_qos(
+                DataReader* /*reader*/,
+                const RequestedIncompatibleQosStatus& info) override
+        {
+            std::cout << "Found a remote Topic with incompatible QoS (QoS ID: " << info.last_policy_id <<
+                ")" << std::endl;
+        }
+
+        void on_sample_lost(
+                DataReader* reader,
+                const SampleLostStatus& info) override
+        {
+            (void)reader, (void)info;
+            std::cout << "A data sample was lost and will not be received" << std::endl;
+        }
+
         HelloWorld hello_;
 
         std::atomic_int samples_;
