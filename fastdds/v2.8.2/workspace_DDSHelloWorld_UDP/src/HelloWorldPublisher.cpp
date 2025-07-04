@@ -189,8 +189,16 @@ public:
             return false;
         }
 
+        DataWriterQos writerQos = DATAWRITER_QOS_DEFAULT;
+        writerQos.history().kind = KEEP_LAST_HISTORY_QOS;
+        writerQos.history().depth = options_["history"].as<int>();  // 只保留最后n条消息
+        std::cout << "writerQos.history().depth: " << writerQos.history().depth << std::endl;
+
+        // 设置可靠性为可靠的
+        writerQos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+
         // Create the DataWriter
-        writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT, &listener_);
+        writer_ = publisher_->create_datawriter(topic_, writerQos, &listener_);
 
         if (writer_ == nullptr)
         {
@@ -205,8 +213,7 @@ public:
         if (listener_.matched_ > 0)
         {
             hello_.index(hello_.index() + 1);
-            writer_->write(&hello_);
-            return true;
+            return writer_->write(&hello_);
         }
         return false;
     }
@@ -253,6 +260,7 @@ int main(
         ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
         ("udp_only", "only use udp transport", cxxopts::value<bool>()->default_value("false"))
         ("n,number", "Number of iterations", cxxopts::value<int>()->default_value("10"))
+        ("history", "Depth of history", cxxopts::value<int>()->default_value("5"))
         ;
 
     try {

@@ -226,8 +226,15 @@ public:
             return false;
         }
 
+        DataReaderQos readerQos;
+        readerQos.history().kind = KEEP_LAST_HISTORY_QOS;
+        readerQos.history().depth = options_["history"].as<int>();  // 只保留最后n条消息
+
+        // 设置可靠性为可靠的
+        readerQos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+
         // Create the DataReader
-        reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
+        reader_ = subscriber_->create_datareader(topic_, readerQos, &listener_);
 
         if (reader_ == nullptr)
         {
@@ -273,6 +280,7 @@ int main(
         ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
         ("udp_only", "only use udp transport", cxxopts::value<bool>()->default_value("false"))
         ("n,number", "Number of iterations", cxxopts::value<int>()->default_value("10"))
+        ("history", "Depth of history", cxxopts::value<int>()->default_value("5"))
         ;
 
     try {
