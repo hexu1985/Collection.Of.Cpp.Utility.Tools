@@ -31,6 +31,7 @@
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 #include <fastdds/dds/subscriber/Subscriber.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
+#include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 
 #include <fastdds/dds/log/Log.hpp>
 
@@ -189,6 +190,16 @@ public:
     {
         DomainParticipantQos participantQos;
         participantQos.name("Participant_subscriber");
+
+        if (options_["udp_only"].as<bool>()) {
+            std::cout << "only use udp transport" << std::endl;
+            participantQos.transport().use_builtin_transports = false;  // 禁用所有内置传输
+
+            // 只启用 UDPv4 传输
+            auto udp_transport = std::make_shared<eprosima::fastdds::rtps::UDPv4TransportDescriptor>();
+            participantQos.transport().user_transports.push_back(udp_transport);
+        }
+
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
 
         if (participant_ == nullptr)
