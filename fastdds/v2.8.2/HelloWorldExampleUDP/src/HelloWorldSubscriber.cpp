@@ -78,11 +78,7 @@ bool HelloWorldSubscriber::init()
     }
 
     // CREATE THE READER
-    DataReaderQos rqos = DATAREADER_QOS_DEFAULT;
-    rqos.reliability().kind = BEST_EFFORT_RELIABILITY_QOS;
-    rqos.durability().kind = VOLATILE_DURABILITY_QOS;
-    rqos.data_sharing().automatic();
-    reader_ = subscriber_->create_datareader(topic_, rqos, &listener_);
+    reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
 
     if (reader_ == nullptr)
     {

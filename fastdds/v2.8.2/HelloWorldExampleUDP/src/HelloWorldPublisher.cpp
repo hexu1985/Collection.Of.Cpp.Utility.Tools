@@ -78,11 +78,7 @@ bool HelloWorldPublisher::init()
     }
 
     // CREATE THE WRITER
-    DataWriterQos wqos = DATAWRITER_QOS_DEFAULT;
-    wqos.reliability().kind = BEST_EFFORT_RELIABILITY_QOS;
-    wqos.history().depth = 10;
-    wqos.data_sharing().automatic();
-    writer_ = publisher_->create_datawriter(topic_, wqos, &listener_);
+    writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT, &listener_);
 
     if (writer_ == nullptr)
     {
@@ -189,7 +185,7 @@ bool HelloWorldPublisher::publish(
     if (listener_.firstConnected_ || !waitForListener || listener_.matched_ > 0)
     {
         hello_.index(hello_.index() + 1);
-        hello_.message(hello_.message()+":"+std::to_string(hello_.index()));
+        hello_.message("HelloWorld:"+std::to_string(hello_.index()));
         if (!writer_->write(&hello_)) {
             std::cout << "write failed with index: " << hello_.index() << std::endl;
         }
