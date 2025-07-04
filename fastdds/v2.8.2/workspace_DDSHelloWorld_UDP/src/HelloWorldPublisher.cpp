@@ -21,6 +21,7 @@
 
 #include <chrono>
 #include <thread>
+#include <memory>
 
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
@@ -30,14 +31,13 @@
 #include <fastdds/dds/topic/TypeSupport.hpp>
 
 #include <fastdds/dds/log/Log.hpp>
-
+#include "cxxopts.hpp"
 
 using namespace eprosima::fastdds::dds;
 
 class HelloWorldPublisher
 {
 private:
-
     HelloWorld hello_;
 
     DomainParticipant* participant_;
@@ -49,6 +49,8 @@ private:
     DataWriter* writer_;
 
     TypeSupport type_;
+
+    const cxxopts::ParseResult& options_;
 
     class PubListener : public DataWriterListener
     {
@@ -114,12 +116,14 @@ private:
 
 public:
 
-    HelloWorldPublisher()
+    
+    HelloWorldPublisher(const cxxopts::ParseResult& options)
         : participant_(nullptr)
         , publisher_(nullptr)
         , topic_(nullptr)
         , writer_(nullptr)
         , type_(new HelloWorldPubSubType())
+        , options_(options)
     {
     }
 
@@ -214,9 +218,12 @@ public:
     }
 };
 
-void init_log() {
+void init_log(bool verbose) {
     // log info
-    Log::SetVerbosity(Log::Kind::Warning);
+    if (verbose)
+        Log::SetVerbosity(Log::Kind::Info);
+    else
+        Log::SetVerbosity(Log::Kind::Warning);
     //Log::SetCategoryFilter(std::regex("(RTPS_|SECURITY_)"));  // 可选: 设置类别过滤器
 
     // 启用文件名和行号显示
@@ -228,17 +235,44 @@ int main(
         int argc,
         char** argv)
 {
-    init_log();
+    cxxopts::Options options("HelloWorldPublisher", "A brief description of HelloWorldPublisher");
+    // 添加选项
+    options.add_options()
+        ("h,help", "Print help")
+        ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"))
+        ("udp_only", "only use udp transport", cxxopts::value<bool>()->default_value("false"))
+        ("n,number", "Number of iterations", cxxopts::value<int>()->default_value("10"))
+        ;
 
-    std::cout << "Starting publisher." << std::endl;
-    uint32_t samples = 10;
+    try {
+        // 解析命令行参数
+        cxxopts::ParseResult result = options.parse(argc, argv);
 
-    HelloWorldPublisher* mypub = new HelloWorldPublisher();
-    if(mypub->init())
-    {
-        mypub->run(samples);
+        // 处理帮助选项
+        if (result.count("help")) {
+            std::cout << options.help() << std::endl;
+            return 0;
+        }
+
+        // 获取参数值
+        bool verbose = result["verbose"].as<bool>();
+        int samples = result["number"].as<int>();
+
+        // 使用参数...
+        init_log(verbose);
+        
+        std::cout << "Starting publisher." << std::endl;
+
+        std::unique_ptr<HelloWorldPublisher> mypub{new HelloWorldPublisher(result)};
+        if(mypub->init())
+        {
+            mypub->run(samples);
+        }
+
+    } catch (const cxxopts::exceptions::exception& e) {
+        std::cerr << "Error parsing options: " << e.what() << std::endl;
+        return 1;
     }
 
-    delete mypub;
     return 0;
 }
