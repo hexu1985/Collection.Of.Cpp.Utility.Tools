@@ -72,13 +72,13 @@ private:
         {
             if (info.current_count_change == 1)
             {
-                matched_ = info.total_count;
-                std::cout << "Publisher matched." << std::endl;
+                matched_ = info.current_count;
+                std::cout << "Publisher matched. matched_: " << matched_ << std::endl;
             }
             else if (info.current_count_change == -1)
             {
-                matched_ = info.total_count;
-                std::cout << "Publisher unmatched." << std::endl;
+                matched_ = info.current_count;
+                std::cout << "Publisher unmatched. matched_: " << matched_ << std::endl;
             }
             else
             {
@@ -220,7 +220,8 @@ public:
 
     //!Run the Publisher
     void run(
-            uint32_t samples)
+            uint32_t samples,
+            uint32_t sleep)
     {
         uint32_t samples_sent = 0;
         while (samples_sent < samples)
@@ -231,7 +232,7 @@ public:
                 std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
                             << " SENT" << std::endl;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
         }
     }
 };
@@ -261,6 +262,7 @@ int main(
         ("udp_only", "only use udp transport", cxxopts::value<bool>()->default_value("false"))
         ("n,number", "Number of iterations", cxxopts::value<int>()->default_value("10"))
         ("history", "Depth of history", cxxopts::value<int>()->default_value("5"))
+        ("sleep", "sleep milliseconds between writing", cxxopts::value<uint32_t>()->default_value("1000"))
         ;
 
     try {
@@ -276,6 +278,7 @@ int main(
         // 获取参数值
         bool verbose = result["verbose"].as<bool>();
         int samples = result["number"].as<int>();
+        uint32_t sleep = result["sleep"].as<uint32_t>();
 
         // 使用参数...
         init_log(verbose);
@@ -285,7 +288,7 @@ int main(
         std::unique_ptr<HelloWorldPublisher> mypub{new HelloWorldPublisher(result)};
         if(mypub->init())
         {
-            mypub->run(samples);
+            mypub->run(samples, sleep);
         }
 
     } catch (const cxxopts::exceptions::exception& e) {
