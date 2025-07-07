@@ -240,9 +240,14 @@ public:
         DataReaderQos readerQos;
         readerQos.history().kind = KEEP_LAST_HISTORY_QOS;
         readerQos.history().depth = options_["history"].as<int>();  // 只保留最后n条消息
+        std::cout << "readerQos.history().depth: " << readerQos.history().depth << std::endl;
 
         // 设置可靠性为可靠的
         readerQos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+
+        readerQos.resource_limits().max_samples = readerQos.history().depth;
+        readerQos.resource_limits().max_instances = 1;
+        readerQos.resource_limits().max_samples_per_instance = readerQos.history().depth;
 
         // Create the DataReader
         listener_.sleep_ = options_["sleep"].as<uint32_t>();

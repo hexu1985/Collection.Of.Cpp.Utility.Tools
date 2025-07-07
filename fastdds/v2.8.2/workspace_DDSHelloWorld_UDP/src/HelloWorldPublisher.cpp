@@ -194,6 +194,10 @@ public:
         writerQos.history().depth = options_["history"].as<int>();  // 只保留最后n条消息
         std::cout << "writerQos.history().depth: " << writerQos.history().depth << std::endl;
 
+        writerQos.resource_limits().max_samples = writerQos.history().depth;
+        writerQos.resource_limits().max_instances = 1;
+        writerQos.resource_limits().max_samples_per_instance = writerQos.history().depth;
+
         // 设置可靠性为可靠的
         writerQos.reliability().kind = RELIABLE_RELIABILITY_QOS;
 
@@ -213,7 +217,13 @@ public:
         if (listener_.matched_ > 0)
         {
             hello_.index(hello_.index() + 1);
-            return writer_->write(&hello_);
+            hello_.message("HelloWorld:" + std::to_string(hello_.index()));
+            if (writer_->write(&hello_)) {
+                return true;
+            } else {
+                std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
+                            << " SENT failed!" << std::endl;
+            }
         }
         return false;
     }
@@ -230,7 +240,7 @@ public:
             {
                 samples_sent++;
                 std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
-                            << " SENT" << std::endl;
+                            << " SENT success!" << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
         }
