@@ -90,6 +90,13 @@ private:
         void on_data_available(
                 DataReader* reader) override
         {
+            std::cout << "A data sample was available" << std::endl;
+            if (skip_read_) {
+                std::cout << "skip read sample" << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(sleep_));
+                return;
+            }
+
             SampleInfo info;
             if (reader->take_next_sample(&hello_, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
             {
@@ -100,6 +107,7 @@ private:
                               << " RECEIVED." << std::endl;
                 }
             }
+            std::this_thread::sleep_for(std::chrono::milliseconds(sleep_));
         }
 
         void on_requested_deadline_missed(
@@ -153,6 +161,9 @@ private:
 
         std::atomic_int samples_;
 
+        uint32_t sleep_=0;    // milliseconds
+
+        bool skip_read_=false;
     }
     listener_;
 
@@ -234,6 +245,8 @@ public:
         readerQos.reliability().kind = RELIABLE_RELIABILITY_QOS;
 
         // Create the DataReader
+        listener_.sleep_ = options_["sleep"].as<uint32_t>();
+        listener_.skip_read_ = options_["skip_read"].as<bool>();
         reader_ = subscriber_->create_datareader(topic_, readerQos, &listener_);
 
         if (reader_ == nullptr)
@@ -281,6 +294,8 @@ int main(
         ("udp_only", "only use udp transport", cxxopts::value<bool>()->default_value("false"))
         ("n,number", "Number of iterations", cxxopts::value<int>()->default_value("10"))
         ("history", "Depth of history", cxxopts::value<int>()->default_value("5"))
+        ("sleep", "sleep milliseconds on data available", cxxopts::value<uint32_t>()->default_value("10"))
+        ("skip_read", "skip reading on data available", cxxopts::value<bool>()->default_value("false"))
         ;
 
     try {
