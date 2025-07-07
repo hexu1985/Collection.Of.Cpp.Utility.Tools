@@ -47,9 +47,9 @@ private:
 
     Subscriber* subscriber_;
 
-    DataReader* reader_;
-
     Topic* topic_;
+
+    DataReader* reader_;
 
     TypeSupport type_;
 
@@ -159,7 +159,7 @@ private:
 
         HelloWorld hello_;
 
-        std::atomic_int samples_;
+        std::atomic_uint samples_;
 
         uint32_t sleep_=0;    // milliseconds
 
