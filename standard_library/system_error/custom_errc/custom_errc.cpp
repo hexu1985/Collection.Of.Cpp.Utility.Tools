@@ -106,10 +106,13 @@ int main() {
         std::cout << "Category: " << ec.category().name() << '\n';
     }
     
-    // 转换为 error_condition
-    std::error_condition cond = ec.default_error_condition();
+    std::error_condition cond{MyErrc::InvalidArgument};
     std::cout << "Error condition: " << cond.message() << '\n';
     
+    // 转换为 error_condition
+    cond = ec.default_error_condition();
+    std::cout << "Error condition: " << cond.message() << '\n';
+
     return 0;
 }
 
