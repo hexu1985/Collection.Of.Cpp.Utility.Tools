@@ -36,6 +36,7 @@
 #include <fastdds/dds/log/Log.hpp>
 
 #include "cxxopts.hpp"
+#include "worker_thread.hpp"
 
 using namespace eprosima::fastdds::dds;
 
@@ -90,24 +91,23 @@ private:
         void on_data_available(
                 DataReader* reader) override
         {
-            std::cout << "A data sample was available" << std::endl;
+            if (sleep_ != 0) {
+                std::cout << "A data sample was available" << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(sleep_));
+            }
+
             if (skip_read_) {
                 std::cout << "skip read sample" << std::endl;
-                std::this_thread::sleep_for(std::chrono::milliseconds(sleep_));
                 return;
             }
 
-            SampleInfo info;
-            if (reader->take_next_sample(&hello_, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
-            {
-                if (info.valid_data)
-                {
-                    samples_++;
-                    std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
-                              << " RECEIVED." << std::endl;
-                }
+            if (async_) {
+                worker_.submit([=]() { 
+                        std::cout << "async read sample" << std::endl;
+                        read_sample(reader); });
+            } else{
+                read_sample(reader);
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleep_));
         }
 
         void on_requested_deadline_missed(
@@ -157,6 +157,23 @@ private:
             std::cout << "A data sample was lost and will not be received" << std::endl;
         }
 
+        void read_sample(DataReader* reader)
+        {
+            SampleInfo info;
+            if (reader->take_next_sample(&hello_, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
+            {
+                if (info.valid_data)
+                {
+                    samples_++;
+                    std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
+                              << " RECEIVED." << std::endl;
+                }
+            }
+            if (sleep_after_read_ != 0) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(sleep_after_read_));
+            }
+        }
+
         HelloWorld hello_;
 
         std::atomic_uint samples_;
@@ -164,6 +181,12 @@ private:
         uint32_t sleep_=0;    // milliseconds
 
         bool skip_read_=false;
+
+        bool async_=false;
+
+        uint32_t sleep_after_read_=0;    // milliseconds
+
+        worker_thread worker_;
     }
     listener_;
 
@@ -248,6 +271,13 @@ public:
         // Create the DataReader
         listener_.sleep_ = options_["sleep"].as<uint32_t>();
         listener_.skip_read_ = options_["skip_read"].as<bool>();
+        listener_.async_ = options_["async"].as<bool>();
+        listener_.sleep_after_read_ = options_["sleep_after_read"].as<uint32_t>();
+        std::cout << "sleep: " << listener_.sleep_ << std::endl;
+        std::cout << "skip_read: " << listener_.skip_read_ << std::endl;
+        std::cout << "async: " << listener_.async_ << std::endl;
+        std::cout << "sleep_after_read: " << listener_.sleep_after_read_ << std::endl;
+
         reader_ = subscriber_->create_datareader(topic_, readerQos, &listener_);
 
         if (reader_ == nullptr)
@@ -295,8 +325,10 @@ int main(
         ("udp_only", "only use udp transport", cxxopts::value<bool>()->default_value("false"))
         ("n,number", "Number of iterations", cxxopts::value<int>()->default_value("10"))
         ("history", "Depth of history", cxxopts::value<int>()->default_value("5"))
-        ("sleep", "sleep milliseconds on data available", cxxopts::value<uint32_t>()->default_value("10"))
+        ("sleep", "sleep milliseconds on data available", cxxopts::value<uint32_t>()->default_value("0"))
         ("skip_read", "skip reading on data available", cxxopts::value<bool>()->default_value("false"))
+        ("async", "read data asynchronous", cxxopts::value<bool>()->default_value("false"))
+        ("sleep_after_read", "sleep milliseconds after read sample", cxxopts::value<uint32_t>()->default_value("0"))
         ;
 
     try {
