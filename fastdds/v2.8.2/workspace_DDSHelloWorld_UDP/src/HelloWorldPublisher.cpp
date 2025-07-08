@@ -194,10 +194,6 @@ public:
         writerQos.history().depth = options_["history"].as<int>();  // 只保留最后n条消息
         std::cout << "writerQos.history().depth: " << writerQos.history().depth << std::endl;
 
-        writerQos.resource_limits().max_samples = writerQos.history().depth;
-        writerQos.resource_limits().max_instances = 1;
-        writerQos.resource_limits().max_samples_per_instance = writerQos.history().depth;
-
         // 设置可靠性为可靠的
         writerQos.reliability().kind = RELIABLE_RELIABILITY_QOS;
 

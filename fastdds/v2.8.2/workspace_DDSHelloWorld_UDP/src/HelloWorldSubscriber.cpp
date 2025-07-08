@@ -245,10 +245,6 @@ public:
         // 设置可靠性为可靠的
         readerQos.reliability().kind = RELIABLE_RELIABILITY_QOS;
 
-        readerQos.resource_limits().max_samples = readerQos.history().depth;
-        readerQos.resource_limits().max_instances = 1;
-        readerQos.resource_limits().max_samples_per_instance = readerQos.history().depth;
-
         // Create the DataReader
         listener_.sleep_ = options_["sleep"].as<uint32_t>();
         listener_.skip_read_ = options_["skip_read"].as<bool>();
