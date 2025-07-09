@@ -92,7 +92,6 @@ private:
                 DataReader* reader) override
         {
             if (sleep_ != 0) {
-                std::cout << "A data sample was available" << std::endl;
                 std::this_thread::sleep_for(std::chrono::milliseconds(sleep_));
             }
 
@@ -106,6 +105,7 @@ private:
                         std::cout << "async read sample" << std::endl;
                         read_sample(reader); });
             } else{
+                std::cout << "A data sample was available" << std::endl;
                 read_sample(reader);
             }
         }
