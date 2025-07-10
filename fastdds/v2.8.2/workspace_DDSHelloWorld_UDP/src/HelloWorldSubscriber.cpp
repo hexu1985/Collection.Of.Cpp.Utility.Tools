@@ -34,6 +34,7 @@
 #include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 
 #include <fastdds/dds/log/Log.hpp>
+#include <fastdds/dds/log/FileConsumer.hpp>
 
 #include "cxxopts.hpp"
 #include "worker_thread.hpp"
@@ -300,7 +301,7 @@ public:
 
 };
 
-void init_log(bool verbose) {
+void init_log(bool verbose, const std::string& log_file) {
     // log info
     if (verbose)
         Log::SetVerbosity(Log::Kind::Info);
@@ -311,6 +312,11 @@ void init_log(bool verbose) {
     // 启用文件名和行号显示
     Log::ReportFilenames(true);  // 显示文件名
     Log::ReportFunctions(true);  // 显示函数名（可选）
+
+    if (!log_file.empty()) {
+        std::unique_ptr<FileConsumer> file_consumer{new FileConsumer{log_file}};
+        Log::RegisterConsumer(std::move(file_consumer));
+    }
 }
 
 int main(
@@ -329,6 +335,7 @@ int main(
         ("skip_read", "skip reading on data available", cxxopts::value<bool>()->default_value("false"))
         ("async", "read data asynchronous", cxxopts::value<bool>()->default_value("false"))
         ("sleep_after_read", "sleep milliseconds after read sample", cxxopts::value<uint32_t>()->default_value("0"))
+        ("log_file", "the path of log file, default empty(no log file to write)", cxxopts::value<std::string>()->default_value(""))
         ;
 
     try {
@@ -344,9 +351,10 @@ int main(
         // 获取参数值
         bool verbose = result["verbose"].as<bool>();
         int samples = result["number"].as<int>();
+        std::string log_file = result["log_file"].as<std::string>();
 
         // 使用参数...
-        init_log(verbose);
+        init_log(verbose, log_file);
         
         std::cout << "Starting subscriber." << std::endl;
 

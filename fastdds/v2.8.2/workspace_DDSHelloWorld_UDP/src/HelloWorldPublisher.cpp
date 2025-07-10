@@ -32,6 +32,8 @@
 #include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 
 #include <fastdds/dds/log/Log.hpp>
+#include <fastdds/dds/log/FileConsumer.hpp>
+
 #include "cxxopts.hpp"
 
 using namespace eprosima::fastdds::dds;
@@ -243,7 +245,7 @@ public:
     }
 };
 
-void init_log(bool verbose) {
+void init_log(bool verbose, const std::string& log_file) {
     // log info
     if (verbose)
         Log::SetVerbosity(Log::Kind::Info);
@@ -254,6 +256,11 @@ void init_log(bool verbose) {
     // 启用文件名和行号显示
     Log::ReportFilenames(true);  // 显示文件名
     Log::ReportFunctions(true);  // 显示函数名（可选）
+
+    if (!log_file.empty()) {
+        std::unique_ptr<FileConsumer> file_consumer{new FileConsumer{log_file}};
+        Log::RegisterConsumer(std::move(file_consumer));
+    }
 }
 
 int main(
@@ -269,6 +276,7 @@ int main(
         ("n,number", "Number of iterations", cxxopts::value<int>()->default_value("10"))
         ("history", "Depth of history", cxxopts::value<int>()->default_value("5"))
         ("sleep", "sleep milliseconds between writing", cxxopts::value<uint32_t>()->default_value("1000"))
+        ("log_file", "the path of log file, default empty(no log file to write)", cxxopts::value<std::string>()->default_value(""))
         ;
 
     try {
@@ -285,9 +293,10 @@ int main(
         bool verbose = result["verbose"].as<bool>();
         int samples = result["number"].as<int>();
         uint32_t sleep = result["sleep"].as<uint32_t>();
+        std::string log_file = result["log_file"].as<std::string>();
 
         // 使用参数...
-        init_log(verbose);
+        init_log(verbose, log_file);
         
         std::cout << "Starting publisher." << std::endl;
 
