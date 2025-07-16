@@ -1,13 +1,18 @@
 
 
-Subscriber端：read数据跳号，并且有数据包丢失
+Subscriber端：history cache满(read数据跳号)，并且有数据包丢失
 ```bash
 $ ./DDSHelloWorldSubscriber --history 1 --number 1000 --async --sleep 100 --sleep_after_read 3000 --udp_only
 ```
 
-Subscriber端：read数据跳号，无数据包丢失
+Subscriber端：history cache满(read数据跳号)，无数据包丢失
 ```bash
 $ ./DDSHelloWorldSubscriber --history 1 --number 1000 --async --sleep_after_read 3000 --udp_only
+```
+
+Subscriber端：history cache不满，并且有数据包丢失
+```bash
+$ ./DDSHelloWorldSubscriber --history 1 --number 1000 --async --sleep 100 --udp_only
 ```
 
 Publisher端
