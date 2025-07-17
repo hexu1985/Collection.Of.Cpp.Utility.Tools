@@ -5,4 +5,5 @@
 | foonathan_memory | v0.7-3    |
 | Fast-CDR         | v1.0.28   |
 | googletest       | v1.13.x   |
+| asio             | v1.18.1   |
 
