@@ -104,6 +104,8 @@ bool WriterHistory::add_change_(
 
 ```
 
+notify_writer里面如果有提前返回的代码，就会有丢包。
+
 ---
 
 4. 流控
