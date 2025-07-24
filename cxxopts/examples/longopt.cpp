@@ -11,11 +11,11 @@ int main(int argc, char* argv[]) {
         // 无参选项（如 --help）
         ("h,help", "Print help")
         // 带参选项（值类型为 std::string）
-        ("f", "option f", cxxopts::value<std::string>())
+        ("f,file", "option f", cxxopts::value<std::string>())
         // 带默认值的选项
-        ("i", "option i", cxxopts::value<bool>()->default_value("false"))
-        ("l", "option l", cxxopts::value<bool>()->default_value("false"))
-        ("r", "option r", cxxopts::value<bool>()->default_value("false"))
+        ("i,initialize", "option i", cxxopts::value<bool>()->default_value("false"))
+        ("l,list", "option l", cxxopts::value<bool>()->default_value("false"))
+        ("r,restart", "option r", cxxopts::value<bool>()->default_value("false"))
         ("positional", "Positional arguments", cxxopts::value<std::vector<std::string>>());
 
     // 设置位置参数
@@ -31,12 +31,12 @@ int main(int argc, char* argv[]) {
             return 0;
         }
 
-        if (result.count("f")) {
-            std::string file = result["f"].as<std::string>();
+        if (result.count("file")) {
+            std::string file = result["file"].as<std::string>();
             std::cout << "filename: " << file << std::endl;
         }
 
-        for (const auto& opt : std::vector<std::string>{"i", "l", "r"}) {
+        for (const auto& opt : std::vector<std::string>{"initialize", "list", "restart"}) {
             if (result[opt].as<bool>()) {
                 std::cout << "option: " << opt << std::endl;
             }

@@ -18,7 +18,7 @@ echo '------------getopt_long--------------'
 echo '-------------------------------------'
 set -x
 ./longopt --initialize --list 'hi there' --file fred.c -q
-./longopt --init -l --file=fred.c 'hi there'
+./longopt --initialize -l --file=fred.c 'hi there'
 set +x
 echo
 
