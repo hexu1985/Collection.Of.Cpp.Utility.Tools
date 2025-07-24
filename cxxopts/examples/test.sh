@@ -2,14 +2,23 @@
 
 cd $(dirname ${BASH_SOURCE[0]})
 
+# test getopt
+echo '-------------------------------------'
+echo '----------------getopt---------------'
+echo '-------------------------------------'
 set -x
+./argopt -i -lr 'hi here' -f fred.c -q
+./argopt -i -lr 'hi here' -f fred.c 
+set +x
+echo
 
-# 查看帮助
-./myprogram --help
-
-# 正常使用
-./myprogram --file data.txt --debug --vec 1 2 3
-
-# 错误处理（缺少必需参数或类型错误）
-./myprogram --file 123 --debug=invalid
+# test pshm_write 
+echo '-------------------------------------'
+echo '------------getopt_long--------------'
+echo '-------------------------------------'
+set -x
+./longopt --initialize --list 'hi there' --file fred.c -q
+./longopt --init -l --file=fred.c 'hi there'
+set +x
+echo
 
