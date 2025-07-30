@@ -18,6 +18,7 @@
  */
 
 #include "HelloWorldPubSubTypes.h"
+#include "CustomDomainParticipantListener.hpp"
 
 #include <chrono>
 #include <thread>
@@ -36,6 +37,7 @@
 
 #include "cxxopts.hpp"
 
+using eprosima::fastrtps::Duration_t;
 using namespace eprosima::fastdds::dds;
 
 class HelloWorldPublisher
@@ -117,6 +119,8 @@ private:
 
     } listener_;
 
+    CustomDomainParticipantListener participant_listener_;
+
 public:
 
     
@@ -165,7 +169,25 @@ public:
             participantQos.transport().user_transports.push_back(udp_transport);
         }
 
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        // 参与者活跃租期
+        if (options_["lease_duration"].as<int>() > 0) {
+            participantQos.wire_protocol().builtin.discovery_config.leaseDuration = 
+                Duration_t(options_["lease_duration"].as<int>(), 0);
+        }
+        std::cout << "builtin.discovery_config.leaseDuration: " 
+                  << participantQos.wire_protocol().builtin.discovery_config.leaseDuration
+                  << std::endl;
+
+        // 参与者存活公告周期，应小于活跃租期
+        if (options_["announcement_period"].as<int>() > 0) {
+            participantQos.wire_protocol().builtin.discovery_config.leaseDuration_announcementperiod = 
+                Duration_t(options_["announcement_period"].as<int>(), 0);
+        }
+        std::cout << "builtin.discovery_config.leaseDuration_announcementperiod: " 
+                  << participantQos.wire_protocol().builtin.discovery_config.leaseDuration_announcementperiod
+                  << std::endl;
+
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos, &participant_listener_);
 
         if (participant_ == nullptr)
         {
@@ -277,6 +299,8 @@ int main(
         ("history", "Depth of history", cxxopts::value<int>()->default_value("5"))
         ("sleep", "sleep milliseconds between writing", cxxopts::value<uint32_t>()->default_value("1000"))
         ("log_file", "the path of log file, default empty(no log file to write)", cxxopts::value<std::string>()->default_value(""))
+        ("lease_duration", "discovery_config.leaseDuration, unit second", cxxopts::value<int>()->default_value("-1"))
+        ("announcement_period", "discovery_config.leaseDuration_announcementperiod, unit second", cxxopts::value<int>()->default_value("-1"))
         ;
 
     try {
