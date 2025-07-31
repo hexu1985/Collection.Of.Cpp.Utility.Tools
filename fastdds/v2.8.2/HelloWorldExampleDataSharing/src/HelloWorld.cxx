@@ -36,10 +36,10 @@ using namespace eprosima::fastcdr::exception;
 
 HelloWorld::HelloWorld()
 {
-    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@627551fb
+    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@1fc2b765
     m_index = 0;
-    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@2758fe70
-    m_message ="";
+    // m_message com.eprosima.idl.parser.typecode.ArrayTypeCode@289d1c02
+    memset(&m_message, 0, (10) * 1);
 
 }
 
@@ -105,7 +105,8 @@ size_t HelloWorld::getMaxCdrSerializedSize(
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
+    current_alignment += ((10) * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+
 
 
     return current_alignment - initial_alignment;
@@ -122,7 +123,10 @@ size_t HelloWorld::getCdrSerializedSize(
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.message().size() + 1;
+    if ((10) > 0)
+    {
+        current_alignment += ((10) * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+    }
 
 
     return current_alignment - initial_alignment;
@@ -133,7 +137,8 @@ void HelloWorld::serialize(
 {
 
     scdr << m_index;
-    scdr << m_message.c_str();
+    scdr << m_message;
+
 
 }
 
@@ -143,6 +148,7 @@ void HelloWorld::deserialize(
 
     dcdr >> m_index;
     dcdr >> m_message;
+
 }
 
 /*!
@@ -178,7 +184,7 @@ uint32_t& HelloWorld::index()
  * @param _message New value to be copied in member message
  */
 void HelloWorld::message(
-        const std::string& _message)
+        const std::array<char, 10>& _message)
 {
     m_message = _message;
 }
@@ -188,7 +194,7 @@ void HelloWorld::message(
  * @param _message New value to be moved in member message
  */
 void HelloWorld::message(
-        std::string&& _message)
+        std::array<char, 10>&& _message)
 {
     m_message = std::move(_message);
 }
@@ -197,7 +203,7 @@ void HelloWorld::message(
  * @brief This function returns a constant reference to member message
  * @return Constant reference to member message
  */
-const std::string& HelloWorld::message() const
+const std::array<char, 10>& HelloWorld::message() const
 {
     return m_message;
 }
@@ -206,7 +212,7 @@ const std::string& HelloWorld::message() const
  * @brief This function returns a reference to member message
  * @return Reference to member message
  */
-std::string& HelloWorld::message()
+std::array<char, 10>& HelloWorld::message()
 {
     return m_message;
 }
