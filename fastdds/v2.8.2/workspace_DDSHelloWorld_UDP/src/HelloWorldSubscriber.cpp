@@ -256,7 +256,7 @@ public:
                   << participantQos.wire_protocol().builtin.discovery_config.leaseDuration_announcementperiod
                   << std::endl;
 
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos, &participant_listener_);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos, &participant_listener_, StatusMask::none());
 
         if (participant_ == nullptr)
         {
