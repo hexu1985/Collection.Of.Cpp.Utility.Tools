@@ -324,6 +324,8 @@ int main(
         
         std::cout << "Starting publisher." << std::endl;
 
+        logWarning(main, "Starting publisher.");
+
         std::unique_ptr<HelloWorldPublisher> mypub{new HelloWorldPublisher(result)};
         if(mypub->init())
         {

@@ -381,6 +381,8 @@ int main(
         
         std::cout << "Starting subscriber." << std::endl;
 
+        logWarning(main, "Starting subscriber.");
+
         std::unique_ptr<HelloWorldSubscriber> mysub{new HelloWorldSubscriber(result)};
         if (mysub->init())
         {
