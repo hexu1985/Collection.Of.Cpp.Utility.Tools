@@ -33,6 +33,47 @@
 
 using namespace eprosima::fastdds::dds;
 
+void print_liveliness_qos(const LivelinessQosPolicy& liveliness)
+{
+    std::cout << "Liveliness QoS:" << std::endl;
+    std::cout << "  Kind: ";
+    switch(liveliness.kind)
+    {
+        case AUTOMATIC_LIVELINESS_QOS:
+            std::cout << "AUTOMATIC_LIVELINESS_QOS" << std::endl;
+            break;
+        case MANUAL_BY_PARTICIPANT_LIVELINESS_QOS:
+            std::cout << "MANUAL_BY_PARTICIPANT_LIVELINESS_QOS" << std::endl;
+            break;
+        case MANUAL_BY_TOPIC_LIVELINESS_QOS:
+            std::cout << "MANUAL_BY_TOPIC_LIVELINESS_QOS" << std::endl;
+            break;
+        default:
+            std::cout << "UNKNOWN" << std::endl;
+    }
+    
+    std::cout << "  Lease Duration: " 
+              << liveliness.lease_duration.seconds << " sec "
+              << liveliness.lease_duration.nanosec % 1000000000 << " nsec" << std::endl;
+    
+    std::cout << "  Announcement Period: " 
+              << liveliness.announcement_period.seconds << " sec "
+              << liveliness.announcement_period.nanosec % 1000000000 << " nsec" << std::endl;
+}
+
+void print_datareader_liveliness_qos(DataReader* reader)
+{
+    if (reader == nullptr)
+    {
+        std::cerr << "DataReader is null" << std::endl;
+        return;
+    }
+
+    DataReaderQos qos;
+    reader->get_qos(qos);
+    print_liveliness_qos(qos.liveliness());
+}
+
 class HelloWorldSubscriber
 {
 private:
@@ -167,7 +208,7 @@ public:
         {
             return false;
         }
-
+        print_datareader_liveliness_qos(reader_);
         return true;
     }
 
