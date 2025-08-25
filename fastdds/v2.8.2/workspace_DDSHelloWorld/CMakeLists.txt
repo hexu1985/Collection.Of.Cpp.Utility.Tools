@@ -52,4 +52,7 @@ target_link_libraries(DDSHelloWorldPublisherFast fastrtps fastcdr tinyxml2::tiny
 add_executable(DDSHelloWorldSubscriberSlow src/HelloWorldSubscriberSlow.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldSubscriberSlow fastrtps fastcdr tinyxml2::tinyxml2)
 
+add_executable(DDSPrintDataReaderQos src/printDataReaderQos.cpp src/test_printDataReaderQos.cpp)
+target_link_libraries(DDSPrintDataReaderQos fastrtps fastcdr tinyxml2::tinyxml2)
+
 
