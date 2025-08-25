@@ -55,4 +55,7 @@ target_link_libraries(DDSHelloWorldSubscriberSlow fastrtps fastcdr tinyxml2::tin
 add_executable(DDSPrintDataReaderQos src/printDataReaderQos.cpp src/test_printDataReaderQos.cpp)
 target_link_libraries(DDSPrintDataReaderQos fastrtps fastcdr tinyxml2::tinyxml2)
 
+add_executable(DDSPrintDataWriterQos src/printDataWriterQos.cpp src/test_printDataWriterQos.cpp)
+target_link_libraries(DDSPrintDataWriterQos fastrtps fastcdr tinyxml2::tinyxml2)
+
 
