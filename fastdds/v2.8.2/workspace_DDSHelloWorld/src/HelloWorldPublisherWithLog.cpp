@@ -18,6 +18,7 @@
  */
 
 #include "HelloWorldPubSubTypes.h"
+#include "ParticipantListener.hpp"
 
 #include <chrono>
 #include <thread>
@@ -28,9 +29,7 @@
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
 #include <fastdds/dds/publisher/Publisher.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
-
 #include <fastdds/dds/log/Log.hpp>
-
 
 using namespace eprosima::fastdds::dds;
 
@@ -49,6 +48,8 @@ private:
     DataWriter* writer_;
 
     TypeSupport type_;
+
+    ParticipantListener participantListenser_;
 
     class PubListener : public DataWriterListener
     {
@@ -124,7 +125,7 @@ public:
 
         DomainParticipantQos participantQos;
         participantQos.name("Participant_publisher");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos, &participantListenser_);
 
         if (participant_ == nullptr)
         {
@@ -192,7 +193,8 @@ public:
 
 void init_log() {
     // log info
-    Log::SetVerbosity(Log::Kind::Info);
+    //Log::SetVerbosity(Log::Kind::Info);
+    Log::SetVerbosity(Log::Kind::Warning);
     //Log::SetCategoryFilter(std::regex("(RTPS_|SECURITY_)"));  // 可选: 设置类别过滤器
 
     // 启用文件名和行号显示
