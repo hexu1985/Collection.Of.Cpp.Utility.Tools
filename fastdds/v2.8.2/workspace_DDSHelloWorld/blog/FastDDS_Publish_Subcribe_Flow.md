@@ -33,6 +33,7 @@
 ![发布和订阅api流程](api.drawio.png)
 
 发布端（Publisher）的API流程如下：
+
 - 第一步创建了DomainParticipant对象，这个对象包含很多内容，包括RTPSParticipant对象，可以理解为Fast DDS里的根对象，管理其它所有的子对象。
 - 第二步调用了TypeSupport 的register_type，这里面主要是为了之后数据传输的过程中数据解析使用，约定传输数据的数据结构。如果type 不对，数据解析就无法进行。示例代码里对应的是HelloWorldPubSubType（通过HelloWorld.idl文件描述生成）
 - 第三步创建了Topic 对象，topic 就是通信的主题，只有在同一topic下才能互相通信。
@@ -40,7 +41,8 @@
 - 第五步创建 DataWriter 对象。
 - 第六步通过 DataWriter 对象的write()接口发送数据，前提是有匹配的订阅端。
 
-订阅端（subscriber）的API流程如下：其中第一、二、四步和发布端（Publisher）的API流程是一样的。
+订阅端（subscriber）的API流程如下：
+
 - 第一步创建了DomainParticipant对象，这个对象包含很多内容，包括rtpsparticipant对象，可以理解为Fast DDS里的根对象，管理其它所有的子对象。
 - 第二步调用了TypeSupport 的register_type，这里面主要是为了之后数据传输的过程中数据解析使用，约定传输数据的数据结构。如果type 不对，数据解析就无法进行。示例代码里对应的是HelloWorldPubSubType（通过HelloWorld.idl文件描述生成）
 - 第三步创建了Topic 对象，topic 就是通信的主题，只有在同一topic下才能互相通信。
