@@ -35,17 +35,17 @@
 发布端（Publisher）的API流程如下：
 - 第一步创建了DomainParticipant对象，这个对象包含很多内容，包括RTPSParticipant对象，可以理解为Fast DDS里的根对象，管理其它所有的子对象。
 - 第二步调用了TypeSupport 的register_type，这里面主要是为了之后数据传输的过程中数据解析使用，约定传输数据的数据结构。如果type 不对，数据解析就无法进行。示例代码里对应的是HelloWorldPubSubType（通过HelloWorld.idl文件描述生成）
-- 第三步创建的Publisher对象，是在DomainParticipant内部创建的，DomainParticipant内部可以包含0到多个Publisher和Subsciber，Publisher对象是消息的发布者，Subsciber对象是消息的接收者。
-- 第四步创建了Topic 对象，topic 就是通信的主题，只有在同一topic下才能互相通信。
-- 第五步在第三步的基础上创建 DataWriter 对象。
+- 第三步创建了Topic 对象，topic 就是通信的主题，只有在同一topic下才能互相通信。
+- 第四步创建的Publisher对象，是在DomainParticipant内部创建的，DomainParticipant内部可以包含0到多个Publisher和Subsciber，Publisher对象是消息的发布者，Subsciber对象是消息的接收者。
+- 第五步创建 DataWriter 对象。
 - 第六步通过 DataWriter 对象的write()接口发送数据，前提是有匹配的订阅端。
 
 订阅端（subscriber）的API流程如下：其中第一、二、四步和发布端（Publisher）的API流程是一样的。
 - 第一步创建了DomainParticipant对象，这个对象包含很多内容，包括rtpsparticipant对象，可以理解为Fast DDS里的根对象，管理其它所有的子对象。
 - 第二步调用了TypeSupport 的register_type，这里面主要是为了之后数据传输的过程中数据解析使用，约定传输数据的数据结构。如果type 不对，数据解析就无法进行。示例代码里对应的是HelloWorldPubSubType（通过HelloWorld.idl文件描述生成）
-- 第三步创建的Subscriber对象，是在DomainParticipant内部创建的
-- 第四步创建了Topic 对象，topic 就是通信的主题，只有在同一topic下才能互相通信。
-- 第五步在第三步的基础上创建DataReader对象，并且注册了DataReaderListener的子类
+- 第三步创建了Topic 对象，topic 就是通信的主题，只有在同一topic下才能互相通信。
+- 第四步创建的Subscriber对象，是在DomainParticipant内部创建的
+- 第五步创建DataReader对象，并且注册了DataReaderListener的子类
 - 第六步在DataReader收到数据时，会回调on_data_available()通知到上层应用，上层应用再通过DataReader的take_next_sample()接口读取数据。
 
 我们主要介绍发布端（Publisher）和订阅端（Subscriber）之间的数据传输在Fast DDS库中的代码实现。所以Fast DDS库中，发布端（Publisher）和订阅端（Subscriber）的初始化部分代码（以及PDP和EDP协议流程）不会在本文中描述。
@@ -76,12 +76,6 @@
 
 DSS域的类大部分都使用了Impl惯用法，我理解因为DSS域中的大部分类都是应用层（Applilcation）能看到的接口类，所以桥接模式可以减少耦合，避免内部定义（头文件）的暴露。  
 DSS域中的WriterHistory类作为DSS域和RTPS域之间的数据传输缓存很重要：
-
-**WriterHistory 主要作用**
-
-1. **历史记录管理**：维护已发送但尚未被所有订阅者确认接收的数据样本的历史记录
-2. **可靠性支持**：在可靠通信模式下，确保数据能够被重新发送给未能成功接收的订阅者
-3. **样本生命周期管理**：跟踪数据样本的状态（已发送、已确认等）
 
 **WriterHistory 核心功能**
 
@@ -256,7 +250,7 @@ RTPSMessageGroup类会在析构函数中调用send函数，通过RTPSMessageSend
 首先是UDPChannelResource::perform_listen_operation这个函数（图中没体现）是作为一个独立线程函数运行的，它里面是个无限循环，不断的调用socket的receive_from函数，从网络获取原始数据，然后把message_buffer发给ReceiverResource，而ReceiverResource将网络字节流转成CDRMessage_t对象，再传给MessageReceiver做后续处理。  
 这段流程主要完成数据接收和传给数据处理模块的工作。
 
-**2. 数据接收和分发**
+**2. 数据解包和分发**
 
 ![Subscriber的回调时序图2](subscriber_callback.2.png)
 
