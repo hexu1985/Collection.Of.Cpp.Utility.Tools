@@ -109,6 +109,8 @@ bool HelloWorldPublisher::init(
         publisher_->get_default_datawriter_qos(wqos);
     }
 
+//    wqos.history().depth = 10;
+
     writer_ = publisher_->create_datawriter(
         topic_,
         wqos,
