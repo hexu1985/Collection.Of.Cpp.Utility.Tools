@@ -25,6 +25,7 @@
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
+#include <fastdds/dds/log/Log.hpp>
 
 using namespace eprosima::fastdds::dds;
 
@@ -182,10 +183,23 @@ void HelloWorldSubscriber::run(
 }
 
 
+void init_log() {
+    // log info
+    //Log::SetVerbosity(Log::Kind::Info);
+    Log::SetVerbosity(Log::Kind::Warning);
+    //Log::SetCategoryFilter(std::regex("(RTPS_|SECURITY_)"));  // 可选: 设置类别过滤器
+
+    // 启用文件名和行号显示
+    Log::ReportFilenames(true);  // 显示文件名
+    Log::ReportFunctions(true);  // 显示函数名（可选）
+}
+
 int main(
         int argc,
         char** argv)
 {
+    init_log();
+
     std::cout << "Starting subscriber." << std::endl;
     bool use_environment_qos = false;
 
