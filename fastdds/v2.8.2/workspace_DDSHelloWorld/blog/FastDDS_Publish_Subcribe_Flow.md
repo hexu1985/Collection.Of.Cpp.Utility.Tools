@@ -66,10 +66,10 @@
     + Topic和TopicDescription
     + Publisher和PublisherImpl
     + DataWriter和DataWriterImpl
-    + 缓存WriterHistory和CacheChange_t 
 - RTPS域的类：
     + RTPSParticipant和RTPSParticipantImpl
     + RTPSWriter及其子类：StatefulWriter、StatelessWriter
+    + 缓存WriterHistory和CacheChange_t 
     + RTPSMessageSenderInterface及其子类：LocatorSelectorSender
     + 网络传输相关的类：NetworkFactory，TransportInterface及其子类：UDPTransportInterface、UDPv4Transport、UDPv6Transport、TCPTransportInterface、TCPv4Transport、TCPv6Transport、SharedMemTransport
     + 发送相关的类：SenderResource及其子类：UDPSenderResource、TCPSenderResource、SharedMemSenderResource
@@ -162,10 +162,10 @@ RTPSMessageGroup类会在析构函数中调用send函数，通过RTPSMessageSend
     + Topic和TopicDescription
     + Subscriber和SubscriberImpl
     + DataReader和DataReaderImpl，以及相关的listener类（观察者模式）：InnerDataReaderListener（ReaderListener的子类）
-    + 缓存ReaderHistory和CacheChange_t 
 - RTPS域的类：
     + RTPSParticipant和RTPSParticipantImpl
     + RTPSReader及其子类：StatefulReader、StatelessReader
+    + 缓存ReaderHistory和CacheChange_t 
     + 网络传输相关的类：NetworkFactory，TransportInterface及其子类：UDPTransportInterface、UDPv4Transport、UDPv6Transport、TCPTransportInterface、TCPv4Transport、TCPv6Transport、SharedMemTransport
     + 消息接收相关的类：ReceiverControlBlock、ReceiverResource、MessageReceiver、UDPChannelResource
 
