@@ -77,7 +77,12 @@
     + 消息相关的类：RTPSMessageGroup和CDRMessage_t
 
 DSS域的类大部分都使用了Impl惯用法，我理解因为DSS域中的大部分类都是应用层（Applilcation）能看到的接口类，所以桥接模式可以减少耦合，避免内部定义（头文件）的暴露。  
-DSS域中的WriterHistory类作为DSS域和RTPS域之间的数据传输缓存很重要：
+
+而RTPS域的类虽然众多，但在发布端(publisher)扮演的角色其实就分类两大类：
+- 数据组包
+- 数据发送
+
+其中WriterHistory类作为数据传输缓存很重要：
 
 **WriterHistory 核心功能**
 
@@ -85,10 +90,6 @@ DSS域中的WriterHistory类作为DSS域和RTPS域之间的数据传输缓存很
 - **支持样本回收**：当样本被所有订阅者确认后，可以回收内存
 - **提供重传机制**：当检测到订阅者丢失数据时，可以从历史记录中重新发送
 - **管理历史深度**：根据配置的历史深度限制，自动移除旧的样本
-
-而RTPS域的类虽然众多，但在发布端(publisher)扮演的角色其实就分类两大类：
-- 数据组包
-- 数据发送
 
 具体每个类的作用，我会在下面的时序图中，分别介绍。
 
@@ -287,4 +288,3 @@ RTPSMessageGroup类会在析构函数中调用send函数，通过RTPSMessageSend
 ### 参考文档：
 - https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/getting_started/simple_app/simple_app.html
 - https://fast-dds.docs.eprosima.com/en/v2.8.2/fastdds/library_overview/library_overview.html#architecture
-
