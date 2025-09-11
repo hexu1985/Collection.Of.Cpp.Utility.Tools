@@ -102,7 +102,7 @@ bool HelloWorldSubscriber::init(
         subscriber_->get_default_datareader_qos(rqos);
     }
 
-//    wqos.history().depth = 10;
+    //rqos.history().depth = 10;
 
     reader_ = subscriber_->create_datareader(topic_, rqos, &listener_);
 
