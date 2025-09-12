@@ -109,7 +109,14 @@ bool HelloWorldPublisher::init(
         publisher_->get_default_datawriter_qos(wqos);
     }
 
-    //wqos.history().depth = 10;
+#if 1
+    // 为了消除如下warning
+    // 2025-09-11 10:40:29.648 [RTPS_READER Warning] Reader 01.0f.05.0a.04.ad.2b.ba.01.00.00.00|0.0.1.4 was configured to have a large history (5000 max samples), but the history size used with writer 01.0f.05.0a.f7.ac.f4.9c.01.00.00.00|0.0.1.3 will be 3 max samples. (/home/hexu/fast_dds/Fast-DDS/src/cpp/rtps/DataSharing/DataSharingListener.cpp:226) -> Function add_datasharing_writer
+    wqos.history().depth = 10;
+    wqos.resource_limits().max_samples = 10;
+    wqos.resource_limits().max_samples_per_instance = 10;
+    wqos.resource_limits().max_instances = 1;
+#endif
 
     writer_ = publisher_->create_datawriter(
         topic_,
