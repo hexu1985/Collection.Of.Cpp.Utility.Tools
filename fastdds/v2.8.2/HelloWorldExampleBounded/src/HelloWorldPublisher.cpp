@@ -27,7 +27,6 @@
 #include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
 #include <fastdds/dds/log/Log.hpp>
 
-#include <string.h>
 #include <thread>
 
 using namespace eprosima::fastdds::dds;
@@ -45,7 +44,7 @@ bool HelloWorldPublisher::init(
         bool use_env)
 {
     hello_.index(0);
-    memcpy(&hello_.message()[0], "HelloWorld", hello_.message().size());
+    hello_.message("HelloWorld");
     DomainParticipantQos pqos = PARTICIPANT_QOS_DEFAULT;
     pqos.name("Participant_pub");
     auto factory = DomainParticipantFactory::get_instance();
@@ -180,7 +179,7 @@ void HelloWorldPublisher::runThread(
         {
             if (publish(false))
             {
-                std::cout << "Message: " << std::string(&hello_.message()[0], hello_.message().size()) << " with index: " << hello_.index()
+                std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
                           << " SENT" << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
@@ -196,7 +195,7 @@ void HelloWorldPublisher::runThread(
             }
             else
             {
-                std::cout << "Message: " << std::string(&hello_.message()[0], hello_.message().size()) << " with index: " << hello_.index()
+                std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
                           << " SENT" << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
@@ -234,6 +233,7 @@ bool HelloWorldPublisher::publish(
     }
     return false;
 }
+
 
 void init_log() {
     // log info

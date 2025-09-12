@@ -169,7 +169,7 @@ void HelloWorldSubscriber::SubListener::on_data_available(
         {
             samples_++;
             // Print your structure data here.
-            std::cout << "Message " << std::string(&hello_.message()[0], hello_.message().size()) << " " << hello_.index() << " RECEIVED" << std::endl;
+            std::cout << "Message " << hello_.message() << " " << hello_.index() << " RECEIVED" << std::endl;
         }
     }
 }
