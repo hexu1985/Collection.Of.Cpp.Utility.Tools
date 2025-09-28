@@ -124,12 +124,15 @@ public:
         hello_.index(0);
         hello_.message("HelloWorld");
 
-        DomainParticipantQos participantQos;
-        participantQos.name("Participant_publisher");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos, &participantListenser_);
+        if (ReturnCode_t::RETCODE_OK != DomainParticipantFactory::get_instance()->load_XML_profiles_file("my_profiles.xml")) {
+            std::cout << "load_XML_profiles_file failed!" << std::endl;
+            return false;
+        }
 
+        participant_ = DomainParticipantFactory::get_instance()->create_participant_with_profile(0, "participant_xml_profile", &participantListenser_);
         if (participant_ == nullptr)
         {
+            std::cout << "create_participant_with_profile failed!" << std::endl;
             return false;
         }
 
@@ -141,22 +144,25 @@ public:
 
         if (topic_ == nullptr)
         {
+            std::cout << "create_topic failed!" << std::endl;
             return false;
         }
 
         // Create the Publisher
-        publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
+        publisher_ = participant_->create_publisher_with_profile("publisher_xml_profile");
 
         if (publisher_ == nullptr)
         {
+            std::cout << "create_publisher_with_profile failed!" << std::endl;
             return false;
         }
 
         // Create the DataWriter
-        writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT, &listener_);
+        writer_ = publisher_->create_datawriter_with_profile(topic_, "datawriter_xml_profile", &listener_);
 
         if (writer_ == nullptr)
         {
+            std::cout << "create_datawriter_with_profile failed!" << std::endl;
             return false;
         }
         return true;

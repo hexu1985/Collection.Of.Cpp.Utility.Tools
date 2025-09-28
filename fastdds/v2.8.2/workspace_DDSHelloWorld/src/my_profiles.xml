@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+    <!-- 1. 传输协议配置 -->
+    <transport_descriptors>
+        <transport_descriptor>
+            <transport_id>udp_transport</transport_id>
+            <type>UDPv4</type>
+            <non_blocking_send>true</non_blocking_send> <!-- 非阻塞发送 -->
+            <sendBufferSize>503316480</sendBufferSize> <!-- 60MB * 8 = 480MB -->
+            <receiveBufferSize>503316480</receiveBufferSize>
+            <interfaceWhiteList>
+                <address>192.168.1.102</address>
+                <address>192.168.1.103</address>
+                <address>192.168.1.1</address>
+                <address>127.0.0.1</address>
+            </interfaceWhiteList>
+        </transport_descriptor>
+    </transport_descriptors>
+
+    <participant profile_name="participant_xml_profile">
+        <domainId>80</domainId>
+        <rtps>
+            <name>my_participant</name>
+            <useBuiltinTransports>true</useBuiltinTransports>
+        </rtps>
+    </participant>
+
+    <participant profile_name="participant_profile_1">
+        <domainId>0</domainId>
+        <rtps>
+            <name>participant_name</name>
+            <useBuiltinTransports>false</useBuiltinTransports>
+            <userTransports>
+                <transport_id>udp_transport</transport_id>
+            </userTransports>
+            <builtin>
+                <!-- 内置负载大小优化 -->
+                <writerPayloadSize>2048</writerPayloadSize>
+                <readerPayloadSize>2048</readerPayloadSize>
+                <!-- 发现协议参数 -->
+                <discovery_config>
+                    <leaseDuration>
+                        <sec>5</sec> <!-- 租期5秒 -->
+                    </leaseDuration>
+                    <leaseAnnouncement>
+                        <sec>1</sec> <!-- 公告周期1秒 -->
+                    </leaseAnnouncement>
+                </discovery_config>
+            </builtin>
+        </rtps>
+    </participant>
+
+    <publisher profile_name="publisher_xml_profile" is_default_profile="true">
+        <qos>
+            <reliability>
+                <kind>BEST_EFFORT</kind>
+            </reliability>
+        </qos>
+    </publisher>
+    <subscriber profile_name="subscriber_xml_profile" is_default_profile="true">
+        <qos>
+            <reliability>
+                <kind>BEST_EFFORT</kind>
+            </reliability>
+        </qos>
+    </subscriber>
+
+    <!--  数据发布者配置 -->
+    <data_writer profile_name="datawriter_xml_profile">
+        <topic>
+            <historyQos>
+                <kind>KEEP_LAST</kind>
+                <depth>5</depth>
+            </historyQos>
+            <resourceLimitsQos>
+                <max_samples>5</max_samples>
+                <max_instances>1</max_instances>
+                <max_samples_per_instance>5</max_samples_per_instance>
+            </resourceLimitsQos>
+        </topic>
+        <qos>
+            <reliability>
+                <kind>RELIABLE</kind>
+                <max_blocking_time>
+                    <sec>0</sec>
+                    <nanosec>300000000</nanosec>
+                </max_blocking_time>
+            </reliability>
+        </qos>
+        <times>
+            <heartbeatPeriod>
+                <sec>0</sec> <!-- 秒 -->
+                <nanosec>50000000</nanosec> <!-- 50毫秒 -->
+            </heartbeatPeriod>
+        </times>
+    </data_writer>
+
+    <data_writer profile_name="best_effort_datawriter_profile_default">
+        <qos>
+            <reliability>
+                <kind>BEST_EFFORT</kind>
+            </reliability>
+        </qos>
+        <times>
+            <heartbeatPeriod>
+                <sec>0</sec> <!-- 秒 -->
+                <nanosec>50000000</nanosec> <!-- 50毫秒 -->
+            </heartbeatPeriod>
+        </times>
+    </data_writer>
+
+
+    <!--  数据订阅者配置 -->
+    <data_reader profile_name="datareader_xml_profile">
+        <qos>
+            <reliability>
+                <kind>RELIABLE</kind>
+            </reliability>
+        </qos>
+        <topic>
+            <historyQos>
+                <kind>KEEP_LAST</kind>
+                <depth>5</depth>
+            </historyQos>
+            <resourceLimitsQos>
+                <max_samples>5</max_samples>
+                <max_instances>1</max_instances>
+                <max_samples_per_instance>5</max_samples_per_instance>
+            </resourceLimitsQos>
+        </topic>
+    </data_reader>
+
+    <data_reader profile_name="best_effort_datareader_profile_default">
+        <qos>
+            <reliability>
+                <kind>BEST_EFFORT</kind>
+            </reliability>
+        </qos>
+    </data_reader>
+</profiles>

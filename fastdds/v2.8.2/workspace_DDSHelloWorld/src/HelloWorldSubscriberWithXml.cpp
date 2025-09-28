@@ -137,12 +137,15 @@ public:
     //!Initialize the subscriber
     bool init()
     {
-        DomainParticipantQos participantQos;
-        participantQos.name("Participant_subscriber");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos, &participantListenser_, eprosima::fastdds::dds::StatusMask::none());
+        if (ReturnCode_t::RETCODE_OK != DomainParticipantFactory::get_instance()->load_XML_profiles_file("my_profiles.xml")) {
+            std::cout << "load_XML_profiles_file failed!" << std::endl;
+            return false;
+        }
 
+        participant_ = DomainParticipantFactory::get_instance()->create_participant_with_profile(0, "participant_xml_profile", &participantListenser_, StatusMask::none());
         if (participant_ == nullptr)
         {
+            std::cout << "create_participant_with_profile failed!" << std::endl;
             return false;
         }
 
@@ -158,18 +161,20 @@ public:
         }
 
         // Create the Subscriber
-        subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT, nullptr);
+        subscriber_ = participant_->create_subscriber_with_profile("subscriber_xml_profile");
 
         if (subscriber_ == nullptr)
         {
+            std::cout << "create_subscriber_with_profile failed!" << std::endl;
             return false;
         }
 
         // Create the DataReader
-        reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
+        reader_ = subscriber_->create_datareader_with_profile(topic_, "datareader_xml_profile", &listener_);
 
         if (reader_ == nullptr)
         {
+            std::cout << "create_datareader_with_profile failed!" << std::endl;
             return false;
         }
 
