@@ -52,10 +52,10 @@ add_executable(DDSHelloWorldPublisherWithLog
     ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldPublisherWithLog fastrtps fastcdr tinyxml2::tinyxml2)
 
-add_executable(DDSPrintDataReaderQos src/printDataReaderQos.cpp src/test_printDataReaderQos.cpp)
+add_executable(DDSPrintDataReaderQos src/printDataReaderQos.cpp src/test_printDataReaderQos.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSPrintDataReaderQos fastrtps fastcdr tinyxml2::tinyxml2)
 
-add_executable(DDSPrintDataWriterQos src/printDataWriterQos.cpp src/test_printDataWriterQos.cpp)
+add_executable(DDSPrintDataWriterQos src/printDataWriterQos.cpp src/test_printDataWriterQos.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSPrintDataWriterQos fastrtps fastcdr tinyxml2::tinyxml2)
 
 
