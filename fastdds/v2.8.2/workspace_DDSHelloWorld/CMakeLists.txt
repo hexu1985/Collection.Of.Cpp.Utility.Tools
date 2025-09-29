@@ -31,6 +31,25 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
     endif()
 endif()
 
+### test file
+set(TEST_FILES my_profiles.xml)
+
+foreach(test_file ${TEST_FILES})
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${test_file}
+        #COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/${test_file}
+                ${CMAKE_CURRENT_BINARY_DIR}/${test_file}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/${test_file}
+        COMMENT "Copying test test_file ${test_file}"
+    )
+endforeach()
+
+add_custom_target(copy_test_files ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/my_profiles.xml
+)
+
 message(STATUS "Configuring HelloWorld publisher/subscriber example...")
 file(GLOB DDS_HELLOWORLD_SOURCES_CXX "src/*.cxx")
 
@@ -64,6 +83,7 @@ add_executable(DDSHelloWorldPublisherWithXml
     src/printDataWriterQos.cpp 
     ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldPublisherWithXml fastrtps fastcdr tinyxml2::tinyxml2)
+add_dependencies(DDSHelloWorldPublisherWithXml copy_test_files)
 
 add_executable(DDSHelloWorldSubscriberWithXml
     src/HelloWorldSubscriberWithXml.cpp 
@@ -71,4 +91,5 @@ add_executable(DDSHelloWorldSubscriberWithXml
     src/printDataReaderQos.cpp 
     ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldSubscriberWithXml fastrtps fastcdr tinyxml2::tinyxml2)
+add_dependencies(DDSHelloWorldSubscriberWithXml copy_test_files)
 
