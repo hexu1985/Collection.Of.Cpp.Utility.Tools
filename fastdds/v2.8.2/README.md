@@ -104,7 +104,7 @@ make: *** [Makefile:141: all] Error 2
 ```
 
 6. 源码编译fastdds
-
+https://gitee.com/hexu1985/fast-dds-v2.8.2.git
 ```bash
 $ cd ~/fast_dds
 $ git clone https://github.com/eProsima/Fast-DDS.git
