@@ -4,7 +4,7 @@ current_dir=$( cd $(dirname ${BASH_SOURCE[0]}) && pwd )
 src_dir=${current_dir}
 build_dir=${current_dir}/build
 
-cmake -S ${src_dir} -B ${build_dir} -DCMAKE_INSTALL_PREFIX=~/fast_dds/install -DCMAKE_BUILD_TYPE=Debug
+cmake -S ${src_dir} -B ${build_dir} -DCMAKE_INSTALL_PREFIX=~/git/fast-dds-v2.8.2/target_x86 -DCMAKE_BUILD_TYPE=Debug
 #cmake -S ${src_dir} -B ${build_dir} \
 #    -DCMAKE_BUILD_TYPE=Debug \
 #    -Dfastcdr_DIR=${HOME}/local/fast_cdr/lib/cmake/fastcdr \

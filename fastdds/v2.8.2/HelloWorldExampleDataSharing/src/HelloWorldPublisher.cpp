@@ -25,6 +25,7 @@
 #include <fastdds/dds/publisher/qos/PublisherQos.hpp>
 #include <fastdds/dds/publisher/DataWriter.hpp>
 #include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
+#include <fastdds/dds/log/Log.hpp>
 
 #include <string.h>
 #include <thread>
@@ -189,12 +190,25 @@ bool HelloWorldPublisher::publish(
     return false;
 }
 
+void init_log() {
+    // log info
+    //Log::SetVerbosity(Log::Kind::Info);
+    Log::SetVerbosity(Log::Kind::Warning);
+    //Log::SetCategoryFilter(std::regex("(RTPS_|SECURITY_)"));  // 可选: 设置类别过滤器
+
+    // 启用文件名和行号显示
+    Log::ReportFilenames(true);  // 显示文件名
+    Log::ReportFunctions(true);  // 显示函数名（可选）
+}
 
 int main(
         int argc,
         char** argv)
 {
     std::cout << "Starting publisher." << std::endl;
+
+    init_log();
+
     uint32_t count = 10;
     uint32_t sleep = 100;
 

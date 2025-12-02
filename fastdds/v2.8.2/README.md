@@ -53,7 +53,7 @@ $ cd ~/fast_dds/
 ```
 
 2. clone fastcdr项目，源码编译
-
+https://gitee.com/hexu1985/fast-cdr-v1.0.28.git
 ```bash
 $ cd ~/fast_dds
 $ git clone https://github.com/eProsima/Fast-CDR.git
@@ -67,6 +67,7 @@ $ cmake --install build --prefix ~/fast_dds/install
 3. 复制asio头文件到~/fast_dds/install/include目录下( ASIO_VERSION 101801 // 1.18.1 )
 
 4. clone foonathan_memory项目，源码编译
+https://gitee.com/hexu1985/foonathan_memory_v0.7-3.git
 
 ```bash
 $ cd ~/fast_dds
@@ -79,7 +80,7 @@ $ cmake --install build --prefix ~/fast_dds/install
 ```
 
 5. clone tinyxml2项目，源码编译
-
+https://gitee.com/hexu1985/tinyxml2_v9.0.0.git
 ```bash
 $ cd ~/fast_dds
 $ git clone https://github.com/leethomason/tinyxml2.git
