@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<!-- 启用Chromium高速渲染模式 -->
+<meta name="renderer" content="webkit">
+<meta name="force-rendering" content="webkit">
+<!-- 禁止百度转码 -->
+<meta name="applicable-device" content="pc,mobile">
+<meta name="MobileOptimized" content="width">
+<meta name="HandheldFriendly" content="true">
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<!-- 禁止识别电话号码 -->
+<meta name="format-detection" content="telephone=no">
+
+<link rel="shortcut icon" href="https://c.biancheng.net/favicon.ico?v=1.7.20">
+<link href="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/common.css" rel="stylesheet">
+<title>YAML是什么，YAML的语法格式（非常详细） - C语言中文网</title>
+<meta name="description" content="YAML 是一种有层级且可读性非常强的数据格式，用于表示数据结构和配置信息，具有简洁、可扩展和易于理解的特点。 YAML 文件的扩展名有两种：一种是 yaml（官方推荐的写法），另一种">
+<script id="LA_CODELESS" src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/js-sdk-event.min.js" data-la-ev="KDf6QzBhogyQjall" crossorigin="anonymous" charset="UTF-8"></script></head>
+<body>
+
+<div id="header" class="clearfix">
+	<a id="logo" class="left" href="https://c.biancheng.net/">
+		<img height="26" src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/logo.png" alt="C语言中文网">
+	</a>
+	<ul id="nav-main" class="hover-none left clearfix">
+		<li class="wap-yes"><a href="https://c.biancheng.net/">首页</a></li>
+		<li><a href="https://c.biancheng.net/c/">C语言教程</a></li>
+		<li><a href="https://c.biancheng.net/cplus/">C++教程</a></li>
+		<li><a href="https://c.biancheng.net/python/">Python教程</a></li>
+		<li><a href="https://c.biancheng.net/java/">Java教程</a></li>
+		<li><a href="https://c.biancheng.net/linux_tutorial/">Linux入门</a></li>
+		<li><a href="https://c.biancheng.net/sitemap/" title="网站地图">更多&gt;&gt;</a></li>
+	</ul>
+	<a href="http://vip.biancheng.net/?from=topbar" class="user-info iconfont iconfont-user hover-none" target="_blank" title="用户中心"></a>
+</div>
+<div id="main-no-course" class="clearfix">
+	<div class="arc-info">
+	<span class="position"><span class="iconfont iconfont-home2"></span> <a href="https://c.biancheng.net/">首页</a> &gt; <a href="https://c.biancheng.net/skill/">编程笔记</a> &gt; <a href="https://c.biancheng.net/skill/python/">Python笔记</a></span>
+	<span class="read-num"><b class="iconfont iconfont-fire"></b> 阅读：4124</span>
+</div>
+
+
+	<h1>YAML是什么，YAML的语法格式（非常详细）</h1>
+	
+	<div id="arc-body">YAML 是一种有层级且可读性非常强的数据格式，用于表示<a href="https://c.biancheng.net/data_structure/" target="_blank">数据结构</a>和配置信息，具有简洁、可扩展和易于理解的特点。<br>
+<br>
+YAML 文件的扩展名有两种：一种是 yaml（官方推荐的写法），另一种是 yml（在 DevOps 中被广泛使用）。例如，用 YAML 数据表示一台网络设备的基本信息：
+<pre class="info-box">device:
+  name: netdevops01
+  ip: 192.168.137.1
+  vendor: 华为
+  online: true
+  rack: '0101'
+  start_u: 20
+  end_u: 21
+  interface_usage: 0.67
+  interfaces:
+    - eth1/1
+    - eth1/2
+    - eth1/3
+  uptime: null</pre>
+作为 <a href="https://c.biancheng.net/python/" target="_blank">Python</a> 网络运维自动化的初学者，即使没有任何的 YAML 基础知识，也可以从这段 YAML 数据中理解其承载的数据信息。<br>
+<br>
+相对 JSON 而言，YAML 的可读性更优秀，层次结构更清晰。YAML 使用带空格的缩进来表示层级关系，且缩进没有数量上的强制要求，一般使用 2 个空格来表示一个缩进。从观感上而言，同层级的字段数据是左侧对齐的。<br>
+<br>
+YAML 支持编写注释，使用 # 表示行注释，直到行末尾都是注释内容，类似于 Python 语法中的行注释。YAML 是大小写敏感的，在编写时要注意大小写。<br>
+<br>
+YAML 中有 3 种数据类型——对象、数组和纯量，其中纯量中又包含了字符串、整数、浮点数、布尔值、空值、时间和日期。<br>
+<h2>
+	YAML对象</h2>
+YAML 中的对象（mapping）类似于 Python 中的字典，它是一个由 key 和 value 组成的键值对。其中 key 可以是字符串、整数、浮点数，value 可以是 YAML 中的任意数据类型。<br>
+<br>
+书写对象时，key 不需要加双引号，且 key 后面紧跟英文冒号，冒号后面必须接空格，空格数量一般为 1 个，空格后面接对应的 value。在缩进上，多个 key 一定要左侧对齐。<br>
+<br>
+对象类型的 YAML 数据如下所示：
+<pre class="info-box">name: netdevops01
+ip: 192.168.137.1</pre>
+<br>
+对象类型的 YAML 数据所对应的 Python 数据如下：
+<pre class="info-box">{'name': 'netdevops01', 'ip': '192.168.137.1'}</pre>
+<br>
+一组键值对中的 value 可以是对象、数组、纯量中的任意一种，类似于 Python 字典中的 value，支持多种类型，这样可以让 YAML 数据表达出多层次的复杂数据。<br>
+<h2>
+	YAML数组</h2>
+YAML 中的数组（sequence）类似于 Python 中的列表，它代表一个有序的集合。在数组中通过减号来表示成员，减号之后要添加 1 个空格再写成员的值，各个成员的减号要左对齐。<br>
+<br>
+数组类型的 YAML 数据如下所示：
+<pre class="info-box">- dev01
+- dev02
+- dev03</pre>
+<br>
+数组类型的 YAML 数据所对应的 Python 数据如下所示：
+<pre class="info-box">['dev01','dev02','dev03']</pre>
+<br>
+如果数组的成员不多，且都是简单的字符串、数字类型，那么可以将其写成一排并用方括号括起来，成员之间用英文逗号隔开，这时无须再写减号。这种书写方式与 Python 的列表格式非常相像。数组类型的 YAML 数据的另一种格式如下所示：
+<pre class="info-box">[ dev01,dev02,dev03 ]</pre>
+<br>
+数组的成员可以是对象、数组、纯量中的任意一种，使用对象的数组表示一组端口信息的复杂 YAML 数据：
+<pre class="info-box">- name: Eth1/1
+  status: up
+  allow_vlan:
+    - 1
+    - 200
+    - 201
+- name: Eth1/2
+  status: up
+  allow_vlan: [1,200,201]
+- name: Eth1/3
+  status: up
+  allow_vlan: [1,200,201]</pre>
+代码中，数组的每个成员都是一个表示端口信息的对象。端口对象中有一个 allow_vlan 字段，这个字段也是数组类型，且使用了带减号和不带减号两种方式表示。<br>
+<h2>
+	YAML纯量</h2>
+纯量（scalars）是最基本的、不可再分的值。YAML 支持的纯量数据类型有字符串、整数、浮点数、布尔值、空值、时间和日期。<br>
+<h4>
+	1) 字符串</h4>
+YAML 中的字符串与 Python 数据类型中的字符串是一致的，它是数据格式中最基础的数据类型之一。<br>
+<br>
+单行字符串可以使用类似 Python 中的字符串定义方式，用单引号或者双引号包裹，也可以直接写字符串内容，无须引号包裹。从可读性和书写便利性角度考虑，人们多选择不加引号的写法。<br>
+<br>
+YAML 中单行字符串的 3 种基本写法如下所示：
+<pre class="info-box">simple_str1: dev01
+simple_str2: "This is dev01"
+simple_str3: 'This is dev01'</pre>
+在一些特殊的场景中，如字符串中涉及多行，可以考虑使用 <code>&gt;</code> 或者 <code>|</code>：
+<ul>
+	<li>
+		<code>&gt;</code> 代表将字符串中的换行符替换为空格；</li>
+	<li>
+		<code>|</code> 代表保留换行符，即使被程序加载，字符串也是多行的。</li>
+</ul>
+<br>
+无论是哪种方式，文本都要注意缩进，且一定是左对齐的。YAML 中多行字符串的两种基本写法如下所示：
+<pre class="info-box">yaml_multi_str1: &gt;
+  这是一个多行的字符串；
+  字符串内容一定要对齐；
+  换行都会被替换为空格。
+　
+yaml_multi_str2: |
+  这是一个多行的字符串；
+  字符串内容一定要对齐；
+  换行会被保留。</pre>
+<h4>
+	2) 整数与浮点数</h4>
+YAML 支持整数与浮点数两种数字表示方法，分别对应 Python 中的整数与浮点数，它们的书写方式也一致。<br>
+<br>
+YAML 中整数及浮点数的基本写法如下所示：
+<pre class="info-box">int1: 100
+int2: -100
+float: 100.0</pre>
+<br>
+如果想要将 100 表示为字符串，需要将数字用引号包裹，这样就不会被自动识别为整数或者浮点数。YAML 中定义数字内容的字符串要通过引号显式地声明为字符串，如下面的代码所示：
+<pre class="info-box">int_str: '100'</pre>
+<h4>
+	3) YAML布尔值</h4>
+YAML 的布尔值与 Python 中的布尔值是一致的。真可以写为 true、True、TRUE、on、On、ON、yes、Yes、YES 
+中的任意一种；假可以写为 false、False、FALSE、off、Off、OFF、no、No、NO 
+中的任意一种。这些值都会被自动转换为布尔值。<br>
+<br>
+YAML 中布尔值的写法如下所示：
+<pre class="info-box"># 表示为真的布尔值
+boolean_true1: true
+boolean_true2: True
+boolean_true3: TRUE
+boolean_true4: on
+boolean_true5: On
+boolean_true6: ON
+boolean_true7: yes
+boolean_true8: Yes
+boolean_true9: YES
+　
+# 表示为假的布尔值
+boolean_false1: false
+boolean_false2: False
+boolean_false3: FALSE
+boolean_false4: off
+boolean_false5: Off
+boolean_false6: OFF
+boolean_false7: no
+boolean_false8: No
+boolean_false9: NO</pre>
+<h4>
+	4) YAML空值</h4>
+YAML 中也支持 Python 中的空值 None。Null、null 或者不填写内容都被视为定义了一个空值。<br>
+<br>
+YAML 中空值的写法如下所示：
+<pre class="info-box">null1: Null
+null2: null
+null3: ~
+null4:</pre>
+<h4>
+	5) 日期与时间</h4>
+YAML 支持日期和时间两种格式。JSON 是不支持这两种格式的，它们可以被分别转换为 Python 的两个内置类 datetime.date 和 datetime.datetime。<br>
+<br>
+日期类 date 是精确到天，时间类 datetime 是精确到微秒，二者的书写格式必须遵循 ISO 8601 标准。<br>
+<br>
+YAML 中日期与时间的写法如下所示：
+<pre class="info-box">date: 2024-06-25    #必须遵循ISO 8601标准，yyyy-MM-dd
+datetime: 2024-06-25T15:08:31+08:00    #遵循ISO 8601标准</pre>
+<h2>
+	多文档的YAML数据</h2>
+一个 YAML 文件中可以有多个 YAML 文档，每个 YAML 文档以 3 个减号（---）开始。这种多文档的 YAML 文件多出现在 Ansible 的 playbook 中。<br>
+<br>
+多个文档的 YAML 数据如下所示。这是一个省略了很多内容的 playbook，此处主要用于演示多个 YAML 文档。
+<pre class="info-box"># this is a play list
+---
+- name: play 01
+  host: huawei_devs
+　
+- name: play 02
+  host: huawei_devs
+---
+- name: play 01
+  host: cisco_devs
+　
+- name: play 02
+  host: cisco_devs</pre>
+代码中的 YAML 文件包含两个 YAML 文档，每个文档的开头都是一个 3 个减号组成的标识，每个文档中都是对象数组的 YAML 数据。多文档 YAML 数据对应的 Python 数据对象如下所示：
+<pre class="info-box">[[{'name': 'play 01', 'host': 'huawei_devs'}, {'name': 'play 02', 'host': 'huawei_devs'}],[{'name': 'play 01', 'host': 'cisco_devs'}, {'name': 'play 02', 'host': 'cisco_devs'}]</pre>
+</div>
+	<!-- <div id="trae-ide" style="margin-top: 15px;"></div> -->
+<div id="nice-arcs" class="box-bottom">
+    <h4>相关文章</h4>
+    <ul class="clearfix">
+<li><a href="https://c.biancheng.net/spring_boot/yaml.html" title="YAML教程（快速入门版）" target="_blank">YAML教程（快速入门版）</a></li>
+<li><a href="https://c.biancheng.net/view/lbj0cst.html" title="Python读取yaml配置文件（PyYAML模块）" target="_blank">Python读取yaml配置文件（PyYAML模块）</a></li>
+<li><a href="https://c.biancheng.net/view/h07h005.html" title="DiskGenius中文版下载、安装和使用图文教程（附安装包，超级详细）" target="_blank">DiskGenius中文版下载、安装和使用图文教程（附安装包，超级详细）</a></li>
+<li><a href="https://c.biancheng.net/view/qlsgx6i.html" title="MATLAB hist()函数：绘制条形直方图（附带实例）" target="_blank">MATLAB hist()函数：绘制条形直方图（附带实例）</a></li>
+<li><a href="https://c.biancheng.net/view/6802.html" title="使用Java 8新增的Predicate操作Collection集合" target="_blank">使用Java 8新增的Predicate操作Collection集合</a></li>
+<li><a href="https://c.biancheng.net/view/r0xo67m.html" title="Hibernate Validator校验数据详解（附带实例）" target="_blank">Hibernate Validator校验数据详解（附带实例）</a></li>
+<li><a href="https://c.biancheng.net/view/6867.html" title="Java多对多关系示例" target="_blank">Java多对多关系示例</a></li>
+<li><a href="https://c.biancheng.net/view/w04i7p9.html" title="Go语言通道(channel)的创建和使用（非常详细，附带实例）" target="_blank">Go语言通道(channel)的创建和使用（非常详细，附带实例）</a></li>
+<li><a href="https://c.biancheng.net/view/20ygq31.html" title="图像工程的3个层次（非常详细）" target="_blank">图像工程的3个层次（非常详细）</a></li>
+<li><a href="https://c.biancheng.net/view/t0k2pf3.html" title="Java泛型类和泛型方法（附带实例）" target="_blank">Java泛型类和泛型方法（附带实例）</a></li>
+</ul>
+</div>
+	
+</div>
+<script type="text/javascript">
+// 当前文章ID
+window.arcIdRaw = 'a_' + 12143;
+window.arcId = "ad5bzcF75qsgI3AmYRNefUmI8ZNgwsPSgYcnA3BJoTa8ybgNqrbDObOwhdLR";
+window.typeidChain = "145|119";
+</script>
+<div id="footer" class="clearfix">
+	<div class="info left">
+	<p>新手在线学习编程的网站，专注于分享优质精品课程，从零基础到轻进阶，完整、全面、详细。您的下一套教程，何必是书籍。</p>
+	<p>
+		<a class="blue" href="https://c.biancheng.net/view/8066.html" target="_blank">关于网站</a> <span class="break">|</span>
+		<a class="blue" href="https://c.biancheng.net/view/8093.html" target="_blank">联系我们</a> <span class="break">|</span>
+		<a class="blue" href="https://c.biancheng.net/sitemap/" target="_blank">新版网站地图</a> <span class="break">|</span>
+		<a class="blue" href="https://c.biancheng.net/cpp/sitemap/" target="_blank">旧版网站地图</a> <span class="break">|</span>
+		<a class="blue" href="https://c.biancheng.net/ref/" target="_blank">C语言函数手册</a>
+	</p>
+	<p>
+		<span>Copyright ©2012-2026 biancheng.net</span><span class="break">&nbsp;</span>
+		<span><img class="beian" src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/icp.png" alt="ICP备案"> ICP备案：<a class="grey" href="https://beian.miit.gov.cn/" target="_blank">冀ICP备2022013920号-4</a></span><span class="break">&nbsp;</span>
+		<span><img class="beian" src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/gongan.png" alt="公安部网络备案"> 公安联网备案：<a class="grey" href="https://beian.mps.gov.cn/#/query/webSearch?code=13110202001352" target="_blank">冀公网安备13110202001352号</a></span>
+	</p>
+	</div>
+	<img id="logo_bottom" class="right" src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/logo_bottom.gif" alt="底部Logo">
+	<span id="return-top"><b>↑</b></span>
+</div>
+
+<script type="text/javascript">
+window.siteId = 4;
+window.cmsTemplets = "/templets/new";
+window.cmsTempletsVer = "1.7.20";
+
+</script>
+
+<script src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/jquery1.12.4.min.js"></script>
+<script src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/common.js"></script>
+<span style="display: none;">
+<script charset="UTF-8" id="LA_COLLECT" src="YAML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CYAML%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%88%E9%9D%9E%E5%B8%B8%E8%AF%A6%E7%BB%86%EF%BC%89%20-%20C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%87%E7%BD%91_files/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"KDf6QzBhogyQjall",ck:"KDf6QzBhogyQjall",autoTrack:true})</script>
+</span>
+
+</body></html>
