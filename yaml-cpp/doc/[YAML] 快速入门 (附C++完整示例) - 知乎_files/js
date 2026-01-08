@@ -1,0 +1,4 @@
+
+
+!function(n){n.ZS_CAP=n.ZS_CAP||{};var t=null;n.ZS_CAP.init=function(c){var i={show:function(){t&&t.popUp()},close:function(){t&&t.close()},refresh:function(){t&&t.refresh()}};return t?Promise.resolve(i):new Promise(function(o,e){window.initNECaptcha({mode:"popup",width:"320px",element:c.element,captchaId:"ffccaa537da544269b4c9c1dc84dcb73",onClose:function(){c.onClose&&c.onClose()},enableClose:c.enableClose,onVerify:function(n,o){c.callback&&c.callback({type:"ne",result:n||o})}},function(n){t=n,o(i)},function(n){e(n)})})}}(window);
+
