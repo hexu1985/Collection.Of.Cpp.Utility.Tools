@@ -41,10 +41,17 @@ int main() {
     std::cout << summary << std::endl << std::endl;
 
     /* data type */
+#if 0
     std::cout << "int: " << config["int_v"].as<int>() << std::endl;
     std::cout << "float: " << config["float_v"].as<float>() << std::endl;
     std::cout << "bool: " << config["bool_v"].as<bool>() << std::endl;
     std::cout << "string: " << config["string_v"].as<std::string>() << std::endl;
+#else
+    std::cout << "int: " << config["integar"].as<int>() << std::endl;
+    std::cout << "float: " << config["float"].as<float>() << std::endl;
+    std::cout << "bool: " << config["boolean"].as<bool>() << std::endl;
+    std::cout << "string: " << config["string"].as<std::string>() << std::endl;
+#endif
 
     return 0;
 }
