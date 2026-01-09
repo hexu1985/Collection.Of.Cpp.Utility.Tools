@@ -15,3 +15,6 @@ target_link_libraries(demo2 yaml-cpp)
 
 add_executable(demo3 demo3.cpp)
 target_link_libraries(demo3 yaml-cpp)
+
+add_executable(load_config load_config.cpp)
+target_link_libraries(load_config yaml-cpp)

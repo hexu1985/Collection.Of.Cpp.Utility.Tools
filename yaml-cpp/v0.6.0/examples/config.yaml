@@ -1,0 +1,27 @@
+# This is a YAML example
+name: Xiao Ming
+age: 18
+
+fruits:
+    - Apple
+    - Banana
+    - Orange
+
+person:
+    name: Li Hua
+    age: 25
+    hobbies:
+        - Reading
+        - Swimming
+          
+description: |
+    This is a multi-line
+    string in YAML.
+summary:
+    This is a folded
+    multi-line string.
+    
+integar: 42
+float: 3.14
+boolean: true
+string: "Hello, YAML!"
