@@ -9,3 +9,9 @@ link_directories( ${YAML_CPP_DIR}/lib )
 
 add_executable(demo1 demo1.cpp)
 target_link_libraries(demo1 yaml-cpp)
+
+add_executable(demo2 demo2.cpp)
+target_link_libraries(demo2 yaml-cpp)
+
+add_executable(demo3 demo3.cpp)
+target_link_libraries(demo3 yaml-cpp)
