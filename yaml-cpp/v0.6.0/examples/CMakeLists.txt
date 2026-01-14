@@ -18,3 +18,9 @@ target_link_libraries(demo3 yaml-cpp)
 
 add_executable(load_config load_config.cpp)
 target_link_libraries(load_config yaml-cpp)
+
+add_executable(detect_scalar_type detect_scalar_type.cpp)
+target_link_libraries(detect_scalar_type yaml-cpp)
+
+add_executable(null_as_string null_as_string.cpp)
+target_link_libraries(null_as_string yaml-cpp)
