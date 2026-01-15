@@ -24,3 +24,6 @@ target_link_libraries(detect_scalar_type yaml-cpp)
 
 add_executable(null_as_string null_as_string.cpp)
 target_link_libraries(null_as_string yaml-cpp)
+
+add_executable(detect_node_type detect_node_type.cpp)
+target_link_libraries(detect_node_type yaml-cpp)
