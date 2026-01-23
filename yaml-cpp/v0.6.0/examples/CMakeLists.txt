@@ -27,3 +27,6 @@ target_link_libraries(null_as_string yaml-cpp)
 
 add_executable(detect_node_type detect_node_type.cpp)
 target_link_libraries(detect_node_type yaml-cpp)
+
+add_executable(traversal_sub_key traversal_sub_key.cpp)
+target_link_libraries(traversal_sub_key yaml-cpp)
