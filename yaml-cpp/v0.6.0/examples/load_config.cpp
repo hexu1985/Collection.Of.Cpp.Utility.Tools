@@ -1,7 +1,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>  /* yaml-cpp header file */
 
-int main() {
+int main() try {
     /* load yaml file */
     YAML::Node config = YAML::LoadFile("config.yaml");
 
@@ -54,5 +54,13 @@ int main() {
 #endif
 
     return 0;
+} catch (const YAML::BadFile& e) {
+    // 文件不存在、权限不足或无法访问
+    std::cerr << "文件错误: " << e.what() << std::endl;
+} catch (const YAML::ParserException& e) {
+    // YAML语法错误
+    std::cerr << "解析错误 at line " << e.mark.line + 1 
+              << ", column " << e.mark.column + 1 << ": "
+              << e.what() << std::endl;
 }
 
