@@ -30,3 +30,6 @@ target_link_libraries(detect_node_type yaml-cpp)
 
 add_executable(traversal_sub_key traversal_sub_key.cpp)
 target_link_libraries(traversal_sub_key yaml-cpp)
+
+add_executable(copy_node copy_node.cpp)
+target_link_libraries(copy_node yaml-cpp)
