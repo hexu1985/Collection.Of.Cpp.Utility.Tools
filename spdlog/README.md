@@ -12,3 +12,4 @@ $ sudo apt install libspdlog-dev
 ```
 
 项目地址: <https://github.com/gabime/spdlog>
+文档地址：<https://spdlog.readthedocs.io/en/latest/>
