@@ -3,6 +3,10 @@
 cmake_minimum_required(VERSION 3.11)
 project(spdlog_examples CXX)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 if(NOT TARGET spdlog)
     # Stand-alone build
     find_package(spdlog REQUIRED)

@@ -1,3 +1,4 @@
+#include "spdlog/spdlog.h"
 #include "spdlog/sinks/syslog_sink.h"
 void syslog_example()
 {
