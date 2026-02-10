@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-cn" style="--olcb-folder-code-block-max-height: 80vh; --cnb-code-bg: rgb(245, 245, 245); --cnb-code-font-size: 12px; --cnb-code-color: rgb(68, 68, 68);"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <meta name="keywords" content="logging,spdlog">
+    <meta name="description" content="spdlog 基本结构分析 代码取自 V1.5.0, 代码堪称美学。 spdlog 是一个只有头文件的C++日志库，速度非常快，扩展性很强，更重要的是 社区活跃，文档齐全。 使用 参考官方的 example. {fmt} 的格式使用也需要熟悉一下，毕竟也进 C++20 了，什么垃圾流就快扫进历史的垃">
+    <meta property="og:description" content="spdlog 基本结构分析 代码取自 V1.5.0, 代码堪称美学。 spdlog 是一个只有头文件的C++日志库，速度非常快，扩展性很强，更重要的是 社区活跃，文档齐全。 使用 参考官方的 example. {fmt} 的格式使用也需要熟悉一下，毕竟也进 C++20 了，什么垃圾流就快扫进历史的垃">
+    <meta property="og:image" content="https://img2018.cnblogs.com/blog/1461087/202001/1461087-20200119163912955-1306625099.png">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>[源码分析] spdlog 整体结构和实现 - 文一路挖坑侠 - 博客园</title>
+    <link rel="icon" id="favicon" href="https://assets.cnblogs.com/favicon_v3_2.ico" type="image/x-icon">
+    <link rel="canonical" href="https://www.cnblogs.com/shuqin/p/12214439.html">
+    
+    <style>#home :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs), :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs) {background: rgb(245, 245, 245);
+        padding: 12px;
+        border: 1px solid rgb(204, 204, 204);
+        border-radius: 3px;
+        border-color: transparent;
+        color: rgb(68, 68, 68);
+        font-family: "Courier New", sans-serif;
+        font-size: 12px</style><link rel="stylesheet" href="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/blog-common.min.css">
+    
+
+    <link id="MainCss" rel="stylesheet" href="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/bundle-cleargertrude.min.css">
+        <link id="highlighter-theme-cnblogs" type="text/css" rel="stylesheet" href="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/cnblogs.css">
+    <link type="text/css" rel="stylesheet" href="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/custom.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/bundle-cleargertrude-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/shuqin/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/shuqin/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/shuqin/wlwmanifest.xml">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": "https://www.cnblogs.com/shuqin/p/12214439.html",
+      "headline": "[源码分析] spdlog 整体结构和实现",
+      "description": "spdlog 基本结构分析 代码取自 V1.5.0, 代码堪称美学。 spdlog 是一个只有头文件的C&#x2B;&#x2B;日志库，速度非常快，扩展性很强，更重要的是 社区活跃，文档齐全。 使用 参考官方的 example. {fmt} 的格式使用也需要熟悉一下，毕竟也进 C&#x2B;&#x2B;20 了，什么垃圾流就快扫进历史的垃",
+      "image": [
+        
+      ],
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.cnblogs.com/shuqin/",
+        "name": "文一路挖坑侠",
+        "url": "https://www.cnblogs.com/shuqin/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://www.cnblogs.com/",
+        "name": "博客园",
+        "url": "https://www.cnblogs.com/"
+      },
+      "datePublished": "2020-01-19T16:25:00.0000000&#x2B;08:00",
+      "dateModified": "2024-10-23T23:56:00.0000000&#x2B;08:00",
+      "wordCount": "2814",
+      "isPartOf": {
+        "@type": "Blog",
+        "@id": "https://www.cnblogs.com/shuqin/",
+        "name": "一篇读罢头飞雪，但记得斑斑点点，几行陈迹。",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.cnblogs.com/",
+          "name": "博客园"
+        }
+      }
+    }
+    </script>
+
+    <script>
+        var currentBlogId = 450530;
+        var currentBlogApp = 'shuqin';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'ClearGertrude';
+        var visitorUserId = '';
+        window.hasCustomScript = false;
+        window.cb_enable_mathjax = true;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+        <script>
+            window.currentPostId = 12214439;
+            window.currentPostDateAdded = '2020-01-19 16:25';
+        </script>
+    <script src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/jquery-3.3.1.min.js"></script>
+    <script src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/blog-common.min.js"></script><style>.medium-zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 300ms;
+  will-change: opacity;
+}
+
+.medium-zoom--opened .medium-zoom-overlay {
+  cursor: pointer;
+  cursor: zoom-out;
+  opacity: 1;
+}
+
+.medium-zoom-image {
+  cursor: pointer;
+  cursor: zoom-in;
+  /*
+    The `transition` is marked as "!important" for the animation to happen
+    even though it's overriden by another inline `transition` style attribute.
+
+    This is problematic with frameworks that generate inline styles on their
+    images (e.g. Gatsby).
+
+    See https://github.com/francoischalifour/medium-zoom/issues/110
+   */
+  transition: transform 300ms cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+
+.medium-zoom-image--hidden {
+  visibility: hidden;
+}
+
+.medium-zoom-image--opened {
+  position: relative;
+  cursor: pointer;
+  cursor: zoom-out;
+  will-change: transform;
+}
+</style><script id="hljs-script" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/highlight.min.js" type="text/javascript" async=""></script>
+    
+<script id="mathjax" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/MathJax.js" type="text/javascript" async=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body class="skin-cleargertrude no-navbar mathjax2 hljs-engine"><div id="MathJax_Message" style="display: none;"></div>
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/logo.svg" alt="博客园logo">
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://www.cnblogs.com/cmt/p/18500368">众包</a></li>
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://chat2db-ai.com/" target="_blank" onclick="countClicks('nav', 'skin-navbar-chat2db')">Chat2DB</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off">
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/search.svg" alt="搜索">
+                            <img class="hidden focus-visible" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/enter.svg" alt="搜索">
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/search.svg" alt="搜索">
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'shuqin', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/search.svg" alt="搜索">
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔" style="display: none;">
+                        <img id="new_post_icon" class="navbar-icon" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/newpost.svg" alt="写随笔">
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客" style="display: none;">
+                        <img id="myblog_icon" class="navbar-icon" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/myblog.svg" alt="我的博客">
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息" style="display: none;">
+                        <img id="msg_icon" class="navbar-icon" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/message.svg" alt="短消息">
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/lite-mode-on.svg" alt="简洁模式">
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown" style="display: none;">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/avatar-default.svg" alt="用户头像">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup" style="display: inline;">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()" style="display: inline;">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <div id="header">
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/shuqin">一篇读罢头飞雪，但记得斑斑点点，几行陈迹。</a>
+</h1>
+<p id="tagline"></p>
+
+</div>
+<div id="main">
+	<div id="post_detail">
+	<div class="post">
+		<h2>
+			<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/shuqin/p/12214439.html" title="发布于 2020-01-19 16:25">
+    <span role="heading" aria-level="2">[源码分析] spdlog 整体结构和实现</span>
+    
+
+</a><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button>
+
+		</h2>
+		<div class="postText"><div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<h1 id="spdlog-基本结构分析">spdlog 基本结构分析<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h1>
+<p>代码取自 <a href="https://github.com/gabime/spdlog/commit/cf6f1dd01e660d5865d68bf5fa78f6376b89470a" target="_blank" rel="noopener nofollow">V1.5.0</a>, 代码堪称美学。</p>
+<p><a href="https://github.com/gabime/spdlog#features." target="_blank" rel="noopener nofollow">spdlog</a> 是一个只有头文件的C++日志库，速度非常快，扩展性很强，更重要的是 <strong>社区活跃，文档齐全</strong>。</p>
+<h2 id="使用">使用<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<ol>
+<li>参考官方的 <a href="https://github.com/gabime/spdlog/blob/v1.x/README.md" target="_blank" rel="noopener nofollow">example</a>.</li>
+<li>{fmt} 的格式使用也需要熟悉一下，毕竟也进 C++20 了，什么垃圾流就快扫进历史的垃圾堆吧.</li>
+</ol>
+<h2 id="分析">分析<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p>这里选择了三个点来做分析：</p>
+<ol>
+<li>提供的 <a href="https://github.com/gabime/spdlog/wiki/3.-Custom-formatting" target="_blank" rel="noopener nofollow">日志格式</a> 非常丰富，并且允许用户自定义需要的格式。</li>
+<li>对日志文件的类型也做了充分扩展，支持控制台，普通文件，按大小滚动文件，按时间滚动文件，如果不能满足需要，可以自己扩展格式，见 <em>spdlog/sinks/base_sink.h</em>。</li>
+<li>支持单/多线程，异步/同步，阻塞非阻塞模式。</li>
+</ol>
+<p>spdlog 的代码结构如下：</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash">spdlog
+    ├─example  用法代码
+    ├─include  实现目录
+    │  └─spdlog
+    │      ├─details  功能函数目录
+    │      ├─<span class="hljs-built_in">fmt</span>  {<span class="hljs-built_in">fmt</span>} 库目录
+    │      ├─sinks  落地文件格式实现
+    │      └─*.h    异步模式，日志库接口等实现
+    ├─src  .cpp 文件，组成编译模块生成静态库使用
+    ├─<span class="hljs-built_in">test</span>  测试代码
+</code></pre>
+<p>基本逻辑结构如下：<br>
+<img alt="" loading="lazy" data-src="https://img2018.cnblogs.com/blog/1461087/202001/1461087-20200119163912955-1306625099.png" class="ls-is-cached lazyloaded medium-zoom-image" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/1461087-20200119163912955-1306625099.png"></p>
+<p>有几个比较重要的文件:</p>
+<ul>
+<li><em>spdlog/spdlog.h</em> 为日志库接口，提供日志宏的属性控制函数。</li>
+<li><em>spdlog/logger.h</em> 为日志管理器，为前后端连接的枢纽。</li>
+<li><em>spdlog/async.h</em> 为异步模式接口。</li>
+<li><em>spdlog/sinks/base_sink.h</em> 为日志文件格式父类，后面所有的日志文件格式都是继承该类来实现不同功能。</li>
+<li><em>spdlog/sinks/registry.h</em> 用于登记所有的logger，及一些默认的属性，如日志格式、日志写入等级。</li>
+</ul>
+<h3 id="spdlog-接口">spdlog 接口<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>spdlog 总体而言提供了日志接口</p>
+<ol>
+<li><code>spdlog::debug()</code>, 默认的日志对象，使用默认的日志信息格式，输出至 stdout。</li>
+<li><code>logger-&gt;debug()</code>, 指定日志对象进行日志记录，输出至该日志对象对应的文件中。</li>
+<li><code>SPDLOG_LOGGER_DEBUG(logger), SPDLOG_DEBUG()</code>, 使用宏对以上两种接口进行包装，产生的日志格式包含 文件、函数、行。</li>
+</ol>
+<p>提供的一些落地的文件类型：</p>
+<ul>
+<li>标准输出</li>
+<li>带颜色的标准输出（默认）</li>
+<li>基本文件</li>
+<li>可设定时间的滚动文件</li>
+<li>可设定大小的滚动文件</li>
+<li>过滤重复的日志</li>
+<li>syslog 日志</li>
+</ul>
+<p>这里简单提一下 sinks 的实现，所有落地文件的类型都是从 <code>base_sink</code>（忽略sink） 继承而来，提供了两个纯虚函数 <code>sink_it_()</code> 和 <code>flush_()</code>，这样一来，需要扩展的类型文件只需要实现两个函数，很大的简化了扩展的流程。而单/多线程通过模板来确定是否需要使用互斥量来保持同步，也算是比较有意思的一个实现了：</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-cpp highlighter-hljs hljs"><span class="hljs-comment">// 例子使用 base_file_sink</span>
+<span class="hljs-keyword">using</span> basic_file_sink_mt = basic_file_sink&lt;std::mutex&gt;;
+<span class="hljs-keyword">using</span> basic_file_sink_st = basic_file_sink&lt;details::null_mutex&gt;;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">null_mutex</span>
+{
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">lock</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{}
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unlock</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{}
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">try_lock</span><span class="hljs-params">()</span> <span class="hljs-type">const</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+};
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Mutex&gt;
+<span class="hljs-type">void</span> SPDLOG_INLINE spdlog::sinks::base_sink&lt;Mutex&gt;::<span class="hljs-built_in">log</span>(<span class="hljs-type">const</span> details::log_msg &amp;msg)
+{
+    <span class="hljs-function">std::lock_guard&lt;Mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;
+    <span class="hljs-built_in">sink_it_</span>(msg);
+}
+</code></pre>
+<p>如果需要使用多线程模式，就使用 <code>std::mutex</code>，如果是单线程，我们就不需要互斥来同步，这里实现一个空的互斥量类，就使得 log() 的代码完全不需要修改了，也提高了内聚性。</p>
+<p>spdlog 默认使用同步模式，也可以设置异步模式，异步模式会创建一个线程池，线程池大小可以自行设置，默认为1，该线程池所有者为 <code>details::registry::instance()</code>. 后台的大小可以设置的 <em>多生产者多消费者队列</em> 默认为阻塞模式，也可以设置为非阻塞，不过这个非阻塞的处理非常简单粗暴，就是简单的丢弃最老的日志，推荐是不要这样设置滴，一般产生阻塞的情况大概是磁盘IO打满了，出现这个情况一般是别的地方出问题了。</p>
+<p><code>details::registry</code> 管理所有的日志对象</p>
+<ol>
+<li>使用 <code>&lt;name, logger&gt;</code> 将日志对象和其名称对应起来，后面使用的时候可以直接通过名称获取对应的日志对象。</li>
+<li>保存全部日志对象的默认属性，可使用提供的属性控制接口改变所有的日志对象属性。</li>
+<li>提供定时flush，spdlog 的文件操作具有缓冲区属性，为试日志信息及时落地，后台新生成一个flush线程，设置一个时间（单位：秒）定时唤醒一次进行 flush。</li>
+</ol>
+<h2 id="参考">参考<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<ol>
+<li><a href="https://github.com/fmtlib/fmt" target="_blank" rel="noopener nofollow">{fmt}</a>, A modern formatting library. 现代化的格式化库，速度快，使用简单，已经确定进入 C++20.</li>
+</ol>
+
+
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo" class="post-meta-container">
+
+<div id="EntryTag" class="post-meta-item detail-post-tags">
+    <div class="post-meta-tags">
+        标签: 
+                <a href="https://www.cnblogs.com/shuqin/tag/logging/">logging</a>,                 <a href="https://www.cnblogs.com/shuqin/tag/spdlog/">spdlog</a>    </div>
+    <div class="post-meta-item post-meta-disclaimer">
+        免责声明：本内容来自平台创作者，博客园系信息发布平台，仅提供信息存储空间服务。
+    </div>
+</div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(12214439,cb_blogId,1);green_channel_success(this,'谢谢推荐！');">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow('5e3e7e65-0f03-47f1-5124-08d5fcda22d8');" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_wechat" href="javascript:void(0);" onclick="shareManager.wechatShare()">微信分享</a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/shuqin/" target="_blank"><img src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/20240702204422.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info post-detail-profile">
+            <a href="https://home.cnblogs.com/u/shuqin/">文一路挖坑侠</a>
+            <br>
+            <a href="https://home.cnblogs.com/u/shuqin/followers/">粉丝 - <span class="follower-count">33</span></a>
+            <a href="https://home.cnblogs.com/u/shuqin/followees/">关注 - <span class="following-count">3</span></a><br>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow" class="follow-tip">
+                <a href="javascript:void(0);" onclick="follow('5e3e7e65-0f03-47f1-5124-08d5fcda22d8');return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(12214439,'Digg')">
+        <span class="diggnum" id="digg_count">2</span>
+    </div>
+    <div class="buryit" onclick="votePost(12214439,'Bury')">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+        <div id="vip_tip"><a class="tip" href="https://cnblogs.vip/" target="_blank">升级成为会员</a></div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script>
+</div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/shuqin/p/12103952.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/shuqin/p/12103952.html" data-featured-image="" title="发布于 2019-12-26 19:22">[C++] 一个轻量快速的C++日志库</a>
+    <br>
+    <a href="https://www.cnblogs.com/shuqin/p/12234739.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/shuqin/p/12234739.html" data-featured-image="" title="发布于 2020-01-26 20:20">[C++] 不同场景下的构造函数调用</a>
+
+</div>
+</div></div>
+		<p class="postfoot">
+			posted on 
+<span id="post-date" data-last-update-days="1739.3131944444444" data-date-updated="2024-10-23 23:56" aria-expanded="false">2020-01-19 16:25</span>&nbsp;
+<a href="https://www.cnblogs.com/shuqin">文一路挖坑侠</a>&nbsp;
+阅读(<span id="post_view_count">8349</span>)&nbsp;
+评论(<span id="post_comment_count">2</span>)&nbsp;
+&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(12214439);return false;">收藏</a>&nbsp;
+<a href="javascript:void(0)" onclick="reportManager.report({ currentUserId: '', targetType: 'blogPost', targetId: '12214439', targetLink: 'https://www.cnblogs.com/shuqin/p/12214439.html', title: '[源码分析] spdlog 整体结构和实现' })">举报</a>
+
+		</p>
+	</div>
+	
+	
+	
+<script>
+    var cb_entryId = 12214439, cb_entryCreatedDate = '2020-01-19 16:25', cb_postType = 1, cb_postTitle = '[源码分析] spdlog 整体结构和实现';
+    var allowComments = true, cb_blogId = 450530, cb_blogApp = 'shuqin', cb_blogUserGuid = '5e3e7e65-0f03-47f1-5124-08d5fcda22d8';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");    
+</script>
+<a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container"><div class="login_tips">
+    登录后才能查看或发表评论，立即 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return account.login('!comments');">登录</a> 或者
+    <a href="https://www.cnblogs.com/">逛逛</a> 博客园首页
+</div>
+</div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"><a href="https://cnblogs.vip/store/key-caps" target="_blank" onclick="countCreativeClicks('CH-周边-键帽')">【推荐】博客园周边店上新键帽，多款五面热升华设计，为代码加点仪式感</a><br><a href="https://www.trae.com.cn/?utm_source=advertising&amp;utm_medium=cnblogs_ug_cpa&amp;utm_term=hw_trae_cnblogs" target="_blank" onclick="countCreativeClicks('CH-TRAE')">【推荐】智能无限 | 协作无间，TRAE SOLO 中国版正式上线，全面免费</a><br><a href="https://ais.cn/u/QjqYJr" target="_blank" onclick="countCreativeClicks('CH-艾思科蓝')">【推荐】科研领域的连接者艾思科蓝，一站式科研学术服务数字化平台</a><br></div>
+    <div id="opt_under_post"></div>
+        <div id="blog_c1" class="under-post-card below-post-card">
+            <a href="https://ais.cn/u/3Qf22e" rel="nofollow" target="_blank" onclick="countCreativeClicks('C1-艾思科蓝')">
+                <img src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/35695-20251205182619157-1150461542.webp" onload="countCreativeImpressions('C1-艾思科蓝')" alt="" style="width:300px!important;height:250px!important;min-width:300px!important;max-width:300px!important;">
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+        </div>
+    <div id="under_post_card1"><div class="under-post-card below-post-card">
+<header>编辑推荐：</header>
+<ul>
+    <li><a href="https://www.cnblogs.com/zlt2000/p/19577443" target="_blank">Agent Skills 开放标准彻底改变了AI协作方式</a></li>
+    <li><a href="https://www.cnblogs.com/deep-sky/p/19550524" target="_blank">从0到1打造Skill：完整实战指南</a></li>
+    <li><a href="https://www.cnblogs.com/tcjiaan/p/19528796" target="_blank">EF Core 实体状态与变更追踪</a></li>
+    <li><a href="https://www.cnblogs.com/aishangyipiyema/p/19499381" target="_blank">基于NetCorePal Clou Framework的DDD架构管理系统实践</a></li>
+    <li><a href="https://www.cnblogs.com/guangzan/p/19487446" target="_blank">AI → JSON → UI</a></li>
+</ul>
+</div></div>
+    <div id="related_posts_card"></div>
+    <div id="under_post_card2"><div class="under-post-card below-post-card">
+    <header>热点博文：</header>
+    <ul>
+        <li><a href="https://www.cnblogs.com/kaiux/p/19558207" target="_blank">硬核科普：为何小米任天堂封杀 Root？揭秘操作系统从启动到“夺权”的底层游戏</a></li>
+        <li><a href="https://www.cnblogs.com/yuanjinwen/p/19589825" target="_blank">开始记录一个普通煤矿工人的一生，是否改变，留作记录</a></li>
+        <li><a href="https://www.cnblogs.com/kevin-Y/p/19569791" target="_blank">asp.net core如何实现Controller热更新</a></li>
+        <li><a href="https://www.cnblogs.com/xueweihan/p/19596455" target="_blank">追更 HelloGitHub 一整年，终于等到了这篇年度盘点</a></li>
+        <li><a href="https://www.cnblogs.com/xiaobaiysf/p/19571167" target="_blank">操作教程 | 使用开源三件套（OpenClaw+Ollama+1Panel）部署7×24运行的个人A</a></li>
+    </ul>
+</div></div>
+    <div id="HistoryToday" class="under-post-card below-post-card"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+            setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+            LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+</div>
+
+
+</div>
+<div id="rightmenu">
+	
+		
+<h3>导航</h3>
+<ul>
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/shuqin/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0">
+联系</a></li>
+<li>
+
+</li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div id="sidebar_news" class="newsItem">
+    <h3>公告</h3>
+<div class="newsItem">
+	<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container"><div id="profile_block" class="sidebar-profile">
+    昵称：
+    <a href="https://home.cnblogs.com/u/shuqin/">
+        文一路挖坑侠
+    </a>
+    <br>
+    园龄：
+    <a href="https://home.cnblogs.com/u/shuqin/" title="入园时间：2018-08-08">
+        7年6个月
+    </a>
+    <br>
+    粉丝：
+    <a class="follower-count" href="https://home.cnblogs.com/u/shuqin/followers/">
+        33
+    </a>
+    <br>
+    关注：
+    <a class="folowing-count" href="https://home.cnblogs.com/u/shuqin/followees/">
+        3
+    </a>
+    <div id="p_b_follow" class="follow-tip">
+<a href="javascript:void(0)" onclick="follow('5e3e7e65-0f03-47f1-5124-08d5fcda22d8')">+加关注</a></div>
+    <script>getFollowStatus('5e3e7e65-0f03-47f1-5124-08d5fcda22d8');</script>
+</div>
+</div>
+</div>
+<script>loadBlogNews();</script>
+</div>
+
+
+</div>					
+		<div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar('2026/01/10'); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2026年2月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar('2026/03/10'); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <tr>
+        <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+        <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+        <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+        <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+        <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+        <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+        <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+    </tr>
+            <tr>
+                        <td class="CalWeekendDay" align="center">
+                            1
+                        </td>
+                        <td class="" align="center">
+                            2
+                        </td>
+                        <td class="" align="center">
+                            3
+                        </td>
+                        <td class="" align="center">
+                            4
+                        </td>
+                        <td class="" align="center">
+                            5
+                        </td>
+                        <td class="" align="center">
+                            6
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        7
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            8
+                        </td>
+                            <td class="" align="center">
+                                9
+                            </td>
+                            <td class="CalTodayDay cal-today" align="center">
+                                10
+                            </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            14
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            15
+                        </td>
+                            <td class="" align="center">
+                                16
+                            </td>
+                            <td class="" align="center">
+                                17
+                            </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            21
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            22
+                        </td>
+                            <td class="" align="center">
+                                23
+                            </td>
+                            <td class="" align="center">
+                                24
+                            </td>
+                            <td class="" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            28
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            1
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            7
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            8
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                9
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                10
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                11
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                12
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                13
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            14
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>
+		<h3>统计</h3>
+<ul>
+	<li>随笔 - 57</li>
+	<li>文章 - 0</li>
+	<li>评论 - 23</li>
+	<li>阅读 - 
+<span title="总阅读数: 135855">
+13万</span></li>
+ </ul>
+
+
+		<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+    
+</div>
+
+<div id="sidebar_shortcut" class="sidebar-block">
+    
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+    <li><a href="https://www.cnblogs.com/shuqin/p/" title="我的博客的随笔列表">我的随笔</a></li>
+<li><a href="https://www.cnblogs.com/shuqin/MyComments.html" title="我的发表过的评论列表">我的评论</a></li>
+<li><a href="https://www.cnblogs.com/shuqin/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li>
+<li><a href="https://www.cnblogs.com/shuqin/comments" title="我的博客的评论列表">最新评论</a></li>
+<li><a href="https://www.cnblogs.com/shuqin/tag/" title="我的博客的标签列表">我的标签</a></li>
+
+</ul>
+
+</div>
+
+
+
+<div id="sidebar_toptags" class="sidebar-block">
+    <h3><a href="https://www.cnblogs.com/shuqin/tag/" class="sidebar-card-title-a">我的标签</a></h3>
+<div id="MyTag">
+    <ul>
+                <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/linux/">linux<span class="tag-count">(13)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/c%2B%2B/">c++<span class="tag-count">(12)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/go/">go<span class="tag-count">(4)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统<span class="tag-count">(3)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/%E7%BD%91%E7%BB%9C%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4/">网络命名空间<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/%E7%BD%91%E7%BB%9C/">网络<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1/">代码设计<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/spdlog/">spdlog<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/select/">select<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/shuqin/tag/rust/">rust<span class="tag-count">(2)</span></a>
+        </li>
+    <li>
+        <a href="https://www.cnblogs.com/shuqin/tag/">更多</a>
+    </li>
+
+    </ul>
+</div>
+
+</div>
+
+
+
+<div id="sidebar_categories">
+
+    <h3>
+        
+    <a class="sidebar-card-title-a" href="https://www.cnblogs.com/shuqin/post-categories">随笔分类</a>
+
+
+
+    </h3>
+    <ul>
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1306086.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">cpp(6)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1274590.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Linux(14)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1865363.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">nginx(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1985950.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">rust(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1274613.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">编程语言                    (1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1476780.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">计算机科学(3)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1274615.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">计算机网络                    (4)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1291535.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">算法导论(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/2379530.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">应用场景(3)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/category/1274614.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">杂记                    (10)</a>
+ 
+            </li>            
+        
+    </ul>
+    <h3>
+        
+随笔档案
+
+
+    </h3>
+    <ul>
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2025/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2025年9月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2025/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2025年3月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2024/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年11月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2024/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年10月(3)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2024/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年9月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2024/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年7月(3)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2024/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年2月(5)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2024/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年1月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2022/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2022年3月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2021/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年6月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2021/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年5月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2020/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年11月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2020/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年10月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2020/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年6月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="true" style="display: block">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2020/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年5月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2020/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年4月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2020/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年2月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2020/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年1月(4)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2019/12" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年12月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2019/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年11月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2019/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年10月(4)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2019/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年9月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2019/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年8月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2019/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年6月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2019/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年1月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2018/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年11月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2018/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年10月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2018/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年9月(4)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2018/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年5月(1)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2018/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年4月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2018/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年3月(2)</a>
+ 
+            </li>            
+            <li data-category-list-item-visible="false" style="display: none">
+                <a href="https://www.cnblogs.com/shuqin/p/archive/2017/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年3月(1)</a>
+ 
+            </li>            
+        <li><a href="javascript:void(0)" onclick="sideColumnManager.loadMore(this)">更多</a></li>
+    </ul>
+</div>
+
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    
+<div id="topview_posts_wrap">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/shuqin/most-viewed" class="sidebar-card-title-a">
+    阅读排行榜
+</a>
+
+    </h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/11897207.html">
+                            1. [解决方案] 如何使用 Graphviz 进行画图(53403)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/12103952.html">
+                            2. [C++] 一个轻量快速的C++日志库(17979)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/12214439.html">
+                            3. [源码分析] spdlog 整体结构和实现(8348)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/13196585.html">
+                            4. [解决方案] 如何使用 SystemTap 对程序进行追踪(6158)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/12639441.html">
+                            5. [杂项] LLVM Coding Standards 中文翻译(4618)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<div id="sidebar_topcommentedposts" class="sidebar-block">
+    <div id="topfeedback_posts_wrap">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/shuqin/most-commented" class="sidebar-card-title-a">评论排行榜</a>
+
+    </h3>
+    <div id="TopFeedbackPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/12103952.html">
+                            1. [C++] 一个轻量快速的C++日志库(8)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/18500231">
+                            2. [Go] 如何完善处理 TCP 代理中连接的关闭(5)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/11897207.html">
+                            3. [解决方案] 如何使用 Graphviz 进行画图(4)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/13196585.html">
+                            4. [解决方案] 如何使用 SystemTap 对程序进行追踪(2)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/shuqin/p/12214439.html">
+                            5. [源码分析] spdlog 整体结构和实现(2)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+    
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">
+            <a href="https://www.cnblogs.com/shuqin/most-liked" class="sidebar-card-title-a">推荐排行榜</a>
+
+        </h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/shuqin/p/11897207.html">
+                                1. [解决方案] 如何使用 Graphviz 进行画图(14)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/shuqin/p/17983667">
+                                2. [想法] 2023 的一些技术总结(5)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/shuqin/p/12103952.html">
+                                3. [C++] 一个轻量快速的C++日志库(5)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/shuqin/p/18034331">
+                                4. [解决方案] 如何使用 perf 分析 splice 中 pipe 的容量变化(4)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/shuqin/p/11000334.html">
+                                5. [阅读笔记] 《深入理解计算机系统》程序的机器级表示(4)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div><div id="sidebar_recentcomments" class="sidebar-block">
+    
+</div></div>
+                    <script>loadBlogSideColumn();</script>
+		<div id="footer">
+    <a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a><span class="footer-copyright"> &nbsp;©&nbsp; 2004-2026</span>
+<br><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/ghs.png">浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+</div>
+
+
+	
+</div>			
+			
+	
+
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8E2WNf1AXE5GolAm9rsxlHBXqZb_KfrvnFFAjnz2CjyDlJrGIMA8LUWufcVoFCd8xMDbWjDSQ393WUf-fhF-DjdzSFAVCi3HpSyDB66fbGtSV6jpUyFEGmRLqyEZ9WUhK9PGp4mxedmgA0Y0a2CduvM">
+    <script async="" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/js"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer="defer" src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/hm.js"></script>
+
+
+<div style="z-index: 998; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; flex-direction: column; align-items: center; justify-content: center">
+<div style="background: #fff;padding: 30px; margin: 30px; border-radius: 16px;">
+  <div style="width: 200px; height: 200px; background: rgba(255, 255, 255, 0.8); position: absolute; top: -100px; right: -100px; border-radius: 100px"></div>
+  <div style="text-align: center; font-size: 18px; margin-bottom: 10px;">点击右上角即可分享</div>
+  <img src="[%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90]%20spdlog%20%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E6%96%87%E4%B8%80%E8%B7%AF%E6%8C%96%E5%9D%91%E4%BE%A0%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/35695-20230906145857937-1471873834.gif" alt="微信分享提示">
+</div>   
+    </div></body></html>

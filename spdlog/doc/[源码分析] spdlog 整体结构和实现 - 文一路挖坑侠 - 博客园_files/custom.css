@@ -1,0 +1,178 @@
+/* 文章标题样式(这个不是markdown里的标题) */
+#topics .postTitle a {
+    color: #828282;
+    font-size: 36px;
+}
+
+/* 普通文字样式 */
+#cnblogs_post_body p {
+    margin: 18px auto;
+    color: #000;
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    font-size: 15px;
+    text-indent: 0;
+}
+
+.cnblogs-markdown code {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+  border: none !important;
+  display: inline-block;
+}
+
+/* 标题样式 */
+#cnblogs_post_body h1 {
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
+#cnblogs_post_body h2 {
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 20px 0;
+}
+
+#cnblogs_post_body h3 {
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
+#cnblogs_post_body h4 {
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+/* 标题样式设置结束 */
+
+/* 去除双下划线斜体样式 */
+em {
+    /* font-style: normal; */
+    color: #000;
+}
+
+/* 无序列表 */
+#cnblogs_post_body ul li {
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    color: #000;
+    font-size: 15px;
+    list-style-type: disc;
+}
+
+/* 有序列表 */
+#cnblogs_post_body ol li {
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    color: #000;
+    font-size: 15px;
+    list-style-type: decimal;
+}
+
+/* 超链接 */
+#cnblogs_post_body a:link {
+    text-decoration: none;
+    color: #002C99;
+}
+
+/* 引用背景 */
+#topics .postBody blockquote {
+    background: #f6f8fa;
+    border: none;
+    margin-bottom: 10px;
+    padding: 2px 10px;
+    border-left: 5px #CD6839 solid;
+}
+
+/* 单行代码 */
+.cnblogs-markdown code {
+    font-family: Consolas, "Microsoft YaHei", monospace !important;
+    font-size: 15px!important;
+    color: #000;
+    line-height: 20px;
+    background-color: #f9f2f4!important;
+    padding: 0 5px!important;
+    border: none;
+    line-height: 1.5;
+    margin: 1px 5px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+/* 多行代码, 引用 */
+.cnblogs-markdown .hljs {
+    font-family: Consolas, "Microsoft YaHei", monospace !important;
+    font-size: 15px!important;
+    background-color:#F0F8FF!important;
+    line-height: 1.5!important;
+    padding: 9px!important;
+    border: none;
+}
+
+.cnblogs-markdown hr:before {
+  display: table;
+  content: "";
+}
+
+.cnblogs-markdown hr:after {
+  display: table;
+  clear: both;
+  content: "";
+}
+/* 表格 */
+.cnblogs-markdown table {
+  border: none;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+  font-family: Consolas, "Microsoft YaHei", monospace !important;
+  font-size: 15px!important;
+}
+/* 表格 表头 */
+.cnblogs-markdown table th {
+  font-weight: bold;
+}
+/* 表格 行，列 */
+.cnblogs-markdown table th,
+.cnblogs-markdown table td {
+  padding: 6px 13px;
+  border: none;
+}
+
+.cnblogs-markdown table tr {
+  background-color: #fff;
+  border-top: none;
+}
+
+.cnblogs-markdown table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/*only for syntaxhighlighter */
+/*--start--*/
+.cnblogs-markdown .syntaxhighlighter table td.code {
+  width:95% !important; 
+}
+
+.cnblogs-markdown p,
+.cnblogs-markdown blockquote,
+.cnblogs-markdown ul,
+.cnblogs-markdown ol,
+.cnblogs-markdown dl,
+.cnblogs-markdown table,
+.cnblogs-markdown pre {
+  margin-top: 0;
+  margin-bottom: 15px;
+}

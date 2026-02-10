@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light" style="scroll-padding-top: 76px;" data-readthedocs-tool="mkdocs"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <style type="text/css">:root, :host {
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 7 Free";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 7 Free";
+  --fa-font-light: normal 300 1em/1 "Font Awesome 7 Pro";
+  --fa-font-thin: normal 100 1em/1 "Font Awesome 7 Pro";
+  --fa-font-duotone: normal 900 1em/1 "Font Awesome 7 Duotone";
+  --fa-font-duotone-regular: normal 400 1em/1 "Font Awesome 7 Duotone";
+  --fa-font-duotone-light: normal 300 1em/1 "Font Awesome 7 Duotone";
+  --fa-font-duotone-thin: normal 100 1em/1 "Font Awesome 7 Duotone";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 7 Brands";
+  --fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 7 Sharp";
+  --fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 7 Sharp";
+  --fa-font-sharp-light: normal 300 1em/1 "Font Awesome 7 Sharp";
+  --fa-font-sharp-thin: normal 100 1em/1 "Font Awesome 7 Sharp";
+  --fa-font-sharp-duotone-solid: normal 900 1em/1 "Font Awesome 7 Sharp Duotone";
+  --fa-font-sharp-duotone-regular: normal 400 1em/1 "Font Awesome 7 Sharp Duotone";
+  --fa-font-sharp-duotone-light: normal 300 1em/1 "Font Awesome 7 Sharp Duotone";
+  --fa-font-sharp-duotone-thin: normal 100 1em/1 "Font Awesome 7 Sharp Duotone";
+  --fa-font-slab-regular: normal 400 1em/1 "Font Awesome 7 Slab";
+  --fa-font-slab-press-regular: normal 400 1em/1 "Font Awesome 7 Slab Press";
+  --fa-font-whiteboard-semibold: normal 600 1em/1 "Font Awesome 7 Whiteboard";
+  --fa-font-thumbprint-light: normal 300 1em/1 "Font Awesome 7 Thumbprint";
+  --fa-font-notdog-solid: normal 900 1em/1 "Font Awesome 7 Notdog";
+  --fa-font-notdog-duo-solid: normal 900 1em/1 "Font Awesome 7 Notdog Duo";
+  --fa-font-etch-solid: normal 900 1em/1 "Font Awesome 7 Etch";
+  --fa-font-jelly-regular: normal 400 1em/1 "Font Awesome 7 Jelly";
+  --fa-font-jelly-fill-regular: normal 400 1em/1 "Font Awesome 7 Jelly Fill";
+  --fa-font-jelly-duo-regular: normal 400 1em/1 "Font Awesome 7 Jelly Duo";
+  --fa-font-chisel-regular: normal 400 1em/1 "Font Awesome 7 Chisel";
+  --fa-font-utility-semibold: normal 600 1em/1 "Font Awesome 7 Utility";
+  --fa-font-utility-duo-semibold: normal 600 1em/1 "Font Awesome 7 Utility Duo";
+  --fa-font-utility-fill-semibold: normal 600 1em/1 "Font Awesome 7 Utility Fill";
+}
+
+.svg-inline--fa {
+  box-sizing: content-box;
+  display: var(--fa-display, inline-block);
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+  width: var(--fa-width, 1.25em);
+}
+.svg-inline--fa.fa-2xs {
+  vertical-align: 0.1em;
+}
+.svg-inline--fa.fa-xs {
+  vertical-align: 0em;
+}
+.svg-inline--fa.fa-sm {
+  vertical-align: -0.0714285714em;
+}
+.svg-inline--fa.fa-lg {
+  vertical-align: -0.2em;
+}
+.svg-inline--fa.fa-xl {
+  vertical-align: -0.25em;
+}
+.svg-inline--fa.fa-2xl {
+  vertical-align: -0.3125em;
+}
+.svg-inline--fa.fa-pull-left,
+.svg-inline--fa .fa-pull-start {
+  float: inline-start;
+  margin-inline-end: var(--fa-pull-margin, 0.3em);
+}
+.svg-inline--fa.fa-pull-right,
+.svg-inline--fa .fa-pull-end {
+  float: inline-end;
+  margin-inline-start: var(--fa-pull-margin, 0.3em);
+}
+.svg-inline--fa.fa-li {
+  width: var(--fa-li-width, 2em);
+  inset-inline-start: calc(-1 * var(--fa-li-width, 2em));
+  inset-block-start: 0.25em; /* syncing vertical alignment with Web Font rendering */
+}
+
+.fa-layers-counter, .fa-layers-text {
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+}
+
+.fa-layers {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -0.125em;
+  width: var(--fa-width, 1.25em);
+}
+.fa-layers .svg-inline--fa {
+  inset: 0;
+  margin: auto;
+  position: absolute;
+  transform-origin: center center;
+}
+
+.fa-layers-text {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.fa-layers-counter {
+  background-color: var(--fa-counter-background-color, #ff253a);
+  border-radius: var(--fa-counter-border-radius, 1em);
+  box-sizing: border-box;
+  color: var(--fa-inverse, #fff);
+  line-height: var(--fa-counter-line-height, 1);
+  max-width: var(--fa-counter-max-width, 5em);
+  min-width: var(--fa-counter-min-width, 1.5em);
+  overflow: hidden;
+  padding: var(--fa-counter-padding, 0.25em 0.5em);
+  right: var(--fa-right, 0);
+  text-overflow: ellipsis;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-counter-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-bottom-right {
+  bottom: var(--fa-bottom, 0);
+  right: var(--fa-right, 0);
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom right;
+}
+
+.fa-layers-bottom-left {
+  bottom: var(--fa-bottom, 0);
+  left: var(--fa-left, 0);
+  right: auto;
+  top: auto;
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: bottom left;
+}
+
+.fa-layers-top-right {
+  top: var(--fa-top, 0);
+  right: var(--fa-right, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top right;
+}
+
+.fa-layers-top-left {
+  left: var(--fa-left, 0);
+  right: auto;
+  top: var(--fa-top, 0);
+  transform: scale(var(--fa-layers-scale, 0.25));
+  transform-origin: top left;
+}
+
+.fa-1x {
+  font-size: 1em;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa-3x {
+  font-size: 3em;
+}
+
+.fa-4x {
+  font-size: 4em;
+}
+
+.fa-5x {
+  font-size: 5em;
+}
+
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
+}
+
+.fa-8x {
+  font-size: 8em;
+}
+
+.fa-9x {
+  font-size: 9em;
+}
+
+.fa-10x {
+  font-size: 10em;
+}
+
+.fa-2xs {
+  font-size: calc(10 / 16 * 1em); /* converts a 10px size into an em-based value that's relative to the scale's 16px base */
+  line-height: calc(1 / 10 * 1em); /* sets the line-height of the icon back to that of it's parent */
+  vertical-align: calc((6 / 10 - 0.375) * 1em); /* vertically centers the icon taking into account the surrounding text's descender */
+}
+
+.fa-xs {
+  font-size: calc(12 / 16 * 1em); /* converts a 12px size into an em-based value that's relative to the scale's 16px base */
+  line-height: calc(1 / 12 * 1em); /* sets the line-height of the icon back to that of it's parent */
+  vertical-align: calc((6 / 12 - 0.375) * 1em); /* vertically centers the icon taking into account the surrounding text's descender */
+}
+
+.fa-sm {
+  font-size: calc(14 / 16 * 1em); /* converts a 14px size into an em-based value that's relative to the scale's 16px base */
+  line-height: calc(1 / 14 * 1em); /* sets the line-height of the icon back to that of it's parent */
+  vertical-align: calc((6 / 14 - 0.375) * 1em); /* vertically centers the icon taking into account the surrounding text's descender */
+}
+
+.fa-lg {
+  font-size: calc(20 / 16 * 1em); /* converts a 20px size into an em-based value that's relative to the scale's 16px base */
+  line-height: calc(1 / 20 * 1em); /* sets the line-height of the icon back to that of it's parent */
+  vertical-align: calc((6 / 20 - 0.375) * 1em); /* vertically centers the icon taking into account the surrounding text's descender */
+}
+
+.fa-xl {
+  font-size: calc(24 / 16 * 1em); /* converts a 24px size into an em-based value that's relative to the scale's 16px base */
+  line-height: calc(1 / 24 * 1em); /* sets the line-height of the icon back to that of it's parent */
+  vertical-align: calc((6 / 24 - 0.375) * 1em); /* vertically centers the icon taking into account the surrounding text's descender */
+}
+
+.fa-2xl {
+  font-size: calc(32 / 16 * 1em); /* converts a 32px size into an em-based value that's relative to the scale's 16px base */
+  line-height: calc(1 / 32 * 1em); /* sets the line-height of the icon back to that of it's parent */
+  vertical-align: calc((6 / 32 - 0.375) * 1em); /* vertically centers the icon taking into account the surrounding text's descender */
+}
+
+.fa-width-auto {
+  --fa-width: auto;
+}
+
+.fa-fw,
+.fa-width-fixed {
+  --fa-width: 1.25em;
+}
+
+.fa-ul {
+  list-style-type: none;
+  margin-inline-start: var(--fa-li-margin, 2.5em);
+  padding-inline-start: 0;
+}
+.fa-ul > li {
+  position: relative;
+}
+
+.fa-li {
+  inset-inline-start: calc(-1 * var(--fa-li-width, 2em));
+  position: absolute;
+  text-align: center;
+  width: var(--fa-li-width, 2em);
+  line-height: inherit;
+}
+
+/* Heads Up: Bordered Icons will not be supported in the future!
+  - This feature will be deprecated in the next major release of Font Awesome (v8)!
+  - You may continue to use it in this version *v7), but it will not be supported in Font Awesome v8.
+*/
+/* Notes:
+* --@{v.$css-prefix}-border-width = 1/16 by default (to render as ~1px based on a 16px default font-size)
+* --@{v.$css-prefix}-border-padding =
+  ** 3/16 for vertical padding (to give ~2px of vertical whitespace around an icon considering it's vertical alignment)
+  ** 4/16 for horizontal padding (to give ~4px of horizontal whitespace around an icon)
+*/
+.fa-border {
+  border-color: var(--fa-border-color, #eee);
+  border-radius: var(--fa-border-radius, 0.1em);
+  border-style: var(--fa-border-style, solid);
+  border-width: var(--fa-border-width, 0.0625em);
+  box-sizing: var(--fa-border-box-sizing, content-box);
+  padding: var(--fa-border-padding, 0.1875em 0.25em);
+}
+
+.fa-pull-left,
+.fa-pull-start {
+  float: inline-start;
+  margin-inline-end: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-pull-right,
+.fa-pull-end {
+  float: inline-end;
+  margin-inline-start: var(--fa-pull-margin, 0.3em);
+}
+
+.fa-beat {
+  animation-name: fa-beat;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-bounce {
+  animation-name: fa-bounce;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+}
+
+.fa-fade {
+  animation-name: fa-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-beat-fade {
+  animation-name: fa-beat-fade;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+}
+
+.fa-flip {
+  animation-name: fa-flip;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, ease-in-out);
+}
+
+.fa-shake {
+  animation-name: fa-shake;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin {
+  animation-name: fa-spin;
+  animation-delay: var(--fa-animation-delay, 0s);
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 2s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, linear);
+}
+
+.fa-spin-reverse {
+  --fa-animation-direction: reverse;
+}
+
+.fa-pulse,
+.fa-spin-pulse {
+  animation-name: fa-spin;
+  animation-direction: var(--fa-animation-direction, normal);
+  animation-duration: var(--fa-animation-duration, 1s);
+  animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+  animation-timing-function: var(--fa-animation-timing, steps(8));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fa-beat,
+  .fa-bounce,
+  .fa-fade,
+  .fa-beat-fade,
+  .fa-flip,
+  .fa-pulse,
+  .fa-shake,
+  .fa-spin,
+  .fa-spin-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@keyframes fa-beat {
+  0%, 90% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(var(--fa-beat-scale, 1.25));
+  }
+}
+@keyframes fa-bounce {
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  10% {
+    transform: scale(var(--fa-bounce-start-scale-x, 1.1), var(--fa-bounce-start-scale-y, 0.9)) translateY(0);
+  }
+  30% {
+    transform: scale(var(--fa-bounce-jump-scale-x, 0.9), var(--fa-bounce-jump-scale-y, 1.1)) translateY(var(--fa-bounce-height, -0.5em));
+  }
+  50% {
+    transform: scale(var(--fa-bounce-land-scale-x, 1.05), var(--fa-bounce-land-scale-y, 0.95)) translateY(0);
+  }
+  57% {
+    transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+  }
+  64% {
+    transform: scale(1, 1) translateY(0);
+  }
+  100% {
+    transform: scale(1, 1) translateY(0);
+  }
+}
+@keyframes fa-fade {
+  50% {
+    opacity: var(--fa-fade-opacity, 0.4);
+  }
+}
+@keyframes fa-beat-fade {
+  0%, 100% {
+    opacity: var(--fa-beat-fade-opacity, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(var(--fa-beat-fade-scale, 1.125));
+  }
+}
+@keyframes fa-flip {
+  50% {
+    transform: rotate3d(var(--fa-flip-x, 0), var(--fa-flip-y, 1), var(--fa-flip-z, 0), var(--fa-flip-angle, -180deg));
+  }
+}
+@keyframes fa-shake {
+  0% {
+    transform: rotate(-15deg);
+  }
+  4% {
+    transform: rotate(15deg);
+  }
+  8%, 24% {
+    transform: rotate(-18deg);
+  }
+  12%, 28% {
+    transform: rotate(18deg);
+  }
+  16% {
+    transform: rotate(-22deg);
+  }
+  20% {
+    transform: rotate(22deg);
+  }
+  32% {
+    transform: rotate(-12deg);
+  }
+  36% {
+    transform: rotate(12deg);
+  }
+  40%, 100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.fa-rotate-90 {
+  transform: rotate(90deg);
+}
+
+.fa-rotate-180 {
+  transform: rotate(180deg);
+}
+
+.fa-rotate-270 {
+  transform: rotate(270deg);
+}
+
+.fa-flip-horizontal {
+  transform: scale(-1, 1);
+}
+
+.fa-flip-vertical {
+  transform: scale(1, -1);
+}
+
+.fa-flip-both,
+.fa-flip-horizontal.fa-flip-vertical {
+  transform: scale(-1, -1);
+}
+
+.fa-rotate-by {
+  transform: rotate(var(--fa-rotate-angle, 0));
+}
+
+.svg-inline--fa .fa-primary {
+  fill: var(--fa-primary-color, currentColor);
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa .fa-secondary {
+  fill: var(--fa-secondary-color, currentColor);
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-primary {
+  opacity: var(--fa-secondary-opacity, 0.4);
+}
+
+.svg-inline--fa.fa-swap-opacity .fa-secondary {
+  opacity: var(--fa-primary-opacity, 1);
+}
+
+.svg-inline--fa mask .fa-primary,
+.svg-inline--fa mask .fa-secondary {
+  fill: black;
+}
+
+.svg-inline--fa.fa-inverse {
+  fill: var(--fa-inverse, #fff);
+}
+
+.fa-stack {
+  display: inline-block;
+  height: 2em;
+  line-height: 2em;
+  position: relative;
+  vertical-align: middle;
+  width: 2.5em;
+}
+
+.fa-inverse {
+  color: var(--fa-inverse, #fff);
+}
+
+.svg-inline--fa.fa-stack-1x {
+  --fa-width: 1.25em;
+  height: 1em;
+  width: var(--fa-width);
+}
+.svg-inline--fa.fa-stack-2x {
+  --fa-width: 2.5em;
+  height: 2em;
+  width: var(--fa-width);
+}
+
+.fa-stack-1x,
+.fa-stack-2x {
+  inset: 0;
+  margin: auto;
+  position: absolute;
+  z-index: var(--fa-stack-z-index, auto);
+}</style><link rel="shortcut icon" href="https://spdlog.readthedocs.io/en/latest/img/favicon.ico">
+        <title>spdlog</title>
+        <link href="spdlog_files/bootstrap.min.css" rel="stylesheet">
+        <link href="spdlog_files/fontawesome.min.css" rel="stylesheet">
+        <link href="spdlog_files/brands.min.css" rel="stylesheet">
+        <link href="spdlog_files/solid.min.css" rel="stylesheet">
+        <link href="spdlog_files/v4-font-face.min.css" rel="stylesheet">
+        <link href="spdlog_files/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="spdlog_files/github.min.css">
+        <link id="hljs-dark" rel="stylesheet" href="spdlog_files/github-dark.min.css" disabled="">
+        <script src="spdlog_files/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    <script async="" type="text/javascript" src="spdlog_files/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="spdlog"><meta name="readthedocs-version-slug" content="latest"><meta name="readthedocs-resolver-filename" content="/"><meta name="readthedocs-http-status" content="200"><script id="ethicaladsjs" type="text/javascript" async="true" src="spdlog_files/ethicalads.min.js"></script><style>@layer defaults{:root{--ea-container-md: 720px;--ea-container-lg: 960px;--ea-container-xl: 1040px;--ea-image-width: 120px;--ea-image-width-xs: 44px;--ea-image-placement-width: 180px;--ea-image-placement-width-horizontal: 320px;--ea-image-logo-width: 80px;--ea-fixedheader-height: 50px;--ea-font-size: 14px;--ea-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;--ea-bgcolor: rgba(0, 0, 0, 0.03);--ea-bgcolor-dark: rgba(255, 255, 255, 0.05);--ea-font-size-text-only-header: 18px;--ea-stylefixed-bgcolor: rgb(220, 220, 220);--ea-stylefixed-bgcolor-dark: rgb(80, 80, 80);--ea-color-link: rgb(80, 80, 80);--ea-color-link-dark: rgb(220, 220, 220);--ea-color-link-active: rgb(54.5, 54.5, 54.5);--ea-color-link-dark-active: rgb(245.5, 245.5, 245.5);--ea-color-link-callout: rgb(105.5, 105.5, 105.5);--ea-color-link-callout-dark: rgb(194.5, 194.5, 194.5);--ea-color-link-callout-active: #505050;--ea-color-link-callout-dark-active: gainsboro;--ea-color-link-bold: #088cdb;--ea-color-link-bold-dark: rgb(80.3788546256, 185.6299559471, 248.6211453744);--ea-color-domain: rgb(156.5, 156.5, 156.5);--ea-color-domain-dark: rgb(143.5, 143.5, 143.5);--ea-image-logo-filter: grayscale(1);--ea-image-logo-filter-dark: grayscale(1) invert(1)}}[data-ea-publisher].loaded{font-size:var(--ea-font-size);font-family:var(--ea-font-family);font-weight:normal;font-style:normal;letter-spacing:0px;vertical-align:baseline;line-height:1.3em}[data-ea-publisher].loaded a{text-decoration:none}[data-ea-publisher].loaded .ea-pixel{display:none}[data-ea-publisher].loaded .ea-content{margin:1em 1em .5em 1em;padding:1em;background:var(--ea-bgcolor);color:var(--ea-color-link);color:var(--ea-color-link)}[data-ea-publisher].loaded .ea-content a:link{color:var(--ea-color-link)}[data-ea-publisher].loaded .ea-content a:visited{color:var(--ea-color-link)}[data-ea-publisher].loaded .ea-content a:hover{color:var(--ea-color-link-active)}[data-ea-publisher].loaded .ea-content a:active{color:var(--ea-color-link-active)}[data-ea-publisher].loaded .ea-content a strong,[data-ea-publisher].loaded .ea-content a b{color:var(--ea-color-link-bold)}[data-ea-publisher].loaded .ea-callout{color:var(--ea-color-link-callout)}[data-ea-publisher].loaded .ea-callout a{font-size:.8em}[data-ea-publisher].loaded .ea-callout a:link{color:var(--ea-color-link-callout)}[data-ea-publisher].loaded .ea-callout a:visited{color:var(--ea-color-link-callout)}[data-ea-publisher].loaded .ea-callout a:hover{color:var(--ea-color-link-callout-active)}[data-ea-publisher].loaded .ea-callout a:active{color:var(--ea-color-link-callout-active)}[data-ea-publisher].loaded .ea-callout a strong,[data-ea-publisher].loaded .ea-callout a b{color:var(--ea-color-link-callout)}[data-ea-publisher].loaded .ea-domain{margin-top:.75em;font-size:.8em;text-align:center;color:var(--ea-color-domain)}[data-ea-publisher].loaded.dark{--ea-bgcolor: var(--ea-bgcolor-dark);--ea-stylefixed-bgcolor: var(--ea-stylefixed-bgcolor-dark);--ea-color-link: var(--ea-color-link-dark);--ea-color-link-active: var(--ea-color-link-dark-active);--ea-color-link-callout: var(--ea-color-link-callout-dark);--ea-color-link-callout-active: var(--ea-color-link-callout-dark-active);--ea-color-link-bold: var(--ea-color-link-bold-dark);--ea-color-domain: var(--ea-color-domain-dark);--ea-image-logo-filter: var(--ea-image-logo-filter-dark)}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.adaptive{--ea-bgcolor: var(--ea-bgcolor-dark);--ea-stylefixed-bgcolor: var(--ea-stylefixed-bgcolor-dark);--ea-color-link: var(--ea-color-link-dark);--ea-color-link-active: var(--ea-color-link-dark-active);--ea-color-link-callout: var(--ea-color-link-callout-dark);--ea-color-link-callout-active: var(--ea-color-link-callout-dark-active);--ea-color-link-bold: var(--ea-color-link-bold-dark);--ea-color-domain: var(--ea-color-domain-dark);--ea-image-logo-filter: var(--ea-image-logo-filter-dark)}}html.dark [data-ea-publisher].loaded.adaptive-css,body.dark [data-ea-publisher].loaded.adaptive-css,html[data-theme=dark] [data-ea-publisher].loaded.adaptive-css,body[data-theme=dark] [data-ea-publisher].loaded.adaptive-css,html[data-bs-theme=dark] [data-ea-publisher].loaded.adaptive-css,body[data-bs-theme=dark] [data-ea-publisher].loaded.adaptive-css{--ea-bgcolor: var(--ea-bgcolor-dark);--ea-stylefixed-bgcolor: var(--ea-stylefixed-bgcolor-dark);--ea-color-link: var(--ea-color-link-dark);--ea-color-link-active: var(--ea-color-link-dark-active);--ea-color-link-callout: var(--ea-color-link-callout-dark);--ea-color-link-callout-active: var(--ea-color-link-callout-dark-active);--ea-color-link-bold: var(--ea-color-link-bold-dark);--ea-color-domain: var(--ea-color-domain-dark);--ea-image-logo-filter: var(--ea-image-logo-filter-dark)}@media(prefers-color-scheme: dark){html.auto [data-ea-publisher].loaded.adaptive-css,body.auto [data-ea-publisher].loaded.adaptive-css,html.system [data-ea-publisher].loaded.adaptive-css,body.system [data-ea-publisher].loaded.adaptive-css,html[data-theme=auto] [data-ea-publisher].loaded.adaptive-css,body[data-theme=auto] [data-ea-publisher].loaded.adaptive-css,html[data-bs-theme=auto] [data-ea-publisher].loaded.adaptive-css,body[data-bs-theme=auto] [data-ea-publisher].loaded.adaptive-css{--ea-bgcolor: var(--ea-bgcolor-dark);--ea-stylefixed-bgcolor: var(--ea-stylefixed-bgcolor-dark);--ea-color-link: var(--ea-color-link-dark);--ea-color-link-active: var(--ea-color-link-dark-active);--ea-color-link-callout: var(--ea-color-link-callout-dark);--ea-color-link-callout-active: var(--ea-color-link-callout-dark-active);--ea-color-link-bold: var(--ea-color-link-bold-dark);--ea-color-domain: var(--ea-color-domain-dark);--ea-image-logo-filter: var(--ea-image-logo-filter-dark)}}[data-ea-publisher].loaded .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.raised .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.bordered .ea-content{border:1px solid rgba(0,0,0,.04);border-radius:3px;box-shadow:none}[data-ea-publisher].loaded.bordered.dark .ea-content{border:1px solid hsla(0,0%,100%,.07)}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.bordered.adaptive .ea-content{border:1px solid hsla(0,0%,100%,.07)}}[data-ea-publisher].loaded.flat .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-type=image].loaded,[data-ea-publisher]:not([data-ea-type]).loaded,.ea-type-image{display:inline-block}[data-ea-type=image].loaded .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content,.ea-type-image .ea-content{max-width:var(--ea-image-placement-width);overflow:auto;text-align:center}[data-ea-type=image].loaded .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>a>img,.ea-type-image .ea-content>a>img{width:var(--ea-image-width);height:auto;display:inline-block}[data-ea-type=image].loaded .ea-content>.ea-text,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>.ea-text,.ea-type-image .ea-content>.ea-text{margin-top:1em;font-size:1em;text-align:center}[data-ea-type=image].loaded .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded .ea-callout,.ea-type-image .ea-callout{max-width:var(--ea-image-placement-width);margin:0em 1em 1em 1em;padding-left:1em;padding-right:1em;font-style:italic;text-align:right}[data-ea-type=image].loaded.horizontal .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content,.ea-type-image.horizontal .ea-content{max-width:var(--ea-image-placement-width-horizontal)}[data-ea-type=image].loaded.horizontal .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content>a>img,.ea-type-image.horizontal .ea-content>a>img{float:left;margin-right:1em}[data-ea-type=image].loaded.horizontal .ea-content .ea-text,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content .ea-text,.ea-type-image.horizontal .ea-content .ea-text{margin-top:0em;text-align:left;overflow:auto}[data-ea-type=image].loaded.horizontal .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-callout,.ea-type-image.horizontal .ea-callout{max-width:var(--ea-image-placement-width-horizontal);text-align:right}[data-ea-type=text].loaded,.ea-type-text{font-size:var(--ea-font-size)}[data-ea-type=text].loaded .ea-content,.ea-type-text .ea-content{text-align:left}[data-ea-type=text].loaded .ea-callout,.ea-type-text .ea-callout{margin:.5em 1em 1em 1em;padding-left:1em;padding-right:1em;text-align:right;font-style:italic}[data-ea-type=text-only-large-v1].loaded,.ea-type-text-large{font-size:var(--ea-font-size);margin:1em 0}[data-ea-type=text-only-large-v1].loaded .ea-logo,.ea-type-text-large .ea-logo{float:right;margin-left:1em;margin-bottom:1em}[data-ea-type=text-only-large-v1].loaded img,.ea-type-text-large img{width:var(--ea-image-logo-width);height:auto;filter:var(--ea-image-logo-filter)}[data-ea-type=text-only-large-v1].loaded .ea-headline,.ea-type-text-large .ea-headline{font-size:var(--ea-font-size-text-only-header);font-weight:bold;margin-bottom:.5em;text-align:left}[data-ea-type=text-only-large-v1].loaded .ea-body,.ea-type-text-large .ea-body{margin-bottom:.5em;text-align:left}[data-ea-type=text-only-large-v1].loaded .ea-cta,.ea-type-text-large .ea-cta{border-radius:.5em;border:1px solid var(--ea-color-link);color:var(--ea-color-link);display:inline-block;font-weight:bold;padding:.25em .5em}[data-ea-type=text-only-large-v1].loaded .ea-cta::after,.ea-type-text-large .ea-cta::after{content:" ↗"}[data-ea-type=text-only-large-v1].loaded .ea-callout,.ea-type-text-large .ea-callout{margin:.5em 1em 1em 1em;padding-left:1em;padding-right:1em;text-align:right;font-style:italic}[data-ea-style=stickybox].loaded{position:fixed;bottom:20px;right:20px;z-index:100}[data-ea-style=stickybox].loaded .ea-type-image .ea-stickybox-hide{cursor:pointer;position:absolute;top:.75em;right:.75em;background-color:#fefefe;border:1px solid #088cdb;border-radius:50%;color:#088cdb;font-size:1em;text-align:center;height:1.5em;width:1.5em;line-height:1.4}[data-ea-style=stickybox].loaded .ea-type-text{display:none !important}@media(max-width: 1300px){[data-ea-style=stickybox].loaded{position:static;bottom:0;right:0;margin:auto;text-align:center}[data-ea-style=stickybox].loaded .ea-stickybox-hide{display:none}}@media(min-width: 1301px){[data-ea-style=stickybox].loaded .ea-type-image .ea-content{background:var(--ea-stylefixed-bgcolor)}}[data-ea-style=fixedfooter].loaded{position:fixed;bottom:0;left:0;z-index:200;width:100%;max-width:100%}[data-ea-style=fixedfooter].loaded .ea-type-text{width:100%;max-width:100%;display:flex;z-index:200;background:var(--ea-stylefixed-bgcolor)}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{background-color:inherit;max-width:100%;margin:0;padding:1em;flex:auto}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{max-width:100%;margin:0;padding:1em;flex:initial}@media(max-width: 576px){[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{display:none}}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide{cursor:pointer;color:var(--ea-color-link);padding:1em;flex:initial;margin:auto 0}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide span{padding:.25em;font-size:.8em;font-weight:bold;border:.15em solid var(--ea-color-link);border-radius:.5em;white-space:nowrap}[data-ea-style=fixedfooter].loaded .ea-type-image{display:none !important}[data-ea-style=fixedheader]{height:var(--ea-fixedheader-height);width:100%;max-width:100%;background:var(--ea-stylefixed-bgcolor);border-bottom:1px solid var(--ea-background-color)}@media(max-width: 768px){[data-ea-style=fixedheader]{display:none !important}}[data-ea-style=fixedheader].loaded .ea-type-image,[data-ea-style=fixedheader].loaded .ea-type-text{width:var(--ea-container-xl);margin:0 auto;display:flex}@media(max-width: 992px){[data-ea-style=fixedheader].loaded .ea-type-image,[data-ea-style=fixedheader].loaded .ea-type-text{width:var(--ea-container-md)}}@media(max-width: 1200px){[data-ea-style=fixedheader].loaded .ea-type-image,[data-ea-style=fixedheader].loaded .ea-type-text{width:var(--ea-container-lg)}}[data-ea-style=fixedheader].loaded .ea-type-image .ea-content,[data-ea-style=fixedheader].loaded .ea-type-text .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-style=fixedheader].loaded .ea-type-image .ea-content,[data-ea-style=fixedheader].loaded .ea-type-text .ea-content{background-color:inherit;max-width:100%;margin:0;padding:0;flex:auto;display:flex}[data-ea-style=fixedheader].loaded .ea-type-image .ea-content .ea-text,[data-ea-style=fixedheader].loaded .ea-type-text .ea-content .ea-text{margin-top:0;padding:1em;flex:auto;text-align:left}[data-ea-style=fixedheader].loaded .ea-type-image .ea-callout,[data-ea-style=fixedheader].loaded .ea-type-text .ea-callout{max-width:100%;margin:0;padding:1em;flex:initial}@media(max-width: 576px){[data-ea-style=fixedheader].loaded .ea-type-image .ea-callout,[data-ea-style=fixedheader].loaded .ea-type-text .ea-callout{display:none}}[data-ea-style=fixedheader].loaded .ea-type-image img{width:var(--ea-image-width-xs) !important;margin:.6em}[data-ea-style=fixedheader].loaded .ea-type-image .ea-domain{display:none}</style><script src="spdlog_files/Untitled" type="text/javascript" async=""></script></head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="https://spdlog.readthedocs.io/en/latest/">spdlog</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary" style="top: 76px;">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#spdlog" class="nav-link active">spdlog</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#install" class="nav-link">Install</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#platforms" class="nav-link">Platforms</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#package-managers" class="nav-link">Package managers:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#features" class="nav-link">Features</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#usage-samples" class="nav-link">Usage samples</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#benchmarks" class="nav-link">Benchmarks</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#documentation" class="nav-link">Documentation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="spdlog">spdlog</h1>
+<p><a href="https://github.com/gabime/spdlog/actions/workflows/linux.yml"><img alt="ci" src="spdlog_files/badge_003.svg"></a>&nbsp;
+<a href="https://github.com/gabime/spdlog/actions/workflows/windows.yml"><img alt="ci" src="spdlog_files/badge.svg"></a>&nbsp;
+<a href="https://github.com/gabime/spdlog/actions/workflows/macos.yml"><img alt="ci" src="spdlog_files/badge_002.svg"></a>&nbsp;
+<a href="https://github.com/gabime/spdlog/releases/latest"><img alt="Release" src="spdlog_files/spdlog.svg"></a></p>
+<p>Fast C++ logging library</p>
+<h2 id="install">Install</h2>
+<pre><code class="language-console hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/gabime/spdlog.git</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">cd</span> spdlog &amp;&amp; <span class="hljs-built_in">mkdir</span> build &amp;&amp; <span class="hljs-built_in">cd</span> build</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">cmake .. &amp;&amp; cmake --build .</span>
+</code></pre>
+<p>see example <a href="https://github.com/gabime/spdlog/blob/v2.x/example/CMakeLists.txt">CMakeLists.txt</a> on how to use.</p>
+<h2 id="platforms">Platforms</h2>
+<ul>
+<li>Linux, FreeBSD, OpenBSD, Solaris, AIX</li>
+<li>Windows (msvc, cygwin)</li>
+<li>macOS </li>
+<li>Android</li>
+</ul>
+<h2 id="package-managers">Package managers:</h2>
+<ul>
+<li>Debian: <code>sudo apt install libspdlog-dev</code></li>
+<li>Homebrew: <code>brew install spdlog</code></li>
+<li>MacPorts: <code>sudo port install spdlog</code></li>
+<li>FreeBSD:  <code>pkg install spdlog</code></li>
+<li>Fedora: <code>dnf install spdlog</code></li>
+<li>Gentoo: <code>emerge dev-libs/spdlog</code></li>
+<li>Arch Linux: <code>pacman -S spdlog</code></li>
+<li>openSUSE: <code>sudo zypper in spdlog-devel</code></li>
+<li>vcpkg: <code>vcpkg install spdlog</code></li>
+<li>conan: <code>conan install --requires=spdlog/[*]</code></li>
+<li>conda: <code>conda install -c conda-forge spdlog</code></li>
+<li>build2: <code>depends: spdlog ^1.8.2</code></li>
+</ul>
+<h2 id="features">Features</h2>
+<ul>
+<li>Very fast (see <a href="#benchmarks">benchmarks</a> below).</li>
+<li>Headers only or compiled</li>
+<li>Feature-rich formatting, using the excellent <a href="https://github.com/fmtlib/fmt">fmt</a> library.</li>
+<li>Asynchronous mode (optional)</li>
+<li><a href="https://github.com/gabime/spdlog/wiki/3.-Custom-formatting">Custom</a> formatting.</li>
+<li>Multi/Single threaded loggers.</li>
+<li>Various log targets:</li>
+<li>Rotating log files.</li>
+<li>Daily log files.</li>
+<li>Console logging (colors supported).</li>
+<li>syslog.</li>
+<li>Windows event log.</li>
+<li>Windows debugger (<code>OutputDebugString(..)</code>).</li>
+<li>Log to Qt widgets (<a href="#log-to-qt-with-nice-colors">example</a>).</li>
+<li>Easily <a href="https://github.com/gabime/spdlog/wiki/4.-Sinks#implementing-your-own-sink">extendable</a> with custom log targets.</li>
+<li>Log filtering - log levels can be modified at runtime as well as compile time.</li>
+<li>Support for loading log levels from argv or environment var.</li>
+</ul>
+<h2 id="usage-samples">Usage samples</h2>
+<h4 id="basic-usage">Basic usage</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/spdlog.h"</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> 
+{
+    spdlog::info(<span class="hljs-string">"Welcome to spdlog!"</span>);
+    spdlog::error(<span class="hljs-string">"Some error message with arg: {}"</span>, <span class="hljs-number">1</span>);
+
+    spdlog::warn(<span class="hljs-string">"Easy padding in numbers like {:08d}"</span>, <span class="hljs-number">12</span>);
+    spdlog::critical(<span class="hljs-string">"Support for int: {0:d};  hex: {0:x};  oct: {0:o}; bin: {0:b}"</span>, <span class="hljs-number">42</span>);
+    spdlog::info(<span class="hljs-string">"Support for floats {:03.2f}"</span>, <span class="hljs-number">1.23456</span>);
+    spdlog::info(<span class="hljs-string">"Positional args are {1} {0}.."</span>, <span class="hljs-string">"too"</span>, <span class="hljs-string">"supported"</span>);
+    spdlog::info(<span class="hljs-string">"{:&lt;30}"</span>, <span class="hljs-string">"left aligned"</span>);
+
+    spdlog::set_level(spdlog::level::debug); <span class="hljs-comment">// Set global log level to debug</span>
+    spdlog::debug(<span class="hljs-string">"This message should be displayed.."</span>);    
+
+    <span class="hljs-comment">// change log pattern</span>
+    spdlog::set_pattern(<span class="hljs-string">"[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v"</span>);
+
+    <span class="hljs-comment">// Compile time log levels</span>
+    <span class="hljs-comment">// define SPDLOG_ACTIVE_LEVEL to desired level</span>
+    SPDLOG_TRACE(<span class="hljs-string">"Some trace message with param {}"</span>, <span class="hljs-number">42</span>);
+    SPDLOG_DEBUG(<span class="hljs-string">"Some debug message"</span>);
+}
+
+</code></pre>
+<hr>
+<h4 id="create-stdoutstderr-logger-object">Create stdout/stderr logger object</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/spdlog.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/stdout_color_sinks.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">stdout_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-comment">// create a color multi-threaded logger</span>
+    <span class="hljs-keyword">auto</span> console = spdlog::stdout_color_mt(<span class="hljs-string">"console"</span>);    
+    <span class="hljs-keyword">auto</span> err_logger = spdlog::stderr_color_mt(<span class="hljs-string">"stderr"</span>);    
+    spdlog::get(<span class="hljs-string">"console"</span>)-&gt;info(<span class="hljs-string">"loggers can be retrieved from a global registry using the spdlog::get(logger_name)"</span>);
+}
+</code></pre>
+<hr>
+<h4 id="basic-file-logger">Basic file logger</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/basic_file_sink.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">basic_logfile_example</span><span class="hljs-params">()</span>
+{
+    try 
+    {
+        <span class="hljs-keyword">auto</span> logger = spdlog::basic_logger_mt(<span class="hljs-string">"basic_logger"</span>, <span class="hljs-string">"logs/basic-log.txt"</span>);
+    }
+    catch (<span class="hljs-type">const</span> spdlog::spdlog_ex &amp;ex)
+    {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Log init failed: "</span> &lt;&lt; ex.what() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    }
+}
+</code></pre>
+<hr>
+<h4 id="rotating-files">Rotating files</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/rotating_file_sink.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">rotating_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-comment">// Create a file rotating logger with 5 MB size max and 3 rotated files</span>
+    <span class="hljs-keyword">auto</span> max_size = <span class="hljs-number">1048576</span> * <span class="hljs-number">5</span>;
+    <span class="hljs-keyword">auto</span> max_files = <span class="hljs-number">3</span>;
+    <span class="hljs-keyword">auto</span> logger = spdlog::rotating_logger_mt(<span class="hljs-string">"some_logger_name"</span>, <span class="hljs-string">"logs/rotating.txt"</span>, max_size, max_files);
+}
+</code></pre>
+<hr>
+<h4 id="daily-files">Daily files</h4>
+<pre><code class="language-c++ hljs language-c">
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/daily_file_sink.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">daily_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-comment">// Create a daily logger - a new file is created every day at 2:30 am</span>
+    <span class="hljs-keyword">auto</span> logger = spdlog::daily_logger_mt(<span class="hljs-string">"daily_logger"</span>, <span class="hljs-string">"logs/daily.txt"</span>, <span class="hljs-number">2</span>, <span class="hljs-number">30</span>);
+}
+
+</code></pre>
+<hr>
+<h4 id="periodic-flush">Periodic flush</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-comment">// periodically flush all *registered* loggers every 3 seconds:</span>
+<span class="hljs-comment">// warning: only use if all your loggers are thread-safe ("_mt" loggers)</span>
+spdlog::flush_every(<span class="hljs-built_in">std</span>::chrono::seconds(<span class="hljs-number">3</span>));
+
+</code></pre>
+<hr>
+<h4 id="stopwatch">Stopwatch</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-comment">// Stopwatch support for spdlog</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/stopwatch.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">stopwatch_example</span><span class="hljs-params">()</span>
+{
+    spdlog::stopwatch sw;    
+    spdlog::debug(<span class="hljs-string">"Elapsed {}"</span>, sw);
+    spdlog::debug(<span class="hljs-string">"Elapsed {:.3}"</span>, sw);       
+}
+
+</code></pre>
+<hr>
+<h4 id="log-binary-data-in-hex">Log binary data in hex</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-comment">// many types of std::container&lt;char&gt; types can be used.</span>
+<span class="hljs-comment">// ranges are supported too.</span>
+<span class="hljs-comment">// format flags:</span>
+<span class="hljs-comment">// {:X} - print in uppercase.</span>
+<span class="hljs-comment">// {:s} - don't separate each byte with space.</span>
+<span class="hljs-comment">// {:p} - don't print the position on each line start.</span>
+<span class="hljs-comment">// {:n} - don't split the output into lines.</span>
+<span class="hljs-comment">// {:a} - show ASCII if :n is not set.</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/fmt/bin_to_hex.h"</span></span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">binary_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-keyword">auto</span> console = spdlog::get(<span class="hljs-string">"console"</span>);
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">array</span>&lt;<span class="hljs-type">char</span>, <span class="hljs-number">80</span>&gt; buf;
+    console-&gt;info(<span class="hljs-string">"Binary example: {}"</span>, spdlog::to_hex(buf));
+    console-&gt;info(<span class="hljs-string">"Another binary example:{:n}"</span>, spdlog::to_hex(<span class="hljs-built_in">std</span>::begin(buf), <span class="hljs-built_in">std</span>::begin(buf) + <span class="hljs-number">10</span>));
+    <span class="hljs-comment">// more examples:</span>
+    <span class="hljs-comment">// logger-&gt;info("uppercase: {:X}", spdlog::to_hex(buf));</span>
+    <span class="hljs-comment">// logger-&gt;info("uppercase, no delimiters: {:Xs}", spdlog::to_hex(buf));</span>
+    <span class="hljs-comment">// logger-&gt;info("uppercase, no delimiters, no position info: {:Xsp}", spdlog::to_hex(buf));</span>
+}
+
+</code></pre>
+<hr>
+<h4 id="logger-with-multi-sinks-each-with-a-different-format-and-log-level">Logger with multi sinks - each with a different format and log level</h4>
+<pre><code class="language-c++ hljs language-c">
+<span class="hljs-comment">// create a logger with 2 targets, with different log levels and formats.</span>
+<span class="hljs-comment">// The console will show only warnings or errors, while the file will log all.</span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">multi_sink_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-keyword">auto</span> console_sink = <span class="hljs-built_in">std</span>::make_shared&lt;spdlog::sinks::stdout_color_sink_mt&gt;();
+    console_sink-&gt;set_level(spdlog::level::warn);
+    console_sink-&gt;set_pattern(<span class="hljs-string">"[multi_sink_example] [%^%l%$] %v"</span>);
+
+    <span class="hljs-keyword">auto</span> file_sink = <span class="hljs-built_in">std</span>::make_shared&lt;spdlog::sinks::basic_file_sink_mt&gt;(<span class="hljs-string">"logs/multisink.txt"</span>, <span class="hljs-literal">true</span>);
+    file_sink-&gt;set_level(spdlog::level::trace);
+
+    spdlog::logger <span class="hljs-title function_">logger</span><span class="hljs-params">(<span class="hljs-string">"multi_sink"</span>, {console_sink, file_sink})</span>;
+    logger.set_level(spdlog::level::debug);
+    logger.warn(<span class="hljs-string">"this should appear in both console and file"</span>);
+    logger.info(<span class="hljs-string">"this message should not appear in the console, only in the file"</span>);
+}
+</code></pre>
+<hr>
+<h4 id="user-defined-callbacks-about-log-events">User-defined callbacks about log events</h4>
+<pre><code class="language-c++ hljs language-c">
+<span class="hljs-comment">// create a logger with a lambda function callback, the callback will be called</span>
+<span class="hljs-comment">// each time something is logged to the logger</span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">callback_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-keyword">auto</span> callback_sink = <span class="hljs-built_in">std</span>::make_shared&lt;spdlog::sinks::callback_sink_mt&gt;([](<span class="hljs-type">const</span> spdlog::details::log_msg &amp;msg) {
+         <span class="hljs-comment">// for example you can be notified by sending an email to yourself</span>
+    });
+    callback_sink-&gt;set_level(spdlog::level::err);
+
+    <span class="hljs-keyword">auto</span> console_sink = <span class="hljs-built_in">std</span>::make_shared&lt;spdlog::sinks::stdout_color_sink_mt&gt;();
+    spdlog::logger <span class="hljs-title function_">logger</span><span class="hljs-params">(<span class="hljs-string">"custom_callback_logger"</span>, {console_sink, callback_sink})</span>;
+
+    logger.info(<span class="hljs-string">"some info log"</span>);
+    logger.error(<span class="hljs-string">"critical issue"</span>); <span class="hljs-comment">// will notify you</span>
+}
+</code></pre>
+<hr>
+<h4 id="asynchronous-logging">Asynchronous logging</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/async.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/basic_file_sink.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">async_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-comment">// TODO       </span>
+}
+
+</code></pre>
+<hr>
+<h4 id="user-defined-types">User-defined types</h4>
+<pre><code class="language-c++ hljs language-c">template&lt;&gt;
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">fmt</span>:</span>:formatter&lt;my_type&gt; : fmt::formatter&lt;<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&gt;
+{
+    <span class="hljs-keyword">auto</span> <span class="hljs-title function_">format</span><span class="hljs-params">(my_type my, format_context &amp;ctx)</span> <span class="hljs-type">const</span> -&gt; <span class="hljs-title function_">decltype</span><span class="hljs-params">(ctx.out())</span>
+    {
+        <span class="hljs-keyword">return</span> format_to(ctx.out(), <span class="hljs-string">"[my_type i={}]"</span>, my.i);
+    }
+};
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">user_defined_example</span><span class="hljs-params">()</span>
+{
+    spdlog::info(<span class="hljs-string">"user defined type: {}"</span>, my_type(<span class="hljs-number">14</span>));
+}
+
+</code></pre>
+<hr>
+<h4 id="user-defined-flags-in-the-log-pattern">User-defined flags in the log pattern</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-comment">// Log patterns can contain custom flags.</span>
+<span class="hljs-comment">// the following example will add new flag '%*' - which will be bound to a &lt;my_formatter_flag&gt; instance.</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/pattern_formatter.h"</span></span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">my_formatter_flag</span> :</span> public spdlog::custom_flag_formatter
+{
+public:
+    <span class="hljs-type">void</span> <span class="hljs-title function_">format</span><span class="hljs-params">(<span class="hljs-type">const</span> spdlog::details::log_msg &amp;, <span class="hljs-type">const</span> <span class="hljs-built_in">std</span>::tm &amp;, spdlog::<span class="hljs-type">memory_buf_t</span> &amp;dest)</span> override
+    {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> some_txt = <span class="hljs-string">"custom-flag"</span>;
+        dest.append(some_txt.data(), some_txt.data() + some_txt.size());
+    }
+
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">unique_ptr</span>&lt;custom_flag_formatter&gt; <span class="hljs-title function_">clone</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> override
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">std</span>::make_unique&lt;my_formatter_flag&gt;();
+    }
+};
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">custom_flags_example</span><span class="hljs-params">()</span>
+{    
+    <span class="hljs-keyword">auto</span> formatter = <span class="hljs-built_in">std</span>::make_unique&lt;spdlog::pattern_formatter&gt;();
+    formatter-&gt;add_flag&lt;my_formatter_flag&gt;(<span class="hljs-string">'*'</span>).set_pattern(<span class="hljs-string">"[%n] [%*] [%^%l%$] %v"</span>);
+    spdlog::set_formatter(<span class="hljs-built_in">std</span>::move(formatter));
+}
+
+</code></pre>
+<hr>
+<h4 id="custom-error-handler">Custom error handler</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-type">void</span> <span class="hljs-title function_">err_handler_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-comment">// can be set globally or per logger(logger-&gt;set_error_handler(..))</span>
+    spdlog::set_error_handler([](<span class="hljs-type">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> &amp;msg) { spdlog::get(<span class="hljs-string">"console"</span>)-&gt;error(<span class="hljs-string">"*** LOGGER ERROR ***: {}"</span>, msg); });
+    spdlog::get(<span class="hljs-string">"console"</span>)-&gt;info(<span class="hljs-string">"some invalid message to trigger an error {}{}{}{}"</span>, <span class="hljs-number">3</span>);
+}
+
+</code></pre>
+<hr>
+<h4 id="syslog">syslog</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/syslog_sink.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">syslog_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> ident = <span class="hljs-string">"spdlog-example"</span>;
+    <span class="hljs-keyword">auto</span> syslog_logger = spdlog::syslog_logger_mt(<span class="hljs-string">"syslog"</span>, ident, LOG_PID);
+    syslog_logger-&gt;warn(<span class="hljs-string">"This is warning that will end up in syslog."</span>);
+}
+</code></pre>
+<hr>
+<h4 id="android-example">Android example</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/android_sink.h"</span></span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">android_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> tag = <span class="hljs-string">"spdlog-android"</span>;
+    <span class="hljs-keyword">auto</span> android_logger = spdlog::android_logger_mt(<span class="hljs-string">"android"</span>, tag);
+    android_logger-&gt;critical(<span class="hljs-string">"Use \"adb shell logcat\" to view this message."</span>);
+}
+</code></pre>
+<hr>
+<h4 id="load-log-levels-from-the-env-variable-or-argv">Load log levels from the env variable or argv</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/cfg/env.h"</span></span>
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span> <span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span>
+{
+    spdlog::cfg::load_env_levels();
+    <span class="hljs-comment">// or from the command line:</span>
+    <span class="hljs-comment">// ./example SPDLOG_LEVEL=info,mylogger=trace</span>
+    <span class="hljs-comment">// #include "spdlog/cfg/argv.h" // for loading levels from argv</span>
+    <span class="hljs-comment">// spdlog::cfg::load_argv_levels(argc, argv);</span>
+}
+</code></pre>
+<p>So then you can:</p>
+<pre><code class="language-console hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">export</span> SPDLOG_LEVEL=info,mylogger=trace</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">./example</span>
+</code></pre>
+<hr>
+<h4 id="log-file-openclose-event-handlers">Log file open/close event handlers</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-comment">// You can get callbacks from spdlog before/after a log file has been opened or closed. </span>
+<span class="hljs-comment">// This is useful for cleanup procedures or for adding something to the start/end of the log file.</span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">file_events_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-comment">// pass the spdlog::file_event_handlers to file sinks for open/close log file notifications</span>
+    spdlog::file_event_handlers handlers;
+    handlers.before_open = [](spdlog::<span class="hljs-type">filename_t</span> filename) { spdlog::info(<span class="hljs-string">"Before opening {}"</span>, filename); };
+    handlers.after_open = [](spdlog::<span class="hljs-type">filename_t</span> filename, <span class="hljs-built_in">std</span>::FILE *fstream) { <span class="hljs-built_in">fputs</span>(<span class="hljs-string">"After opening\n"</span>, fstream); };
+    handlers.before_close = [](spdlog::<span class="hljs-type">filename_t</span> filename, <span class="hljs-built_in">std</span>::FILE *fstream) { <span class="hljs-built_in">fputs</span>(<span class="hljs-string">"Before closing\n"</span>, fstream); };
+    handlers.after_close = [](spdlog::<span class="hljs-type">filename_t</span> filename) { spdlog::info(<span class="hljs-string">"After closing {}"</span>, filename); };
+    <span class="hljs-keyword">auto</span> my_logger = spdlog::basic_logger_st(<span class="hljs-string">"some_logger"</span>, <span class="hljs-string">"logs/events-sample.txt"</span>, <span class="hljs-literal">true</span>, handlers);        
+}
+</code></pre>
+<hr>
+<h4 id="replace-the-default-logger">Replace the Default Logger</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-type">void</span> <span class="hljs-title function_">replace_global_logger_example</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-keyword">auto</span> new_logger = spdlog::basic_logger_mt(<span class="hljs-string">"new_global_logger"</span>, <span class="hljs-string">"logs/new-default-log.txt"</span>, <span class="hljs-literal">true</span>);
+    spdlog::set_global_logger(new_logger);
+    spdlog::info(<span class="hljs-string">"new logger log message"</span>);
+}
+</code></pre>
+<hr>
+<h4 id="log-to-qt-with-nice-colors">Log to Qt with nice colors</h4>
+<pre><code class="language-c++ hljs language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/spdlog.h"</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"spdlog/sinks/qt_sinks.h"</span></span>
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+{
+    setMinimumSize(<span class="hljs-number">640</span>, <span class="hljs-number">480</span>);
+    <span class="hljs-keyword">auto</span> log_widget = new QTextEdit(this);
+    setCentralWidget(log_widget);
+    <span class="hljs-type">int</span> max_lines = <span class="hljs-number">500</span>; <span class="hljs-comment">// keep the text widget to max 500 lines. remove old lines if needed.</span>
+    <span class="hljs-keyword">auto</span> logger = spdlog::qt_color_logger_mt(<span class="hljs-string">"qt_logger"</span>, log_widget, max_lines);
+    logger-&gt;info(<span class="hljs-string">"Some info message"</span>);
+}
+</code></pre>
+<hr>
+<h2 id="benchmarks">Benchmarks</h2>
+<p>Below are some <a href="https://github.com/gabime/spdlog/blob/v2.x/bench/bench.cpp">benchmarks</a> done in Ubuntu 64 bit, Intel i7-4770 CPU @ 3.40GHz</p>
+<h4 id="synchronous-mode">Synchronous mode</h4>
+<pre><code class="hljs language-markdown">[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>**
+[info] Single thread, 1,000,000 iterations
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>**
+[info] basic<span class="hljs-emphasis">_st         Elapsed: 0.17 secs        5,777,626/sec
+[info] rotating_</span>st      Elapsed: 0.18 secs        5,475,894/sec
+[info] daily<span class="hljs-emphasis">_st         Elapsed: 0.20 secs        5,062,659/sec
+[info] empty_</span>logger     Elapsed: 0.07 secs       14,127,300/sec
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>**
+[info] C-string (400 bytes). Single thread, 1,000,000 iterations
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>**
+[info] basic<span class="hljs-emphasis">_st         Elapsed: 0.41 secs        2,412,483/sec
+[info] rotating_</span>st      Elapsed: 0.72 secs        1,389,196/sec
+[info] daily<span class="hljs-emphasis">_st         Elapsed: 0.42 secs        2,393,298/sec
+[info] null_</span>st          Elapsed: 0.04 secs       27,446,957/sec
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>**
+[info] 10 threads, competing over the same logger object, 1,000,000 iterations
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>**
+[info] basic<span class="hljs-emphasis">_mt         Elapsed: 0.60 secs        1,659,613/sec
+[info] rotating_</span>mt      Elapsed: 0.62 secs        1,612,493/sec
+[info] daily<span class="hljs-emphasis">_mt         Elapsed: 0.61 secs        1,638,305/sec
+[info] null_</span>mt          Elapsed: 0.16 secs        6,272,758/sec
+</code></pre>
+<h4 id="asynchronous-mode">Asynchronous mode</h4>
+<pre><code class="hljs language-markdown">[info] -------------------------------------------------
+[info] Messages     : 1,000,000
+[info] Threads      : 10
+[info] Queue        : 8,192 slots
+[info] Queue memory : 8,192 x 272 = 2,176 KB 
+[info] -------------------------------------------------
+[info] 
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>*
+[info] Queue Overflow Policy: block
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>*
+[info] Elapsed: 1.70784 secs     585,535/sec
+[info] Elapsed: 1.69805 secs     588,910/sec
+[info] Elapsed: 1.7026 secs      587,337/sec
+[info] 
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>*
+[info] Queue Overflow Policy: overrun
+[info] <span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>*
+[info] Elapsed: 0.372816 secs    2,682,285/sec
+[info] Elapsed: 0.379758 secs    2,633,255/sec
+[info] Elapsed: 0.373532 secs    2,677,147/sec
+
+</code></pre>
+<h2 id="documentation">Documentation</h2>
+<p>Documentation can be found in the <a href="https://github.com/gabime/spdlog/wiki/1.-QuickStart">wiki</a> pages.</p>
+<hr>
+<p>Thanks to <a href="https://www.jetbrains.com/?from=spdlog">JetBrains</a> for donating product licenses to help develop <strong>spdlog</strong> <a href="https://www.jetbrains.com/?from=spdlog"><img src="spdlog_files/jetbrains-variant-4.svg" width="94" align="middle"></a></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="spdlog_files/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="spdlog_files/base.js"></script>
+        <script src="spdlog_files/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+
+
+<readthedocs-flyout></readthedocs-flyout><readthedocs-notification class="raised toast"></readthedocs-notification><div class="raised adaptive-css" data-ea-type="text" data-ea-manual="true" data-ea-publisher="readthedocs" data-ea-keywords="only words|readthedocs-project-1129897|readthedocs-project-spdlog" data-ea-campaign-types="community|house|paid" id="readthedocs-ea-text-nostyle-mkdocs"></div><readthedocs-search class="raised floating"></readthedocs-search><readthedocs-hotkeys></readthedocs-hotkeys></body></html>
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2025-01-06 11:30:14.085468+00:00
+-->
