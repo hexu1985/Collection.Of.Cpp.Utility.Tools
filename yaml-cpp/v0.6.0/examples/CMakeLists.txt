@@ -39,3 +39,6 @@ target_link_libraries(save_file yaml-cpp)
 
 add_executable(load_array load_array.cpp)
 target_link_libraries(load_array yaml-cpp)
+
+add_executable(load_array2 load_array2.cpp)
+target_link_libraries(load_array2 yaml-cpp)
