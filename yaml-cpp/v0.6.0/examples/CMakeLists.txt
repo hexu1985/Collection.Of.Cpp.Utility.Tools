@@ -42,3 +42,6 @@ target_link_libraries(load_array yaml-cpp)
 
 add_executable(load_array2 load_array2.cpp)
 target_link_libraries(load_array2 yaml-cpp)
+
+add_executable(test test.cpp)
+target_link_libraries(test yaml-cpp)
