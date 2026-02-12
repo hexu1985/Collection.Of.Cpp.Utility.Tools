@@ -37,5 +37,5 @@ target_link_libraries(copy_node yaml-cpp)
 add_executable(save_file save_file.cpp)
 target_link_libraries(save_file yaml-cpp)
 
-add_executable(scalar_array scalar_array.cpp)
-target_link_libraries(scalar_array yaml-cpp)
+add_executable(load_array load_array.cpp)
+target_link_libraries(load_array yaml-cpp)
