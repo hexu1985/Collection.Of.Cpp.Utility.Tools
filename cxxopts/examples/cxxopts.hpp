@@ -730,7 +730,7 @@ inline ArguDesc ParseArgument(const char *arg, bool &matched)
     {
       argu_desc.arg_name.push_back(*pdata);
       pdata += 1;
-      while (isalnum(*pdata, std::locale::classic()) || *pdata == '-' || *pdata == '_')
+      while (isalnum(*pdata, std::locale::classic()) || *pdata == '-' || *pdata == '_' || *pdata == '.')
       {
         argu_desc.arg_name.push_back(*pdata);
         pdata += 1;
@@ -757,13 +757,19 @@ inline ArguDesc ParseArgument(const char *arg, bool &matched)
   else if (strncmp(pdata, "-", 1) == 0)
   {
     pdata += 1;
-    argu_desc.grouping = true;
-    while (isalnum(*pdata, std::locale::classic()))
-    {
-      argu_desc.arg_name.push_back(*pdata);
-      pdata += 1;
+    if(isalnum(*pdata, std::locale::classic())) {
+      // If we have '=' right after first alnum, its a match.
+      if(*(pdata+1) == '=') {
+        argu_desc.arg_name.push_back(*pdata);
+        argu_desc.set_value = true;
+        argu_desc.value = std::string(pdata+2);
+      }
+      else{
+        argu_desc.arg_name = std::string(pdata);
+      }
+      argu_desc.grouping = true;
+      matched = true;
     }
-    matched = !argu_desc.arg_name.empty() && *pdata == '\0';
   }
   return argu_desc;
 }
@@ -782,7 +788,20 @@ const char* const falsy_pattern =
   "(f|F)(alse)?|0";
 CXXOPTS_LINKONCE
 const char* const option_pattern =
-  "--([[:alnum:]][-_[:alnum:]\\.]+)(=(.*))?|-([[:alnum:]].*)";
+  "--([[:alnum:]][-_[:alnum:]\\.]+)(=(.*))?|-([[:alnum:]])((=(.*))|(.*))";
+// <-------Long Option--------------------> <-----Short Option------->
+// Groups :
+//   <---------1------------------><--2-->   <--4--------><-----5------>
+//                                   <-3>                  <--6--> <-8>
+//                                                           <-7>
+const int LONG_NAME_IDX=1;
+const int LONG_MATCH_IDX=2;
+const int LONG_MATCH_VALUE_IDX=3;
+const int SHORT_NAME_IDX=4;
+const int SHORT_MATCH_IDX=6;
+const int SHORT_MATCH_VALUE_IDX=7;
+const int SHORT_GROUPING_IDX=8;
+
 CXXOPTS_LINKONCE
 const char* const option_specifier_pattern =
   "([[:alnum:]][-_[:alnum:]\\.]*)(,[ ]*[[:alnum:]][-_[:alnum:]]*)*";
@@ -864,13 +883,21 @@ inline ArguDesc ParseArgument(const char *arg, bool &matched)
 
   ArguDesc argu_desc;
   if (matched) {
-    argu_desc.arg_name = result[1].str();
-    argu_desc.set_value = result[2].length() > 0;
-    argu_desc.value = result[3].str();
-    if (result[4].length() > 0)
+    if(result[LONG_NAME_IDX].length() > 0) {
+      argu_desc.arg_name = result[LONG_NAME_IDX].str();
+      argu_desc.set_value = result[LONG_MATCH_IDX].length() > 0;
+      argu_desc.value = result[LONG_MATCH_VALUE_IDX].str();
+    }
+    else if (result[SHORT_NAME_IDX].length() > 0)
     {
       argu_desc.grouping = true;
-      argu_desc.arg_name = result[4].str();
+      argu_desc.arg_name = result[SHORT_NAME_IDX].str();
+      if(result[SHORT_MATCH_IDX].length() > 0){
+        argu_desc.set_value = true;
+        argu_desc.value = result[SHORT_MATCH_VALUE_IDX].str();
+      } else {
+        argu_desc.arg_name += result[SHORT_GROUPING_IDX].str();
+      }
     }
   }
 
@@ -1100,22 +1127,19 @@ void parse_value(const std::string& text, char& c)
   c = text[0];
 }
 
+template<typename T> void add_value(const std::string& text, std::vector<T>& value);
+
 template <typename T>
 void
 parse_value(const std::string& text, std::vector<T>& value)
 {
   if (text.empty()) {
-    T v;
-    parse_value(text, v);
-    value.emplace_back(std::move(v));
     return;
   }
   std::stringstream in(text);
   std::string token;
   while(!in.eof() && std::getline(in, token, CXXOPTS_VECTOR_DELIMITER)) {
-    T v;
-    parse_value(token, v);
-    value.emplace_back(std::move(v));
+    add_value(token, value);
   }
 }
 
@@ -1302,8 +1326,6 @@ template <>
 class standard_value<bool> : public abstract_value<bool>
 {
   public:
-  ~standard_value() override = default;
-
   standard_value()
   {
     set_default_and_implicit();
@@ -2344,7 +2366,7 @@ OptionAdder::operator()
     // (length-1) and longer names
   std::string short_name {""};
   auto first_short_name_iter =
-    std::partition(option_names.begin(), option_names.end(),
+    std::stable_partition(option_names.begin(), option_names.end(),
       [&](const std::string& name) { return name.length() > 1; }
     );
   auto num_length_1_names = (option_names.end() - first_short_name_iter);
@@ -2524,7 +2546,7 @@ OptionParser::parse(int argc, const char* const* argv)
 
   std::vector<std::string> unmatched;
 
-  while (current != argc)
+  while (current < argc)
   {
     if (strcmp(argv[current], "--") == 0)
     {
@@ -2586,7 +2608,12 @@ OptionParser::parse(int argc, const char* const* argv)
           if (i + 1 == s.size())
           {
             //it must be the last argument
-            checked_parse_arg(argc, argv, current, value, name);
+            if (argu_desc.set_value) {
+              parse_option(value, name, argu_desc.value);
+            }
+            else{
+              checked_parse_arg(argc, argv, current, value, name);
+            }
           }
           else if (value->value().has_implicit())
           {
@@ -2776,17 +2803,17 @@ Options::help_one_group(const std::string& g) const
 {
   using OptionHelp = std::vector<std::pair<String, String>>;
 
+  String result;
+
   auto group = m_help.find(g);
   if (group == m_help.end())
   {
-    return "";
+    return result;
   }
 
   OptionHelp format;
 
   std::size_t longest = 0;
-
-  String result;
 
   if (!g.empty())
   {
