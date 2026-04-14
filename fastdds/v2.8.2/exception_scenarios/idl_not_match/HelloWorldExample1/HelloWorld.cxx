@@ -36,9 +36,9 @@ using namespace eprosima::fastcdr::exception;
 
 HelloWorld::HelloWorld()
 {
-    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@569cfc36
+    // m_index com.eprosima.idl.parser.typecode.PrimitiveTypeCode@74a10858
     m_index = 0;
-    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@64f6106c
+    // m_message com.eprosima.idl.parser.typecode.StringTypeCode@32eebfca
     m_message ="";
 
 }
@@ -150,7 +150,7 @@ void HelloWorld::deserialize(
  * @param _index New value for member index
  */
 void HelloWorld::index(
-        uint32_t _index)
+        int32_t _index)
 {
     m_index = _index;
 }
@@ -159,7 +159,7 @@ void HelloWorld::index(
  * @brief This function returns the value of member index
  * @return Value of member index
  */
-uint32_t HelloWorld::index() const
+int32_t HelloWorld::index() const
 {
     return m_index;
 }
@@ -168,7 +168,7 @@ uint32_t HelloWorld::index() const
  * @brief This function returns a reference to member index
  * @return Reference to member index
  */
-uint32_t& HelloWorld::index()
+int32_t& HelloWorld::index()
 {
     return m_index;
 }
