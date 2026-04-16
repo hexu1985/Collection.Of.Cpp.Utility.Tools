@@ -101,6 +101,7 @@ bool HelloWorldPublisher::init(
 
     // CREATE THE WRITER
     DataWriterQos wqos = DATAWRITER_QOS_DEFAULT;
+    wqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
 
     if (use_env)
     {

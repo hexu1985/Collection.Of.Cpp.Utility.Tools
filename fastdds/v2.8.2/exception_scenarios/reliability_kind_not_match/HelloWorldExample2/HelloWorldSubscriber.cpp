@@ -95,7 +95,7 @@ bool HelloWorldSubscriber::init(
 
     // CREATE THE READER
     DataReaderQos rqos = DATAREADER_QOS_DEFAULT;
-    rqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+    rqos.reliability().kind = BEST_EFFORT_RELIABILITY_QOS;
 
     if (use_env)
     {
