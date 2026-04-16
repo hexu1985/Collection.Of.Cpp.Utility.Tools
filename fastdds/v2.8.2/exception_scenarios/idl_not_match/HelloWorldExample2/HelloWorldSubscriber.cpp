@@ -153,6 +153,7 @@ void HelloWorldSubscriber::SubListener::on_subscription_matched(
 void HelloWorldSubscriber::SubListener::on_data_available(
         DataReader* reader)
 {
+    std::cout << "on_data_available" << std::endl;
     SampleInfo info;
     if (reader->take_next_sample(&hello_, &info) == ReturnCode_t::RETCODE_OK)
     {
