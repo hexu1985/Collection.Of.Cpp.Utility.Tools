@@ -40,3 +40,9 @@ target_link_libraries(DDSHelloWorldPublisher fastrtps fastcdr tinyxml2::tinyxml2
 add_executable(DDSHelloWorldSubscriber HelloWorldSubscriber.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldSubscriber fastrtps fastcdr tinyxml2::tinyxml2)
 
+add_executable(DDSHelloWorldSubscriber_lost1 HelloWorldSubscriber_lost1.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
+target_link_libraries(DDSHelloWorldSubscriber_lost1 fastrtps fastcdr tinyxml2::tinyxml2)
+
+add_executable(DDSHelloWorldSubscriber_lost2 HelloWorldSubscriber_lost2.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
+target_link_libraries(DDSHelloWorldSubscriber_lost2 fastrtps fastcdr tinyxml2::tinyxml2)
+
