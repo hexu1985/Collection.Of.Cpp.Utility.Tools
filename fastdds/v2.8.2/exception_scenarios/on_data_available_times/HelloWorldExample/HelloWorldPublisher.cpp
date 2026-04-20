@@ -28,6 +28,8 @@
 
 #include <thread>
 
+#include "getCurrentTime.h"
+
 using namespace eprosima::fastdds::dds;
 
 HelloWorldPublisher::HelloWorldPublisher()
@@ -172,7 +174,7 @@ void HelloWorldPublisher::runThread(
             if (publish(false))
             {
                 std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
-                          << " SENT" << std::endl;
+                          << " SENT: " << getCurrentTime() << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
         }
@@ -188,7 +190,7 @@ void HelloWorldPublisher::runThread(
             else
             {
                 std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
-                          << " SENT" << std::endl;
+                          << " SENT: " << getCurrentTime() << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
         }

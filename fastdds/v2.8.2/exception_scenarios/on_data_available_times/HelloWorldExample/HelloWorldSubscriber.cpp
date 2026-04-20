@@ -26,6 +26,8 @@
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 
+#include "getCurrentTime.h"
+
 using namespace eprosima::fastdds::dds;
 
 HelloWorldSubscriber::HelloWorldSubscriber()
@@ -154,6 +156,7 @@ void HelloWorldSubscriber::SubListener::on_subscription_matched(
 void HelloWorldSubscriber::SubListener::on_data_available(
         DataReader* reader)
 {
+    std::cout << "on_data_available: " << getCurrentTime() << std::endl;
     SampleInfo info;
     if (reader->take_next_sample(&hello_, &info) == ReturnCode_t::RETCODE_OK)
     {
@@ -161,7 +164,7 @@ void HelloWorldSubscriber::SubListener::on_data_available(
         {
             samples_++;
             // Print your structure data here.
-            std::cout << "Message " << hello_.message() << " " << hello_.index() << " RECEIVED" << std::endl;
+            std::cout << "Message " << hello_.message() << " " << hello_.index() << " RECEIVED: " << getCurrentTime() << std::endl;
         }
     }
 }
