@@ -1,0 +1,8 @@
+# Boost.Build 配置：使用 Yocto SDK 的 aarch64 交叉编译器
+using gcc : aarch64 : /opt/fsl-imx-wayland/5.4-zeus/sysroots/x86_64-pokysdk-linux/usr/bin/aarch64-poky-linux/aarch64-poky-linux-g++ :
+    <cflags>"-mcpu=cortex-a35+crc+crypto -fstack-protector-strong -D_FORTIFY_SOURCE=2 -Wformat -Wformat-security -Werror=format-security --sysroot=/opt/fsl-imx-wayland/5.4-zeus/sysroots/aarch64-poky-linux -O2 -pipe -g -feliminate-unused-debug-types"
+    <cxxflags>"-mcpu=cortex-a35+crc+crypto -fstack-protector-strong -D_FORTIFY_SOURCE=2 -Wformat -Wformat-security -Werror=format-security --sysroot=/opt/fsl-imx-wayland/5.4-zeus/sysroots/aarch64-poky-linux -O2 -pipe -g -feliminate-unused-debug-types"
+    <linkflags>"--sysroot=/opt/fsl-imx-wayland/5.4-zeus/sysroots/aarch64-poky-linux -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed -fstack-protector-strong -Wl,-z,relro,-z,now"
+    <archiver>/opt/fsl-imx-wayland/5.4-zeus/sysroots/x86_64-pokysdk-linux/usr/bin/aarch64-poky-linux/aarch64-poky-linux-ar
+    <ranlib>/opt/fsl-imx-wayland/5.4-zeus/sysroots/x86_64-pokysdk-linux/usr/bin/aarch64-poky-linux/aarch64-poky-linux-ranlib
+    ;
