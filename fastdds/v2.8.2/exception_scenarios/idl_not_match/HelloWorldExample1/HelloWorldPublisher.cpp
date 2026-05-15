@@ -242,7 +242,7 @@ int main(
 {
     std::cout << "Starting publisher." << std::endl;
     uint32_t count = 10;
-    uint32_t sleep = 100;
+    uint32_t sleep = 1000;
     bool use_environment_qos = false;
 
     init_log();
