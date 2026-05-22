@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="zh-cn" style="--olcb-folder-code-block-max-height: 80vh; --cnb-code-bg: rgb(245, 245, 245); --cnb-code-font-size: 12px; --cnb-code-color: rgb(68, 68, 68);"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">            
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <title>Ubuntu 20.04 安装 CUDA Toolkit 的三种方式 - klchang - 博客园</title>
+    <meta name="keywords" content="Tools,Linux">
+    <meta name="description" content="无论采用哪一种方式，首先都需要更新 Ubuntu 软件源和升级到最新版本的软件包。由于国内从 Ubuntu 官方软件源下载速度比较慢，所以，建议采用国内 Ubuntu 镜像源，比如阿里 Ubuntu 软件源或清华大学 Ubuntu 软件源。具体的配置方式是修改配置文件 /etc/apt/source">    
+    <meta property="og:description" content="无论采用哪一种方式，首先都需要更新 Ubuntu 软件源和升级到最新版本的软件包。由于国内从 Ubuntu 官方软件源下载速度比较慢，所以，建议采用国内 Ubuntu 镜像源，比如阿里 Ubuntu 软件源或清华大学 Ubuntu 软件源。具体的配置方式是修改配置文件 /etc/apt/source">
+    <meta property="og:image" content="https://img2020.cnblogs.com/blog/757205/202101/757205-20210131164003904-672549518.png">    
+    
+    <style>#home :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs), :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs) {background: rgb(245, 245, 245);
+        padding: 12px;
+        border: 0.833333px solid rgb(204, 204, 204);
+        border-radius: 3px;
+        border-color: transparent;
+        color: rgb(68, 68, 68);
+        font-family: "Courier New", sans-serif;
+        font-size: 12px</style><link rel="stylesheet" href="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/blog-common.min.css">
+    
+
+    <link id="MainCss" rel="stylesheet" href="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/bundle-red_autumnal_leaves.min.css">
+        <link id="highlighter-theme-cnblogs" type="text/css" rel="stylesheet" href="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/cnblogs.css">
+    
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/bundle-red_autumnal_leaves-mobile.min.css">
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico">
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg">
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png?v=2">
+    <link rel="canonical" href="https://www.cnblogs.com/klchang/p/14353384.html">
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/klchang/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/klchang/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/klchang/wlwmanifest.xml">
+    
+    <script type="text/javascript" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/encoder.js"></script><script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": "https://www.cnblogs.com/klchang/p/14353384.html",
+      "headline": "Ubuntu 20.04 安装 CUDA Toolkit 的三种方式",
+      "description": "无论采用哪一种方式，首先都需要更新 Ubuntu 软件源和升级到最新版本的软件包。由于国内从 Ubuntu 官方软件源下载速度比较慢，所以，建议采用国内 Ubuntu 镜像源，比如阿里 Ubuntu 软件源或清华大学 Ubuntu 软件源。具体的配置方式是修改配置文件 /etc/apt/source",
+      "image": [
+        
+      ],
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.cnblogs.com/klchang/",
+        "name": "klchang",
+        "url": "https://www.cnblogs.com/klchang/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://www.cnblogs.com/",
+        "name": "博客园",
+        "url": "https://www.cnblogs.com/"
+      },
+      "datePublished": "2021-01-31T18:04:00.0000000&#x2B;08:00",
+      "dateModified": "2021-01-31T18:07:00.0000000&#x2B;08:00",
+      "wordCount": "11071",
+      "isPartOf": {
+        "@type": "Blog",
+        "@id": "https://www.cnblogs.com/klchang/",
+        "name": "klchang",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.cnblogs.com/",
+          "name": "博客园"
+        }
+      }
+    }
+    </script>
+
+    <script>
+        var currentBlogId = 227853;
+        var currentBlogApp = 'klchang';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'red_autumnal_leaves';
+        var visitorUserId = '';
+        window.hasCustomScript = false;
+        window.cb_enable_mathjax = true;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+        <script>
+            window.currentPostId = 14353384;
+            window.currentPostDateAdded = '2021-01-31 18:04';
+        </script>
+    <script src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/jquery-3.3.1.min.js"></script>
+    <script src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/blog-common.min.js"></script><style>.medium-zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 300ms;
+  will-change: opacity;
+}
+
+.medium-zoom--opened .medium-zoom-overlay {
+  cursor: pointer;
+  cursor: zoom-out;
+  opacity: 1;
+}
+
+.medium-zoom-image {
+  cursor: pointer;
+  cursor: zoom-in;
+  /*
+    The `transition` is marked as "!important" for the animation to happen
+    even though it's overriden by another inline `transition` style attribute.
+
+    This is problematic with frameworks that generate inline styles on their
+    images (e.g. Gatsby).
+
+    See https://github.com/francoischalifour/medium-zoom/issues/110
+   */
+  transition: transform 300ms cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+
+.medium-zoom-image--hidden {
+  visibility: hidden;
+}
+
+.medium-zoom-image--opened {
+  position: relative;
+  cursor: pointer;
+  cursor: zoom-out;
+  will-change: transform;
+}
+</style><script id="hljs-script" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/highlight.min.js" type="text/javascript" async=""></script>
+    
+<script id="mathjax" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/MathJax.js" type="text/javascript" async=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body class="skin-red_autumnal_leaves has-navbar mathjax2"><div id="MathJax_Message" style="display: none;"></div>
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/logo.svg" alt="博客园logo">
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://youclaw.dev/" target="_blank" onclick="countClicks('nav', 'skin-navbar-youclaw')">YouClaw</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off">
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/search.svg" alt="搜索">
+                            <img class="hidden focus-visible" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/enter.svg" alt="搜索">
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/search.svg" alt="搜索">
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'klchang', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/search.svg" alt="搜索">
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔" style="display: none;">
+                        <img id="new_post_icon" class="navbar-icon" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/newpost.svg" alt="写随笔">
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客" style="display: none;">
+                        <img id="myblog_icon" class="navbar-icon" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/myblog.svg" alt="我的博客">
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息" style="display: none;">
+                        <img id="msg_icon" class="navbar-icon" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/message.svg" alt="短消息">
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/lite-mode-on.svg" alt="简洁模式">
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown" style="display: none;">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/avatar-default.svg" alt="用户头像">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup" style="display: inline;">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()" style="display: inline;">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/klchang/"><img id="blogLogo" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/logo.gif" alt="返回主页"></a>		
+		
+
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/klchang">klchang</a>
+</h1>
+<h2>只要有一颗沉静的心，其他都已不再重要......；换个角度看世界</h2>
+
+
+
+
+		
+	</div>
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/klchang/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/klchang">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/klchang/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<span id="stats_post_count">随笔 - 131&nbsp; </span>
+<span id="stats_article_count">文章 - 2&nbsp; </span>
+<span id="stats-comment_count">评论 - 41&nbsp; </span>
+<span id="stats-total-view-count">阅读 - 
+<span title="总阅读数: 1711291">
+171万</span></span>
+
+		</div>
+	</div>
+</div>
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    
+    <div id="topics">
+        <div class="post">
+            <h1 class="postTitle">
+                <a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/klchang/p/14353384.html" title="发布于 2021-01-31 18:04">
+    <span role="heading" aria-level="2">Ubuntu 20.04 安装 CUDA Toolkit 的三种方式</span>
+    
+
+</a><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<p><span style="font-size: 16px">无论采用哪一种方式，首先都需要更新 Ubuntu 软件源和升级到最新版本的软件包。由于国内从 Ubuntu 官方软件源下载速度比较慢，所以，建议采用国内 Ubuntu 镜像源，比如<a href="https://developer.aliyun.com/mirror/ubuntu" target="_blank" rel="noopener nofollow">阿里 Ubuntu 软件源</a>或<a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/" target="_blank" rel="noopener nofollow">清华大学 Ubuntu 软件源</a>。
+具体的配置方式是修改配置文件 /etc/apt/sources.list，将其中的 archive.ubuntu.com 替换为 
+mirrors.alibaba.com 或 mirrors.tuna.tsinghua.edu.cn 。也可以在图形界面应用 "Software
+ &amp; Update" 中，修改 Ubuntu Software 标签页中的 Download from 后的软件源地址。</span></p>
+<p><span style="font-size: 16px">配置软件源后，采用如下命令进行软件源的更新和软件包的升级。</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 255, 1)">sudo</span><span style="color: rgba(0, 0, 0, 1)"> apt update
+</span><span style="color: rgba(0, 0, 255, 1)">sudo</span> apt upgrade</span></pre>
+</div>
+<p><span style="font-size: 16px">下面介绍在 Ubuntu 20.04 长期支持版本中，安装 CUDA Tools 的三种方式：</span></p>
+<h2><span style="font-size: 18px">方式一：采用 Ubuntu 软件源中的 CUDA Tools 软件包</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p><span style="font-size: 16px">这种方式安装简单，但安装的 CUDA Toolkit 版本往往不是最新版本。<strong>查询</strong>目前可安装的<strong> CUDA Toolkit 版本</strong>的命令，如下所示</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">apt search nvidia-cuda-toolkit</span></pre>
+</div>
+<p><span style="font-size: 16px">具体安装命令如下：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 255, 1)">sudo</span> apt <span style="color: rgba(0, 0, 255, 1)">install</span> nvidia-cuda-toolkit</span></pre>
+</div>
+<h2><span style="font-size: 18px">方式二：先采用图形界面安装 CUDA 驱动，再安装从 NVIDIA 官网下载的 CUDA Toolkit 安装包</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<h3><span style="font-size: 16px">1）图形界面安装 CUDA 驱动</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p><span style="font-size: 16px">在所有应用中，选择 “Software &amp; Update” 应用，在标签页 "Additional Drivers" 中选择 “nvidia-driver-450-server”，如下图所示：</span></p>
+<p><span style="font-size: 16px"><img alt="" loading="lazy" data-src="https://img2020.cnblogs.com/blog/757205/202101/757205-20210131164003904-672549518.png" class="lazyloaded medium-zoom-image" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/757205-20210131164003904-672549518.png"></span></p>
+<p><span style="font-size: 16px">选择后，单击 “Apply Changes” 按钮，这样就更新并切换到所选驱动。</span></p>
+<p><span style="font-size: 16px">快捷键 Ctrl + Alt + T 打开 Terminal ，运行 <strong>nvidia-smi</strong> 命令以验证切换到 CUDA 驱动是否成功。我尝试过 nvidia-driver-460 这个版本，但没有成功，因此使用稍低的版本 <strong>nvidia-driver-450-server</strong> 。</span></p>
+<h3><span style="font-size: 16px">2）下载并安装 CUDA Toolkit</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p><span style="font-size: 16px">本机安装的 CUDA Toolkit 版本为 11.0.3，与上一步安装 CUDA 驱动 450 兼容（可以参考下载文件名的尾缀）， 具体下载命令，如下</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 255, 1)">wget</span> https:<span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda_11.0.3_450.51.06_linux.run</span></span></pre>
+</div>
+<p><span style="font-size: 16px">安装命令，如下</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 255, 1)">sudo</span> <span style="color: rgba(0, 0, 255, 1)">sh</span> cuda_11.<span style="color: rgba(128, 0, 128, 1)">0</span>.3_450.<span style="color: rgba(128, 0, 128, 1)">51</span>.06_linux.run </span></pre>
+</div>
+<p><span style="font-size: 16px">需要注意，安装时，选择<strong>不安装 CUDA 驱动</strong>，安装记录如下：</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-size: 16px">===========
+= Summary =
+===========
+
+Driver:   Not Selected
+Toolkit:  Installed in /usr/local/cuda-11.0/
+Samples:  Installed in /home/klchang/, but missing recommended libraries
+
+Please make sure that
+ -   PATH includes /usr/local/cuda-11.0/bin
+ -   LD_LIBRARY_PATH includes /usr/local/cuda-11.0/lib64, or, add /usr/local/cuda-11.0/lib64 to /etc/ld.so.conf and run ldconfig as root
+
+To uninstall the CUDA Toolkit, run cuda-uninstaller in /usr/local/cuda-11.0/bin
+***WARNING: Incomplete installation! This installation did not install the CUDA Driver. A driver of version at least .00 is required for CUDA 11.0 functionality to work.
+To install the driver using this installer, run the following command, replacing &lt;CudaInstaller&gt; with the name of this run file:
+    sudo &lt;CudaInstaller&gt;.run --silent --driver
+
+Logfile is /var/log/cuda-installer.log</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="font-size: 16px">安装结束后，添加环境变量到 ~/.bashrc 文件的末尾，具体添加内容如下：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/<span style="color: rgba(0, 0, 0, 1)">lib64
+export PATH</span>=$PATH:/usr/local/cuda/<span style="color: rgba(0, 0, 0, 1)">bin
+export CUDA_HOME</span>=$CUDA_HOME:/usr/local/cuda</span></pre>
+</div>
+<p><span style="font-size: 16px">保存后退出。</span></p>
+<p><span style="font-size: 16px">在 Terminal 中，激活环境变量命令为 <strong>source ~/.bashrc </strong>。</span></p>
+<p><span style="font-size: 16px">测试 CUDA Toolkit 。 通过编译自带 Samples并执行， 以验证是否安装成功。具体命令如下所示：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">cd /usr/local/cuda/samples/1_Utilities/<span style="color: rgba(0, 0, 0, 1)">deviceQuery
+</span><span style="color: rgba(0, 0, 255, 1)">sudo</span> <span style="color: rgba(0, 0, 255, 1)">make</span><span style="color: rgba(0, 0, 0, 1)">
+.</span>/deviceQuery</span></pre>
+</div>
+<p><span style="font-size: 16px">如果安装成功，则输出类似于如下信息：</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-size: 16px">./deviceQuery Starting...
+
+ CUDA Device Query (Runtime API) version (CUDART static linking)
+
+Detected 1 CUDA Capable device(s)
+
+Device 0: "GeForce RTX 2070 with Max-Q Design"
+  CUDA Driver Version / Runtime Version          11.0 / 11.0
+  CUDA Capability Major/Minor version number:    7.5
+  Total amount of global memory:                 7982 MBytes (8370061312 bytes)
+  (36) Multiprocessors, ( 64) CUDA Cores/MP:     2304 CUDA Cores
+  GPU Max Clock rate:                            1125 MHz (1.12 GHz)
+  Memory Clock rate:                             5501 Mhz
+  Memory Bus Width:                              256-bit
+  L2 Cache Size:                                 4194304 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total number of registers available per block: 65536
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  1024
+  Maximum number of threads per block:           1024
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 3 copy engine(s)
+  Run time limit on kernels:                     Yes
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        Disabled
+  Device supports Unified Addressing (UVA):      Yes
+  Device supports Managed Memory:                Yes
+  Device supports Compute Preemption:            Yes
+  Supports Cooperative Kernel Launch:            Yes
+  Supports MultiDevice Co-op Kernel Launch:      Yes
+  Device PCI Domain ID / Bus ID / location ID:   0 / 1 / 0
+  Compute Mode:
+     &lt; Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) &gt;
+
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 11.0, CUDA Runtime Version = 11.0, NumDevs = 1
+Result = PASS</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3><span style="font-size: 16px">3）下载并安装&nbsp;cuDNN</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p><span style="font-size: 16px">从 NVIDIA 官方网址&nbsp;&nbsp;<a href="https://developer.nvidia.com/rdp/cudnn-download" rel="noopener nofollow">https://developer.nvidia.com/rdp/cudnn-download</a>&nbsp;下载&nbsp;cudnn-11.0-linux-x64-v8.0.5.39.tgz&nbsp;。</span></p>
+<p><span style="font-size: 16px">解压压缩包，并把相应的文件，复制到指定目录即可。如下所示：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 255, 1)">tar</span> zxvf cudnn-<span style="color: rgba(128, 0, 128, 1)">11.0</span>-linux-x64-v8.<span style="color: rgba(128, 0, 128, 1)">0.5</span>.<span style="color: rgba(128, 0, 128, 1)">39</span><span style="color: rgba(0, 0, 0, 1)">.tgz 
+</span><span style="color: rgba(0, 0, 255, 1)">sudo</span> <span style="color: rgba(0, 0, 255, 1)">cp</span> cuda/include/cudnn* /usr/local/cuda/<span style="color: rgba(0, 0, 0, 1)">include
+</span><span style="color: rgba(0, 0, 255, 1)">sudo</span> <span style="color: rgba(0, 0, 255, 1)">cp</span> cuda/lib64/libcudnn* /usr/local/cuda/<span style="color: rgba(0, 0, 0, 1)">lib64
+</span><span style="color: rgba(0, 0, 255, 1)">sudo</span> <span style="color: rgba(0, 0, 255, 1)">chmod</span> a+r /usr/local/cuda/include/cudnn* /usr/local/cuda/lib64/libcudnn*</span></pre>
+</div>
+<h2><span style="font-size: 18px">方式三：CUDA 驱动和 CUDA Toolkit 都采用命令行方式安装</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p><span style="font-size: 16px">首先，需要卸载原有的 NVIDIA 驱动并禁用自带的驱动 nouveau；然后，重启电脑，使用<strong> lsmod | grep nouveau</strong> 命令检查禁用自带驱动是否成功；如果禁用成功，则安装从 <a href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank" rel="noopener nofollow">NVIDIA 官方地址</a>下载的 CUDA&nbsp; Toolkit。其步骤则与方式二相同，差别在于这次需要安装 CUDA 驱动 。更多内容，参见&nbsp;<a href="https://beyondstateoftheart.medium.com/install-cuda-toolkit-install-nvidia-driver-ubuntu20-04-1634685ed68a" target="_blank" rel="noopener nofollow">How to Install CUDA ToolKit 11.0, and Nvidia Display Driver on Ubuntu 20.04</a>。</span></p>
+<h2><span style="font-size: 18px">问题与解答</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<h3><span style="font-size: 16px">问题 1，sudo apt update 时，出现有锁无法更新的情况</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-size: 16px">$ <span style="color: rgba(0, 0, 255, 1)">sudo</span><span style="color: rgba(0, 0, 0, 1)"> apt update
+
+Reading package lists... Done
+E: Could not get lock </span>/var/lib/apt/lists/lock. It is held by process <span style="color: rgba(128, 0, 128, 1)">1379</span><span style="color: rgba(0, 0, 0, 1)"> (packagekitd)
+N: Be aware that removing the lock </span><span style="color: rgba(0, 0, 255, 1)">file</span><span style="color: rgba(0, 0, 0, 1)"> is not a solution and may break your system.
+E: Unable to lock directory </span>/var/lib/apt/lists/</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="font-size: 16px">解决方法：</span></p>
+<p><span style="font-size: 16px">停用 packagekitd，并禁止开机启动，具体命令如下：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1); font-size: 16px">systemctl stop packagekitd
+systemcrl disable packagekit.service</span></pre>
+</div>
+<h2><span style="font-size: 18px">参考资料&nbsp;</span><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p><span style="font-size: 16px">[1] How to Install cuda on Ubuntu 20.04.&nbsp;<a href="https://linuxconfig.org/how-to-install-cuda-on-ubuntu-20-04-focal-fossa-linux" rel="noopener nofollow">https://linuxconfig.org/how-to-install-cuda-on-ubuntu-20-04-focal-fossa-linux</a></span></p>
+<p><span style="font-size: 16px">[2]&nbsp;Ubuntu16.04安装NVIDIA驱动、实现GPU加速.&nbsp;<a href="https://blog.csdn.net/zhang970187013/article/details/81012845" rel="noopener nofollow">https://blog.csdn.net/zhang970187013/article/details/81012845</a></span></p>
+<p>&nbsp;</p>
+
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo" class="post-meta-container">
+<div id="BlogPostCategory" class="post-meta-item detail-post-categories post-meata-categories">
+    分类: 
+            <a href="https://www.cnblogs.com/klchang/category/772973.html" target="_blank">Tools</a>,             <a href="https://www.cnblogs.com/klchang/category/737513.html" target="_blank">Linux</a></div>
+<div id="EntryTag" class="post-meta-item detail-post-tags">
+    
+    <div class="post-meta-item post-meta-disclaimer">
+        免责声明：本内容来自平台创作者，博客园系信息发布平台，仅提供信息存储空间服务。
+    </div>
+</div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(14353384,cb_blogId,1);green_channel_success(this,'谢谢推荐！');">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow('179fb08f-81f9-e411-b908-9dcfd8948a71');" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_wechat" href="javascript:void(0);" onclick="shareManager.wechatShare()">微信分享</a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/klchang/" target="_blank"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info post-detail-profile">
+            <a href="https://home.cnblogs.com/u/klchang/">klchang</a>
+            <br>
+            <a href="https://home.cnblogs.com/u/klchang/followers/">粉丝 - <span class="follower-count">47</span></a>
+            <a href="https://home.cnblogs.com/u/klchang/followees/">关注 - <span class="following-count">0</span></a><br>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow" class="follow-tip">
+                <a href="javascript:void(0);" onclick="follow('179fb08f-81f9-e411-b908-9dcfd8948a71');return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(14353384,'Digg')">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(14353384,'Bury')">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+        <div id="vip_tip"><a class="tip" href="https://cnblogs.vip/" target="_blank">升级成为会员</a></div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script>
+</div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/klchang/p/14322667.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/klchang/p/14322667.html" data-featured-image="" title="发布于 2021-01-24 22:56">安装 Win 10 + Ubuntu 双系统之 Ubuntu 安装笔记 (HP笔记本+UEFI 模式)</a>
+    <br>
+    <a href="https://www.cnblogs.com/klchang/p/14459983.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/klchang/p/14459983.html" data-featured-image="" title="发布于 2021-02-28 18:41">理解 numpy.rollaxis() 函数</a>
+
+</div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date" data-last-update-days="0.0020833333333333333" data-date-updated="2021-01-31 18:07">2021-01-31 18:04</span>&nbsp;
+<a href="https://www.cnblogs.com/klchang">klchang</a>&nbsp;
+阅读(<span id="post_view_count">66281</span>)&nbsp;
+评论(<span id="post_comment_count">1</span>)&nbsp;
+&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14353384);return false;">收藏</a>&nbsp;
+<a href="https://report.cnblogs.com/?targetLink=https%3A%2F%2Fwww.cnblogs.com%2Fklchang%2Fp%2F14353384.html&amp;targetId=14353384&amp;targetType=0" target="_blank">举报</a>
+</div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script>
+    var cb_entryId = 14353384, cb_entryCreatedDate = '2021-01-31 18:04', cb_postType = 1, cb_postTitle = 'Ubuntu 20.04 安装 CUDA Toolkit 的三种方式';
+    var allowComments = true, cb_blogId = 227853, cb_blogApp = 'klchang', cb_blogUserGuid = '179fb08f-81f9-e411-b908-9dcfd8948a71';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");    
+</script>
+<a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container"><div class="login_tips">
+    登录后才能查看或发表评论，立即 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return account.login('!comments');">登录</a> 或者
+    <a href="https://www.cnblogs.com/">逛逛</a> 博客园首页
+</div>
+</div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"><a href="https://www.cnblogs.com/cmt/p/20047647" target="_blank" onclick="countCreativeClicks('CH-Halo')">【推荐】博客园 × Halo｜国产电商新选择，商城版永久授权，3 折升级特惠</a><br><a href="https://harmonyos.cnblogs.com/p/28310" target="_blank" onclick="countCreativeClicks('CH-HarmonyOS')">【推荐】HarmonyOS 6.1.0 创新特性“悬浮页签+沉浸光感”精品文章专题</a><br><a href="https://ais.cn/u/QjqYJr" target="_blank" onclick="countCreativeClicks('CH-艾思科蓝')">【推荐】科研领域的连接者艾思科蓝，一站式科研学术服务数字化平台</a><br></div>
+    <div id="opt_under_post"></div>
+        <div id="blog_c1" class="under-post-card below-post-card">
+            <a href="https://ais.cn/u/3Qf22e" rel="nofollow" target="_blank" onclick="countCreativeClicks('C1-艾思科蓝')">
+                <img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/35695-20251205182619157-1150461542.webp" onload="countCreativeImpressions('C1-艾思科蓝')" alt="" style="width:300px!important;height:250px!important;min-width:300px!important;max-width:300px!important;">
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+        </div>
+    <div id="under_post_card1"><div class="under-post-card below-post-card">
+<header>编辑推荐：</header>
+<ul>
+    <li><a href="https://www.cnblogs.com/Zhang-Xiang/p/20028472" target="_blank">代码是 AI 写的，生产事故谁背锅？</a></li>
+    <li><a href="https://www.cnblogs.com/BettaFish/p/20012355" target="_blank">在 Avalonia 中编写高性能动画 </a></li>
+    <li><a href="https://www.cnblogs.com/cswuyg/p/19981922" target="_blank">从 305 GB 到 7.4 GB：大模型 KVCache 架构演进全景</a></li>
+    <li><a href="https://www.cnblogs.com/zhayujie/p/19935607/deepseek-v4-eval" target="_blank">DeepSeek V4模型的Agent能力实测 </a></li>
+    <li><a href="https://www.cnblogs.com/hez2010/p/19891530/union-types-in-csharp-15" target="_blank">C# 15 类型系统改进：Union Types</a></li>
+</ul>
+</div></div>
+    <div id="related_posts_card"></div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card below-post-card"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+            setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+            LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+	</div>
+	</div>
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+    <h3 class="catListTitle">公告</h3>
+<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container"><div id="profile_block" class="sidebar-profile">
+    昵称：
+    <a href="https://home.cnblogs.com/u/klchang/">
+        klchang
+    </a>
+    <br>
+    园龄：
+    <a href="https://home.cnblogs.com/u/klchang/" title="入园时间：2015-05-13">
+        11年
+    </a>
+    <br>
+    粉丝：
+    <a class="follower-count" href="https://home.cnblogs.com/u/klchang/followers/">
+        47
+    </a>
+    <br>
+    关注：
+    <a class="folowing-count" href="https://home.cnblogs.com/u/klchang/followees/">
+        0
+    </a>
+    <div id="p_b_follow" class="follow-tip">
+<a href="javascript:void(0)" onclick="follow('179fb08f-81f9-e411-b908-9dcfd8948a71')">+加关注</a></div>
+    <script>getFollowStatus('179fb08f-81f9-e411-b908-9dcfd8948a71');</script>
+</div>
+</div>
+</div>
+<script>loadBlogNews();</script>
+
+
+</div>
+			<div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar('2026/04/22'); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2026年5月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar('2026/06/22'); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <tr>
+        <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+        <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+        <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+        <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+        <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+        <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+        <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+    </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">26</td>
+                            <td class="CalOtherMonthDay" align="center">27</td>
+                            <td class="CalOtherMonthDay" align="center">28</td>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                        <td class="" align="center">
+                            1
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        2
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            3
+                        </td>
+                            <td class="" align="center">
+                                4
+                            </td>
+                            <td class="" align="center">
+                                5
+                            </td>
+                            <td class="" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                7
+                            </td>
+                            <td class="" align="center">
+                                8
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            9
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            10
+                        </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                            <td class="" align="center">
+                                14
+                            </td>
+                            <td class="" align="center">
+                                15
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            16
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            17
+                        </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                            <td class="" align="center">
+                                21
+                            </td>
+                            <td class="CalTodayDay cal-today" align="center">
+                                22
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            23
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            24
+                        </td>
+                            <td class="" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                            <td class="" align="center">
+                                29
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            30
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            31
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                1
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            6
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+    
+</div>
+
+
+
+
+
+<div id="sidebar_toptags" class="sidebar-block">
+    
+</div>
+
+<div id="sidebar_scorerank" class="sidebar-block">
+    <div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	
+268151
+	</li>
+	<li class="liRank">
+		排名 -	
+4193
+	</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<div id="sidebar_categories">
+
+    <div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+        <h3 class="catListTitle">
+            
+    <a class="sidebar-card-title-a" href="https://www.cnblogs.com/klchang/post-categories">随笔分类</a>
+
+
+
+        </h3>
+
+        <ul>
+
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/1071758.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Algorithm(13)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/1021777.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Android(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/737519.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Artificial Intelligence(6)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/860306.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">C/C++(9)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/756707.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Calligraphy(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/726726.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">CNN(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/779719.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Culture(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/737517.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Hardware(5)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/1002573.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Image(4)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/715346.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Java(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/2448673.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Javascript(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/737513.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Linux(7)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/737518.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Machine Learning(8)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/737520.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Mobile(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/category/787238.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Network(15)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/category/726725.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Python(43)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/category/747504.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Statistical Learning(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/category/772973.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Tools(12)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/category/737512.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Windows(6)</a>
+ 
+                </li>                
+            <li>
+                <a href="javascript:void(0)" onclick="sideColumnManager.loadMore(this)">更多</a>
+            </li>
+        </ul>
+
+
+    </div>    
+    <div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+        <h3 class="catListTitle">
+            
+随笔档案
+
+
+        </h3>
+
+        <ul>
+
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2025/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2025年4月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2025/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2025年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2024/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年6月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2024/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年5月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2024/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年4月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2024/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2024/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年2月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2024/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年1月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年10月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年9月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年8月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年7月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年6月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年5月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年4月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2023/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2023年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2021/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2021/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年2月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2021/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年1月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/12" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年12月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年11月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年10月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年9月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年8月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年7月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年6月(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2020/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2020年1月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2019/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年11月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2019/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年9月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2019/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年8月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2019/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年7月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2019/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年6月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2019/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2019/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年2月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/12" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年12月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年11月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年10月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年9月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年8月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年7月(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年6月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年5月(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年4月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年3月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年2月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2018/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年1月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/12" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年12月(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年11月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年10月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年9月(5)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年8月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年7月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年6月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年5月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年4月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2017/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年1月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/12" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年12月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年10月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年7月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年6月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年5月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年2月(15)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2016/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2016年1月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/12" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年12月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年11月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年10月(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年9月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年8月(4)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年7月(4)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年6月(7)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/klchang/p/archive/2015/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2015年5月(4)</a>
+ 
+                </li>                
+            <li>
+                <a href="javascript:void(0)" onclick="sideColumnManager.loadMore(this)">更多</a>
+            </li>
+        </ul>
+
+
+    </div>    
+</div>
+
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    <div class="catListView">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/klchang/most-viewed" class="sidebar-card-title-a">
+    阅读排行榜
+</a>
+
+    </h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/klchang/p/4635040.html">
+                            1. Python中获取异常（Exception）信息(316609)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/klchang/p/14020974.html">
+                            2. Windows 系统下 MD5 值计算方法（工具篇）(149571)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/klchang/p/7296058.html">
+                            3. 如何查看Python对象的属性(104174)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/klchang/p/10203404.html">
+                            4. 如何在Markdown文档中插入空格?(78711)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/klchang/p/9217551.html">
+                            5. 对数损失函数(Logarithmic Loss Function)的原理和 Python 实现(74460)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+
+
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+    
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">
+            <a href="https://www.cnblogs.com/klchang/most-liked" class="sidebar-card-title-a">推荐排行榜</a>
+
+        </h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/klchang/p/14020974.html">
+                                1. Windows 系统下 MD5 值计算方法（工具篇）(13)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/klchang/p/4635040.html">
+                                2. Python中获取异常（Exception）信息(10)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/klchang/p/10203404.html">
+                                3. 如何在Markdown文档中插入空格?(7)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/klchang/p/4771101.html">
+                                4. Windows系统自带工具的 cmd 命令(6)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/klchang/p/17352911.html">
+                                5. OpenAI API keys 的申请和测试小结(5)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div><div id="sidebar_recentcomments" class="sidebar-block">
+    
+</div></div>
+					<script>loadBlogSideColumn()</script>
+			</div>			
+		</div>
+	</div>
+	<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	<div id="footer">
+		<a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a>
+<span class="footer-copyright"> &nbsp;©&nbsp; 2004-2026</span>
+<br><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/ghs.png">浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+
+
+	</div>
+</div>
+
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8OBZrxGJLy5MvghieKIKXCzFKAGdLY3eWScTCjisgH6-89mjD-LM-XSO3gBOOGcV98FlZr5pYXAl9HRO4LMWg3zMntK0GxhSMt5KCI87QW9a-eVI4JRGn6WHQkzORZgbpJ03gqZehQ-oedIwGbN0-O4">
+    <script async="" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/js"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer="defer" src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/hm.js"></script>
+
+
+<div style="z-index: 998; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; flex-direction: column; align-items: center; justify-content: center">
+<div style="background: #fff;padding: 30px; margin: 30px; border-radius: 16px;">
+  <div style="width: 200px; height: 200px; background: rgba(255, 255, 255, 0.8); position: absolute; top: -100px; right: -100px; border-radius: 100px"></div>
+  <div style="text-align: center; font-size: 18px; margin-bottom: 10px;">点击右上角即可分享</div>
+  <img src="Ubuntu%2020.04%20%E5%AE%89%E8%A3%85%20CUDA%20Toolkit%20%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%20-%20klchang%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD_files/35695-20230906145857937-1471873834.gif" alt="微信分享提示">
+</div>   
+    </div></body></html>
