@@ -28,6 +28,7 @@
 #include <fastdds/dds/log/Log.hpp>
 
 #include <thread>
+#include "cxxopts.hpp"
 
 using namespace eprosima::fastdds::dds;
 
@@ -238,12 +239,28 @@ void init_log() {
 
 int main(
         int argc,
-        char** argv)
+        char** argv) try
 {
+    cxxopts::Options options(argv[0], "DDS publisher");
+
+    options.add_options()
+        ("h,help", "Produce help message.")
+        ("s,samples", "Number of samples (0, default, infinite).", cxxopts::value<uint32_t>()->default_value("0"))
+        ("i,interval", "Time between samples in milliseconds (Default: 100).", cxxopts::value<uint32_t>()->default_value("100"))
+        ("e,env", "Load QoS from environment.", cxxopts::value<bool>()->default_value("false"));
+        
+    auto result = options.parse(argc, argv);
+
+    if (result.count("help")) {
+        std::cout << options.help() << std::endl;
+        return 0;
+    }
+
+    uint32_t count = result["samples"].as<uint32_t>();
+    uint32_t sleep = result["interval"].as<uint32_t>();
+    bool use_environment_qos = result["env"].as<bool>();
+
     std::cout << "Starting publisher." << std::endl;
-    uint32_t count = 10;
-    uint32_t sleep = 100;
-    bool use_environment_qos = false;
 
     init_log();
 
@@ -255,5 +272,7 @@ int main(
 
     delete mypub;
     return 0;
+} catch (const cxxopts::exceptions::exception& e) {
+    std::cerr << "Error: " << e.what() << std::endl;
 }
 

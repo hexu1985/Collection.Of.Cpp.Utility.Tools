@@ -27,6 +27,8 @@
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/log/Log.hpp>
 
+#include "cxxopts.hpp"
+
 using namespace eprosima::fastdds::dds;
 
 HelloWorldSubscriber::HelloWorldSubscriber()
@@ -195,10 +197,24 @@ void init_log() {
 
 int main(
         int argc,
-        char** argv)
+        char** argv) try
 {
+    cxxopts::Options options(argv[0], "DDS publisher");
+
+    options.add_options()
+        ("h,help", "Produce help message.")
+        ("e,env", "Load QoS from environment.", cxxopts::value<bool>()->default_value("false"));
+
+    auto result = options.parse(argc, argv);
+
+    if (result.count("help")) {
+        std::cout << options.help() << std::endl;
+        return 0;
+    }
+
+    bool use_environment_qos = result["env"].as<bool>();
+
     std::cout << "Starting subscriber." << std::endl;
-    bool use_environment_qos = false;
 
     init_log();
 
@@ -210,4 +226,6 @@ int main(
 
     delete mysub;
     return 0;
+} catch (const cxxopts::exceptions::exception& e) {
+    std::cerr << "Error: " << e.what() << std::endl;
 }
