@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 
-fastddsgen HelloWorld.idl
+fastddsgen HelloWorld.idl -d gen
 

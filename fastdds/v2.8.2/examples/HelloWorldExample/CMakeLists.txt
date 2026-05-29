@@ -32,7 +32,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
 endif()
 
 message(STATUS "Configuring HelloWorld publisher/subscriber example...")
-file(GLOB DDS_HELLOWORLD_SOURCES_CXX "*.cxx")
+file(GLOB DDS_HELLOWORLD_SOURCES_CXX "${CMAKE_CURRENT_SOURCE_DIR}/gen/*.cxx")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gen)
 
 add_executable(DDSHelloWorldPublisher HelloWorldPublisher.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 target_link_libraries(DDSHelloWorldPublisher fastrtps fastcdr tinyxml2::tinyxml2)
