@@ -6,5 +6,5 @@ cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release \
     -DCUDA_ARCH_BIN="8.9" \
     -DENABLE_FAST_MATH=1 \
     -DWITH_CUBLAS=1 \
-    -DBUILD_opencv_python3=ON \
+    -DBUILD_opencv_python3=ON
 cmake --build build -j4
