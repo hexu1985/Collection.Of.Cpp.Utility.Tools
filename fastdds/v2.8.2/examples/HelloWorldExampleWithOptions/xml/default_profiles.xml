@@ -5,7 +5,7 @@
             <name>Profiles example name</name>
         </rtps>
     </participant>
-    <data_writer profile_name="datawriter_name_is_mandatory" is_default_profile="true">
+    <data_writer profile_name="datawriter_profile_name" is_default_profile="true">
         <qos>
             <reliability>
                 <kind>BEST_EFFORT</kind>
@@ -16,9 +16,12 @@
                 <kind>KEEP_LAST</kind>
                 <depth>10</depth>
             </historyQos>
+            <resourceLimitsQos>
+                <max_samples>1000</max_samples> <!-- 最大样本数 [7†L44-L46] -->
+            </resourceLimitsQos>
         </topic>
     </data_writer>
-    <data_reader profile_name="datareader_name_is_mandatory" is_default_profile="true">
+    <data_reader profile_name="datareader_profile_name" is_default_profile="true">
         <qos>
             <reliability>
                 <kind>RELIABLE</kind>
@@ -29,6 +32,9 @@
                 <kind>KEEP_LAST</kind>
                 <depth>5</depth>
             </historyQos>
+            <resourceLimitsQos>
+                <max_samples>1000</max_samples> <!-- 最大样本数 [7†L44-L46] -->
+            </resourceLimitsQos>
         </topic>
     </data_reader>
 </profiles>
