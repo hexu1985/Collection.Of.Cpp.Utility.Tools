@@ -25,7 +25,8 @@ bool string2time(const std::string& str, time_t& t) {
 }
 
 void test_string2time(const std::string& str) {
-    time_t t;
+    time_t t{0};
+    std::cout << "origin time_t: " << ctime(&t) << std::endl;
     if (string2time(str, t)) {
         std::cout << "string2time success, origin str: " << str << ", time: " << ctime(&t) << std::endl;
     } else {
