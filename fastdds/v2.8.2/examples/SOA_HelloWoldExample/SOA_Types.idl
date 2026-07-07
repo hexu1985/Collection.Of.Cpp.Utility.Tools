@@ -1,0 +1,25 @@
+
+module fastdds_soa 
+{
+
+struct RPC_Header
+{
+    string client_id;
+    long session_id;
+    long request_id;
+};
+
+struct RPC_Request
+{
+    RPC_Header header;
+    string request_payload;
+};
+
+struct RPC_Response
+{
+    RPC_Header header;
+    long error_code;
+    string response_payload;
+};
+
+};  // fastdds_soa
