@@ -65,6 +65,17 @@ class Cdr;
 
 namespace fastdds_soa {
     /*!
+     * @brief This class represents the enumeration ErrorCode defined by the user in the IDL file.
+     * @ingroup SOA_TYPES
+     */
+    enum ErrorCode : uint32_t
+    {
+        SUCCESS,
+        SERVICE_NOT_AVAILABLE,
+        METHOD_NOT_REGISTER,
+        REQUEST_TIMEOUT
+    };
+    /*!
      * @brief This class represents the structure RPC_Header defined by the user in the IDL file.
      * @ingroup SOA_TYPES
      */
@@ -169,6 +180,25 @@ namespace fastdds_soa {
         eProsima_user_DllExport int32_t& session_id();
 
         /*!
+         * @brief This function sets a value in member method_id
+         * @param _method_id New value for member method_id
+         */
+        eProsima_user_DllExport void method_id(
+                int32_t _method_id);
+
+        /*!
+         * @brief This function returns the value of member method_id
+         * @return Value of member method_id
+         */
+        eProsima_user_DllExport int32_t method_id() const;
+
+        /*!
+         * @brief This function returns a reference to member method_id
+         * @return Reference to member method_id
+         */
+        eProsima_user_DllExport int32_t& method_id();
+
+        /*!
          * @brief This function sets a value in member request_id
          * @param _request_id New value for member request_id
          */
@@ -249,6 +279,7 @@ namespace fastdds_soa {
 
         std::string m_client_id;
         int32_t m_session_id;
+        int32_t m_method_id;
         int32_t m_request_id;
     };
     /*!
@@ -514,19 +545,19 @@ namespace fastdds_soa {
          * @param _error_code New value for member error_code
          */
         eProsima_user_DllExport void error_code(
-                int32_t _error_code);
+                fastdds_soa::ErrorCode _error_code);
 
         /*!
          * @brief This function returns the value of member error_code
          * @return Value of member error_code
          */
-        eProsima_user_DllExport int32_t error_code() const;
+        eProsima_user_DllExport fastdds_soa::ErrorCode error_code() const;
 
         /*!
          * @brief This function returns a reference to member error_code
          * @return Reference to member error_code
          */
-        eProsima_user_DllExport int32_t& error_code();
+        eProsima_user_DllExport fastdds_soa::ErrorCode& error_code();
 
         /*!
          * @brief This function copies the value in member response_payload
@@ -614,7 +645,7 @@ namespace fastdds_soa {
     private:
 
         fastdds_soa::RPC_Header m_header;
-        int32_t m_error_code;
+        fastdds_soa::ErrorCode m_error_code;
         std::string m_response_payload;
     };
 } // namespace fastdds_soa

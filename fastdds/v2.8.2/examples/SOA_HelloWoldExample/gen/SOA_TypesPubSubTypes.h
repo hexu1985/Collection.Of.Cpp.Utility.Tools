@@ -35,6 +35,7 @@
 
 namespace fastdds_soa
 {
+
     /*!
      * @brief This class represents the TopicDataType of the type RPC_Header defined by the user in the IDL file.
      * @ingroup SOA_TYPES

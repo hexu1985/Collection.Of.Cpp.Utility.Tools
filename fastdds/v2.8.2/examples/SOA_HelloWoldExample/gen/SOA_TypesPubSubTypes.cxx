@@ -29,6 +29,7 @@ using SerializedPayload_t = eprosima::fastrtps::rtps::SerializedPayload_t;
 using InstanceHandle_t = eprosima::fastrtps::rtps::InstanceHandle_t;
 
 namespace fastdds_soa {
+
     RPC_HeaderPubSubType::RPC_HeaderPubSubType()
     {
         setName("fastdds_soa::RPC_Header");
