@@ -136,6 +136,31 @@ namespace fastdds_soa {
                 const RPC_Header& x) const;
 
         /*!
+         * @brief This function copies the value in member method_name
+         * @param _method_name New value to be copied in member method_name
+         */
+        eProsima_user_DllExport void method_name(
+                const std::string& _method_name);
+
+        /*!
+         * @brief This function moves the value in member method_name
+         * @param _method_name New value to be moved in member method_name
+         */
+        eProsima_user_DllExport void method_name(
+                std::string&& _method_name);
+
+        /*!
+         * @brief This function returns a constant reference to member method_name
+         * @return Constant reference to member method_name
+         */
+        eProsima_user_DllExport const std::string& method_name() const;
+
+        /*!
+         * @brief This function returns a reference to member method_name
+         * @return Reference to member method_name
+         */
+        eProsima_user_DllExport std::string& method_name();
+        /*!
          * @brief This function copies the value in member client_id
          * @param _client_id New value to be copied in member client_id
          */
@@ -178,25 +203,6 @@ namespace fastdds_soa {
          * @return Reference to member session_id
          */
         eProsima_user_DllExport int32_t& session_id();
-
-        /*!
-         * @brief This function sets a value in member method_id
-         * @param _method_id New value for member method_id
-         */
-        eProsima_user_DllExport void method_id(
-                int32_t _method_id);
-
-        /*!
-         * @brief This function returns the value of member method_id
-         * @return Value of member method_id
-         */
-        eProsima_user_DllExport int32_t method_id() const;
-
-        /*!
-         * @brief This function returns a reference to member method_id
-         * @return Reference to member method_id
-         */
-        eProsima_user_DllExport int32_t& method_id();
 
         /*!
          * @brief This function sets a value in member request_id
@@ -277,9 +283,9 @@ namespace fastdds_soa {
 
     private:
 
+        std::string m_method_name;
         std::string m_client_id;
         int32_t m_session_id;
-        int32_t m_method_id;
         int32_t m_request_id;
     };
     /*!

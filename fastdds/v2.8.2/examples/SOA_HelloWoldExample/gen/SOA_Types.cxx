@@ -37,12 +37,12 @@ using namespace eprosima::fastcdr::exception;
 
 fastdds_soa::RPC_Header::RPC_Header()
 {
-    // m_client_id com.eprosima.idl.parser.typecode.StringTypeCode@27f723
+    // m_method_name com.eprosima.idl.parser.typecode.StringTypeCode@27f723
+    m_method_name ="";
+    // m_client_id com.eprosima.idl.parser.typecode.StringTypeCode@670b40af
     m_client_id ="";
-    // m_session_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@670b40af
+    // m_session_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4923ab24
     m_session_id = 0;
-    // m_method_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4923ab24
-    m_method_id = 0;
     // m_request_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@44c8afef
     m_request_id = 0;
 
@@ -59,18 +59,18 @@ fastdds_soa::RPC_Header::~RPC_Header()
 fastdds_soa::RPC_Header::RPC_Header(
         const RPC_Header& x)
 {
+    m_method_name = x.m_method_name;
     m_client_id = x.m_client_id;
     m_session_id = x.m_session_id;
-    m_method_id = x.m_method_id;
     m_request_id = x.m_request_id;
 }
 
 fastdds_soa::RPC_Header::RPC_Header(
         RPC_Header&& x)
 {
+    m_method_name = std::move(x.m_method_name);
     m_client_id = std::move(x.m_client_id);
     m_session_id = x.m_session_id;
-    m_method_id = x.m_method_id;
     m_request_id = x.m_request_id;
 }
 
@@ -78,9 +78,9 @@ fastdds_soa::RPC_Header& fastdds_soa::RPC_Header::operator =(
         const RPC_Header& x)
 {
 
+    m_method_name = x.m_method_name;
     m_client_id = x.m_client_id;
     m_session_id = x.m_session_id;
-    m_method_id = x.m_method_id;
     m_request_id = x.m_request_id;
 
     return *this;
@@ -90,9 +90,9 @@ fastdds_soa::RPC_Header& fastdds_soa::RPC_Header::operator =(
         RPC_Header&& x)
 {
 
+    m_method_name = std::move(x.m_method_name);
     m_client_id = std::move(x.m_client_id);
     m_session_id = x.m_session_id;
-    m_method_id = x.m_method_id;
     m_request_id = x.m_request_id;
 
     return *this;
@@ -102,7 +102,7 @@ bool fastdds_soa::RPC_Header::operator ==(
         const RPC_Header& x) const
 {
 
-    return (m_client_id == x.m_client_id && m_session_id == x.m_session_id && m_method_id == x.m_method_id && m_request_id == x.m_request_id);
+    return (m_method_name == x.m_method_name && m_client_id == x.m_client_id && m_session_id == x.m_session_id && m_request_id == x.m_request_id);
 }
 
 bool fastdds_soa::RPC_Header::operator !=(
@@ -119,8 +119,7 @@ size_t fastdds_soa::RPC_Header::getMaxCdrSerializedSize(
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
@@ -140,10 +139,9 @@ size_t fastdds_soa::RPC_Header::getCdrSerializedSize(
     size_t initial_alignment = current_alignment;
 
 
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.method_name().size() + 1;
+
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.client_id().size() + 1;
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
-
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
@@ -159,9 +157,9 @@ void fastdds_soa::RPC_Header::serialize(
         eprosima::fastcdr::Cdr& scdr) const
 {
 
+    scdr << m_method_name.c_str();
     scdr << m_client_id.c_str();
     scdr << m_session_id;
-    scdr << m_method_id;
     scdr << m_request_id;
 
 }
@@ -170,12 +168,49 @@ void fastdds_soa::RPC_Header::deserialize(
         eprosima::fastcdr::Cdr& dcdr)
 {
 
+    dcdr >> m_method_name;
     dcdr >> m_client_id;
     dcdr >> m_session_id;
-    dcdr >> m_method_id;
     dcdr >> m_request_id;
 }
 
+/*!
+ * @brief This function copies the value in member method_name
+ * @param _method_name New value to be copied in member method_name
+ */
+void fastdds_soa::RPC_Header::method_name(
+        const std::string& _method_name)
+{
+    m_method_name = _method_name;
+}
+
+/*!
+ * @brief This function moves the value in member method_name
+ * @param _method_name New value to be moved in member method_name
+ */
+void fastdds_soa::RPC_Header::method_name(
+        std::string&& _method_name)
+{
+    m_method_name = std::move(_method_name);
+}
+
+/*!
+ * @brief This function returns a constant reference to member method_name
+ * @return Constant reference to member method_name
+ */
+const std::string& fastdds_soa::RPC_Header::method_name() const
+{
+    return m_method_name;
+}
+
+/*!
+ * @brief This function returns a reference to member method_name
+ * @return Reference to member method_name
+ */
+std::string& fastdds_soa::RPC_Header::method_name()
+{
+    return m_method_name;
+}
 /*!
  * @brief This function copies the value in member client_id
  * @param _client_id New value to be copied in member client_id
@@ -239,34 +274,6 @@ int32_t fastdds_soa::RPC_Header::session_id() const
 int32_t& fastdds_soa::RPC_Header::session_id()
 {
     return m_session_id;
-}
-
-/*!
- * @brief This function sets a value in member method_id
- * @param _method_id New value for member method_id
- */
-void fastdds_soa::RPC_Header::method_id(
-        int32_t _method_id)
-{
-    m_method_id = _method_id;
-}
-
-/*!
- * @brief This function returns the value of member method_id
- * @return Value of member method_id
- */
-int32_t fastdds_soa::RPC_Header::method_id() const
-{
-    return m_method_id;
-}
-
-/*!
- * @brief This function returns a reference to member method_id
- * @return Reference to member method_id
- */
-int32_t& fastdds_soa::RPC_Header::method_id()
-{
-    return m_method_id;
 }
 
 /*!
@@ -534,9 +541,9 @@ fastdds_soa::RPC_Response::RPC_Response()
 {
     // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@5427c60c
 
-    // m_error_code com.eprosima.idl.parser.typecode.EnumTypeCode@43d7741f
+    // m_error_code com.eprosima.idl.parser.typecode.EnumTypeCode@3d0f8e03
     m_error_code = fastdds_soa::SUCCESS;
-    // m_response_payload com.eprosima.idl.parser.typecode.StringTypeCode@27fe3806
+    // m_response_payload com.eprosima.idl.parser.typecode.StringTypeCode@6366ebe0
     m_response_payload ="";
 
 }

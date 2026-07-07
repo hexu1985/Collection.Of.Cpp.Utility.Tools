@@ -9,9 +9,9 @@ enum ErrorCode {
 };
 
 struct RPC_Header {
+    string method_name;
     string client_id;
     long session_id;
-    long method_id;
     long request_id;
 };
 
