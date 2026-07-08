@@ -50,13 +50,12 @@ bool HelloWorldPublisher::init(
     pqos.name("Participant_pub");
     auto factory = DomainParticipantFactory::get_instance();
 
-    if (use_env)
-    {
+    if (use_env) {
         factory->load_profiles();
-        factory->get_default_participant_qos(pqos);
+        participant_ = create_participant_with_profile(0, "participant_xml_profile");
+    } else {
+        participant_ = factory->create_participant(0, pqos);
     }
-
-    participant_ = factory->create_participant(0, pqos);
 
     if (participant_ == nullptr)
     {
@@ -69,14 +68,13 @@ bool HelloWorldPublisher::init(
     //CREATE THE PUBLISHER
     PublisherQos pubqos = PUBLISHER_QOS_DEFAULT;
 
-    if (use_env)
-    {
-        participant_->get_default_publisher_qos(pubqos);
+    if (use_env) {
+        publisher_ = participant_->create_publisher_with_profile("publisher_xml_profile");
+    } else {
+        publisher_ = participant_->create_publisher(
+                pubqos,
+                nullptr);
     }
-
-    publisher_ = participant_->create_publisher(
-        pubqos,
-        nullptr);
 
     if (publisher_ == nullptr)
     {
@@ -104,15 +102,14 @@ bool HelloWorldPublisher::init(
     // CREATE THE WRITER
     DataWriterQos wqos = DATAWRITER_QOS_DEFAULT;
 
-    if (use_env)
-    {
-        publisher_->get_default_datawriter_qos(wqos);
+    if (use_env) {
+        writer_ = subscriber_->create_datareader_with_profile(topic, "datareader_xml_profile");
+    } else {
+        writer_ = publisher_->create_datawriter(
+                topic_,
+                wqos,
+                &listener_);
     }
-
-    writer_ = publisher_->create_datawriter(
-        topic_,
-        wqos,
-        &listener_);
 
     if (writer_ == nullptr)
     {
