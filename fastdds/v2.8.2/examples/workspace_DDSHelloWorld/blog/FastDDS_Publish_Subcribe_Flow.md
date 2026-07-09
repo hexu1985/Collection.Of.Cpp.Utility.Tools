@@ -54,7 +54,7 @@
 
 ## 发布端（Publisher）在Fast DDS库中的数据发送流程
 
-为了后续更容易的看懂函数调用的时序图，我们先给出Fast DSS库中跟发布端相关的类的关系图。
+为了后续更容易的看懂函数调用的时序图，我们先给出Fast DDS库中跟发布端相关的类的关系图。
 
 **发布端(publisher)涉及的类的静态关系图**
 
@@ -76,7 +76,7 @@
     + 流控相关的类：FlowControllerFactory，FlowController及其子类：FlowControllerImpl
     + 消息相关的类：RTPSMessageGroup和CDRMessage_t
 
-DSS域的类大部分都使用了Impl惯用法，我理解因为DSS域中的大部分类都是应用层（Applilcation）能看到的接口类，所以桥接模式可以减少耦合，避免内部定义（头文件）的暴露。  
+DDS域的类大部分都使用了Impl惯用法，我理解因为DDS域中的大部分类都是应用层（Applilcation）能看到的接口类，所以桥接模式可以减少耦合，避免内部定义（头文件）的暴露。  
 
 而RTPS域的类虽然众多，但在发布端(publisher)扮演的角色其实就分类两大类：
 - 数据组包
@@ -151,7 +151,7 @@ RTPSMessageGroup类会在析构函数中调用send函数，通过RTPSMessageSend
 
 ## 订阅端（Subscriber）在Fast DDS库中的数据接收流程
 
-为了后续更容易的看懂函数调用的时序图，我们先给出Fast DSS库中跟发布端相关的类的关系图。
+为了后续更容易的看懂函数调用的时序图，我们先给出Fast DDS库中跟发布端相关的类的关系图。
 
 **订阅端（Subscriber）涉及的类的静态关系图**
 
