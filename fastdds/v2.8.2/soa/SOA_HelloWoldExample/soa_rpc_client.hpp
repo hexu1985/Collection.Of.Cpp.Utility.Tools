@@ -13,6 +13,13 @@ public:
     template <typename Argument, typename Result>
     void async_call(const std::string& method_name, const Argument& arg, 
             std::function<void(int, std::shared_ptr<Result>)> call_back);
+
+    template <typename Argument, typename Result>
+    int call_timed(const std::string& method_name, const Argument& arg, Result& res, std::chrono::milliseconds timeout);
+
+    template <typename Argument, typename Result>
+    void async_call_timed(const std::string& method_name, const Argument& arg, 
+            std::function<void(int, std::shared_ptr<Result>)> call_back, std::chrono::milliseconds timeout);
 };
 
 }   // namespace fastdds_soa
