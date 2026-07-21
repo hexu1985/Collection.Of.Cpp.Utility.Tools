@@ -57,6 +57,40 @@ auto mylogger = spdlog::stdout_color_mt("mylogger");
 SPDLOG_LEVEL=info,mylogger=trace ./your_program
 ```
 
+```cpp
+#include <spdlog/spdlog.h>
+#include <spdlog/cfg/env.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+
+int main() {
+    // 创建多个logger
+    auto logger1 = spdlog::stdout_color_mt("logger1");
+    auto logger2 = spdlog::stdout_color_mt("logger2");
+    auto logger3 = spdlog::stdout_color_mt("logger3");
+    
+    // 从环境变量加载所有logger的级别
+    spdlog::load_env_levels();
+    
+    logger1->info("Logger1 info");
+    logger2->debug("Logger2 debug");
+    logger3->trace("Logger3 trace");
+    
+    return 0;
+}
+```
+
+通过环境变量为不同logger设置不同级别：
+
+```bash
+# 格式：SPDLOG_LEVEL=logger1=debug,logger2=trace,logger3=error
+export SPDLOG_LEVEL="logger1=debug,logger2=trace,logger3=error"
+./your_program
+
+# 全局级别 + 特定logger级别
+export SPDLOG_LEVEL="info,logger1=debug,logger3=trace"
+./your_program
+```
+
 #### 3. 精细化控制：关闭大部分日志，只保留特定模块
 
 使用 `off` 可以关闭所有日志，然后只为需要调试的模块单独开启。
