@@ -1,0 +1,3 @@
+After opening
+[2026-07-21 10:51:07.716] [some_logger] [info] Some log line
+Before closing

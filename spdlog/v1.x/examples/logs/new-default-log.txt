@@ -1,0 +1,2 @@
+[2026-07-21 10:51:07.716] [new_default_logger] [debug] This message should be displayed..
+[10:51:07 +08:00] [I] [key1:value1 key2:value2] End of example.

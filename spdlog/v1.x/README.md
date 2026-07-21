@@ -13,3 +13,7 @@ $ sudo apt install libspdlog-dev
 
 项目地址: <https://github.com/gabime/spdlog>
 文档地址：<https://spdlog.readthedocs.io/en/latest/>
+
+#### spdlog学习笔记
+
+通过SPDLOG_LEVEL环境变量，可以设置

@@ -1,0 +1,1 @@
+[10:51:07 +08:00] [I] [key1:value1 key2:value2] End of example.
