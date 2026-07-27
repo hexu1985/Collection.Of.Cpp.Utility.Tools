@@ -38,15 +38,15 @@ using namespace eprosima::fastcdr::exception;
 
 clientserver::Operation::Operation()
 {
-    // m_m_guid com.eprosima.idl.parser.typecode.StringTypeCode@71623278
+    // m_m_guid com.eprosima.idl.parser.typecode.StringTypeCode@5a4041cc
     m_m_guid ="";
-    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@768b970c
+    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@15b3e5b
     m_m_operationId = 0;
-    // m_m_operationType com.eprosima.idl.parser.typecode.EnumTypeCode@5a4041cc
+    // m_m_operationType com.eprosima.idl.parser.typecode.EnumTypeCode@61ca2dfa
     m_m_operationType = clientserver::ADDITION;
-    // m_m_num1 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@15b3e5b
+    // m_m_num1 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4b53f538
     m_m_num1 = 0;
-    // m_m_num2 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@61ca2dfa
+    // m_m_num2 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@134593bf
     m_m_num2 = 0;
 
 }
@@ -376,13 +376,13 @@ void clientserver::Operation::serializeKey(
 
 clientserver::Result::Result()
 {
-    // m_m_guid com.eprosima.idl.parser.typecode.StringTypeCode@15bfd87
+    // m_m_guid com.eprosima.idl.parser.typecode.StringTypeCode@57f23557
     m_m_guid ="";
-    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@543e710e
+    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@3d0f8e03
     m_m_operationId = 0;
-    // m_m_resultType com.eprosima.idl.parser.typecode.EnumTypeCode@57f23557
+    // m_m_resultType com.eprosima.idl.parser.typecode.EnumTypeCode@6366ebe0
     m_m_resultType = clientserver::GOOD_RESULT;
-    // m_m_result com.eprosima.idl.parser.typecode.PrimitiveTypeCode@3d0f8e03
+    // m_m_result com.eprosima.idl.parser.typecode.PrimitiveTypeCode@44f75083
     m_m_result = 0;
 
 }

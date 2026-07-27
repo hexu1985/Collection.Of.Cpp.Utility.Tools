@@ -14,49 +14,48 @@ using namespace eprosima::fastrtps::rtps;
 using std::cout;
 using std::endl;
 using std::atoi;
-using clientserver::Operation;
-using clientserver::Result;
+using namespace clientserver;
 
-Operation::OPERATIONTYPE to_operation_type(const std::string& op_str) {
+OPERATIONTYPE to_operation_type(const std::string& op_str) {
     if (op_str.empty()) {
-        return Operation::ADDITION;
+        return ADDITION;
     }
     switch (op_str[0]) {
     case '+':
-        return Operation::ADDITION;
+        return ADDITION;
     case '-':
-        return Operation::SUBTRACTION;
+        return SUBTRACTION;
     case '*':
-        return Operation::MULTIPLICATION;
+        return MULTIPLICATION;
     case '/':
-        return Operation::DIVISION;
+        return DIVISION;
     default:
-        return Operation::ADDITION;
+        return ADDITION;
     }
 }
 
-int calculate(int32_t num1, Operation::OPERATIONTYPE op, int32_t num2) {
+int calculate(int32_t num1, OPERATIONTYPE op, int32_t num2) {
     switch (op) {
-    case Operation::ADDITION:
+    case ADDITION:
         return num1 + num2;
-    case Operation::SUBTRACTION:
+    case SUBTRACTION:
         return num1 - num2;
-    case Operation::MULTIPLICATION:
+    case MULTIPLICATION:
         return num1 * num2;
-    case Operation::DIVISION:
+    case DIVISION:
         return num1 / num2;
     default:
         return 0;
     }
 }
 
-const char* to_string(Result::RESULTTYPE res_type) {
+const char* to_string(RESULTTYPE res_type) {
     switch (res_type) {
-    case Result::GOOD_RESULT:
+    case GOOD_RESULT:
         return "GOOD_RESULT";
-    case Result::ERROR_RESULT:
+    case ERROR_RESULT:
         return "ERROR_RESULT";
-    case Result::SERVER_NOT_READY:
+    case SERVER_NOT_READY:
         return "SERVER_NOT_READY";
     default:
         return "UNKNOWN";
@@ -77,7 +76,7 @@ int main(
     std::string op_str = argv[2];
     int32_t num2 = atoi(argv[3]);
 
-    Operation::OPERATIONTYPE op = to_operation_type(op_str);
+    OPERATIONTYPE op = to_operation_type(op_str);
     int32_t local_res = calculate(num1, op, num2);
     cout << "calculate local: " << num1 << op_str << num2 << "=" << local_res << endl;
 
@@ -92,8 +91,8 @@ int main(
     }
 
     int32_t res = 0;
-    Result::RESULTTYPE res_type = client.calculate(op, num1, num2, &res);
-    if (res_type != Result::GOOD_RESULT) {
+    RESULTTYPE res_type = client.calculate(op, num1, num2, &res);
+    if (res_type != GOOD_RESULT) {
         cout << "client.calculate failed: " << to_string(res_type) << endl;
         return 1;
     }

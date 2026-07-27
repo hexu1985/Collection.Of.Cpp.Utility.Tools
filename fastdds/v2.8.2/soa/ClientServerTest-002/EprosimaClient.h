@@ -55,8 +55,8 @@ public:
 
     bool init();
 
-    clientserver::Result::RESULTTYPE calculate(
-            clientserver::Operation::OPERATIONTYPE type,
+    clientserver::RESULTTYPE calculate(
+            clientserver::OPERATIONTYPE type,
             int32_t num1,
             int32_t num2,
             int32_t* result);

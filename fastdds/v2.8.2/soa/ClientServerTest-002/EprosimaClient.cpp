@@ -19,20 +19,43 @@
 
 #include "EprosimaClient.h"
 
+#include <sstream>
+#include <string>
+#include <fastdds/rtps/common/Guid.h>
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
+
+#include "ClientServerTypesPubSubTypes.h"
 
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 using namespace clientserver;
 
+namespace {
+
+std::string guid_to_string(const eprosima::fastrtps::rtps::GUID_t& guid) {
+    std::stringstream ss;
+    // GuidPrefix_t 已经支持通过 operator<< 输出为 "xx.xx.xx..." 格式
+    ss << guid.guidPrefix;
+    // 需要手动拼接 EntityId 部分，这里以十六进制输出，例如 "|0.0.0.1"
+    ss << "|"
+       << std::hex << std::setfill('0') << std::setw(2)
+       << (int)guid.entityId.value[0] << "."
+       << std::setw(2) << (int)guid.entityId.value[1] << "."
+       << std::setw(2) << (int)guid.entityId.value[2] << "."
+       << std::setw(2) << (int)guid.entityId.value[3];
+    return ss.str();
+}
+
+}   // namespace
+
 EprosimaClient::EprosimaClient()
     : mp_operation_pub(nullptr)
     , mp_result_sub(nullptr)
     , mp_participant(nullptr)
-    , mp_resultdatatype(new ResultDataType())
-    , mp_operationdatatype(new OperationDataType())
+    , mp_resultdatatype(new ResultPubSubType())
+    , mp_operationdatatype(new OperationPubSubType())
     , m_operationsListener(nullptr)
     , m_resultsListener(nullptr)
     , m_isReady(false)
@@ -159,8 +182,8 @@ bool EprosimaClient::init()
     return true;
 }
 
-Result::RESULTTYPE EprosimaClient::calculate(
-        Operation::OPERATIONTYPE type,
+RESULTTYPE EprosimaClient::calculate(
+        OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result)
@@ -168,12 +191,12 @@ Result::RESULTTYPE EprosimaClient::calculate(
     SampleInfo m_sampleInfo;
     if (!m_isReady)
     {
-        return Result::SERVER_NOT_READY;
+        return SERVER_NOT_READY;
     }
-    m_operation.m_operationId++;
-    m_operation.m_operationType = type;
-    m_operation.m_num1 = num1;
-    m_operation.m_num2 = num2;
+    m_operation.m_operationId(m_operation.m_operationId()+1);
+    m_operation.m_operationType(type);
+    m_operation.m_num1(num1);
+    m_operation.m_num2(num2);
 
     mp_operation_writer->write((void*)&m_operation);
     do {
@@ -181,20 +204,20 @@ Result::RESULTTYPE EprosimaClient::calculate(
         mp_result_reader->wait_for_unread_message({10, 0});
         mp_result_reader->take_next_sample((void*)&m_result, &m_sampleInfo);
     } while (m_sampleInfo.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE ||
-    m_result.m_guid != m_operation.m_guid ||
-    m_result.m_operationId != m_operation.m_operationId);
-    if (m_result.m_resultType == Result::GOOD_RESULT)
+    m_result.m_guid() != m_operation.m_guid() ||
+    m_result.m_operationId() != m_operation.m_operationId());
+    if (m_result.m_resultType() == GOOD_RESULT)
     {
-        *result = m_result.m_result;
+        *result = m_result.m_result();
     }
-    return m_result.m_resultType;
+    return m_result.m_resultType();
 }
 
 void EprosimaClient::resetResult()
 {
-    m_result.m_guid = c_Guid_Unknown;
-    m_result.m_operationId = 0;
-    m_result.m_result = 0;
+    m_result.m_guid(guid_to_string(c_Guid_Unknown));
+    m_result.m_operationId(0);
+    m_result.m_result(0);
 }
 
 void EprosimaClient::OperationListener::on_publication_matched(

@@ -23,6 +23,8 @@
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 
+#include "ClientServerTypesPubSubTypes.h"
+
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 using namespace clientserver;
@@ -32,8 +34,8 @@ EprosimaServer::EprosimaServer()
     : mp_operation_sub(nullptr)
     , mp_result_pub(nullptr)
     , mp_participant(nullptr)
-    , mp_resultdatatype(new ResultDataType())
-    , mp_operationdatatype(new OperationDataType())
+    , mp_resultdatatype(new ResultPubSubType())
+    , mp_operationdatatype(new OperationPubSubType())
     , m_n_served(0)
     , m_operationsListener(nullptr)
     , m_resultsListener(nullptr)
@@ -175,40 +177,40 @@ bool EprosimaServer::init()
     return true;
 }
 
-Result::RESULTTYPE EprosimaServer::calculate(
-        Operation::OPERATIONTYPE type,
+RESULTTYPE EprosimaServer::calculate(
+        OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result)
 {
     switch (type)
     {
-        case Operation::SUBTRACTION:
+        case SUBTRACTION:
         {
             *result = num1 - num2;
             break;
         }
-        case Operation::ADDITION:
+        case ADDITION:
         {
             *result = num1 + num2;
             break;
         }
 
-        case Operation::MULTIPLICATION:
+        case MULTIPLICATION:
         {
             *result = num1 * num2;
             break;
         }
-        case Operation::DIVISION:
+        case DIVISION:
         {
             if (num2 == 0)
             {
-                return Result::ERROR_RESULT;
+                return ERROR_RESULT;
             }
             break;
         }
     }
-    return Result::GOOD_RESULT;
+    return GOOD_RESULT;
 }
 
 void EprosimaServer::OperationListener::on_data_available(
@@ -219,14 +221,16 @@ void EprosimaServer::OperationListener::on_data_available(
     if (m_sampleInfo.valid_data)
     {
         ++mp_up->m_n_served;
-        m_result.m_guid = m_operation.m_guid;
-        m_result.m_operationId = m_operation.m_operationId;
-        m_result.m_result = 0;
-        m_result.m_resultType = mp_up->calculate(
-            m_operation.m_operationType,
-            m_operation.m_num1,
-            m_operation.m_num2,
-            &m_result.m_result);
+        m_result.m_guid(m_operation.m_guid());
+        m_result.m_operationId(m_operation.m_operationId());
+        int32_t result = 0;
+        RESULTTYPE resultType = mp_up->calculate(
+            m_operation.m_operationType(),
+            m_operation.m_num1(),
+            m_operation.m_num2(),
+            &result);
+        m_result.m_result(result);
+        m_result.m_resultType(resultType);
         mp_up->mp_result_writer->write((void*)&m_result);
     }
 }
