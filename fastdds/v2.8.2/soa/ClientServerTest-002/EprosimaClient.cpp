@@ -128,7 +128,7 @@ bool EprosimaClient::init()
     }
 
     //CREATE THE TOPIC
-    mp_operation_topic = mp_participant->create_topic("Operations", "Operation", TOPIC_QOS_DEFAULT);
+    mp_operation_topic = mp_participant->create_topic("Operations", "clientserver::Operation", TOPIC_QOS_DEFAULT);
 
     if (mp_operation_topic == nullptr)
     {
@@ -159,7 +159,7 @@ bool EprosimaClient::init()
     }
 
     //CREATE THE TOPIC
-    mp_result_topic = mp_participant->create_topic("Results", "Result", TOPIC_QOS_DEFAULT);
+    mp_result_topic = mp_participant->create_topic("Results", "clientserver::Result", TOPIC_QOS_DEFAULT);
 
     if (mp_result_topic == nullptr)
     {
