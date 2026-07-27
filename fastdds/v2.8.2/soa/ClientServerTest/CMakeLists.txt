@@ -32,8 +32,22 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
 endif()
 
 message(STATUS "Configuring DDSClientServerTest...")
-file(GLOB DDS_CLIENTSERVERTEST_SOURCES "*.cpp")
+#file(GLOB DDS_CLIENTSERVERTEST_SOURCES "src/*.cpp")
+set(DDS_CLIENTSERVERTEST_SOURCES
+    ClientServerTypes.cpp
+    ClientServerTypes.h
+    EprosimaClient.cpp
+    EprosimaClient.h
+    EprosimaClientTest.cpp
+    EprosimaClientTest.h
+    EprosimaServer.cpp
+    EprosimaServer.h
+    )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_executable(DDSClientServerTest ${DDS_CLIENTSERVERTEST_SOURCES})
+add_executable(DDSClientServerTest main_ClientServerTestFastRTPS.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(DDSClientServerTest fastrtps fastcdr tinyxml2::tinyxml2)
+
+add_executable(soa_server_test soa_server_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+target_link_libraries(soa_server_test fastrtps fastcdr tinyxml2::tinyxml2)
 
