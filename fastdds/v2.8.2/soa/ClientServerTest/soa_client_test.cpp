@@ -17,6 +17,8 @@
  *
  */
 
+
+
 #include <stdio.h>
 #include <string>
 #include <iostream>
@@ -25,7 +27,7 @@
 #include <cstdint>
 #include <sstream>
 
-#include "EprosimaServer.h"
+#include "EprosimaClient.h"
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
@@ -36,11 +38,13 @@ int main(
         int argc,
         char** argv)
 {
-    cout << "Starting server" << endl;
+    EprosimaClient client;
+    client.init();
 
-    EprosimaServer server;
-    server.init();
-    server.serve();
+    cout << "Starting " << endl;
+
+
+    cout << "EVERYTHING STOPPED FINE" << endl;
 
     return 0;
 }
