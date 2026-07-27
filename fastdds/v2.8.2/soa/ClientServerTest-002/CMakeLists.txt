@@ -38,15 +38,10 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     ClientServerTypes.h
     EprosimaClient.cpp
     EprosimaClient.h
-    EprosimaClientTest.cpp
-    EprosimaClientTest.h
     EprosimaServer.cpp
     EprosimaServer.h
     )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-add_executable(DDSClientServerTest main_ClientServerTestFastRTPS.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
-target_link_libraries(DDSClientServerTest fastrtps fastcdr tinyxml2::tinyxml2)
 
 add_executable(calculate_server_test calculate_server_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_server_test fastrtps fastcdr tinyxml2::tinyxml2)
