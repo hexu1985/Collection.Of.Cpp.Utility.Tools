@@ -34,14 +34,16 @@ endif()
 message(STATUS "Configuring DDSClientServerTest...")
 #file(GLOB DDS_CLIENTSERVERTEST_SOURCES "src/*.cpp")
 set(DDS_CLIENTSERVERTEST_SOURCES
-    ClientServerTypes.cpp
-    ClientServerTypes.h
     EprosimaClient.cpp
     EprosimaClient.h
     EprosimaServer.cpp
     EprosimaServer.h
+    gen/ClientServerTypes.cxx
+    gen/ClientServerTypes.h
+    gen/ClientServerTypesPubSubTypes.cxx
+    gen/ClientServerTypesPubSubTypes.h
     )
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gen)
 
 add_executable(calculate_server_test calculate_server_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_server_test fastrtps fastcdr tinyxml2::tinyxml2)

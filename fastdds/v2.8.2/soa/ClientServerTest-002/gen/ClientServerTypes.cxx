@@ -36,49 +36,55 @@ using namespace eprosima::fastcdr::exception;
 
 
 
-Operation::Operation()
+clientserver::Operation::Operation()
 {
-    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@1f021e6c
+    // m_m_guid com.eprosima.idl.parser.typecode.StringTypeCode@71623278
+    m_m_guid ="";
+    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@768b970c
     m_m_operationId = 0;
-    // m_m_operationType com.eprosima.idl.parser.typecode.EnumTypeCode@103f852
-    m_m_operationType = ::ADDITION;
-    // m_m_num1 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@587c290d
+    // m_m_operationType com.eprosima.idl.parser.typecode.EnumTypeCode@5a4041cc
+    m_m_operationType = clientserver::ADDITION;
+    // m_m_num1 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@15b3e5b
     m_m_num1 = 0;
-    // m_m_num2 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4516af24
+    // m_m_num2 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@61ca2dfa
     m_m_num2 = 0;
 
 }
 
-Operation::~Operation()
+clientserver::Operation::~Operation()
 {
+
 
 
 
 
 }
 
-Operation::Operation(
+clientserver::Operation::Operation(
         const Operation& x)
 {
+    m_m_guid = x.m_m_guid;
     m_m_operationId = x.m_m_operationId;
     m_m_operationType = x.m_m_operationType;
     m_m_num1 = x.m_m_num1;
     m_m_num2 = x.m_m_num2;
 }
 
-Operation::Operation(
+clientserver::Operation::Operation(
         Operation&& x)
 {
+    m_m_guid = std::move(x.m_m_guid);
     m_m_operationId = x.m_m_operationId;
     m_m_operationType = x.m_m_operationType;
     m_m_num1 = x.m_m_num1;
     m_m_num2 = x.m_m_num2;
 }
 
-Operation& Operation::operator =(
+clientserver::Operation& clientserver::Operation::operator =(
         const Operation& x)
 {
 
+    m_m_guid = x.m_m_guid;
     m_m_operationId = x.m_m_operationId;
     m_m_operationType = x.m_m_operationType;
     m_m_num1 = x.m_m_num1;
@@ -87,10 +93,11 @@ Operation& Operation::operator =(
     return *this;
 }
 
-Operation& Operation::operator =(
+clientserver::Operation& clientserver::Operation::operator =(
         Operation&& x)
 {
 
+    m_m_guid = std::move(x.m_m_guid);
     m_m_operationId = x.m_m_operationId;
     m_m_operationType = x.m_m_operationType;
     m_m_num1 = x.m_m_num1;
@@ -99,24 +106,26 @@ Operation& Operation::operator =(
     return *this;
 }
 
-bool Operation::operator ==(
+bool clientserver::Operation::operator ==(
         const Operation& x) const
 {
 
-    return (m_m_operationId == x.m_m_operationId && m_m_operationType == x.m_m_operationType && m_m_num1 == x.m_m_num1 && m_m_num2 == x.m_m_num2);
+    return (m_m_guid == x.m_m_guid && m_m_operationId == x.m_m_operationId && m_m_operationType == x.m_m_operationType && m_m_num1 == x.m_m_num1 && m_m_num2 == x.m_m_num2);
 }
 
-bool Operation::operator !=(
+bool clientserver::Operation::operator !=(
         const Operation& x) const
 {
     return !(*this == x);
 }
 
-size_t Operation::getMaxCdrSerializedSize(
+size_t clientserver::Operation::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
 
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
@@ -134,14 +143,16 @@ size_t Operation::getMaxCdrSerializedSize(
     return current_alignment - initial_alignment;
 }
 
-size_t Operation::getCdrSerializedSize(
-        const Operation& data,
+size_t clientserver::Operation::getCdrSerializedSize(
+        const clientserver::Operation& data,
         size_t current_alignment)
 {
     (void)data;
     size_t initial_alignment = current_alignment;
 
 
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.m_guid().size() + 1;
+
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
@@ -158,10 +169,11 @@ size_t Operation::getCdrSerializedSize(
     return current_alignment - initial_alignment;
 }
 
-void Operation::serialize(
+void clientserver::Operation::serialize(
         eprosima::fastcdr::Cdr& scdr) const
 {
 
+    scdr << m_m_guid.c_str();
     scdr << m_m_operationId;
     scdr << (uint32_t)m_m_operationType;
     scdr << m_m_num1;
@@ -169,15 +181,16 @@ void Operation::serialize(
 
 }
 
-void Operation::deserialize(
+void clientserver::Operation::deserialize(
         eprosima::fastcdr::Cdr& dcdr)
 {
 
+    dcdr >> m_m_guid;
     dcdr >> m_m_operationId;
     {
         uint32_t enum_value = 0;
         dcdr >> enum_value;
-        m_m_operationType = (OPERATIONTYPE)enum_value;
+        m_m_operationType = (clientserver::OPERATIONTYPE)enum_value;
     }
 
     dcdr >> m_m_num1;
@@ -185,10 +198,47 @@ void Operation::deserialize(
 }
 
 /*!
+ * @brief This function copies the value in member m_guid
+ * @param _m_guid New value to be copied in member m_guid
+ */
+void clientserver::Operation::m_guid(
+        const std::string& _m_guid)
+{
+    m_m_guid = _m_guid;
+}
+
+/*!
+ * @brief This function moves the value in member m_guid
+ * @param _m_guid New value to be moved in member m_guid
+ */
+void clientserver::Operation::m_guid(
+        std::string&& _m_guid)
+{
+    m_m_guid = std::move(_m_guid);
+}
+
+/*!
+ * @brief This function returns a constant reference to member m_guid
+ * @return Constant reference to member m_guid
+ */
+const std::string& clientserver::Operation::m_guid() const
+{
+    return m_m_guid;
+}
+
+/*!
+ * @brief This function returns a reference to member m_guid
+ * @return Reference to member m_guid
+ */
+std::string& clientserver::Operation::m_guid()
+{
+    return m_m_guid;
+}
+/*!
  * @brief This function sets a value in member m_operationId
  * @param _m_operationId New value for member m_operationId
  */
-void Operation::m_operationId(
+void clientserver::Operation::m_operationId(
         int32_t _m_operationId)
 {
     m_m_operationId = _m_operationId;
@@ -198,7 +248,7 @@ void Operation::m_operationId(
  * @brief This function returns the value of member m_operationId
  * @return Value of member m_operationId
  */
-int32_t Operation::m_operationId() const
+int32_t clientserver::Operation::m_operationId() const
 {
     return m_m_operationId;
 }
@@ -207,7 +257,7 @@ int32_t Operation::m_operationId() const
  * @brief This function returns a reference to member m_operationId
  * @return Reference to member m_operationId
  */
-int32_t& Operation::m_operationId()
+int32_t& clientserver::Operation::m_operationId()
 {
     return m_m_operationId;
 }
@@ -216,8 +266,8 @@ int32_t& Operation::m_operationId()
  * @brief This function sets a value in member m_operationType
  * @param _m_operationType New value for member m_operationType
  */
-void Operation::m_operationType(
-        OPERATIONTYPE _m_operationType)
+void clientserver::Operation::m_operationType(
+        clientserver::OPERATIONTYPE _m_operationType)
 {
     m_m_operationType = _m_operationType;
 }
@@ -226,7 +276,7 @@ void Operation::m_operationType(
  * @brief This function returns the value of member m_operationType
  * @return Value of member m_operationType
  */
-OPERATIONTYPE Operation::m_operationType() const
+clientserver::OPERATIONTYPE clientserver::Operation::m_operationType() const
 {
     return m_m_operationType;
 }
@@ -235,7 +285,7 @@ OPERATIONTYPE Operation::m_operationType() const
  * @brief This function returns a reference to member m_operationType
  * @return Reference to member m_operationType
  */
-OPERATIONTYPE& Operation::m_operationType()
+clientserver::OPERATIONTYPE& clientserver::Operation::m_operationType()
 {
     return m_m_operationType;
 }
@@ -244,7 +294,7 @@ OPERATIONTYPE& Operation::m_operationType()
  * @brief This function sets a value in member m_num1
  * @param _m_num1 New value for member m_num1
  */
-void Operation::m_num1(
+void clientserver::Operation::m_num1(
         int32_t _m_num1)
 {
     m_m_num1 = _m_num1;
@@ -254,7 +304,7 @@ void Operation::m_num1(
  * @brief This function returns the value of member m_num1
  * @return Value of member m_num1
  */
-int32_t Operation::m_num1() const
+int32_t clientserver::Operation::m_num1() const
 {
     return m_m_num1;
 }
@@ -263,7 +313,7 @@ int32_t Operation::m_num1() const
  * @brief This function returns a reference to member m_num1
  * @return Reference to member m_num1
  */
-int32_t& Operation::m_num1()
+int32_t& clientserver::Operation::m_num1()
 {
     return m_m_num1;
 }
@@ -272,7 +322,7 @@ int32_t& Operation::m_num1()
  * @brief This function sets a value in member m_num2
  * @param _m_num2 New value for member m_num2
  */
-void Operation::m_num2(
+void clientserver::Operation::m_num2(
         int32_t _m_num2)
 {
     m_m_num2 = _m_num2;
@@ -282,7 +332,7 @@ void Operation::m_num2(
  * @brief This function returns the value of member m_num2
  * @return Value of member m_num2
  */
-int32_t Operation::m_num2() const
+int32_t clientserver::Operation::m_num2() const
 {
     return m_m_num2;
 }
@@ -291,13 +341,13 @@ int32_t Operation::m_num2() const
  * @brief This function returns a reference to member m_num2
  * @return Reference to member m_num2
  */
-int32_t& Operation::m_num2()
+int32_t& clientserver::Operation::m_num2()
 {
     return m_m_num2;
 }
 
 
-size_t Operation::getKeyMaxCdrSerializedSize(
+size_t clientserver::Operation::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t current_align = current_alignment;
@@ -308,59 +358,66 @@ size_t Operation::getKeyMaxCdrSerializedSize(
 
 
 
+
     return current_align;
 }
 
-bool Operation::isKeyDefined()
+bool clientserver::Operation::isKeyDefined()
 {
     return false;
 }
 
-void Operation::serializeKey(
+void clientserver::Operation::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-        
+         
 }
 
-Result::Result()
+clientserver::Result::Result()
 {
-    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4bb4de6a
+    // m_m_guid com.eprosima.idl.parser.typecode.StringTypeCode@15bfd87
+    m_m_guid ="";
+    // m_m_operationId com.eprosima.idl.parser.typecode.PrimitiveTypeCode@543e710e
     m_m_operationId = 0;
-    // m_m_resultType com.eprosima.idl.parser.typecode.EnumTypeCode@7ba18f1b
-    m_m_resultType = ::GOOD_RESULT;
-    // m_m_result com.eprosima.idl.parser.typecode.PrimitiveTypeCode@2f8f5f62
+    // m_m_resultType com.eprosima.idl.parser.typecode.EnumTypeCode@57f23557
+    m_m_resultType = clientserver::GOOD_RESULT;
+    // m_m_result com.eprosima.idl.parser.typecode.PrimitiveTypeCode@3d0f8e03
     m_m_result = 0;
 
 }
 
-Result::~Result()
+clientserver::Result::~Result()
 {
+
 
 
 
 }
 
-Result::Result(
+clientserver::Result::Result(
         const Result& x)
 {
+    m_m_guid = x.m_m_guid;
     m_m_operationId = x.m_m_operationId;
     m_m_resultType = x.m_m_resultType;
     m_m_result = x.m_m_result;
 }
 
-Result::Result(
+clientserver::Result::Result(
         Result&& x)
 {
+    m_m_guid = std::move(x.m_m_guid);
     m_m_operationId = x.m_m_operationId;
     m_m_resultType = x.m_m_resultType;
     m_m_result = x.m_m_result;
 }
 
-Result& Result::operator =(
+clientserver::Result& clientserver::Result::operator =(
         const Result& x)
 {
 
+    m_m_guid = x.m_m_guid;
     m_m_operationId = x.m_m_operationId;
     m_m_resultType = x.m_m_resultType;
     m_m_result = x.m_m_result;
@@ -368,10 +425,11 @@ Result& Result::operator =(
     return *this;
 }
 
-Result& Result::operator =(
+clientserver::Result& clientserver::Result::operator =(
         Result&& x)
 {
 
+    m_m_guid = std::move(x.m_m_guid);
     m_m_operationId = x.m_m_operationId;
     m_m_resultType = x.m_m_resultType;
     m_m_result = x.m_m_result;
@@ -379,24 +437,26 @@ Result& Result::operator =(
     return *this;
 }
 
-bool Result::operator ==(
+bool clientserver::Result::operator ==(
         const Result& x) const
 {
 
-    return (m_m_operationId == x.m_m_operationId && m_m_resultType == x.m_m_resultType && m_m_result == x.m_m_result);
+    return (m_m_guid == x.m_m_guid && m_m_operationId == x.m_m_operationId && m_m_resultType == x.m_m_resultType && m_m_result == x.m_m_result);
 }
 
-bool Result::operator !=(
+bool clientserver::Result::operator !=(
         const Result& x) const
 {
     return !(*this == x);
 }
 
-size_t Result::getMaxCdrSerializedSize(
+size_t clientserver::Result::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
 
+
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
@@ -411,14 +471,16 @@ size_t Result::getMaxCdrSerializedSize(
     return current_alignment - initial_alignment;
 }
 
-size_t Result::getCdrSerializedSize(
-        const Result& data,
+size_t clientserver::Result::getCdrSerializedSize(
+        const clientserver::Result& data,
         size_t current_alignment)
 {
     (void)data;
     size_t initial_alignment = current_alignment;
 
 
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.m_guid().size() + 1;
+
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
@@ -432,35 +494,74 @@ size_t Result::getCdrSerializedSize(
     return current_alignment - initial_alignment;
 }
 
-void Result::serialize(
+void clientserver::Result::serialize(
         eprosima::fastcdr::Cdr& scdr) const
 {
 
+    scdr << m_m_guid.c_str();
     scdr << m_m_operationId;
     scdr << (uint32_t)m_m_resultType;
     scdr << m_m_result;
 
 }
 
-void Result::deserialize(
+void clientserver::Result::deserialize(
         eprosima::fastcdr::Cdr& dcdr)
 {
 
+    dcdr >> m_m_guid;
     dcdr >> m_m_operationId;
     {
         uint32_t enum_value = 0;
         dcdr >> enum_value;
-        m_m_resultType = (RESULTTYPE)enum_value;
+        m_m_resultType = (clientserver::RESULTTYPE)enum_value;
     }
 
     dcdr >> m_m_result;
 }
 
 /*!
+ * @brief This function copies the value in member m_guid
+ * @param _m_guid New value to be copied in member m_guid
+ */
+void clientserver::Result::m_guid(
+        const std::string& _m_guid)
+{
+    m_m_guid = _m_guid;
+}
+
+/*!
+ * @brief This function moves the value in member m_guid
+ * @param _m_guid New value to be moved in member m_guid
+ */
+void clientserver::Result::m_guid(
+        std::string&& _m_guid)
+{
+    m_m_guid = std::move(_m_guid);
+}
+
+/*!
+ * @brief This function returns a constant reference to member m_guid
+ * @return Constant reference to member m_guid
+ */
+const std::string& clientserver::Result::m_guid() const
+{
+    return m_m_guid;
+}
+
+/*!
+ * @brief This function returns a reference to member m_guid
+ * @return Reference to member m_guid
+ */
+std::string& clientserver::Result::m_guid()
+{
+    return m_m_guid;
+}
+/*!
  * @brief This function sets a value in member m_operationId
  * @param _m_operationId New value for member m_operationId
  */
-void Result::m_operationId(
+void clientserver::Result::m_operationId(
         int32_t _m_operationId)
 {
     m_m_operationId = _m_operationId;
@@ -470,7 +571,7 @@ void Result::m_operationId(
  * @brief This function returns the value of member m_operationId
  * @return Value of member m_operationId
  */
-int32_t Result::m_operationId() const
+int32_t clientserver::Result::m_operationId() const
 {
     return m_m_operationId;
 }
@@ -479,7 +580,7 @@ int32_t Result::m_operationId() const
  * @brief This function returns a reference to member m_operationId
  * @return Reference to member m_operationId
  */
-int32_t& Result::m_operationId()
+int32_t& clientserver::Result::m_operationId()
 {
     return m_m_operationId;
 }
@@ -488,8 +589,8 @@ int32_t& Result::m_operationId()
  * @brief This function sets a value in member m_resultType
  * @param _m_resultType New value for member m_resultType
  */
-void Result::m_resultType(
-        RESULTTYPE _m_resultType)
+void clientserver::Result::m_resultType(
+        clientserver::RESULTTYPE _m_resultType)
 {
     m_m_resultType = _m_resultType;
 }
@@ -498,7 +599,7 @@ void Result::m_resultType(
  * @brief This function returns the value of member m_resultType
  * @return Value of member m_resultType
  */
-RESULTTYPE Result::m_resultType() const
+clientserver::RESULTTYPE clientserver::Result::m_resultType() const
 {
     return m_m_resultType;
 }
@@ -507,7 +608,7 @@ RESULTTYPE Result::m_resultType() const
  * @brief This function returns a reference to member m_resultType
  * @return Reference to member m_resultType
  */
-RESULTTYPE& Result::m_resultType()
+clientserver::RESULTTYPE& clientserver::Result::m_resultType()
 {
     return m_m_resultType;
 }
@@ -516,7 +617,7 @@ RESULTTYPE& Result::m_resultType()
  * @brief This function sets a value in member m_result
  * @param _m_result New value for member m_result
  */
-void Result::m_result(
+void clientserver::Result::m_result(
         int32_t _m_result)
 {
     m_m_result = _m_result;
@@ -526,7 +627,7 @@ void Result::m_result(
  * @brief This function returns the value of member m_result
  * @return Value of member m_result
  */
-int32_t Result::m_result() const
+int32_t clientserver::Result::m_result() const
 {
     return m_m_result;
 }
@@ -535,13 +636,13 @@ int32_t Result::m_result() const
  * @brief This function returns a reference to member m_result
  * @return Reference to member m_result
  */
-int32_t& Result::m_result()
+int32_t& clientserver::Result::m_result()
 {
     return m_m_result;
 }
 
 
-size_t Result::getKeyMaxCdrSerializedSize(
+size_t clientserver::Result::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t current_align = current_alignment;
@@ -551,17 +652,19 @@ size_t Result::getKeyMaxCdrSerializedSize(
 
 
 
+
     return current_align;
 }
 
-bool Result::isKeyDefined()
+bool clientserver::Result::isKeyDefined()
 {
     return false;
 }
 
-void Result::serializeKey(
+void clientserver::Result::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-       
+        
 }
+

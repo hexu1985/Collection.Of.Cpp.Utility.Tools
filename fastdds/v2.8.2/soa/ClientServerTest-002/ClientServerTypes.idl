@@ -1,3 +1,5 @@
+module clientserver {
+
 enum RESULTTYPE {
     GOOD_RESULT,
     ERROR_RESULT,
@@ -12,6 +14,7 @@ enum OPERATIONTYPE {
 };
 
 struct Operation {
+    string m_guid;
     long m_operationId;
     OPERATIONTYPE m_operationType;
     long m_num1;
@@ -19,7 +22,10 @@ struct Operation {
 };
 
 struct Result {
+    string m_guid;
     long m_operationId;
     RESULTTYPE m_resultType;
     long m_result;
 };
+
+};  // clientserver
