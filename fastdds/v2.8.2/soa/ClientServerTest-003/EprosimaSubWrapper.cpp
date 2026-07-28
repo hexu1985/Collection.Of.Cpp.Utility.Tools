@@ -61,3 +61,20 @@ void EprosimaSubWrapper::reset() {
     m_type_support.reset();
     m_participant = nullptr;
 }
+
+bool EprosimaSubWrapper::wait_for_unread_message(const eprosima::fastrtps::Duration_t& timeout) {
+    if (m_data_reader == nullptr) {
+        return false;
+    }
+
+    return m_data_reader->wait_for_unread_message(timeout);
+}
+
+eprosima::fastrtps::types::ReturnCode_t EprosimaSubWrapper::take_next_sample(void* data, 
+        eprosima::fastdds::dds::SampleInfo* info) {
+    if (m_data_reader == nullptr) {
+        return eprosima::fastrtps::types::ReturnCode_t::RETCODE_ERROR;
+    }
+
+    return m_data_reader->take_next_sample(data, info);
+}

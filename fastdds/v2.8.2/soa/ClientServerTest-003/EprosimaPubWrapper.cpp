@@ -61,3 +61,12 @@ void EprosimaPubWrapper::reset() {
     m_type_support.reset();
     m_participant = nullptr;
 }
+
+bool EprosimaPubWrapper::write(void* data) {
+    if (m_data_writer == nullptr) {
+        return false;
+    }
+
+    return m_data_writer->write(data);
+}
+

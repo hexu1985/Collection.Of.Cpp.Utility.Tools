@@ -27,6 +27,11 @@ public:
 
     bool init(const Config& config);
 
+    bool wait_for_unread_message(const eprosima::fastrtps::Duration_t& timeout);
+
+    eprosima::fastrtps::types::ReturnCode_t take_next_sample(void* data, 
+            eprosima::fastdds::dds::SampleInfo* info);
+
 private:
     void reset();
 

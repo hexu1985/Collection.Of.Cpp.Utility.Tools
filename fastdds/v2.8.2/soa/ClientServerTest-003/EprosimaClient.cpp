@@ -51,11 +51,7 @@ std::string guid_to_string(const eprosima::fastrtps::rtps::GUID_t& guid) {
 }   // namespace
 
 EprosimaClient::EprosimaClient()
-    : mp_operation_pub(nullptr)
-    , mp_result_sub(nullptr)
-    , mp_participant(nullptr)
-    , mp_resultdatatype(new ResultPubSubType())
-    , mp_operationdatatype(new OperationPubSubType())
+    : mp_participant(nullptr)
     , m_operationsListener(nullptr)
     , m_resultsListener(nullptr)
     , m_isReady(false)
@@ -64,35 +60,12 @@ EprosimaClient::EprosimaClient()
 {
     m_operationsListener.mp_up = this;
     m_resultsListener.mp_up = this;
-
 }
 
 EprosimaClient::~EprosimaClient()
 {
-    if (mp_operation_writer != nullptr)
-    {
-        mp_operation_pub->delete_datawriter(mp_operation_writer);
-    }
-    if (mp_operation_pub != nullptr)
-    {
-        mp_participant->delete_publisher(mp_operation_pub);
-    }
-    if (mp_operation_topic != nullptr)
-    {
-        mp_participant->delete_topic(mp_operation_topic);
-    }
-    if (mp_result_reader != nullptr)
-    {
-        mp_result_sub->delete_datareader(mp_result_reader);
-    }
-    if (mp_result_sub != nullptr)
-    {
-        mp_participant->delete_subscriber(mp_result_sub);
-    }
-    if (mp_result_topic != nullptr)
-    {
-        mp_participant->delete_topic(mp_result_topic);
-    }
+    mp_operation_pub.reset();
+    mp_result_sub.reset();
     DomainParticipantFactory::get_instance()->delete_participant(mp_participant);
 }
 
@@ -115,67 +88,55 @@ bool EprosimaClient::init()
         return false;
     }
 
-    //REGISTER TYPES
-    mp_resultdatatype.register_type(mp_participant);
-    mp_operationdatatype.register_type(mp_participant);
-
-    //CREATE THE PUBLISHER
-    mp_operation_pub = mp_participant->create_publisher(PUBLISHER_QOS_DEFAULT);
-
-    if (mp_operation_pub == nullptr)
-    {
+    if (!init_operation_pub()) {
         return false;
     }
 
-    //CREATE THE TOPIC
-    mp_operation_topic = mp_participant->create_topic("Operations", "clientserver::Operation", TOPIC_QOS_DEFAULT);
-
-    if (mp_operation_topic == nullptr)
-    {
+    if (!init_result_sub()) {
         return false;
     }
 
-    //CREATE THE DATAWRITER
+    return true;
+}
+
+bool EprosimaClient::init_operation_pub() {
+    mp_operation_pub.reset(new EprosimaPubWrapper);
+    EprosimaPubWrapper::Config config; 
+    config.participant = mp_participant;
+    config.type_support.reset(new OperationPubSubType());
+    config.topic_name = "Operations";
+    config.data_writer_listener = &this->m_operationsListener;
+
     DataWriterQos wqos;
     wqos.history().kind = KEEP_LAST_HISTORY_QOS;
     wqos.history().depth = 2;
     wqos.resource_limits().max_samples = 50;
     wqos.resource_limits().allocated_samples = 50;
-    wqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+    config.data_writer_qos = wqos;
 
-    mp_operation_writer = mp_operation_pub->create_datawriter(mp_operation_topic, wqos, &this->m_operationsListener);
-
-    if (mp_operation_writer == nullptr)
-    {
+    if (!mp_operation_pub->init(config)) {
         return false;
     }
 
-    //CREATE THE SUBSCRIBER
-    mp_result_sub = mp_participant->create_subscriber(SUBSCRIBER_QOS_DEFAULT);
+    return true;
+}
 
-    if (mp_result_sub == nullptr)
-    {
-        return false;
-    }
+bool EprosimaClient::init_result_sub() {
+    mp_result_sub.reset(new EprosimaSubWrapper);
+    EprosimaSubWrapper::Config config;
+    config.participant = mp_participant;
+    config.type_support.reset(new ResultPubSubType());
+    config.topic_name = "Results";
+    config.data_reader_listener = &this->m_resultsListener;
 
-    //CREATE THE TOPIC
-    mp_result_topic = mp_participant->create_topic("Results", "clientserver::Result", TOPIC_QOS_DEFAULT);
-
-    if (mp_result_topic == nullptr)
-    {
-        return false;
-    }
-
-    //CREATE THE DATAREADER
     DataReaderQos rqos;
     rqos.history().kind = KEEP_LAST_HISTORY_QOS;
     rqos.history().depth = 100;
     rqos.resource_limits().max_samples = 100;
     rqos.resource_limits().allocated_samples = 100;
-    mp_result_reader = mp_result_sub->create_datareader(mp_result_topic, rqos, &this->m_resultsListener);
+    config.data_reader_qos = rqos;
 
-    if (mp_result_reader == nullptr)
-    {
+    if (!mp_result_sub->init(config)) {
         return false;
     }
 
@@ -198,11 +159,11 @@ RESULTTYPE EprosimaClient::calculate(
     m_operation.m_num1(num1);
     m_operation.m_num2(num2);
 
-    mp_operation_writer->write((void*)&m_operation);
+    mp_operation_pub->write((void*)&m_operation);
     do {
         resetResult();
-        mp_result_reader->wait_for_unread_message({10, 0});
-        mp_result_reader->take_next_sample((void*)&m_result, &m_sampleInfo);
+        mp_result_sub->wait_for_unread_message({10, 0});
+        mp_result_sub->take_next_sample((void*)&m_result, &m_sampleInfo);
     } while (m_sampleInfo.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE ||
     m_result.m_guid() != m_operation.m_guid() ||
     m_result.m_operationId() != m_operation.m_operationId());
