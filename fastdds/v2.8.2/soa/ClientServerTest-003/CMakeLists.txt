@@ -38,6 +38,8 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaClient.h
     EprosimaServer.cpp
     EprosimaServer.h
+    EprosimaPubWrapper.cpp
+    EprosimaPubWrapper.hpp
     gen/ClientServerTypes.cxx
     gen/ClientServerTypes.h
     gen/ClientServerTypesPubSubTypes.cxx
