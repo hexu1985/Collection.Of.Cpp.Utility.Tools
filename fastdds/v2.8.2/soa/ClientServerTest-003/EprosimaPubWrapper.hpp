@@ -22,19 +22,22 @@ public:
     
     virtual ~EprosimaPubWrapper();
 
+    EprosimaPubWrapper(const EprosimaPubWrapper&) = delete;
+    const EprosimaPubWrapper& operator =(const EprosimaPubWrapper&) = delete;
+
     bool init(const Config& config);
 
 private:
     void reset();
 
 private:
-    eprosima::fastdds::dds::DomainParticipant* mp_participant=nullptr;
+    eprosima::fastdds::dds::DomainParticipant* m_participant=nullptr;
 
-    eprosima::fastdds::dds::TypeSupport mp_type_support;
+    eprosima::fastdds::dds::TypeSupport m_type_support;
 
-    eprosima::fastdds::dds::Publisher* mp_publisher=nullptr;
+    eprosima::fastdds::dds::Publisher* m_publisher=nullptr;
 
-    eprosima::fastdds::dds::Topic* mp_topic=nullptr;
+    eprosima::fastdds::dds::Topic* m_topic=nullptr;
 
-    eprosima::fastdds::dds::DataWriter* mp_data_writer=nullptr;
+    eprosima::fastdds::dds::DataWriter* m_data_writer=nullptr;
 };
