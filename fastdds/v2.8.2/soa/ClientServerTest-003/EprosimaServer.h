@@ -21,15 +21,10 @@
 #define EPROSIMASERVER_H_
 
 #include "ClientServerTypes.h"
+#include "EprosimaPubWrapper.hpp"
+#include "EprosimaSubWrapper.hpp"
 
-#include <fastdds/dds/domain/DomainParticipant.hpp>
-#include <fastdds/dds/publisher/Publisher.hpp>
-#include <fastdds/dds/publisher/DataWriter.hpp>
-#include <fastdds/dds/publisher/DataWriterListener.hpp>
-#include <fastdds/dds/subscriber/Subscriber.hpp>
-#include <fastdds/dds/subscriber/DataReader.hpp>
-#include <fastdds/dds/subscriber/DataReaderListener.hpp>
-#include <fastdds/dds/topic/Topic.hpp>
+#include <memory>
 
 class EprosimaServer
 {
@@ -52,30 +47,19 @@ public:
             uint32_t samples);
 
 private:
-
-    eprosima::fastdds::dds::Subscriber* mp_operation_sub;
-
-    eprosima::fastdds::dds::DataReader* mp_operation_reader;
-
-    eprosima::fastdds::dds::Publisher* mp_result_pub;
-
-    eprosima::fastdds::dds::DataWriter* mp_result_writer;
-
-    eprosima::fastdds::dds::Topic* mp_operation_topic;
-
-    eprosima::fastdds::dds::Topic* mp_result_topic;
+    bool init_operation_sub(); 
+    bool init_result_pub(); 
 
     eprosima::fastdds::dds::DomainParticipant* mp_participant;
+
+    std::unique_ptr<EprosimaSubWrapper> mp_operation_sub;
+    std::unique_ptr<EprosimaPubWrapper> mp_result_pub;
 
     clientserver::RESULTTYPE calculate(
             clientserver::OPERATIONTYPE type,
             int32_t num1,
             int32_t num2,
             int32_t* result);
-
-    eprosima::fastdds::dds::TypeSupport mp_resultdatatype;
-
-    eprosima::fastdds::dds::TypeSupport mp_operationdatatype;
 
 public:
 

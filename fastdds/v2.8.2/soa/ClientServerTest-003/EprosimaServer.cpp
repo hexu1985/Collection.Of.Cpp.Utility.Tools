@@ -31,11 +31,7 @@ using namespace clientserver;
 using namespace std;
 
 EprosimaServer::EprosimaServer()
-    : mp_operation_sub(nullptr)
-    , mp_result_pub(nullptr)
-    , mp_participant(nullptr)
-    , mp_resultdatatype(new ResultPubSubType())
-    , mp_operationdatatype(new OperationPubSubType())
+    : mp_participant(nullptr)
     , m_n_served(0)
     , m_operationsListener(nullptr)
     , m_resultsListener(nullptr)
@@ -47,30 +43,8 @@ EprosimaServer::EprosimaServer()
 
 EprosimaServer::~EprosimaServer()
 {
-    if (mp_operation_reader != nullptr)
-    {
-        mp_operation_sub->delete_datareader(mp_operation_reader);
-    }
-    if (mp_operation_sub != nullptr)
-    {
-        mp_participant->delete_subscriber(mp_operation_sub);
-    }
-    if (mp_operation_topic != nullptr)
-    {
-        mp_participant->delete_topic(mp_operation_topic);
-    }
-    if (mp_result_writer != nullptr)
-    {
-        mp_result_pub->delete_datawriter(mp_result_writer);
-    }
-    if (mp_result_pub != nullptr)
-    {
-        mp_participant->delete_publisher(mp_result_pub);
-    }
-    if (mp_result_topic != nullptr)
-    {
-        mp_participant->delete_topic(mp_result_topic);
-    }
+    mp_operation_sub.reset();
+    mp_result_pub.reset();
     DomainParticipantFactory::get_instance()->delete_participant(mp_participant);
 }
 
@@ -109,68 +83,56 @@ bool EprosimaServer::init()
         return false;
     }
 
-    //REGISTER TYPES
-    mp_resultdatatype.register_type(mp_participant);
-    mp_operationdatatype.register_type(mp_participant);
-
-    // CREATE THE PUBLISHER
-    mp_result_pub = mp_participant->create_publisher(PUBLISHER_QOS_DEFAULT);
-
-    if (mp_result_pub == nullptr)
-    {
+    if (!init_result_pub()) {
         return false;
     }
 
-    //CREATE THE TOPIC
-    mp_result_topic = mp_participant->create_topic("Results", "clientserver::Result", TOPIC_QOS_DEFAULT);
-
-    if (mp_result_topic == nullptr)
-    {
+    if (!init_operation_sub()) {
         return false;
     }
 
-    //CREATE THE DATAWRITER
+    return true;
+}
+
+bool EprosimaServer::init_operation_sub() {
+    mp_operation_sub.reset(new EprosimaSubWrapper);
+    EprosimaSubWrapper::Config config;
+    config.participant = mp_participant;
+    config.type_support.reset(new OperationPubSubType());
+    config.topic_name = "Operations";
+    config.data_reader_listener = &this->m_operationsListener;
+
+    DataReaderQos rqos;
+    rqos.history().kind = KEEP_LAST_HISTORY_QOS;
+    rqos.history().depth = 1000;
+    rqos.resource_limits().max_samples = 1500;
+    rqos.resource_limits().allocated_samples = 1000;
+    config.data_reader_qos = rqos;
+
+    if (!mp_operation_sub->init(config)) {
+        return false;
+    }
+
+    return true;
+}
+
+bool EprosimaServer::init_result_pub() {
+    mp_result_pub.reset(new EprosimaPubWrapper);
+    EprosimaPubWrapper::Config config; 
+    config.participant = mp_participant;
+    config.type_support.reset(new ResultPubSubType());
+    config.topic_name = "Results";
+    config.data_writer_listener = &this->m_resultsListener;
+
     DataWriterQos wqos;
     wqos.history().kind = KEEP_LAST_HISTORY_QOS;
     wqos.history().depth = 1000;
     wqos.resource_limits().max_samples = 1500;
     wqos.resource_limits().allocated_samples = 1000;
     wqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+    config.data_writer_qos = wqos;
 
-    mp_result_writer = mp_result_pub->create_datawriter(mp_result_topic, wqos, &m_resultsListener);
-
-    if (mp_result_writer == nullptr)
-    {
-        return false;
-    }
-
-    //CREATE THE SUBSCRIBER
-    mp_operation_sub = mp_participant->create_subscriber(SUBSCRIBER_QOS_DEFAULT);
-
-    if (mp_operation_sub == nullptr)
-    {
-        return false;
-    }
-
-    //CREATE THE TOPIC
-    mp_operation_topic = mp_participant->create_topic("Operations", "clientserver::Operation", TOPIC_QOS_DEFAULT);
-
-    if (mp_operation_topic == nullptr)
-    {
-        return false;
-    }
-
-    //CREATE THE DATAREADER
-    DataReaderQos rqos;
-    rqos.history().kind = KEEP_LAST_HISTORY_QOS;
-    rqos.history().depth = 1000;
-    rqos.resource_limits().max_samples = 1500;
-    rqos.resource_limits().allocated_samples = 1000;
-
-    mp_operation_reader = mp_operation_sub->create_datareader(mp_operation_topic, rqos, &m_operationsListener);
-
-    if (mp_operation_reader == nullptr)
-    {
+    if (!mp_result_pub->init(config)) {
         return false;
     }
 
@@ -217,7 +179,7 @@ void EprosimaServer::OperationListener::on_data_available(
         DataReader* /*reader*/)
 {
     SampleInfo m_sampleInfo;
-    mp_up->mp_operation_reader->take_next_sample((void*)&m_operation, &m_sampleInfo);
+    mp_up->mp_operation_sub->take_next_sample((void*)&m_operation, &m_sampleInfo);
     if (m_sampleInfo.valid_data)
     {
         ++mp_up->m_n_served;
@@ -231,6 +193,6 @@ void EprosimaServer::OperationListener::on_data_available(
             &result);
         m_result.m_result(result);
         m_result.m_resultType(resultType);
-        mp_up->mp_result_writer->write((void*)&m_result);
+        mp_up->mp_result_pub->write((void*)&m_result);
     }
 }
