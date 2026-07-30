@@ -6,6 +6,8 @@ endif()
 
 project(ClientServerTest)
 
+add_compile_options(-Werror=return-type)
+
 # Find requirements
 if(NOT fastcdr_FOUND)
     find_package(fastcdr REQUIRED)
@@ -42,6 +44,8 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaPubWrapper.hpp
     EprosimaSubWrapper.cpp
     EprosimaSubWrapper.hpp
+    EprosimaParticipantManager.cpp
+    EprosimaParticipantManager.hpp
     gen/ClientServerTypes.cxx
     gen/ClientServerTypes.h
     gen/ClientServerTypesPubSubTypes.cxx

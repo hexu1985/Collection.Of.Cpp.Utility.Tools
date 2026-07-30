@@ -50,6 +50,7 @@ public:
     bool isReady();
 
 private:
+    bool init_participant(); 
     bool init_operation_pub();
     bool init_result_sub();
 

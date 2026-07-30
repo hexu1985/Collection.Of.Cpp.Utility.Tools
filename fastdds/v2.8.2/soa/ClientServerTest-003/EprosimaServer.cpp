@@ -24,6 +24,7 @@
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 
 #include "ClientServerTypesPubSubTypes.h"
+#include "EprosimaParticipantManager.hpp"
 
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
@@ -45,7 +46,7 @@ EprosimaServer::~EprosimaServer()
 {
     mp_operation_sub.reset();
     mp_result_pub.reset();
-    DomainParticipantFactory::get_instance()->delete_participant(mp_participant);
+    EprosimaParticipantManager::delete_participant(mp_participant);
 }
 
 void EprosimaServer::serve()
@@ -66,6 +67,22 @@ void EprosimaServer::serve(
 
 bool EprosimaServer::init()
 {
+    if (!init_participant()) {
+        return false;
+    }
+
+    if (!init_result_pub()) {
+        return false;
+    }
+
+    if (!init_operation_sub()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool EprosimaServer::init_participant() {
     //CREATE THE PARTICIPANT
     DomainParticipantQos pqos;
     pqos.wire_protocol().builtin.discovery_config.use_SIMPLE_EndpointDiscoveryProtocol = true;
@@ -76,18 +93,10 @@ bool EprosimaServer::init()
     pqos.wire_protocol().builtin.discovery_config.leaseDuration = eprosima::fastrtps::c_TimeInfinite;
     pqos.name("server_RTPSParticipant");
 
-    mp_participant = DomainParticipantFactory::get_instance()->create_participant(0, pqos);
+    mp_participant = EprosimaParticipantManager::create_participant(0, pqos);
 
     if (mp_participant == nullptr)
     {
-        return false;
-    }
-
-    if (!init_result_pub()) {
-        return false;
-    }
-
-    if (!init_operation_sub()) {
         return false;
     }
 

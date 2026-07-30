@@ -47,6 +47,7 @@ public:
             uint32_t samples);
 
 private:
+    bool init_participant(); 
     bool init_operation_sub(); 
     bool init_result_pub(); 
 
