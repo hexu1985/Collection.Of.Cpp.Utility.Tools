@@ -16,3 +16,6 @@ target_link_libraries(string_demo PRIVATE fastcdr)
 add_executable(serialize_demo serialize_demo.cpp main.cpp)
 target_link_libraries(serialize_demo PRIVATE fastcdr)
 
+add_executable(test_ClientServerTypes test_ClientServerTypes.cpp ClientServerTypes.cpp)
+target_link_libraries(test_ClientServerTypes PRIVATE fastcdr)
+
