@@ -58,10 +58,6 @@ private:
     soa_on_dds::RPC_Request m_rpc_request;
     soa_on_dds::RPC_Response m_rpc_response;
 
-    clientserver::Operation m_operation;
-
-    clientserver::Result m_result;
-
     void resetResult();
 
     class OperationListener : public eprosima::fastdds::dds::DataWriterListener

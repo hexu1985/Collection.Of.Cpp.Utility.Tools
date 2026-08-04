@@ -161,11 +161,12 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
     SampleInfo m_sampleInfo;
     if (!m_isReady)
     {
-        return SERVER_NOT_READY;
+        return soa_on_dds::SERVICE_NOT_AVAILABLE;
     }
-    m_operation.m_operationType = type;
-    m_operation.m_num1 = num1;
-    m_operation.m_num2 = num2;
+    clientserver::Operation operation;
+    operation.m_operationType = type;
+    operation.m_num1 = num1;
+    operation.m_num2 = num2;
 
     m_rpc_request.header().method_name("operation");
     m_rpc_request.header().client_id("client");
@@ -174,20 +175,24 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
         m_rpc_request.header().request_id()+1
     );
 
-    std::string payload;
-    if (!m_operation.SerializeToString(&payload)) {
-        std::cout << "";
+    std::string request_payload;
+    if (!operation.SerializeToString(&request_payload)) {
+        std::cout << "SerializeToString failed" << std::endl;
+        return soa_on_dds::SERIALIZE_FAILED;
     }
+    m_rpc_request.request_payload(request_payload);
 
-    mp_operation_pub->write((void*)&m_operation);
+    mp_operation_pub->write((void*)&m_rpc_request);
+
+    clientserver::Result result;
     do {
+        result.m_result = 0;
         resetResult();
         mp_result_sub->wait_for_unread_message({10, 0});
-        mp_result_sub->take_next_sample((void*)&m_result, &m_sampleInfo);
+        mp_result_sub->take_next_sample((void*)&m_rpc_response, &m_sampleInfo);
     } while (m_sampleInfo.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE ||
-    m_result.m_guid() != m_operation.m_guid() ||
-    m_result.m_operationId() != m_operation.m_operationId());
-    if (m_result.m_resultType() == GOOD_RESULT)
+    m_rpc_response.header() != m_rpc_request.header());
+    if (m_result.error_code() == GOOD_RESULT)
     {
         *result = m_result.m_result();
     }
@@ -196,9 +201,8 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
 
 void EprosimaClient::resetResult()
 {
-    m_result.m_guid(guid_to_string(c_Guid_Unknown));
-    m_result.m_operationId(0);
-    m_result.m_result(0);
+    m_rpc_response.header(soa_on_dds::RPC_Header{});
+    m_rpc_response.response_payload("");
 }
 
 void EprosimaClient::OperationListener::on_publication_matched(
