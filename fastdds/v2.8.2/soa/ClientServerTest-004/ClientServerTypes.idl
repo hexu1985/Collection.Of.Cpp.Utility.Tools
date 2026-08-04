@@ -1,0 +1,31 @@
+module clientserver {
+
+enum RESULTTYPE {
+    GOOD_RESULT,
+    ERROR_RESULT,
+    SERVER_NOT_READY
+};
+
+enum OPERATIONTYPE {
+    ADDITION,
+    SUBTRACTION,
+    MULTIPLICATION,
+    DIVISION
+};
+
+struct Operation {
+    string m_guid;
+    long m_operationId;
+    OPERATIONTYPE m_operationType;
+    long m_num1;
+    long m_num2;
+};
+
+struct Result {
+    string m_guid;
+    long m_operationId;
+    RESULTTYPE m_resultType;
+    long m_result;
+};
+
+};  // clientserver
