@@ -20,7 +20,8 @@
 #ifndef EPROSIMACLIENT_H_
 #define EPROSIMACLIENT_H_
 
-#include "ClientServerTypes.h"
+#include "soa_on_dds_types.h"
+#include "ClientServerTypes.hpp"
 #include "EprosimaPubWrapper.hpp"
 #include "EprosimaSubWrapper.hpp"
 
@@ -41,8 +42,8 @@ public:
 
     bool init();
 
-    clientserver::RESULTTYPE calculate(
-            clientserver::OPERATIONTYPE type,
+    soa_on_dds::ErrorCode calculate(
+            clientserver::Operation::OPERATIONTYPE type,
             int32_t num1,
             int32_t num2,
             int32_t* result);
@@ -53,6 +54,9 @@ private:
     bool init_participant(); 
     bool init_operation_pub();
     bool init_result_sub();
+
+    soa_on_dds::RPC_Request m_rpc_request;
+    soa_on_dds::RPC_Response m_rpc_response;
 
     clientserver::Operation m_operation;
 

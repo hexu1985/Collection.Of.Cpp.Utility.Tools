@@ -26,7 +26,7 @@
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 
-#include "ClientServerTypesPubSubTypes.h"
+#include "soa_on_dds_typesPubSubTypes.h"
 #include "EprosimaParticipantManager.hpp"
 
 using namespace eprosima::fastdds::dds;
@@ -112,8 +112,8 @@ bool EprosimaClient::init_operation_pub() {
     mp_operation_pub.reset(new EprosimaPubWrapper);
     EprosimaPubWrapper::Config config; 
     config.participant = mp_participant;
-    config.type_support.reset(new OperationPubSubType());
-    config.topic_name = "Operations";
+    config.type_support.reset(new RPC_RequestPubSubType());
+    config.topic_name = "soa.rpc.compute.request";
     config.data_writer_listener = &this->m_operationsListener;
 
     DataWriterQos wqos;
@@ -134,8 +134,8 @@ bool EprosimaClient::init_result_sub() {
     mp_result_sub.reset(new EprosimaSubWrapper);
     EprosimaSubWrapper::Config config;
     config.participant = mp_participant;
-    config.type_support.reset(new ResultPubSubType());
-    config.topic_name = "Results";
+    config.type_support.reset(new RPC_ResponsePubSubType());
+    config.topic_name = "soa.rpc.compute.response";
     config.data_reader_listener = &this->m_resultsListener;
 
     DataReaderQos rqos;
@@ -152,8 +152,8 @@ bool EprosimaClient::init_result_sub() {
     return true;
 }
 
-RESULTTYPE EprosimaClient::calculate(
-        OPERATIONTYPE type,
+soa_on_dds::ErrorCode EprosimaClient::calculate(
+        Operation::OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result)
@@ -163,10 +163,21 @@ RESULTTYPE EprosimaClient::calculate(
     {
         return SERVER_NOT_READY;
     }
-    m_operation.m_operationId(m_operation.m_operationId()+1);
-    m_operation.m_operationType(type);
-    m_operation.m_num1(num1);
-    m_operation.m_num2(num2);
+    m_operation.m_operationType = type;
+    m_operation.m_num1 = num1;
+    m_operation.m_num2 = num2;
+
+    m_rpc_request.header().method_name("operation");
+    m_rpc_request.header().client_id("client");
+    m_rpc_request.header().session_id(getpid());
+    m_rpc_request.header().request_id(
+        m_rpc_request.header().request_id()+1
+    );
+
+    std::string payload;
+    if (!m_operation.SerializeToString(&payload)) {
+        std::cout << "";
+    }
 
     mp_operation_pub->write((void*)&m_operation);
     do {
