@@ -15,6 +15,10 @@ int main()
         float value = 3.14f;
         std::string name = "hello";
 
+        std::cout << "id: " << id << "\n"
+                  << "value: " << value << "\n"
+                  << "name: " << name << std::endl;
+
         cdr_ser << id << value << name;
         // 现在 buffer 里就是序列化后的字节流
     }
@@ -30,6 +34,9 @@ int main()
 
         cdr_deser >> id_out >> value_out >> name_out;
         // 反序列化完成，数据已恢复
+        std::cout << "id_out: " << id_out << "\n"
+                  << "value_out: " << value_out << "\n"
+                  << "name_out: " << name_out << std::endl;
     }
 
     return 0;

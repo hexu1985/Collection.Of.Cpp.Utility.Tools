@@ -5,30 +5,38 @@
 
 int main()
 {
-    char buffer[256];
+    // 1. 准备缓冲区
+    std::string serialized_data;
 
-    // 序列化数据
-    eprosima::fastcdr::FastBuffer fast_buffer(buffer, sizeof(buffer));
-    eprosima::fastcdr::Cdr cdr(fast_buffer);
-    cdr << (uint32_t)42 << (float)3.14;
+    // 2. 序列化
+    {
+        char buffer[256];
 
-    std::string serialized_data(
-        reinterpret_cast<char*>(fast_buffer.getBuffer()),
-        fast_buffer.getBufferSize()
-    );
+        eprosima::fastcdr::FastBuffer fast_buffer(buffer, sizeof(buffer));
+        eprosima::fastcdr::Cdr cdr(fast_buffer);
+        cdr << (uint32_t)42 << (float)3.14;
 
-    eprosima::fastcdr::FastBuffer fast_buffer2(
-            &serialized_data[0],
-            serialized_data.size()
-            );
-    eprosima::fastcdr::Cdr cdr2(fast_buffer2);
+        serialized_data = std::string(
+                reinterpret_cast<char*>(fast_buffer.getBuffer()),
+                fast_buffer.getBufferSize()
+                );
+    }
 
-    uint32_t value1;
-    float value2;
-    cdr >> value1 >> value2;
+    // 3. 反序列化
+    {
+        eprosima::fastcdr::FastBuffer fast_buffer(
+                &serialized_data[0],
+                serialized_data.size()
+                );
+        eprosima::fastcdr::Cdr cdr(fast_buffer);
 
-    std::cout << "value1: " << value1 << ", "
-              << "value2: " << value2 << std::endl;
+        uint32_t value1;
+        float value2;
+        cdr >> value1 >> value2;
+
+        std::cout << "value1: " << value1 << ", "
+            << "value2: " << value2 << std::endl;
+    }
 
     return 0;
 }
