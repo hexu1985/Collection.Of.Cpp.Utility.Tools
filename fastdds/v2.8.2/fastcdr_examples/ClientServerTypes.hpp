@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include <vector>
 #include <cstdint>
 #include <fastcdr/Cdr.h>
 
@@ -29,8 +29,8 @@ public:
     {
     }
 
-    bool SerializeToString(std::string* output) const;
-    bool ParseFromString(const std::string& data);
+    bool SerializeToVector(std::vector<uint8_t>& output) const;
+    bool DeserializeFromVector(const std::vector<uint8_t>& input);
 };
 
 class Result
@@ -46,8 +46,8 @@ public:
     {
     }
 
-    bool SerializeToString(std::string* output) const;
-    bool ParseFromString(const std::string& data);
+    bool SerializeToVector(std::vector<uint8_t>& output) const;
+    bool DeserializeFromVector(const std::vector<uint8_t>& input);
 };
 
 }   // namespace clientserver
