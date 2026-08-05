@@ -333,10 +333,10 @@ void soa_on_dds::RPC_Header::serializeKey(
 
 soa_on_dds::RPC_Request::RPC_Request()
 {
-    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@5427c60c
+    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@1ee807c6
 
-    // m_request_payload com.eprosima.idl.parser.typecode.StringTypeCode@15bfd87
-    m_request_payload ="";
+    // m_request_payload com.eprosima.idl.parser.typecode.SequenceTypeCode@76a4d6c
+
 
 }
 
@@ -400,7 +400,11 @@ size_t soa_on_dds::RPC_Request::getMaxCdrSerializedSize(
 
 
     current_alignment += soa_on_dds::RPC_Header::getMaxCdrSerializedSize(current_alignment);
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+    current_alignment += (100 * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+
+
 
 
     return current_alignment - initial_alignment;
@@ -415,7 +419,14 @@ size_t soa_on_dds::RPC_Request::getCdrSerializedSize(
 
 
     current_alignment += soa_on_dds::RPC_Header::getCdrSerializedSize(data.header(), current_alignment);
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.request_payload().size() + 1;
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+    if (data.request_payload().size() > 0)
+    {
+        current_alignment += (data.request_payload().size() * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+    }
+
+
 
 
     return current_alignment - initial_alignment;
@@ -426,7 +437,7 @@ void soa_on_dds::RPC_Request::serialize(
 {
 
     scdr << m_header;
-    scdr << m_request_payload.c_str();
+    scdr << m_request_payload;
 
 }
 
@@ -480,7 +491,7 @@ soa_on_dds::RPC_Header& soa_on_dds::RPC_Request::header()
  * @param _request_payload New value to be copied in member request_payload
  */
 void soa_on_dds::RPC_Request::request_payload(
-        const std::string& _request_payload)
+        const std::vector<uint8_t>& _request_payload)
 {
     m_request_payload = _request_payload;
 }
@@ -490,7 +501,7 @@ void soa_on_dds::RPC_Request::request_payload(
  * @param _request_payload New value to be moved in member request_payload
  */
 void soa_on_dds::RPC_Request::request_payload(
-        std::string&& _request_payload)
+        std::vector<uint8_t>&& _request_payload)
 {
     m_request_payload = std::move(_request_payload);
 }
@@ -499,7 +510,7 @@ void soa_on_dds::RPC_Request::request_payload(
  * @brief This function returns a constant reference to member request_payload
  * @return Constant reference to member request_payload
  */
-const std::string& soa_on_dds::RPC_Request::request_payload() const
+const std::vector<uint8_t>& soa_on_dds::RPC_Request::request_payload() const
 {
     return m_request_payload;
 }
@@ -508,7 +519,7 @@ const std::string& soa_on_dds::RPC_Request::request_payload() const
  * @brief This function returns a reference to member request_payload
  * @return Reference to member request_payload
  */
-std::string& soa_on_dds::RPC_Request::request_payload()
+std::vector<uint8_t>& soa_on_dds::RPC_Request::request_payload()
 {
     return m_request_payload;
 }
@@ -539,12 +550,12 @@ void soa_on_dds::RPC_Request::serializeKey(
 
 soa_on_dds::RPC_Response::RPC_Response()
 {
-    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@5427c60c
+    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@1ee807c6
 
-    // m_error_code com.eprosima.idl.parser.typecode.EnumTypeCode@3d0f8e03
+    // m_error_code com.eprosima.idl.parser.typecode.EnumTypeCode@12028586
     m_error_code = soa_on_dds::SUCCESS;
-    // m_response_payload com.eprosima.idl.parser.typecode.StringTypeCode@6366ebe0
-    m_response_payload ="";
+    // m_response_payload com.eprosima.idl.parser.typecode.SequenceTypeCode@17776a8
+
 
 }
 
@@ -616,7 +627,11 @@ size_t soa_on_dds::RPC_Response::getMaxCdrSerializedSize(
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+    current_alignment += (100 * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+
+
 
 
     return current_alignment - initial_alignment;
@@ -634,7 +649,14 @@ size_t soa_on_dds::RPC_Response::getCdrSerializedSize(
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.response_payload().size() + 1;
+    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
+    if (data.response_payload().size() > 0)
+    {
+        current_alignment += (data.response_payload().size() * 1) + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+    }
+
+
 
 
     return current_alignment - initial_alignment;
@@ -646,7 +668,7 @@ void soa_on_dds::RPC_Response::serialize(
 
     scdr << m_header;
     scdr << (uint32_t)m_error_code;
-    scdr << m_response_payload.c_str();
+    scdr << m_response_payload;
 
 }
 
@@ -734,7 +756,7 @@ soa_on_dds::ErrorCode& soa_on_dds::RPC_Response::error_code()
  * @param _response_payload New value to be copied in member response_payload
  */
 void soa_on_dds::RPC_Response::response_payload(
-        const std::string& _response_payload)
+        const std::vector<uint8_t>& _response_payload)
 {
     m_response_payload = _response_payload;
 }
@@ -744,7 +766,7 @@ void soa_on_dds::RPC_Response::response_payload(
  * @param _response_payload New value to be moved in member response_payload
  */
 void soa_on_dds::RPC_Response::response_payload(
-        std::string&& _response_payload)
+        std::vector<uint8_t>&& _response_payload)
 {
     m_response_payload = std::move(_response_payload);
 }
@@ -753,7 +775,7 @@ void soa_on_dds::RPC_Response::response_payload(
  * @brief This function returns a constant reference to member response_payload
  * @return Constant reference to member response_payload
  */
-const std::string& soa_on_dds::RPC_Response::response_payload() const
+const std::vector<uint8_t>& soa_on_dds::RPC_Response::response_payload() const
 {
     return m_response_payload;
 }
@@ -762,7 +784,7 @@ const std::string& soa_on_dds::RPC_Response::response_payload() const
  * @brief This function returns a reference to member response_payload
  * @return Reference to member response_payload
  */
-std::string& soa_on_dds::RPC_Response::response_payload()
+std::vector<uint8_t>& soa_on_dds::RPC_Response::response_payload()
 {
     return m_response_payload;
 }

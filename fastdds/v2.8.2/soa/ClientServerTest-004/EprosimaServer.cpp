@@ -197,24 +197,31 @@ void EprosimaServer::OperationListener::on_data_available(
         clientserver::Operation operation;
         soa_on_dds::ErrorCode ec = soa_on_dds::SUCCESS;
         int32_t result = 0;
-        if (operation.ParseFromString(m_rpc_request.request_payload())) {
+        if (operation.DeserializeFromVector(m_rpc_request.request_payload())) {
+            #if 0
+            std::cout << "operation:  m_operationType=" << (uint32_t) operation.m_operationType 
+                << ", m_num1=" << operation.m_num1
+                << ", m_num2=" << operation.m_num2 << "\n";
+            #endif
             ec = mp_up->calculate(
                 operation.m_operationType,
                 operation.m_num1,
                 operation.m_num2,
                 &result);
+            //std::cout << "result: " << result << std::endl;
         } else {
             ec = soa_on_dds::DESERIALIZE_FAILED;
-            std::cout << "operation.ParseFromString failed!" << std::endl;
+            std::cout << "operation.DeserializeFromVector failed!" << std::endl;
         }
         clientserver::Result idl_result;
         idl_result.m_result = result;
-        std::string response_payload;
-        if (idl_result.SerializeToString(&response_payload)) {
+        std::vector<uint8_t> response_payload;
+        if (idl_result.SerializeToVector(response_payload)) {
             m_rpc_response.response_payload(response_payload);
+            //std::cout << "response_payload.size(): " << response_payload.size() << std::endl;
         } else {
             ec = soa_on_dds::SERIALIZE_FAILED;
-            std::cout << "idl_result.SerializeToString failed!" << std::endl;
+            std::cout << "idl_result.SerializeToVector failed!" << std::endl;
         }
         m_rpc_response.error_code(ec);
         mp_up->mp_result_pub->write((void*)&m_rpc_response);

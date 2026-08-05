@@ -381,26 +381,26 @@ namespace soa_on_dds {
          * @param _request_payload New value to be copied in member request_payload
          */
         eProsima_user_DllExport void request_payload(
-                const std::string& _request_payload);
+                const std::vector<uint8_t>& _request_payload);
 
         /*!
          * @brief This function moves the value in member request_payload
          * @param _request_payload New value to be moved in member request_payload
          */
         eProsima_user_DllExport void request_payload(
-                std::string&& _request_payload);
+                std::vector<uint8_t>&& _request_payload);
 
         /*!
          * @brief This function returns a constant reference to member request_payload
          * @return Constant reference to member request_payload
          */
-        eProsima_user_DllExport const std::string& request_payload() const;
+        eProsima_user_DllExport const std::vector<uint8_t>& request_payload() const;
 
         /*!
          * @brief This function returns a reference to member request_payload
          * @return Reference to member request_payload
          */
-        eProsima_user_DllExport std::string& request_payload();
+        eProsima_user_DllExport std::vector<uint8_t>& request_payload();
 
         /*!
          * @brief This function returns the maximum serialized size of an object
@@ -462,7 +462,7 @@ namespace soa_on_dds {
     private:
 
         soa_on_dds::RPC_Header m_header;
-        std::string m_request_payload;
+        std::vector<uint8_t> m_request_payload;
     };
     /*!
      * @brief This class represents the structure RPC_Response defined by the user in the IDL file.
@@ -573,26 +573,26 @@ namespace soa_on_dds {
          * @param _response_payload New value to be copied in member response_payload
          */
         eProsima_user_DllExport void response_payload(
-                const std::string& _response_payload);
+                const std::vector<uint8_t>& _response_payload);
 
         /*!
          * @brief This function moves the value in member response_payload
          * @param _response_payload New value to be moved in member response_payload
          */
         eProsima_user_DllExport void response_payload(
-                std::string&& _response_payload);
+                std::vector<uint8_t>&& _response_payload);
 
         /*!
          * @brief This function returns a constant reference to member response_payload
          * @return Constant reference to member response_payload
          */
-        eProsima_user_DllExport const std::string& response_payload() const;
+        eProsima_user_DllExport const std::vector<uint8_t>& response_payload() const;
 
         /*!
          * @brief This function returns a reference to member response_payload
          * @return Reference to member response_payload
          */
-        eProsima_user_DllExport std::string& response_payload();
+        eProsima_user_DllExport std::vector<uint8_t>& response_payload();
 
         /*!
          * @brief This function returns the maximum serialized size of an object
@@ -655,7 +655,7 @@ namespace soa_on_dds {
 
         soa_on_dds::RPC_Header m_header;
         soa_on_dds::ErrorCode m_error_code;
-        std::string m_response_payload;
+        std::vector<uint8_t> m_response_payload;
     };
 } // namespace soa_on_dds
 

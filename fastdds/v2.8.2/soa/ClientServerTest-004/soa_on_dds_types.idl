@@ -20,13 +20,13 @@ struct RPC_Header {
 
 struct RPC_Request {
     RPC_Header header;
-    string request_payload;
+    sequence<octet> request_payload;
 };
 
 struct RPC_Response {
     RPC_Header header;
     ErrorCode error_code;
-    string response_payload;
+    sequence<octet> response_payload;
 };
 
 };  // soa_on_dds

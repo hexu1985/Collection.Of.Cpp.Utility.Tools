@@ -13,18 +13,17 @@ void test_Operation() {
     original.m_num1 = 25;
     original.m_num2 = 65;
     
-    // 序列化到 string
-    std::string serialized;
+    // 序列化到 vector
+    std::vector<uint8_t> serialized;
     bool ret;
-    ret = original.SerializeToString(&serialized);
+    ret = original.SerializeToVector(serialized);
     if (ret) {
-        std::cout << "SerializeToString success!" << std::endl;
+        std::cout << "SerializeToVector success!" << std::endl;
     } else {
-        std::cout << "SerializeToString failed!" << std::endl;
+        std::cout << "SerializeToVector failed!" << std::endl;
     }
     std::cout << "Serialized size: " << serialized.size() << " bytes\n";
     
-#if 0
     // 打印十六进制内容
     std::cout << "Hex dump: ";
     for (unsigned char c : serialized) {
@@ -32,15 +31,14 @@ void test_Operation() {
                   << static_cast<int>(c) << " ";
     }
     std::cout << std::dec << "\n\n";
-#endif
     
     // 反序列化
     Operation recovered;
-    ret = recovered.ParseFromString(serialized);
+    ret = recovered.DeserializeFromVector(serialized);
     if (ret) {
-        std::cout << "ParseFromString success!" << std::endl;
+        std::cout << "DeserializeFromVector success!" << std::endl;
     } else {
-        std::cout << "ParseFromString failed!" << std::endl;
+        std::cout << "DeserializeFromVector failed!" << std::endl;
     }
     
     // 验证结果
@@ -67,18 +65,17 @@ void test_Result() {
 
     original.m_result = 100;
     
-    // 序列化到 string
-    std::string serialized;
+    // 序列化到 vector
+    std::vector<uint8_t> serialized;
     bool ret;
-    ret = original.SerializeToString(&serialized);
+    ret = original.SerializeToVector(serialized);
     if (ret) {
-        std::cout << "SerializeToString success!" << std::endl;
+        std::cout << "SerializeToVector success!" << std::endl;
     } else {
-        std::cout << "SerializeToString failed!" << std::endl;
+        std::cout << "SerializeToVector failed!" << std::endl;
     }
     std::cout << "Serialized size: " << serialized.size() << " bytes\n";
     
-#if 0
     // 打印十六进制内容
     std::cout << "Hex dump: ";
     for (unsigned char c : serialized) {
@@ -86,15 +83,14 @@ void test_Result() {
                   << static_cast<int>(c) << " ";
     }
     std::cout << std::dec << "\n\n";
-#endif
     
     // 反序列化
     Result recovered;
-    ret = recovered.ParseFromString(serialized);
+    ret = recovered.DeserializeFromVector(serialized);
     if (ret) {
-        std::cout << "ParseFromString success!" << std::endl;
+        std::cout << "DeserializeFromVector success!" << std::endl;
     } else {
-        std::cout << "ParseFromString failed!" << std::endl;
+        std::cout << "DeserializeFromVector failed!" << std::endl;
     }
     
     // 验证结果

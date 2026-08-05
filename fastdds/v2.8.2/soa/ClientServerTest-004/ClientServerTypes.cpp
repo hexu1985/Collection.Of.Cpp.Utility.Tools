@@ -4,22 +4,19 @@
 
 using namespace clientserver;
 
-bool Operation::SerializeToString(std::string* output) const {
-    char buffer[1024];
-    eprosima::fastcdr::FastBuffer fast_buffer(buffer, sizeof(buffer));
+bool Operation::SerializeToVector(std::vector<uint8_t>& output) const {
+    output.resize(1024);
+    eprosima::fastcdr::FastBuffer fast_buffer((char*) output.data(), output.size());
     eprosima::fastcdr::Cdr cdr(fast_buffer);
 
     cdr << (uint32_t) m_operationType << m_num1 << m_num2; 
-    *output = std::string(
-            reinterpret_cast<char*>(fast_buffer.getBuffer()),
-            fast_buffer.getBufferSize()
-            );
+    output.resize(cdr.getSerializedDataLength());
 
     return true;
 }
 
-bool Operation::ParseFromString(const std::string& data) {
-    eprosima::fastcdr::FastBuffer fast_buffer((char *) data.data(), data.size());
+bool Operation::DeserializeFromVector(const std::vector<uint8_t>& input) {
+    eprosima::fastcdr::FastBuffer fast_buffer((char *) input.data(), input.size());
     eprosima::fastcdr::Cdr cdr(fast_buffer);
 
     uint32_t operationType; 
@@ -28,22 +25,19 @@ bool Operation::ParseFromString(const std::string& data) {
     return true;
 }
 
-bool Result::SerializeToString(std::string* output) const {
-    char buffer[1024];
-    eprosima::fastcdr::FastBuffer fast_buffer(buffer, sizeof(buffer));
+bool Result::SerializeToVector(std::vector<uint8_t>& output) const {
+    output.resize(1024);
+    eprosima::fastcdr::FastBuffer fast_buffer((char*) output.data(), output.size());
     eprosima::fastcdr::Cdr cdr(fast_buffer);
 
     cdr << m_result; 
-    *output = std::string(
-            reinterpret_cast<char*>(fast_buffer.getBuffer()),
-            fast_buffer.getBufferSize()
-            );
+    output.resize(cdr.getSerializedDataLength());
 
     return true;
 }
 
-bool Result::ParseFromString(const std::string& data) {
-    eprosima::fastcdr::FastBuffer fast_buffer((char *) data.data(), data.size());
+bool Result::DeserializeFromVector(const std::vector<uint8_t>& input) {
+    eprosima::fastcdr::FastBuffer fast_buffer((char *) input.data(), input.size());
     eprosima::fastcdr::Cdr cdr(fast_buffer);
 
     cdr >> m_result;
