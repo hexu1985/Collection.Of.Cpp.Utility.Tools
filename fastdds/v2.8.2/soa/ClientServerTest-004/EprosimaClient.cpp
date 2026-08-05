@@ -19,6 +19,9 @@
 
 #include "EprosimaClient.h"
 
+#include <sys/types.h>
+#include <unistd.h>
+
 #include <sstream>
 #include <string>
 #include <fastdds/rtps/common/Guid.h>
@@ -112,7 +115,7 @@ bool EprosimaClient::init_operation_pub() {
     mp_operation_pub.reset(new EprosimaPubWrapper);
     EprosimaPubWrapper::Config config; 
     config.participant = mp_participant;
-    config.type_support.reset(new RPC_RequestPubSubType());
+    config.type_support.reset(new soa_on_dds::RPC_RequestPubSubType());
     config.topic_name = "soa.rpc.compute.request";
     config.data_writer_listener = &this->m_operationsListener;
 
@@ -134,7 +137,7 @@ bool EprosimaClient::init_result_sub() {
     mp_result_sub.reset(new EprosimaSubWrapper);
     EprosimaSubWrapper::Config config;
     config.participant = mp_participant;
-    config.type_support.reset(new RPC_ResponsePubSubType());
+    config.type_support.reset(new soa_on_dds::RPC_ResponsePubSubType());
     config.topic_name = "soa.rpc.compute.response";
     config.data_reader_listener = &this->m_resultsListener;
 
@@ -184,19 +187,22 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
 
     mp_operation_pub->write((void*)&m_rpc_request);
 
-    clientserver::Result result;
+    clientserver::Result idl_result;
     do {
-        result.m_result = 0;
+        idl_result.m_result = 0;
         resetResult();
         mp_result_sub->wait_for_unread_message({10, 0});
         mp_result_sub->take_next_sample((void*)&m_rpc_response, &m_sampleInfo);
     } while (m_sampleInfo.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE ||
     m_rpc_response.header() != m_rpc_request.header());
-    if (m_result.error_code() == GOOD_RESULT)
+    if (m_rpc_response.error_code() == soa_on_dds::SUCCESS)
     {
-        *result = m_result.m_result();
+        if (!idl_result.ParseFromString(m_rpc_response.response_payload())) {
+            std::cout << "ParseFromString failed" << std::endl;
+            return soa_on_dds::DESERIALIZE_FAILED;
+        }
     }
-    return m_result.m_resultType();
+    return m_rpc_response.error_code();
 }
 
 void EprosimaClient::resetResult()
