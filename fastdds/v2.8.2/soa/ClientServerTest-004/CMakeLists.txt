@@ -61,3 +61,6 @@ target_link_libraries(calculate_server_test fastrtps fastcdr tinyxml2::tinyxml2)
 add_executable(calculate_client_test calculate_client_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test fastrtps fastcdr tinyxml2::tinyxml2)
 
+add_executable(test_ClientServerTypes test_ClientServerTypes.cpp ClientServerTypes.cpp)
+target_link_libraries(test_ClientServerTypes fastcdr)
+

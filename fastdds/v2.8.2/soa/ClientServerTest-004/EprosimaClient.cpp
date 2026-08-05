@@ -183,6 +183,7 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
         std::cout << "SerializeToString failed" << std::endl;
         return soa_on_dds::SERIALIZE_FAILED;
     }
+    std::cout << "request_payload.size(): " << request_payload.size() << std::endl;
     m_rpc_request.request_payload(request_payload);
 
     mp_operation_pub->write((void*)&m_rpc_request);
