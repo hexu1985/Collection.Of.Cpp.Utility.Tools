@@ -38,8 +38,8 @@ message(STATUS "Configuring DDSClientServerTest...")
 set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaClient.cpp
     EprosimaClient.h
-#    EprosimaServer.cpp
-#    EprosimaServer.h
+    EprosimaServer.cpp
+    EprosimaServer.h
     EprosimaPubWrapper.cpp
     EprosimaPubWrapper.hpp
     EprosimaSubWrapper.cpp
@@ -55,8 +55,8 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gen)
 
-#add_executable(calculate_server_test calculate_server_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
-#target_link_libraries(calculate_server_test fastrtps fastcdr tinyxml2::tinyxml2)
+add_executable(calculate_server_test calculate_server_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+target_link_libraries(calculate_server_test fastrtps fastcdr tinyxml2::tinyxml2)
 
 add_executable(calculate_client_test calculate_client_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test fastrtps fastcdr tinyxml2::tinyxml2)

@@ -20,7 +20,8 @@
 #ifndef EPROSIMASERVER_H_
 #define EPROSIMASERVER_H_
 
-#include "ClientServerTypes.h"
+#include "soa_on_dds_types.h"
+#include "ClientServerTypes.hpp"
 #include "EprosimaPubWrapper.hpp"
 #include "EprosimaSubWrapper.hpp"
 
@@ -56,8 +57,8 @@ private:
     std::unique_ptr<EprosimaSubWrapper> mp_operation_sub;
     std::unique_ptr<EprosimaPubWrapper> mp_result_pub;
 
-    clientserver::RESULTTYPE calculate(
-            clientserver::OPERATIONTYPE type,
+    soa_on_dds::ErrorCode calculate(
+            clientserver::Operation::OPERATIONTYPE type,
             int32_t num1,
             int32_t num2,
             int32_t* result);
@@ -85,9 +86,8 @@ public:
         void on_data_available(
                 eprosima::fastdds::dds::DataReader* reader) override;
 
-        clientserver::Operation m_operation;
-
-        clientserver::Result m_result;
+        soa_on_dds::RPC_Request m_rpc_request;
+        soa_on_dds::RPC_Response m_rpc_response;
 
     }
     m_operationsListener;

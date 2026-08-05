@@ -23,7 +23,7 @@
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 
-#include "ClientServerTypesPubSubTypes.h"
+#include "soa_on_dds_typesPubSubTypes.h"
 #include "EprosimaParticipantManager.hpp"
 
 using namespace eprosima::fastdds::dds;
@@ -107,7 +107,7 @@ bool EprosimaServer::init_operation_sub() {
     mp_operation_sub.reset(new EprosimaSubWrapper);
     EprosimaSubWrapper::Config config;
     config.participant = mp_participant;
-    config.type_support.reset(new OperationPubSubType());
+    config.type_support.reset(new soa_on_dds::RPC_RequestPubSubType());
     config.topic_name = "Operations";
     config.data_reader_listener = &this->m_operationsListener;
 
@@ -129,7 +129,7 @@ bool EprosimaServer::init_result_pub() {
     mp_result_pub.reset(new EprosimaPubWrapper);
     EprosimaPubWrapper::Config config; 
     config.participant = mp_participant;
-    config.type_support.reset(new ResultPubSubType());
+    config.type_support.reset(new soa_on_dds::RPC_ResponsePubSubType());
     config.topic_name = "Results";
     config.data_writer_listener = &this->m_resultsListener;
 
@@ -148,60 +148,74 @@ bool EprosimaServer::init_result_pub() {
     return true;
 }
 
-RESULTTYPE EprosimaServer::calculate(
-        OPERATIONTYPE type,
+soa_on_dds::ErrorCode EprosimaServer::calculate(
+        Operation::OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result)
 {
     switch (type)
     {
-        case SUBTRACTION:
+        case Operation::SUBTRACTION:
         {
             *result = num1 - num2;
             break;
         }
-        case ADDITION:
+        case Operation::ADDITION:
         {
             *result = num1 + num2;
             break;
         }
 
-        case MULTIPLICATION:
+        case Operation::MULTIPLICATION:
         {
             *result = num1 * num2;
             break;
         }
-        case DIVISION:
+        case Operation::DIVISION:
         {
             if (num2 == 0)
             {
-                return ERROR_RESULT;
+                return soa_on_dds::OTHER_ERROR;
             }
             break;
         }
     }
-    return GOOD_RESULT;
+    return soa_on_dds::SUCCESS;
 }
 
 void EprosimaServer::OperationListener::on_data_available(
         DataReader* /*reader*/)
 {
     SampleInfo m_sampleInfo;
-    mp_up->mp_operation_sub->take_next_sample((void*)&m_operation, &m_sampleInfo);
+    mp_up->mp_operation_sub->take_next_sample((void*)&m_rpc_request, &m_sampleInfo);
     if (m_sampleInfo.valid_data)
     {
         ++mp_up->m_n_served;
-        m_result.m_guid(m_operation.m_guid());
-        m_result.m_operationId(m_operation.m_operationId());
+        m_rpc_response.header(m_rpc_request.header());
+        clientserver::Operation operation;
+        soa_on_dds::ErrorCode ec = soa_on_dds::SUCCESS;
         int32_t result = 0;
-        RESULTTYPE resultType = mp_up->calculate(
-            m_operation.m_operationType(),
-            m_operation.m_num1(),
-            m_operation.m_num2(),
-            &result);
-        m_result.m_result(result);
-        m_result.m_resultType(resultType);
-        mp_up->mp_result_pub->write((void*)&m_result);
+        if (operation.ParseFromString(m_rpc_request.request_payload())) {
+            ec = mp_up->calculate(
+                operation.m_operationType,
+                operation.m_num1,
+                operation.m_num2,
+                &result);
+        } else {
+            ec = soa_on_dds::DESERIALIZE_FAILED;
+            std::cout << "operation.ParseFromString failed!" << std::endl;
+        }
+        clientserver::Result idl_result;
+        idl_result.m_result = result;
+        std::string response_payload;
+        if (idl_result.SerializeToString(&response_payload)) {
+            m_rpc_response.response_payload(response_payload);
+        } else {
+            ec = soa_on_dds::SERIALIZE_FAILED;
+            std::cout << "idl_result.SerializeToString failed!" << std::endl;
+        }
+        m_rpc_response.error_code(ec);
+        mp_up->mp_result_pub->write((void*)&m_rpc_response);
     }
 }

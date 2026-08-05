@@ -71,6 +71,7 @@ namespace soa_on_dds {
     enum ErrorCode : uint32_t
     {
         SUCCESS,
+        OTHER_ERROR,
         SERIALIZE_FAILED,
         DESERIALIZE_FAILED,
         SERVICE_NOT_AVAILABLE,

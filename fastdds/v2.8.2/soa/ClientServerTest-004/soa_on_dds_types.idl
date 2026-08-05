@@ -3,6 +3,7 @@ module soa_on_dds {
 
 enum ErrorCode {
     SUCCESS,
+    OTHER_ERROR, 
     SERIALIZE_FAILED,
     DESERIALIZE_FAILED,
     SERVICE_NOT_AVAILABLE,
