@@ -1,0 +1,4 @@
+
+request_payload和response_payload定义成string类型，二进制反序列化会报错，
+原因可能是string类型里存二进制数据，到对端就编程空的了。
+尝试把request_payload和response_payload定义成sequence<octet>看看能否修复这个问题。
