@@ -108,7 +108,7 @@ bool EprosimaServer::init_operation_sub() {
     EprosimaSubWrapper::Config config;
     config.participant = mp_participant;
     config.type_support.reset(new soa_on_dds::RPC_RequestPubSubType());
-    config.topic_name = "Operations";
+    config.topic_name = "soa.rpc.compute.request";
     config.data_reader_listener = &this->m_operationsListener;
 
     DataReaderQos rqos;
@@ -130,7 +130,7 @@ bool EprosimaServer::init_result_pub() {
     EprosimaPubWrapper::Config config; 
     config.participant = mp_participant;
     config.type_support.reset(new soa_on_dds::RPC_ResponsePubSubType());
-    config.topic_name = "Results";
+    config.topic_name = "soa.rpc.compute.response";
     config.data_writer_listener = &this->m_resultsListener;
 
     DataWriterQos wqos;
@@ -187,6 +187,7 @@ soa_on_dds::ErrorCode EprosimaServer::calculate(
 void EprosimaServer::OperationListener::on_data_available(
         DataReader* /*reader*/)
 {
+    //std::cout << "EprosimaServer::OperationListener::on_data_available" << std::endl;
     SampleInfo m_sampleInfo;
     mp_up->mp_operation_sub->take_next_sample((void*)&m_rpc_request, &m_sampleInfo);
     if (m_sampleInfo.valid_data)
@@ -217,5 +218,6 @@ void EprosimaServer::OperationListener::on_data_available(
         }
         m_rpc_response.error_code(ec);
         mp_up->mp_result_pub->write((void*)&m_rpc_response);
+        //std::cout << "mp_up->mp_result_pub->write((void*)&m_rpc_response);" << std::endl;
     }
 }
