@@ -178,6 +178,7 @@ soa_on_dds::ErrorCode EprosimaServer::calculate(
             {
                 return soa_on_dds::UPPER_LAYER_APPLICATION_ERROR;
             }
+            *result = num1 / num2;
             break;
         }
     }
