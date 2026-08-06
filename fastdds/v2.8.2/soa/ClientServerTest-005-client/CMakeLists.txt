@@ -36,6 +36,10 @@ endif()
 message(STATUS "Configuring DDSClientServerTest...")
 #file(GLOB DDS_CLIENTSERVERTEST_SOURCES "src/*.cpp")
 set(DDS_CLIENTSERVERTEST_SOURCES
+    EprosimaRpcClient.cpp
+    EprosimaRpcClient.hpp
+    EprosimaRpcUtils.cpp
+    EprosimaRpcUtils.hpp
     EprosimaClient.cpp
     EprosimaClient.h
     EprosimaServer.cpp

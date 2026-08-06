@@ -11,5 +11,5 @@ cmake -S ${src_dir} -B ${build_dir} \
     -Dfastrtps_DIR=${HOME}/local/fastdds/share/fastrtps/cmake \
     -Dfoonathan_memory_DIR=${HOME}/local/foonathan_memory/lib/foonathan_memory/cmake \
     -Dtinyxml2_DIR=${HOME}/local/tinyxml2/lib/cmake/tinyxml2
-cmake --build ${build_dir} -j 4
+cmake --build ${build_dir} -j 1
 
