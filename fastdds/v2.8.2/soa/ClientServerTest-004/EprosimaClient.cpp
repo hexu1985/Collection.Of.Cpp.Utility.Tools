@@ -181,7 +181,7 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
     std::vector<uint8_t> request_payload;
     if (!operation.SerializeToVector(request_payload)) {
         std::cout << "SerializeToVector failed" << std::endl;
-        return soa_on_dds::SERIALIZE_FAILED;
+        return soa_on_dds::CLIENT_SERIALIZE_ERROR;
     }
     std::cout << "request_payload.size(): " << request_payload.size() << std::endl;
     m_rpc_request.request_payload(request_payload);
@@ -200,7 +200,7 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
     {
         if (!idl_result.DeserializeFromVector(m_rpc_response.response_payload())) {
             std::cout << "DeserializeFromVector failed" << std::endl;
-            return soa_on_dds::DESERIALIZE_FAILED;
+            return soa_on_dds::CLIENT_DESERIALIZE_ERROR;
         }
         *result = idl_result.m_result;
     }
