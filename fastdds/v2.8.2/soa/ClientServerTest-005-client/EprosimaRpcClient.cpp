@@ -1,6 +1,6 @@
 #include "EprosimaRpcClient.hpp"
 #include "EprosimaRpcUtils.hpp"
-#include "soa_on_dds_typesPubSubTypes.h"
+#include "gen/soa_on_dds_typesPubSubTypes.h"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -22,6 +22,8 @@ EprosimaRpcClient::EprosimaRpcClient(const std::string& client_id, const std::st
 
     m_request_pub_listener.m_up = this;
     m_response_sub_listener.m_up = this;
+
+    m_cached_response = std::make_shared<soa_on_dds::RPC_Response>();
 }
 
 EprosimaRpcClient::~EprosimaRpcClient() {
@@ -104,6 +106,109 @@ bool EprosimaRpcClient::init_response_sub() {
     return true;
 }
 
+void EprosimaRpcClient::send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
+        ResponsePromisePtr response_promise) {
+    auto request = make_rpc_request(method_name, request_payload);
+    auto request_info = std::make_shared<RequestInfo>();
+    request_info->request = request;
+    request_info->response_promise = response_promise;
+
+    m_worker.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
+}
+
+void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
+    auto request = request_info->request;
+    auto response_promise = request_info->response_promise;
+    if (!m_request_pub->write((void*)request.get())) {
+        auto response = make_rpc_response(request, soa_on_dds::CLIENT_SEND_REQUEST_ERROR);
+        response_promise->set_value(response);
+        return;
+    }
+
+    m_pending_requests[request->header().request_id()] = request_info;
+    return;
+}
+
+void EprosimaRpcClient::on_data_available() {
+    m_worker.submit(std::bind(&EprosimaRpcClient::do_recv_response, this));
+}
+
+void EprosimaRpcClient::do_recv_response() {
+    while (m_response_sub->take_next_sample((void*) m_cached_response.get(), &m_sample_info) == ReturnCode_t::RETCODE_OK ) {
+        if (m_sample_info.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE) {
+            continue;
+        }
+        if (is_valid_response(m_cached_response)) {
+            auto rpc_response = m_cached_response;
+            m_cached_response = std::make_shared<soa_on_dds::RPC_Response>();
+            dispatch_response(rpc_response);
+        }
+    }
+}
+
+bool EprosimaRpcClient::is_valid_response(ResponsePtr rpc_response) {
+    if (rpc_response->header().client_id() != m_client_id) {
+        std::cout << "client id mismatched: m_client_id[" << m_client_id << "], response.client_id[" << rpc_response->header().client_id() << "]" << std::endl;
+        return false;
+    }
+
+    if (rpc_response->header().session_id() != m_session_id) {
+        std::cout << "session id mismatched: m_session_id[" << m_session_id << "], response.session_id[" << rpc_response->header().session_id() << "]" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+void EprosimaRpcClient::dispatch_response(std::shared_ptr<RPC_Response> rpc_response) {
+    long request_id = rpc_response->header().request_id();
+    auto request_info = get_request_info(request_id);
+    if (request_info == nullptr) {
+        std::cout << "Not found request_info by request_id[" << request_id << "]" << std::endl;
+        return;
+    }
+
+    // check method name
+    auto& request_method_name = request_info->request->header().method_name();
+    auto& response_method_name = rpc_response->header().method_name();
+    if (request_method_name != response_method_name) {
+        std::cout << "Warning: request_method_name[" << request_method_name << "] != response_method_name["
+                  << response_method_name << "]" << std::endl;
+        return;
+    }
+
+    request_info->response_promise->set_value(rpc_response);
+}
+
+EprosimaRpcClient::RequestPtr EprosimaRpcClient::make_rpc_request(
+        const std::string& method_name, const std::vector<uint8_t>& request_payload) {
+    auto rpc_request = std::make_shared<soa_on_dds::RPC_Request>();
+    rpc_request->header().method_name(method_name);
+    rpc_request->header().client_id(m_client_id);
+    rpc_request->header().session_id(m_session_id);
+    long request_id = ++m_request_id_generator;
+    rpc_request->header().request_id(request_id);
+    rpc_request->request_payload(request_payload);
+
+    return rpc_request;
+}
+
+EprosimaRpcClient::ResponsePtr EprosimaRpcClient::make_rpc_response(RequestPtr rpc_request, soa_on_dds::ErrorCode error_code) {
+    auto rpc_response = std::make_shared<soa_on_dds::RPC_Response>();
+    rpc_response->header(rpc_request->header());
+    rpc_response->error_code(error_code);
+    return rpc_response;
+}
+
+EprosimaRpcClient::RequestInfoPtr EprosimaRpcClient::get_request_info(long request_id) {
+    auto iter = m_pending_requests.find(request_id);
+    if (iter != m_pending_requests.end()) {
+        return nullptr;
+    }
+
+    return iter->second;
+}
+
 EprosimaRpcClient::RequestPubListener::RequestPubListener() {
 }
 
@@ -114,6 +219,11 @@ void EprosimaRpcClient::RequestPubListener::on_publication_matched(
         eprosima::fastdds::dds::DataWriter*,
         const eprosima::fastdds::dds::PublicationMatchedStatus& info)
 {
+    if (m_up == nullptr) {
+        std::cout << "m_up is nullptr" << std::endl;
+        return;
+    }
+
     if (info.current_count_change == 1)
     {
         m_up->m_request_pub_matched++;
@@ -140,6 +250,11 @@ void EprosimaRpcClient::ResponseSubListener::on_subscription_matched(
         DataReader*,
         const SubscriptionMatchedStatus& info)
 {
+    if (m_up == nullptr) {
+        std::cout << "m_up is nullptr" << std::endl;
+        return;
+    }
+
     if (info.current_count_change == 1)
     {
         m_up->m_response_sub_matched++;
@@ -159,4 +274,10 @@ void EprosimaRpcClient::ResponseSubListener::on_subscription_matched(
 void EprosimaRpcClient::ResponseSubListener::on_data_available(
         DataReader*)
 {
+    if (m_up == nullptr) {
+        std::cout << "m_up is nullptr" << std::endl;
+        return;
+    }
+
+    m_up->on_data_available();
 }

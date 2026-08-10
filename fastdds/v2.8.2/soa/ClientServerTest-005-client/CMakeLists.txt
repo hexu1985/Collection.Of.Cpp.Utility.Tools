@@ -52,6 +52,8 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaParticipantManager.hpp
     ClientServerTypes.cpp
     ClientServerTypes.hpp
+    threadsafe_queue.hpp
+    worker_thread.hpp
     gen/soa_on_dds_types.cxx
     gen/soa_on_dds_types.h
     gen/soa_on_dds_typesPubSubTypes.cxx
