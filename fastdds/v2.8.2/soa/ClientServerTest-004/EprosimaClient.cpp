@@ -116,7 +116,7 @@ bool EprosimaClient::init_operation_pub() {
     EprosimaPubWrapper::Config config; 
     config.participant = mp_participant;
     config.type_support.reset(new soa_on_dds::RPC_RequestPubSubType());
-    config.topic_name = "soa.rpc.calculate.request";
+    config.topic_name = "soa.rpc.compute.request";
     config.data_writer_listener = &this->m_operationsListener;
 
     DataWriterQos wqos;
@@ -138,7 +138,7 @@ bool EprosimaClient::init_result_sub() {
     EprosimaSubWrapper::Config config;
     config.participant = mp_participant;
     config.type_support.reset(new soa_on_dds::RPC_ResponsePubSubType());
-    config.topic_name = "soa.rpc.calculate.response";
+    config.topic_name = "soa.rpc.compute.response";
     config.data_reader_listener = &this->m_resultsListener;
 
     DataReaderQos rqos;
