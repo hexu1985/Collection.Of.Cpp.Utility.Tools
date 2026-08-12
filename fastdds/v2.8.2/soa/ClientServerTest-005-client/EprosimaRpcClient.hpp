@@ -38,11 +38,11 @@ public:
 
     bool init();
 
-    bool isReady();
+    bool is_ready();
 
     template <typename Argument, typename Result>
     soa_on_dds::ErrorCode call(const std::string& method_name, const Argument& arg, Result& res) {
-        if (!isReady()) {
+        if (!is_ready()) {
             return soa_on_dds::SERVICE_NOT_AVAILABLE;
         }
 
@@ -53,11 +53,13 @@ public:
         }
 
         ResponsePromisePtr response_promise = std::make_shared<ResponsePromise>();
-        send_request(method_name, request_payload, response_promise);
+        long request_id = send_request(method_name, request_payload, response_promise);
 
         auto response_future = response_promise->get_future();
         auto rpc_response = response_future.get();
         assert(rpc_response != nullptr);
+
+        remove_pending_request(request_id);
 
         if (!res.DeserializeFromVector(rpc_response->response_payload())) {
             std::cout << "DeserializeFromVector failed" << std::endl;
@@ -74,13 +76,17 @@ private:
     bool init_request_pub();
     bool init_response_sub();
 
-    void send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
+    long send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
         ResponsePromisePtr response_promise); 
 
     void on_data_available();
 
+    void remove_pending_request(long request_id); 
+
     void do_send_request(RequestInfoPtr request_info);
     void do_recv_response();
+
+    void do_remove_pending_request(long request_id);
 
     bool is_valid_response(ResponsePtr rpc_response);
     void dispatch_response(ResponsePtr rpc_response);

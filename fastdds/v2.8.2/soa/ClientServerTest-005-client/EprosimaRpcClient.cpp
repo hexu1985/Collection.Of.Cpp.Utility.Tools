@@ -50,7 +50,7 @@ bool EprosimaRpcClient::init() {
     return true;
 }
 
-bool EprosimaRpcClient::isReady() {
+bool EprosimaRpcClient::is_ready() {
     if (m_request_pub_matched == 1 && m_response_sub_matched == 1)
     {
         m_is_ready = true;
@@ -106,7 +106,7 @@ bool EprosimaRpcClient::init_response_sub() {
     return true;
 }
 
-void EprosimaRpcClient::send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
+long EprosimaRpcClient::send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
         ResponsePromisePtr response_promise) {
     auto request = make_rpc_request(method_name, request_payload);
     auto request_info = std::make_shared<RequestInfo>();
@@ -114,6 +114,8 @@ void EprosimaRpcClient::send_request(const std::string& method_name, const std::
     request_info->response_promise = response_promise;
 
     m_worker.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
+
+    return request->header().request_id();
 }
 
 void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
@@ -131,6 +133,14 @@ void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
 
 void EprosimaRpcClient::on_data_available() {
     m_worker.submit(std::bind(&EprosimaRpcClient::do_recv_response, this));
+}
+
+void EprosimaRpcClient::remove_pending_request(long request_id) {
+    m_worker.submit(std::bind(&EprosimaRpcClient::do_remove_pending_request, this, request_id));
+}
+
+void EprosimaRpcClient::do_remove_pending_request(long request_id) {
+    m_pending_requests.erase(request_id);
 }
 
 void EprosimaRpcClient::do_recv_response() {
@@ -237,7 +247,7 @@ void EprosimaRpcClient::RequestPubListener::on_publication_matched(
         std::cout << info.current_count_change
                   << " is not a valid value for PublicationMatchedStatus current count change" << std::endl;
     }
-    m_up->isReady();
+    m_up->is_ready();
 }
 
 EprosimaRpcClient::ResponseSubListener::ResponseSubListener() {
@@ -268,7 +278,7 @@ void EprosimaRpcClient::ResponseSubListener::on_subscription_matched(
         std::cout << info.current_count_change
                   << " is not a valid value for SubscriptionMatchedStatus current count change" << std::endl;
     }
-    m_up->isReady();
+    m_up->is_ready();
 }
 
 void EprosimaRpcClient::ResponseSubListener::on_data_available(

@@ -79,7 +79,8 @@ namespace soa_on_dds {
         SERVICE_NOT_AVAILABLE,
         METHOD_NOT_REGISTER,
         REQUEST_TIMEOUT,
-        CLIENT_SEND_REQUEST_ERROR
+        CLIENT_SEND_REQUEST_ERROR,
+        CLIENT_NOT_INITIALIZE
     };
     /*!
      * @brief This class represents the structure RPC_Header defined by the user in the IDL file.
