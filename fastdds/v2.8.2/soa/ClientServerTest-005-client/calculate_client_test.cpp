@@ -91,6 +91,7 @@ int main(
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
+    std::cout << "client.calculate" << std::endl;
 
     int32_t res = 0;
     soa_on_dds::ErrorCode ec = client.calculate(op, num1, num2, &res);

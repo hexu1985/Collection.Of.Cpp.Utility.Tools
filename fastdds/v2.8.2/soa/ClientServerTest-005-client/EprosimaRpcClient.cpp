@@ -124,9 +124,11 @@ void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
     if (!m_request_pub->write((void*)request.get())) {
         auto response = make_rpc_response(request, soa_on_dds::CLIENT_SEND_REQUEST_ERROR);
         response_promise->set_value(response);
+        std::cout << "m_request_pub->write failed" << std::endl;
         return;
     }
 
+    //std::cout << "insert request[" << request->header().request_id() << "]" << std::endl;
     m_pending_requests[request->header().request_id()] = request_info;
     return;
 }
@@ -144,6 +146,7 @@ void EprosimaRpcClient::do_remove_pending_request(long request_id) {
 }
 
 void EprosimaRpcClient::do_recv_response() {
+    //std::cout << "EprosimaRpcClient::do_recv_response" << std::endl;
     while (m_response_sub->take_next_sample((void*) m_cached_response.get(), &m_sample_info) == ReturnCode_t::RETCODE_OK ) {
         if (m_sample_info.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE) {
             continue;
@@ -212,7 +215,7 @@ EprosimaRpcClient::ResponsePtr EprosimaRpcClient::make_rpc_response(RequestPtr r
 
 EprosimaRpcClient::RequestInfoPtr EprosimaRpcClient::get_request_info(long request_id) {
     auto iter = m_pending_requests.find(request_id);
-    if (iter != m_pending_requests.end()) {
+    if (iter == m_pending_requests.end()) {
         return nullptr;
     }
 
