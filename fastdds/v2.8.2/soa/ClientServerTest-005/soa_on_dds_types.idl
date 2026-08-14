@@ -1,0 +1,36 @@
+
+module soa_on_dds {
+
+enum ErrorCode {
+    SUCCESS,
+    UPPER_LAYER_APPLICATION_ERROR,
+    CLIENT_SERIALIZE_ERROR,
+    CLIENT_DESERIALIZE_ERROR,
+    SERVICE_SERIALIZE_ERROR,
+    SERVICE_DESERIALIZE_ERROR,
+    SERVICE_NOT_AVAILABLE,
+    METHOD_NOT_REGISTER,
+    REQUEST_TIMEOUT,
+    CLIENT_SEND_REQUEST_ERROR,
+    CLIENT_NOT_INITIALIZE
+};
+
+struct RPC_Header {
+    string method_name;
+    string client_id;
+    long session_id;
+    long request_id;
+};
+
+struct RPC_Request {
+    RPC_Header header;
+    sequence<octet> request_payload;
+};
+
+struct RPC_Response {
+    RPC_Header header;
+    ErrorCode error_code;
+    sequence<octet> response_payload;
+};
+
+};  // soa_on_dds

@@ -1,0 +1,631 @@
+calculate local: 1+2=3
+Starting client
+2026-07-29 17:06:26.703 [DOMAIN Info] load_environment_server_info and server_list is empty (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/RTPSDomain.cpp:521) -> Function clientServerEnvironmentCreationOverride
+2026-07-29 17:06:26.703 [RTPS_PARTICIPANT Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/RTPSDomain.cpp:104) -> Function createParticipant
+2026-07-29 17:06:26.705 [RTPS_PARTICIPANT Info] metatraffic_multicast_port: 7400 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:255) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.705 [RTPS_PARTICIPANT Info] metatraffic_unicast_port: 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:256) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.705 [RTPS_PARTICIPANT Info] client_RTPSParticipant Created with NO default Unicast Locator List, adding Locators:[UDPv4:[10.88.221.249]:7413,SHM:[_]:7413] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:317) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.705 [RTPS_MSG_IN Info] Created with CDRMessage of size: 65500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/ChannelResource.cpp:49) -> Function ChannelResource
+2026-07-29 17:06:26.706 [RTPS_MSG_IN Info] Created with CDRMessage of size: 65500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:62) -> Function MessageReceiver
+2026-07-29 17:06:26.706 [RTPS_MSG_OUT Info] UDPTransport Error binding at port: (7412) with msg: bind: Address already in use (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:214) -> Function OpenAndBindInputSockets
+2026-07-29 17:06:26.706 [RTPS_MSG_IN Info] Created with CDRMessage of size: 65500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/ChannelResource.cpp:49) -> Function ChannelResource
+2026-07-29 17:06:26.706 [RTPS_MSG_IN Info] Created with CDRMessage of size: 65500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:62) -> Function MessageReceiver
+2026-07-29 17:06:26.706 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Opening fastrtps_port7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:987) -> Function open_port_internal
+2026-07-29 17:06:26.707 [RTPS_MSG_OUT Info] CreateInputChannelResource failed for port 7412 msg: Couldn't open port 7412 (0a5376eaaf3ea00c) because is ReadExclusive locked (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:146) -> Function OpenInputChannel
+2026-07-29 17:06:26.707 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Opening fastrtps_port7414 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:987) -> Function open_port_internal
+2026-07-29 17:06:26.707 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Port 7414 (d451096af4cb61ceReadExclusive) Created. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:1227) -> Function init_port
+2026-07-29 17:06:26.708 [RTPS_MSG_IN Info] Created with CDRMessage of size: 10500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/ChannelResource.cpp:29) -> Function ChannelResource
+2026-07-29 17:06:26.708 [RTPS_MSG_IN Info] Created with CDRMessage of size: 4294967295 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:62) -> Function MessageReceiver
+2026-07-29 17:06:26.708 [RTPS_MSG_OUT Info] UDPTransport Error binding at port: (7413) with msg: bind: Address already in use (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:214) -> Function OpenAndBindInputSockets
+2026-07-29 17:06:26.708 [RTPS_MSG_IN Info] Created with CDRMessage of size: 65500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/ChannelResource.cpp:49) -> Function ChannelResource
+2026-07-29 17:06:26.708 [RTPS_MSG_IN Info] Created with CDRMessage of size: 65500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:62) -> Function MessageReceiver
+2026-07-29 17:06:26.708 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Opening fastrtps_port7413 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:987) -> Function open_port_internal
+2026-07-29 17:06:26.708 [RTPS_MSG_OUT Info] CreateInputChannelResource failed for port 7413 msg: Couldn't open port 7413 (48e638725d9a40f1) because is ReadExclusive locked (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:146) -> Function OpenInputChannel
+2026-07-29 17:06:26.708 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Opening fastrtps_port7415 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:987) -> Function open_port_internal
+2026-07-29 17:06:26.709 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Port 7415 (ac15ba976fc5f02eReadExclusive) Created. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:1227) -> Function init_port
+2026-07-29 17:06:26.709 [RTPS_MSG_IN Info] Created with CDRMessage of size: 10500 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/ChannelResource.cpp:29) -> Function ChannelResource
+2026-07-29 17:06:26.709 [RTPS_MSG_IN Info] Created with CDRMessage of size: 4294967295 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:62) -> Function MessageReceiver
+2026-07-29 17:06:26.709 [RTPS_PARTICIPANT Info] metatrafficMulticastLocatorList: [UDPv4:[239.255.0.1]:7400] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:360) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.709 [RTPS_PARTICIPANT Info] metatrafficUnicastLocatorList: [UDPv4:[10.88.221.249]:7414,SHM:[_]:7414] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:361) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.709 [RTPS_PARTICIPANT Info] defaultUnicastLocatorList: [UDPv4:[10.88.221.249]:7415,SHM:[_]:7415] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:362) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.709 [RTPS_PARTICIPANT Info] defaultMulticastLocatorList: [_] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:363) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:26.710 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:26.710 [RTPS_PDP Info] Beginning (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDP.cpp:388) -> Function initPDP
+2026-07-29 17:06:26.710 [RTPS_PDP Info] Beginning (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDPSimple.cpp:246) -> Function createPDPEndpoints
+2026-07-29 17:06:26.710 [RTPS_PARTICIPANT Info] Creating reader of type BEST_EFFORT (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:811) -> Function create_reader
+2026-07-29 17:06:26.711 [RTPS_UTILS Info] Creating CacheChangePool of size: 26 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.711 [RTPS_UTILS Info] Semi-Static Mode is active, preallocating memory for pool_size. Size of the cachechanges can be increased (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:80) -> Function init
+2026-07-29 17:06:26.711 [RTPS_UTILS Info] Allocating group of cache changes of size: 26 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.711 [RTPS_READER Info] RTPSReader created correctly (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:146) -> Function init
+2026-07-29 17:06:26.711 [RTPS_PARTICIPANT Info] Creating writer of type BEST_EFFORT (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:616) -> Function create_writer
+2026-07-29 17:06:26.711 [RTPS_UTILS Info] Creating CacheChangePool of size: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.711 [RTPS_UTILS Info] Semi-Static Mode is active, preallocating memory for pool_size. Size of the cachechanges can be increased (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:80) -> Function init
+2026-07-29 17:06:26.711 [RTPS_UTILS Info] Allocating group of cache changes of size: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.711 [RTPS_WRITER Info] RTPSWriter created:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:135) -> Function init
+2026-07-29 17:06:26.711 [RTPS_PDP Info] SPDP Endpoints creation finished (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDPSimple.cpp:357) -> Function createPDPEndpoints
+2026-07-29 17:06:26.712 [RTPS_EDP Info] Beginning Simple Endpoint Discovery Protocol (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:127) -> Function initEDP
+2026-07-29 17:06:26.712 [RTPS_PARTICIPANT Info] Creating writer of type RELIABLE (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:616) -> Function create_writer
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Creating CacheChangePool of size: 21 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Semi-Static Mode is active, preallocating memory for pool_size. Size of the cachechanges can be increased (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:80) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Allocating group of cache changes of size: 21 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.712 [RTPS_WRITER Info] RTPSWriter created:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.3.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:135) -> Function init
+2026-07-29 17:06:26.712 [RTPS_EDP Info] SEDP Publication Writer created (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:429) -> Function createSEDPEndpoints
+2026-07-29 17:06:26.712 [RTPS_PARTICIPANT Info] Creating reader of type RELIABLE (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:811) -> Function create_reader
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Creating CacheChangePool of size: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Semi-Static Mode is active, preallocating memory for pool_size. Size of the cachechanges can be increased (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:80) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Allocating group of cache changes of size: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.712 [RTPS_READER Info] RTPSReader created correctly (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:146) -> Function init
+2026-07-29 17:06:26.712 [RTPS_EDP Info] SEDP Subscription Reader created (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:437) -> Function createSEDPEndpoints
+2026-07-29 17:06:26.712 [RTPS_PARTICIPANT Info] Creating reader of type RELIABLE (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:811) -> Function create_reader
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Creating CacheChangePool of size: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Semi-Static Mode is active, preallocating memory for pool_size. Size of the cachechanges can be increased (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:80) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Allocating group of cache changes of size: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.712 [RTPS_READER Info] RTPSReader created correctly (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:146) -> Function init
+2026-07-29 17:06:26.712 [RTPS_EDP Info] SEDP Publication Reader created (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:448) -> Function createSEDPEndpoints
+2026-07-29 17:06:26.712 [RTPS_PARTICIPANT Info] Creating writer of type RELIABLE (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:616) -> Function create_writer
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Creating CacheChangePool of size: 21 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Semi-Static Mode is active, preallocating memory for pool_size. Size of the cachechanges can be increased (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:80) -> Function init
+2026-07-29 17:06:26.712 [RTPS_UTILS Info] Allocating group of cache changes of size: 21 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.712 [RTPS_WRITER Info] RTPSWriter created:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.4.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:135) -> Function init
+2026-07-29 17:06:26.713 [RTPS_EDP Info] SEDP Subscription Writer created (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:456) -> Function createSEDPEndpoints
+2026-07-29 17:06:26.713 [RTPS_EDP Info] Creation finished (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:459) -> Function createSEDPEndpoints
+2026-07-29 17:06:26.713 [RTPS_LIVELINESS Info] Initializing Liveliness Protocol (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/liveliness/WLP.cpp:187) -> Function initWL
+2026-07-29 17:06:26.713 [RTPS_PARTICIPANT Info] Creating writer of type RELIABLE (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:616) -> Function create_writer
+2026-07-29 17:06:26.713 [RTPS_UTILS Info] Creating CacheChangePool of size: 3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.713 [RTPS_UTILS Info] Static Mode is active, preallocating memory for pool_size elements (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:76) -> Function init
+2026-07-29 17:06:26.713 [RTPS_UTILS Info] Allocating group of cache changes of size: 3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.713 [RTPS_WRITER Info] RTPSWriter created:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.2.0.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:135) -> Function init
+2026-07-29 17:06:26.713 [RTPS_LIVELINESS Info] Builtin Liveliness Writer created (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/liveliness/WLP.cpp:270) -> Function createEndpoints
+2026-07-29 17:06:26.713 [RTPS_PARTICIPANT Info] Creating reader of type RELIABLE (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:811) -> Function create_reader
+2026-07-29 17:06:26.713 [RTPS_UTILS Info] Creating CacheChangePool of size: 0 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.713 [RTPS_UTILS Info] Static Mode is active, preallocating memory for pool_size elements (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:76) -> Function init
+2026-07-29 17:06:26.713 [RTPS_UTILS Info] Allocating group of cache changes of size: 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.713 [RTPS_READER Info] RTPSReader created correctly (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:146) -> Function init
+2026-07-29 17:06:26.713 [RTPS_LIVELINESS Info] Builtin Liveliness Reader created (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/liveliness/WLP.cpp:317) -> Function createEndpoints
+2026-07-29 17:06:26.713 [RTPS_PARTICIPANT Info] RTPSParticipant "client_RTPSParticipant" with guidPrefix: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:441) -> Function RTPSParticipantImpl
+2026-07-29 17:06:26.713 [RTPS_WRITER Info] Creating new change:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:180) -> Function new_change
+2026-07-29 17:06:26.713 [RTPS_WRITER_HISTORY Info] Change 1 added with 252 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/WriterHistory.cpp:115) -> Function prepare_and_add_change
+2026-07-29 17:06:26.713 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:26.713 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:26.713 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:26.716 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:26.716 [RTPS_PARTICIPANT Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.c1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ParticipantProxyData.cpp:108) -> Function ~ParticipantProxyData
+2026-07-29 17:06:26.716 [PARTICIPANT Info] Type clientserver::Operation registered. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/domain/DomainParticipantImpl.cpp:1426) -> Function register_type
+2026-07-29 17:06:26.716 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.716 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.717 [RTPS_MSG_IN Info] (ID:134232273835584) Heartbeat Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:478) -> Function processCDRMsg
+2026-07-29 17:06:26.717 [PUBLISHER Info] CREATING WRITER IN TOPIC: Operations (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/PublisherImpl.cpp:220) -> Function create_datawriter
+2026-07-29 17:06:26.717 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.717 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.717 [RTPS_MSG_IN Info] (ID:134232273835584) Heartbeat Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:478) -> Function processCDRMsg
+2026-07-29 17:06:26.717 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.717 [DATA_WRITER Info] Data sharing disabled because data type is not bounded (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:2180) -> Function check_datasharing_compatible
+2026-07-29 17:06:26.717 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.717 [RTPS_MSG_IN Info] (ID:134232273835584) Heartbeat Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:478) -> Function processCDRMsg
+2026-07-29 17:06:26.717 [RTPS_UTILS Info] Creating CacheChangePool of size: 3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.717 [RTPS_UTILS Info] Static Mode is active, preallocating memory for pool_size elements (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:76) -> Function init
+2026-07-29 17:06:26.717 [RTPS_UTILS Info] Allocating group of cache changes of size: 3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.717 [RTPS_PARTICIPANT Info] Creating writer of type RELIABLE (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:616) -> Function create_writer
+2026-07-29 17:06:26.717 [RTPS_WRITER Info] RTPSWriter created:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:135) -> Function init
+2026-07-29 17:06:26.717 [RTPS_EDP Info] Adding 0.0.1.3 in topic Operations (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:247) -> Function newLocalWriterProxyData
+2026-07-29 17:06:26.717 [RTPS_PDP Info] Adding writer proxy data 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDP.cpp:848) -> Function addWriterProxyData
+2026-07-29 17:06:26.721 [RTPS_EDP Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3 in topic: "Operations" (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1442) -> Function pairing_writer_proxy_with_any_local_reader
+2026-07-29 17:06:26.721 [RTPS_EDP Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3 in topic: "Operations" (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1146) -> Function pairingWriter
+2026-07-29 17:06:26.721 [RTPS_EDP Info] 0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:580) -> Function processLocalWriterProxyData
+2026-07-29 17:06:26.721 [RTPS_WRITER Info] Creating new change:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.3.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:180) -> Function new_change
+2026-07-29 17:06:26.721 [RTPS_WRITER_HISTORY Info] Change 1 added with 380 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/WriterHistory.cpp:115) -> Function prepare_and_add_change
+2026-07-29 17:06:26.721 [RTPS_WRITER Info] No reader proxy to add change. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:462) -> Function unsent_change_added_to_history
+2026-07-29 17:06:26.721 [RTPS_LIVELINESS Info] 0.0.1.3 to Liveliness Protocol (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/liveliness/WLP.cpp:621) -> Function add_local_writer
+2026-07-29 17:06:26.722 [DATA_WRITER Warning] DataWriterImpl::enable() ok, RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3] <=> TOPIC[Operations] <=> reliability.kind[RELIABLE] <=> TYPE[clientserver::Operation]
+=== DataWriterQos ===
+durability.kind: TRANSIENT_LOCAL_DURABILITY_QOS
+durability_service.service_cleanup_delay: 0s 0ns
+durability_service.history_kind: KEEP_LAST_HISTORY_QOS
+durability_service.history_depth: 1
+durability_service.max_samples: -1
+durability_service.max_instances: -1
+durability_service.max_samples_per_instance: -1
+deadline.period: 2147483647s 4294967295ns
+latency_budget.duration: 0s 0ns
+liveliness.kind: AUTOMATIC_LIVELINESS_QOS
+liveliness.lease_duration: 2147483647s 4294967295ns
+liveliness.announcement_period: 2147483647s 4294967295ns
+reliability.kind: RELIABLE_RELIABILITY_QOS
+reliability.max_blocking_time: 0s 100000000ns
+destination_order.kind: BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS
+history.kind: KEEP_LAST_HISTORY_QOS
+history.depth: 2
+resource_limits.max_samples: 50
+resource_limits.max_instances: 10
+resource_limits.max_samples_per_instance: 400
+resource_limits.allocated_samples: 50
+transport_priority.value: 0
+lifespan.duration: 2147483647s 4294967295ns
+user_data.size: 0
+ownership.kind: SHARED_OWNERSHIP_QOS
+ownership_strength.value: 0
+writer_data_lifecycle.autodispose_unregistered_instances: 1
+representation.m_value.size: 0
+publish_mode.kind: SYNCHRONOUS_PUBLISH_MODE
+properties.properties.size: 0
+properties.binary_properties.size: 0
+=================================
+ (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:555) -> Function enable
+2026-07-29 17:06:26.722 [PARTICIPANT Info] Type clientserver::Result registered. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/domain/DomainParticipantImpl.cpp:1426) -> Function register_type
+2026-07-29 17:06:26.722 [SUBSCRIBER Info] CREATING SUBSCRIBER IN TOPIC: Results (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/subscriber/SubscriberImpl.cpp:189) -> Function create_datareader
+2026-07-29 17:06:26.722 [DATA_READER Info] Data sharing disabled because data type is not bounded (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/subscriber/DataReaderImpl.cpp:1958) -> Function check_datasharing_compatible
+2026-07-29 17:06:26.722 [RTPS_PARTICIPANT Info] Creating reader of type BEST_EFFORT (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/participant/RTPSParticipantImpl.cpp:811) -> Function create_reader
+2026-07-29 17:06:26.722 [RTPS_UTILS Info] Creating CacheChangePool of size: 101 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:54) -> Function init
+2026-07-29 17:06:26.722 [RTPS_UTILS Info] Static Mode is active, preallocating memory for pool_size elements (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:76) -> Function init
+2026-07-29 17:06:26.722 [RTPS_UTILS Info] Allocating group of cache changes of size: 101 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:120) -> Function allocateGroup
+2026-07-29 17:06:26.722 [RTPS_READER Info] RTPSReader created correctly (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:146) -> Function init
+2026-07-29 17:06:26.722 [RTPS_EDP Info] Adding 0.0.2.4 in topic Results (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:102) -> Function newLocalReaderProxyData
+2026-07-29 17:06:26.723 [RTPS_PDP Info] Adding reader proxy data 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDP.cpp:752) -> Function addReaderProxyData
+2026-07-29 17:06:26.723 [RTPS_EDP Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 in topic: "Results" (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1236) -> Function pairing_reader_proxy_with_any_local_writer
+2026-07-29 17:06:26.723 [RTPS_EDP Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 in topic: "Results" (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1059) -> Function pairingReader
+2026-07-29 17:06:26.723 [RTPS_EDP Info] 0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:556) -> Function processLocalReaderProxyData
+2026-07-29 17:06:26.723 [RTPS_WRITER Info] Creating new change:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.4.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:180) -> Function new_change
+2026-07-29 17:06:26.723 [RTPS_WRITER_HISTORY Info] Change 1 added with 376 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/WriterHistory.cpp:115) -> Function prepare_and_add_change
+2026-07-29 17:06:26.723 [RTPS_WRITER Info] No reader proxy to add change. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:462) -> Function unsent_change_added_to_history
+2026-07-29 17:06:26.723 [DATA_READER Warning] DataReaderImpl::enable() ok, RTPSReader.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4] <=> TOPIC[Results] <=> reliability.kind[BEST_EFFORT] <=> TYPE[clientserver::Result]
+=== DataReaderQos ===
+durability.kind: VOLATILE_DURABILITY_QOS
+deadline.period: 2147483647s 4294967295ns
+latency_budget.duration: 0s 0ns
+liveliness.kind: AUTOMATIC_LIVELINESS_QOS
+liveliness.lease_duration: 2147483647s 4294967295ns
+liveliness.announcement_period: 2147483647s 4294967295ns
+reliability.kind: BEST_EFFORT_RELIABILITY_QOS
+reliability.max_blocking_time: 0s 100000000ns
+destination_order.kind: BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS
+history.kind: KEEP_LAST_HISTORY_QOS
+history.depth: 100
+resource_limits.max_samples: 100
+resource_limits.max_instances: 10
+resource_limits.max_samples_per_instance: 400
+resource_limits.allocated_samples: 100
+user_data.size: 0
+ownership.kind: SHARED_OWNERSHIP_QOS
+time_based_filter.minimum_separation: 0s 0ns
+reader_data_lifecycle.autopurge_no_writer_samples_delay: 2147483647s 4294967295ns
+reader_data_lifecycle.autopurge_disposed_samples_delay: 2147483647s 4294967295ns
+durability_service.service_cleanup_delay: 0s 0ns
+durability_service.history_kind: KEEP_LAST_HISTORY_QOS
+durability_service.history_depth: 1
+durability_service.max_samples: -1
+durability_service.max_instances: -1
+durability_service.max_samples_per_instance: -1
+lifespan.duration: 2147483647s 4294967295ns
+representation.m_value.size: 0
+type_consistency.kind: ALLOW_TYPE_COERCION
+type_consistency.ignore_sequence_bounds: 1
+type_consistency.ignore_string_bounds: 1
+type_consistency.ignore_member_names: 0
+type_consistency.prevent_type_widening: 0
+type_consistency.force_type_validation: 0
+=================================
+ (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/subscriber/DataReaderImpl.cpp:440) -> Function enable
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.787 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.816 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:26.816 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:26.816 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:26.816 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:26.816 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:26.817 [RTPS_READER_HISTORY Info] Change 1 added with 252 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:110) -> Function add_change
+2026-07-29 17:06:26.817 [RTPS_PDP Info] SPDP Message received from: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDPListener.cpp:59) -> Function onNewCacheChangeAdded
+2026-07-29 17:06:26.817 [RTPS_PDP Info] Message from own RTPSParticipant, removing (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDPListener.cpp:81) -> Function onNewCacheChangeAdded
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:26.817 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.857 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.916 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:26.916 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:26.916 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.917 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:26.917 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.927 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:26.997 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.016 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.016 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.017 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.017 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.017 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.067 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.117 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.117 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.117 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.117 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.117 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.137 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.207 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.217 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.217 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.217 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.217 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.217 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.277 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.347 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232273835584) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232273835584) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232273835584) from Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232273835584) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.403 [RTPS_READER_HISTORY Info] Change 1 added with 252 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:110) -> Function add_change
+2026-07-29 17:06:27.403 [RTPS_PDP Info] SPDP Message received from: 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.1.0.c2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDPListener.cpp:59) -> Function onNewCacheChangeAdded
+2026-07-29 17:06:27.403 [RTPS_PDP_DISCOVERY Info] New participant 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.c1 at MTTLoc: {UNICAST:[SHM:[_]:7412]} DefLoc:{UNICAST:[SHM:[_]:7413]} (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDPListener.cpp:141) -> Function onNewCacheChangeAdded
+2026-07-29 17:06:27.403 [RTPS_PDP Info] For RTPSParticipant: 01.0f.7c.f8.36.9e.a5.34.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDPSimple.cpp:364) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.403 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.403 [RTPS_READER Info] Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.1.0.c2 added to reader 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:163) -> Function matched_writer_add
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.404 [RTPS_WRITER Info] Adding reader 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.1.0.c7 to 0.1.0.c2 as remote reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatelessWriter.cpp:523) -> Function matched_reader_add
+2026-07-29 17:06:27.404 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.404 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.404 [RTPS_TRANSPORT_SHM Warning] Buffer is being invalidated, segment_size may be insufficient (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemManager.hpp:113) -> Function invalidate_if_not_processing
+2026-07-29 17:06:27.404 [RTPS_TRANSPORT_SHM Info] (ID:134232273835584) Opening fastrtps_port7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:987) -> Function open_port_internal
+2026-07-29 17:06:27.404 [RTPS_TRANSPORT_SHM Info] (ID:134232273835584) Port 7412 (0a5376eaaf3ea00c) OpenedWrite (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:1085) -> Function open_port_internal
+2026-07-29 17:06:27.404 [RTPS_MSG_OUT Info] (ID:134232273835584) SharedMemTransport: 308 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.404 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.404 [RTPS_MSG_OUT Info] UDPTransport: 308 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.404 [RTPS_EDP Info] New DPD received, adding remote endpoints to our SimpleEDP endpoints (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:765) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.404 [RTPS_MSG_IN Info] (ID:134232290620992) from Writer 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2; possible RTPSReader entities: 2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.405 [RTPS_MSG_IN Info] (ID:134232290620992) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.405 [RTPS_MSG_IN Info] (ID:134232290620992) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.405 [RTPS_EDP Info] Adding SEDP Pub Writer to my Pub Reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:794) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.405 [RTPS_READER Info] Writer Proxy created in reader: 0.0.3.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:110) -> Function WriterProxy
+2026-07-29 17:06:27.405 [RTPS_READER Info] Writer Proxy 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.3.c2 added to 0.0.3.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:310) -> Function matched_writer_add
+2026-07-29 17:06:27.405 [RTPS_EDP Info] Adding SEDP Pub Reader to my Pub Writer (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:803) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.405 [RTPS_READER_PROXY Info] Reader Proxy started (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/ReaderProxy.cpp:143) -> Function start
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] Adding reader 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.3.c7 to 0.0.3.c2 as remote reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1100) -> Function matched_reader_add
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] 0.0.3.c2 Sending Heartbeat (1 - 1) (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1798) -> Function send_heartbeat_nts_
+2026-07-29 17:06:27.405 [RTPS_MSG_OUT Info] (ID:134232273835584) SharedMemTransport: 68 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] Reader Proxy 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.3.c7 added to 0.0.3.c2 with 1(u)-0(m) locators (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1203) -> Function matched_reader_add
+2026-07-29 17:06:27.405 [RTPS_EDP Info] Adding SEDP Sub Writer to my Sub Reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:811) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.405 [RTPS_READER Info] Writer Proxy created in reader: 0.0.4.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:110) -> Function WriterProxy
+2026-07-29 17:06:27.405 [RTPS_READER Info] Writer Proxy 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.4.c2 added to 0.0.4.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:310) -> Function matched_writer_add
+2026-07-29 17:06:27.405 [RTPS_EDP Info] Adding SEDP Sub Reader to my Sub Writer (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:820) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.405 [RTPS_READER_PROXY Info] Reader Proxy started (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/ReaderProxy.cpp:143) -> Function start
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] Adding reader 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.4.c7 to 0.0.4.c2 as remote reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1100) -> Function matched_reader_add
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] 0.0.4.c2 Sending Heartbeat (1 - 1) (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1798) -> Function send_heartbeat_nts_
+2026-07-29 17:06:27.405 [RTPS_MSG_OUT Info] (ID:134232273835584) SharedMemTransport: 68 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] Reader Proxy 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.4.c7 added to 0.0.4.c2 with 1(u)-0(m) locators (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1203) -> Function matched_reader_add
+2026-07-29 17:06:27.405 [RTPS_LIVELINESS Info] Adding remote writer to my local Builtin Reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/liveliness/WLP.cpp:510) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.405 [RTPS_READER Info] Writer Proxy created in reader: 0.2.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:110) -> Function WriterProxy
+2026-07-29 17:06:27.405 [RTPS_READER Info] Writer Proxy 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.2.0.c2 added to 0.2.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:310) -> Function matched_writer_add
+2026-07-29 17:06:27.405 [RTPS_LIVELINESS Info] Adding remote reader to my local Builtin Writer (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/liveliness/WLP.cpp:519) -> Function assignRemoteEndpoints
+2026-07-29 17:06:27.405 [RTPS_READER_PROXY Info] Reader Proxy started (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/ReaderProxy.cpp:143) -> Function start
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] Adding reader 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.2.0.c7 to 0.2.0.c2 as remote reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1100) -> Function matched_reader_add
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] 0.2.0.c2 Sending Heartbeat (1 - 0) (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1798) -> Function send_heartbeat_nts_
+2026-07-29 17:06:27.405 [RTPS_MSG_OUT Info] (ID:134232273835584) SharedMemTransport: 68 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.405 [RTPS_WRITER Info] Reader Proxy 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.2.0.c7 added to 0.2.0.c2 with 1(u)-0(m) locators (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1203) -> Function matched_reader_add
+2026-07-29 17:06:27.405 [RTPS_MSG_IN Info] (ID:134232273835584) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.405 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.405 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.406 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.406 [RTPS_READER_PROXY Info] Requested Changes: 1:1- (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/ReaderProxy.cpp:435) -> Function requested_changes_set
+2026-07-29 17:06:27.406 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.406 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.406 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.406 [RTPS_READER_PROXY Info] Requested Changes: 1:1- (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/ReaderProxy.cpp:435) -> Function requested_changes_set
+2026-07-29 17:06:27.406 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.406 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.406 [RTPS_MSG_OUT Info] (ID:134232248657472) SharedMemTransport: 452 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.406 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.406 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.406 [RTPS_MSG_OUT Info] (ID:134232248657472) SharedMemTransport: 448 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.411 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.411 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.411 [RTPS_MSG_IN Info] (ID:134232273835584) Acknack Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:452) -> Function processCDRMsg
+2026-07-29 17:06:27.475 [RTPS_READER Info] Sending ACKNACK: 0: (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:1453) -> Function send_acknack
+2026-07-29 17:06:27.475 [RTPS_MSG_OUT Info] (ID:134232374498880) SharedMemTransport: 64 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.475 [RTPS_READER Info] Sending ACKNACK: 0: (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:1453) -> Function send_acknack
+2026-07-29 17:06:27.475 [RTPS_MSG_OUT Info] (ID:134232374498880) SharedMemTransport: 64 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.475 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.475 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.475 [RTPS_MSG_IN Info] (ID:134232273835584) Heartbeat Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:478) -> Function processCDRMsg
+2026-07-29 17:06:27.475 [RTPS_READER Info] 0.0.3.c2: up to seq_num: 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:226) -> Function lost_changes_update
+2026-07-29 17:06:27.475 [RTPS_READER Info] 0.0.3.c2: changes up to seq_num: 1 missing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:207) -> Function missing_changes_update
+2026-07-29 17:06:27.475 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.475 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.475 [RTPS_MSG_IN Info] (ID:134232273835584) Heartbeat Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:478) -> Function processCDRMsg
+2026-07-29 17:06:27.475 [RTPS_READER Info] 0.0.4.c2: up to seq_num: 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:226) -> Function lost_changes_update
+2026-07-29 17:06:27.475 [RTPS_READER Info] 0.0.4.c2: changes up to seq_num: 1 missing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:207) -> Function missing_changes_update
+2026-07-29 17:06:27.475 [RTPS_READER Info] Sending ACKNACK: 1:1- (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:1523) -> Function send_acknack
+2026-07-29 17:06:27.475 [RTPS_MSG_OUT Info] (ID:134232374498880) SharedMemTransport: 68 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.475 [RTPS_READER Info] Sending ACKNACK: 0: (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:1453) -> Function send_acknack
+2026-07-29 17:06:27.475 [RTPS_MSG_OUT Info] (ID:134232374498880) SharedMemTransport: 64 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.476 [RTPS_READER Info] Sending ACKNACK: 1:1- (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:1523) -> Function send_acknack
+2026-07-29 17:06:27.476 [RTPS_MSG_OUT Info] (ID:134232374498880) SharedMemTransport: 68 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) Heartbeat Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:478) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_READER Info] 0.2.0.c2: up to seq_num: 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:226) -> Function lost_changes_update
+2026-07-29 17:06:27.476 [RTPS_READER Info] 0.2.0.c2: changes up to seq_num: 0 missing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:207) -> Function missing_changes_update
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) from Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.3.c2; possible RTPSReader entities: 4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) Trying to add change 1 TO reader: 0.0.3.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:522) -> Function processDataMsg
+2026-07-29 17:06:27.476 [RTPS_READER_HISTORY Info] Change 1 added with 376 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:110) -> Function add_change
+2026-07-29 17:06:27.476 [RTPS_READER Info] 0.0.3.c2: seq_num: 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:267) -> Function received_change_set
+2026-07-29 17:06:27.476 [RTPS_EDP Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimpleListeners.cpp:137) -> Function onNewCacheChangeAdded
+2026-07-29 17:06:27.476 [RTPS_PDP Info] Adding writer proxy data 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDP.cpp:848) -> Function addWriterProxyData
+2026-07-29 17:06:27.476 [RTPS_EDP Info] 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.3 in topic: "Results" (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1442) -> Function pairing_writer_proxy_with_any_local_reader
+2026-07-29 17:06:27.476 [RTPS_READER Info] Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.3 added to reader 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:163) -> Function matched_writer_add
+2026-07-29 17:06:27.476 [RTPS_EDP_MATCH Info] WP:01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.3 match R:01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4. WLoc:{UNICAST:[UDPv4:[127.0.0.1]:7413,SHM:[_]:7413]} (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1469) -> Function operator()
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) from Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.4.c2; possible RTPSReader entities: 4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.476 [RTPS_MSG_IN Info] (ID:134232273835584) Trying to add change 1 TO reader: 0.0.4.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:522) -> Function processDataMsg
+2026-07-29 17:06:27.476 [RTPS_READER_HISTORY Info] Change 1 added with 380 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:110) -> Function add_change
+2026-07-29 17:06:27.476 [RTPS_READER Info] 0.0.4.c2: seq_num: 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/WriterProxy.cpp:267) -> Function received_change_set
+2026-07-29 17:06:27.476 [RTPS_EDP Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimpleListeners.cpp:251) -> Function onNewCacheChangeAdded
+2026-07-29 17:06:27.477 [RTPS_PDP Info] Adding reader proxy data 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDP.cpp:752) -> Function addReaderProxyData
+2026-07-29 17:06:27.477 [RTPS_EDP Info] 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4 in topic: "Operations" (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1236) -> Function pairing_reader_proxy_with_any_local_writer
+2026-07-29 17:06:27.477 [RTPS_READER_PROXY Info] Reader Proxy started (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/ReaderProxy.cpp:143) -> Function start
+2026-07-29 17:06:27.477 [RTPS_WRITER Info] Adding reader 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4 to 0.0.1.3 as remote reader (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1100) -> Function matched_reader_add
+2026-07-29 17:06:27.477 [RTPS_WRITER Info] Reader Proxy 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4 added to 0.0.1.3 with 2(u)-0(m) locators (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:1203) -> Function matched_reader_add
+2026-07-29 17:06:27.477 [RTPS_EDP_MATCH Info] RP:01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4 match W:01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3. RLoc:{UNICAST:[UDPv4:[127.0.0.1]:7413,SHM:[_]:7413]} (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:1263) -> Function operator()
+2026-07-29 17:06:27.477 [RTPS_MSG_IN Info] (ID:134232273835584) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.481 [RTPS_READER Info] Sending ACKNACK: 1: (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:1523) -> Function send_acknack
+2026-07-29 17:06:27.481 [RTPS_MSG_OUT Info] (ID:134232374498880) SharedMemTransport: 64 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.524 [DATA_WRITER Info] Writing new data (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:714) -> Function write
+2026-07-29 17:06:27.524 [RTPS_WRITER Info] Creating new change:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:215) -> Function new_change
+2026-07-29 17:06:27.524 [RTPS_WRITER_HISTORY Info] Change 1 added with 28 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/WriterHistory.cpp:115) -> Function prepare_and_add_change
+2026-07-29 17:06:27.524 [RTPS_READER_PROXY Info] Change 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0 is relevant for reader 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4? 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/ReaderProxy.cpp:88) -> Function rtps_is_relevant
+2026-07-29 17:06:27.524 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.524 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.524 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Opening fastrtps_port7413 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:987) -> Function open_port_internal
+2026-07-29 17:06:27.524 [RTPS_TRANSPORT_SHM Info] (ID:134232428656448) Port 7413 (48e638725d9a40f1) OpenedWrite (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:1085) -> Function open_port_internal
+2026-07-29 17:06:27.524 [RTPS_MSG_OUT Info] (ID:134232428656448) SharedMemTransport: 100 bytes to port 7413 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.524 [RTPS_HISTORY Info] clientserver::Operation Change 1 added with key: 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0 and 28 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterHistory.hpp:142) -> Function add_pub_change_with_commit_hook
+2026-07-29 17:06:27.525 [RTPS_MSG_IN Info] (ID:134232257050176) InfoDST message received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:500) -> Function processCDRMsg
+2026-07-29 17:06:27.525 [RTPS_MSG_IN Info] (ID:134232257050176) DST RTPSParticipant is now: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:1229) -> Function proc_Submsg_InfoDST
+2026-07-29 17:06:27.525 [RTPS_MSG_IN Info] (ID:134232257050176) InfoTS Submsg received, processing... (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:509) -> Function processCDRMsg
+2026-07-29 17:06:27.525 [RTPS_MSG_IN Info] (ID:134232257050176) Data Submsg received, processing. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:415) -> Function processCDRMsg
+2026-07-29 17:06:27.525 [RTPS_MSG_IN Info] (ID:134232257050176) from Writer 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.3; possible RTPSReader entities: 1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:833) -> Function proc_Submsg_Data
+2026-07-29 17:06:27.525 [RTPS_MSG_IN Info] (ID:134232257050176) Trying to add change 1 TO reader: 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:478) -> Function processDataMsg
+2026-07-29 17:06:27.525 [RTPS_READER_HISTORY Info] Change 1 added with 24 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:110) -> Function add_change
+2026-07-29 17:06:27.525 [SUBSCRIBER Info] 0.0.2.4: Change 1 added from: 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.3 with KEY: 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/subscriber/history/DataReaderHistory.cpp:350) -> Function add_to_instance
+2026-07-29 17:06:27.525 [RTPS_MSG_IN Info] (ID:134232257050176) Sub Message DATA processed (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:849) -> Function proc_Submsg_Data
+calculate remote: 1+2=3
+remote result is correct!
+EVERYTHING STOPPED FINE
+2026-07-29 17:06:27.526 [DATA_WRITER Info] 0.0.1.3 in topic: clientserver::Operation (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:589) -> Function ~DataWriterImpl
+2026-07-29 17:06:27.526 [RTPS_LIVELINESS Info] 0.0.1.3 from Liveliness Protocol (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/liveliness/WLP.cpp:710) -> Function remove_local_writer
+2026-07-29 17:06:27.526 [RTPS_EDP Info] 0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:676) -> Function removeLocalWriter
+2026-07-29 17:06:27.526 [RTPS_WRITER Info] Creating new change:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.3.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:180) -> Function new_change
+2026-07-29 17:06:27.526 [RTPS_WRITER Info] Change 1 to be removed. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:541) -> Function change_removed_by_history
+2026-07-29 17:06:27.526 [RTPS_WRITER_HISTORY Info] Change 2 added with 0 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/WriterHistory.cpp:115) -> Function prepare_and_add_change
+2026-07-29 17:06:27.526 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.526 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.526 [RTPS_MSG_OUT Info] (ID:134232428656448) SharedMemTransport: 104 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.526 [RTPS_PDP Info] Removing writer proxy data 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDP.cpp:680) -> Function removeWriterProxyData
+2026-07-29 17:06:27.526 [RTPS_EDP Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:566) -> Function unpairWriterProxy
+2026-07-29 17:06:27.526 [RTPS_WRITER Info] StatefulWriter destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:320) -> Function ~StatefulWriter
+2026-07-29 17:06:27.526 [RTPS_WRITER Info] RTPSWriter destructor:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:140) -> Function ~RTPSWriter
+2026-07-29 17:06:27.526 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.526 [RTPS_UTILS Info] PayloadPool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/./TopicPayloadPool.hpp:48) -> Function ~TopicPayloadPool
+2026-07-29 17:06:27.526 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.526 [DATA_READER Info] Removing 0.0.2.4 in topic: Results (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/subscriber/DataReaderImpl.cpp:470) -> Function stop
+2026-07-29 17:06:27.526 [RTPS_EDP Info] 0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDPSimple.cpp:721) -> Function removeLocalReader
+2026-07-29 17:06:27.526 [RTPS_WRITER Info] Creating new change:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.4.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:180) -> Function new_change
+2026-07-29 17:06:27.527 [RTPS_WRITER Info] Change 1 to be removed. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:541) -> Function change_removed_by_history
+2026-07-29 17:06:27.527 [RTPS_WRITER_HISTORY Info] Change 2 added with 0 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/WriterHistory.cpp:115) -> Function prepare_and_add_change
+2026-07-29 17:06:27.527 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.527 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.527 [RTPS_MSG_OUT Info] (ID:134232428656448) SharedMemTransport: 104 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.527 [RTPS_PDP Info] Removing reader proxy data 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/participant/PDP.cpp:643) -> Function removeReaderProxyData
+2026-07-29 17:06:27.527 [RTPS_EDP Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/discovery/endpoint/EDP.cpp:606) -> Function unpairReaderProxy
+2026-07-29 17:06:27.527 [RTPS_READER Info] Removing reader 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:45) -> Function ~StatelessReader
+2026-07-29 17:06:27.527 [RTPS_READER Info] Removing reader 0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:151) -> Function ~RTPSReader
+2026-07-29 17:06:27.527 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.527 [RTPS_UTILS Info] PayloadPool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/./TopicPayloadPool.hpp:48) -> Function ~TopicPayloadPool
+2026-07-29 17:06:27.527 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.527 [RTPS_PARTICIPANT Info] Removing event thread (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/resources/ResourceEvent.cpp:49) -> Function stop_thread
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] Creating new change:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:180) -> Function new_change
+2026-07-29 17:06:27.528 [RTPS_WRITER_HISTORY Info] Change 2 added with 252 bytes (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/WriterHistory.cpp:115) -> Function prepare_and_add_change
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] Sending relevant changes as DATA/DATA_FRAG messages (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:437) -> Function add_data
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] Sending INFO_TS message (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/RTPSMessageGroup.cpp:390) -> Function add_info_ts_in_buffer
+2026-07-29 17:06:27.528 [RTPS_MSG_OUT Info] (ID:134232428656448) SharedMemTransport: 116 bytes to port 7412 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemTransport.cpp:532) -> Function send
+2026-07-29 17:06:27.528 [RTPS_MSG_OUT Info] UDPTransport: 116 bytes TO endpoint: 239.255.0.1:7400 FROM 0.0.0.0:40716 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.528 [RTPS_MSG_OUT Info] UDPTransport: 116 bytes TO endpoint: 239.255.0.1:7400 FROM 10.88.221.249:37323 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/UDPTransportInterface.cpp:519) -> Function send
+2026-07-29 17:06:27.528 [RTPS_PARTICIPANT Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.c1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ParticipantProxyData.cpp:108) -> Function ~ParticipantProxyData
+2026-07-29 17:06:27.528 [RTPS_READER Info] StatefulReader destructor. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:85) -> Function ~StatefulReader
+2026-07-29 17:06:27.528 [RTPS_READER Info] Removing reader 0.2.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:151) -> Function ~RTPSReader
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] StatefulWriter destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:320) -> Function ~StatefulWriter
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] RTPSWriter destructor:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.2.0.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:140) -> Function ~RTPSWriter
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.528 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.528 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] PayloadPool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/./TopicPayloadPool.hpp:48) -> Function ~TopicPayloadPool
+2026-07-29 17:06:27.528 [RTPS_PROXY_DATA Info] 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.2.0.c2 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:27.528 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.2.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:27.528 [RTPS_READER Info] StatefulReader destructor. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:85) -> Function ~StatefulReader
+2026-07-29 17:06:27.528 [RTPS_READER Info] Removing reader 0.0.3.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:151) -> Function ~RTPSReader
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.528 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.528 [RTPS_READER Info] StatefulReader destructor. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:85) -> Function ~StatefulReader
+2026-07-29 17:06:27.528 [RTPS_READER Info] Removing reader 0.0.4.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:151) -> Function ~RTPSReader
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.528 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] StatefulWriter destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:320) -> Function ~StatefulWriter
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] RTPSWriter destructor:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.3.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:140) -> Function ~RTPSWriter
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] PayloadPool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/./TopicPayloadPool.hpp:48) -> Function ~TopicPayloadPool
+2026-07-29 17:06:27.528 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] StatefulWriter destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatefulWriter.cpp:320) -> Function ~StatefulWriter
+2026-07-29 17:06:27.528 [RTPS_WRITER Info] RTPSWriter destructor:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.4.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:140) -> Function ~RTPSWriter
+2026-07-29 17:06:27.528 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.529 [RTPS_UTILS Info] PayloadPool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/./TopicPayloadPool.hpp:48) -> Function ~TopicPayloadPool
+2026-07-29 17:06:27.529 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.529 [RTPS_WRITER Info] StatelessWriter destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/StatelessWriter.cpp:219) -> Function ~StatelessWriter
+2026-07-29 17:06:27.529 [RTPS_WRITER Info] RTPSWriter destructor:RTPSWriter.GUID[01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c2] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/writer/RTPSWriter.cpp:140) -> Function ~RTPSWriter
+2026-07-29 17:06:27.529 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.529 [RTPS_READER Info] Removing reader 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatelessReader.cpp:45) -> Function ~StatelessReader
+2026-07-29 17:06:27.529 [RTPS_READER Info] Removing reader 0.1.0.c7 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/RTPSReader.cpp:151) -> Function ~RTPSReader
+2026-07-29 17:06:27.529 [RTPS_UTILS Info] ChangePool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/CacheChangePool.cpp:36) -> Function ~CacheChangePool
+2026-07-29 17:06:27.529 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.529 [RTPS_HISTORY Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/History.cpp:45) -> Function ~History
+2026-07-29 17:06:27.529 [RTPS_PARTICIPANT Info] 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.c1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ParticipantProxyData.cpp:108) -> Function ~ParticipantProxyData
+2026-07-29 17:06:27.529 [RTPS_PARTICIPANT Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.c1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ParticipantProxyData.cpp:108) -> Function ~ParticipantProxyData
+2026-07-29 17:06:27.529 [RTPS_PARTICIPANT Info] 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.c1 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ParticipantProxyData.cpp:108) -> Function ~ParticipantProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] 01.0f.7c.f8.44.9e.f6.5a.01.00.00.00|0.0.1.3 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/WriterProxyData.cpp:114) -> Function ~WriterProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: |GUID UNKNOWN| (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:27.529 [RTPS_PROXY_DATA Info] ReaderProxyData destructor: 01.0f.7c.f8.36.9e.a5.34.01.00.00.00|0.0.2.4 (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/builtin/data/ReaderProxyData.cpp:81) -> Function ~ReaderProxyData
+2026-07-29 17:06:27.529 [RTPS_UTILS Info] PayloadPool destructor (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/./TopicPayloadPool.hpp:48) -> Function ~TopicPayloadPool
+2026-07-29 17:06:27.529 [RTPS_PARTICIPANT Info] Removing event thread (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/resources/ResourceEvent.cpp:49) -> Function stop_thread
+2026-07-29 17:06:27.529 [RTPS_MSG_IN Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:107) -> Function ~MessageReceiver
+2026-07-29 17:06:27.529 [RTPS_MSG_IN Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:107) -> Function ~MessageReceiver
+2026-07-29 17:06:27.529 [RTPS_MSG_IN Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:107) -> Function ~MessageReceiver
+2026-07-29 17:06:27.529 [RTPS_MSG_IN Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:107) -> Function ~MessageReceiver
+2026-07-29 17:06:27.529 [RTPS_MSG_IN Info]  (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/messages/MessageReceiver.cpp:107) -> Function ~MessageReceiver
+2026-07-29 17:06:27.530 [RTPS_PARTICIPANT Info] Removing event thread (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/resources/ResourceEvent.cpp:49) -> Function stop_thread
