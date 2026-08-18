@@ -35,13 +35,32 @@ EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name,
 }
 
 EprosimaRpcServer::~EprosimaRpcServer() {
+    stop();
 }
 
 bool EprosimaRpcServer::start() {
+    if (m_participant == nullptr) {
+        return false;
+    }
+
+    if (!init_request_sub()) {
+        return false;
+    }
+
+    if (!init_response_pub()) {
+        return false;
+    }
+
     return true;
 }
 
 void EprosimaRpcServer::stop() {
+    m_main_thread.submit(std::bind(&EprosimaRpcServer::do_stop, this));
+}
+
+void EprosimaRpcServer::do_stop() {
+    m_request_sub.reset();
+    m_response_pub.reset();
 }
 
 bool EprosimaRpcServer::init_request_sub() {
@@ -89,6 +108,49 @@ bool EprosimaRpcServer::init_response_pub() {
     return true;
 }
 
+void EprosimaRpcServer::register_method_helper(const std::string& method_name, IMethodHandlerPtr method_handler) {
+    m_main_thread.submit(std::bind(&EprosimaRpcServer::do_register_method, this, method_name, method_handler));
+}
+
+void EprosimaRpcServer::do_register_method(const std::string& method_name, IMethodHandlerPtr method_handler) {
+    m_method_handlers[method_name]= method_handler;
+}
+
+void EprosimaRpcServer::unregister_method(const std::string& method_name) {
+    m_main_thread.submit(std::bind(&EprosimaRpcServer::do_unregister_method, this, method_name));
+}
+
+void EprosimaRpcServer::do_unregister_method(const std::string& method_name) {
+    m_method_handlers.erase(method_name);
+}
+
+void EprosimaRpcServer::on_data_available() {
+    m_main_thread.submit(std::bind(&EprosimaRpcServer::do_recv_request, this));
+}
+
+void EprosimaRpcServer::do_recv_request() {
+    std::cout << "EprosimaRpcClient::do_recv_response" << std::endl;
+    int count = 0;
+    auto rpc_request = std::make_shared<soa_on_dds::RPC_Request>();
+    while (m_request_sub->take_next_sample((void*) rpc_request.get(), &m_sample_info) == ReturnCode_t::RETCODE_OK ) {
+        if (m_sample_info.instance_state == eprosima::fastdds::dds::ALIVE_INSTANCE_STATE) {
+
+        }
+        count++;
+        if (count > MAX_THREAD_POOL_SIZE) {
+        }
+    }
+}
+
+EprosimaRpcServer::IMethodHandlerPtr EprosimaRpcServer::get_method_handler(const std::string& method_name) {
+    auto iter = m_method_handlers.find(method_name);
+    if (iter == m_method_handlers.end()) {
+        return nullptr;
+    }
+
+    return iter->second;
+}
+
 EprosimaRpcServer::RequestSubListener::RequestSubListener() {
 }
 
@@ -103,4 +165,10 @@ EprosimaRpcServer::ResponsePubListener::ResponsePubListener() {
 }
 
 EprosimaRpcServer::ResponsePubListener::~ResponsePubListener() {
+}
+
+EprosimaRpcServer::IMethodHandler::IMethodHandler() {
+}
+
+EprosimaRpcServer::IMethodHandler::~IMethodHandler() {
 }

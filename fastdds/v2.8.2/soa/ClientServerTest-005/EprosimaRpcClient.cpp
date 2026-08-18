@@ -27,9 +27,6 @@ EprosimaRpcClient::EprosimaRpcClient(const std::string& client_id, const std::st
 }
 
 EprosimaRpcClient::~EprosimaRpcClient() {
-    m_request_pub_listener.m_up = nullptr;
-    m_response_sub_listener.m_up = nullptr;
-
     m_request_pub.reset();
     m_response_sub.reset();
 }
