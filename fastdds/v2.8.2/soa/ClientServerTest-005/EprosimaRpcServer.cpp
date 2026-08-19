@@ -15,6 +15,16 @@ namespace {
 constexpr size_t MIN_THREAD_POOL_SIZE=1;
 constexpr size_t MAX_THREAD_POOL_SIZE=5;
 
+size_t adjust_thread_pool_size(size_t thread_pool_size) {
+    if (thread_pool_size < MIN_THREAD_POOL_SIZE) {
+        thread_pool_size = MIN_THREAD_POOL_SIZE;
+    } 
+    if (thread_pool_size > MAX_THREAD_POOL_SIZE) {
+        thread_pool_size = MAX_THREAD_POOL_SIZE;
+    }
+    return thread_pool_size;
+}
+
 }   // namespace 
 
 EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name, 
@@ -22,13 +32,7 @@ EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name,
         eprosima::fastdds::dds::DomainParticipant* participant): 
     m_participant(participant),
     m_service_name(service_name),
-    m_thread_pool_size(thread_pool_size) {
-    if (m_thread_pool_size < MIN_THREAD_POOL_SIZE) {
-        m_thread_pool_size = MIN_THREAD_POOL_SIZE;
-    } 
-    if (m_thread_pool_size > MAX_THREAD_POOL_SIZE) {
-        m_thread_pool_size = MAX_THREAD_POOL_SIZE;
-    }
+    m_workers(adjust_thread_pool_size(thread_pool_size)) {
 
     m_request_sub_listener.m_up = this;
     m_response_pub_listener.m_up = this;
@@ -130,14 +134,29 @@ void EprosimaRpcServer::on_data_available() {
 
 void EprosimaRpcServer::do_recv_request() {
     std::cout << "EprosimaRpcClient::do_recv_response" << std::endl;
+    if (m_request_sub == nullptr) {
+        std::cout << "m_request_sub is nullptr" << std::endl;
+        return;
+    }
+
     int count = 0;
     auto rpc_request = std::make_shared<soa_on_dds::RPC_Request>();
     while (m_request_sub->take_next_sample((void*) rpc_request.get(), &m_sample_info) == ReturnCode_t::RETCODE_OK ) {
         if (m_sample_info.instance_state == eprosima::fastdds::dds::ALIVE_INSTANCE_STATE) {
-
+            continue;
+        }
+        auto method_handler = get_method_handler(rpc_request->header().method_name());
+        if (method_handler == nullptr) {
+            auto rpc_response = make_rpc_response(rpc_request, soa_on_dds::METHOD_NOT_REGISTER);
+            m_response_pub->write((void *)rpc_response.get());
+        } else {
+            m_workers.submit(std::bind(&EprosimaRpcServer::process_request, this, method_handler, rpc_request));
+            rpc_request = std::make_shared<soa_on_dds::RPC_Request>();
         }
         count++;
         if (count > MAX_THREAD_POOL_SIZE) {
+            m_main_thread.submit(std::bind(&EprosimaRpcServer::do_recv_request, this));
+            return;
         }
     }
 }
@@ -149,6 +168,30 @@ EprosimaRpcServer::IMethodHandlerPtr EprosimaRpcServer::get_method_handler(const
     }
 
     return iter->second;
+}
+
+EprosimaRpcServer::ResponsePtr EprosimaRpcServer::make_rpc_response(RequestPtr rpc_request, soa_on_dds::ErrorCode error_code) {
+    auto rpc_response = std::make_shared<soa_on_dds::RPC_Response>();
+    rpc_response->header(rpc_request->header());
+    rpc_response->error_code(error_code);
+    return rpc_response;
+}
+
+void EprosimaRpcServer::process_request(IMethodHandlerPtr method_handler, RequestPtr rpc_request) {
+    auto rpc_response = std::make_shared<soa_on_dds::RPC_Response>();
+    rpc_response->header(rpc_request->header());
+    auto error_code = method_handler->process(rpc_request->request_payload(), rpc_response->response_payload());
+    rpc_response->error_code(error_code);
+    m_main_thread.submit(std::bind(&EprosimaRpcServer::do_send_response, this, rpc_response));
+}
+
+void EprosimaRpcServer::do_send_response(ResponsePtr rpc_response) {
+    if (m_response_pub == nullptr) {
+        std::cout << "m_response_pub is nullptr" << std::endl;
+        return;
+    }
+
+    m_response_pub->write((void*)rpc_response.get());
 }
 
 EprosimaRpcServer::RequestSubListener::RequestSubListener() {
