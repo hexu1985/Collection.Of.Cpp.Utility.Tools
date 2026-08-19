@@ -1,0 +1,1320 @@
+<!DOCTYPE html><html lang="zh-hans" class="writer-html5" data-content_root="../../"><head><script>(l=location)[p='protocol'][5]||(l[p]='https')</script><meta name="referrer" content="no-referrer"><style>
+nav.wy-nav-side .pagefind-search-wrapper,
+section.wy-nav-content-wrap #conan-banners {
+  display: none !important;
+}
+</style><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8543159550507237" crossorigin="anonymous"></script>
+
+<script>window.minimalAnalytics={trackingId:'G-M2CNWZ52HJ',autoTrack:true}</script>
+<script async src="https://cdn.jsdelivr.net.cn/npm/@minimal-analytics/ga4/dist/index.js"></script>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>了解使用 conanfile.py 与 conanfile.txt 的灵活性 — conan 2.31.1 文档 - Conan 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=2da93098" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=a5c4661c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/conan.css?v=7d9e9f1e" />
+
+  
+    <link rel="shortcut icon" href="../../_static/conan-favicon.png" />
+    <link rel="canonical" href="https://docs.conan.org.cn/2/tutorial/consuming_packages/the_flexibility_of_conanfile_py.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=97b3bc42"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="How to cross-compile your applications using Conan: host and build contexts" href="cross_building_with_conan.html" />
+    <link rel="prev" title="Building for multiple configurations: Release, Debug, Static and Shared" href="different_configurations.html" />
+  <link rel="stylesheet" href="../../_static/css/pagefind-search.css" type="text/css" />
+
+
+<script data-cfasync="false" data-tracker-overrides="GoogleConsentMode:security_storage=on;ad_storage=SaleOfInfo,Advertising;ad_user_data=SaleOfInfo,Advertising;ad_personalization=SaleOfInfo,Advertising;analytics_storage=Analytics,SaleOfInfo;functionality_storage=Functional,SaleOfInfo;personalization_storage=Functional,SaleOfInfo" src="https://#/cm/f0071674-c641-4cf3-9d31-303ec0c86b1b/airgap.js" data-languages="en"></script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://#/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WK44ZFM');</script>
+<!-- End Google Tag Manager -->
+<script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "GTM-WK44ZFM");
+      gtag('set', 'developer_id.dODQ2Mj', true);
+</script>
+
+ 
+
+
+
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/conan-docs-logo-2.svg" class="logo" alt="Logo">
+          </a>
+              <div class="version">
+                2.31
+              </div>
+<div role="search" class="pagefind-search-wrapper">
+  <button type="button" id="pagefind-trigger" class="pagefind-trigger" aria-label="Search docs">
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <span>搜索文档</span> <kbd class="pagefind-kbd">⌘K</kbd></button>
+</div>
+
+<div id="pagefind-modal" class="pagefind-modal" role="dialog" aria-modal="true" aria-label="Search docs" hidden="">
+  <div class="pagefind-modal-backdrop" data-pagefind-close=""></div>
+  <div class="pagefind-modal-panel">
+    <button type="button" class="pagefind-modal-close" aria-label="Close search" data-pagefind-close="">×</button>
+    <div id="pagefind-search"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var modal = document.getElementById('pagefind-modal');
+  var trigger = document.getElementById('pagefind-trigger');
+  var mountedUi = null;
+  // bundlePath must be absolute — Pagefind's dynamic import() resolves relative
+  // paths against the module URL, not the document.
+  var bundlePath = new URL("../../pagefind/", document.baseURI).href;
+  var uiScriptLoaded = false;
+
+  function ensureUiScript(cb) {
+    if (window.PagefindUI) return cb();
+    if (uiScriptLoaded) {
+      var wait = setInterval(function () {
+        if (window.PagefindUI) { clearInterval(wait); cb(); }
+      }, 30);
+      return;
+    }
+    uiScriptLoaded = true;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = bundlePath + 'pagefind-ui.css';
+    document.head.appendChild(link);
+    var s = document.createElement('script');
+    s.src = bundlePath + 'pagefind-ui.js';
+    s.onload = cb;
+    document.head.appendChild(s);
+  }
+
+  function openModal() {
+    modal.hidden = false;
+    document.body.classList.add('pagefind-modal-open');
+    ensureUiScript(function () {
+      if (!mountedUi) {
+        mountedUi = new window.PagefindUI({
+          element: "#pagefind-search",
+          bundlePath: bundlePath,
+          showSubResults: true,
+          resetStyles: false,
+          autofocus: true
+        });
+        var input = modal.querySelector('.pagefind-ui__search-input');
+        if (input) input.addEventListener('input', function () { selectedIdx = -1; });
+      }
+      setTimeout(function () {
+        var input = modal.querySelector('.pagefind-ui__search-input');
+        if (input) input.focus();
+      }, 50);
+    });
+  }
+
+  // Keyboard navigation across result links.
+  var selectedIdx = -1;
+  function resultLinks() {
+    return Array.prototype.slice.call(
+      modal.querySelectorAll('.pagefind-ui__result-link')
+    );
+  }
+  function setSelected(idx) {
+    var links = resultLinks();
+    resultLinks().forEach(function (a) { a.classList.remove('pagefind-selected'); });
+    if (links.length === 0) { selectedIdx = -1; return; }
+    selectedIdx = ((idx % links.length) + links.length) % links.length;
+    var cur = links[selectedIdx];
+    cur.classList.add('pagefind-selected');
+    cur.scrollIntoView({ block: 'nearest' });
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+    document.body.classList.remove('pagefind-modal-open');
+  }
+
+  if (trigger) trigger.addEventListener('click', openModal);
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      openModal();
+      return;
+    }
+    if (modal.hidden) {
+      if (e.key === '/' ) {
+        var tag = (e.target && e.target.tagName) || '';
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA' && !e.target.isContentEditable) {
+          e.preventDefault();
+          openModal();
+        }
+      }
+      return;
+    }
+    // Modal is open.
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeModal();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelected(selectedIdx + 1);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelected(selectedIdx - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setSelected(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setSelected(resultLinks().length - 1);
+    } else if (e.key === 'Enter') {
+      var links = resultLinks();
+      var target = selectedIdx >= 0 ? links[selectedIdx] : links[0];
+      if (target) { e.preventDefault(); target.click(); }
+    }
+  });
+
+  modal.addEventListener('click', function (e) {
+    if (e.target.hasAttribute('data-pagefind-close')) closeModal();
+  });
+
+  // Rewrite result links to include the query so the landing page can
+  // highlight it; PagefindUI 1.5's highlightOnClick is not implemented.
+  // Each word is a separate param because pagefind-highlight forces
+  // separateWordSearch=false in mark.js (whole-phrase match only).
+  document.getElementById('pagefind-search').addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[href]');
+    if (!link) return;
+    var input = modal.querySelector('.pagefind-ui__search-input');
+    var q = input && input.value && input.value.trim();
+    if (!q) return;
+    try {
+      var url = new URL(link.href, document.baseURI);
+      url.searchParams.delete('pagefind-highlight');
+      q.split(/\s+/).filter(Boolean).forEach(function (w) {
+        url.searchParams.append('pagefind-highlight', w);
+      });
+      link.href = url.toString();
+    } catch (err) { /* ignore */ }
+  }, true);
+})();
+</script>
+<script type="module">
+  (async () => {
+    var params = new URLSearchParams(window.location.search);
+    if (!params.has('pagefind-highlight')) return;
+    var base = new URL("../../pagefind/", document.baseURI).href;
+    try {
+      var mod = await import(base + "pagefind-highlight.js");
+      new mod.default({
+        highlightParam: "pagefind-highlight",
+        className: "pagefind-highlight"
+      });
+      requestAnimationFrame(function () {
+        if (!window.location.hash) {
+          var first = document.querySelector('mark.pagefind-highlight');
+          if (first) first.scrollIntoView({ block: 'center' });
+        }
+        // Strip pagefind-highlight from the address bar so copy/share is clean.
+        var u = new URL(window.location.href);
+        u.searchParams.delete('pagefind-highlight');
+        window.history.replaceState({}, '', u.toString());
+      });
+    } catch (err) { /* fail silently */ }
+  })();
+</script>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorial.html">教程</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../consuming_packages.html">使用包</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="build_simple_cmake_project.html">使用 Conan 构建一个简单的 CMake 项目</a></li>
+<li class="toctree-l3"><a class="reference internal" href="use_tools_as_conan_packages.html">将构建工具用作 Conan 包</a></li>
+<li class="toctree-l3"><a class="reference internal" href="different_configurations.html">针对多种配置进行构建：Release、Debug、Static 和 Shared</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">理解使用 conanfile.py 与 conanfile.txt 的灵活性</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cross_building_with_conan.html">如何使用 Conan 交叉编译您的应用程序：host 和 build 上下文</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_to_versioning.html">版本控制介绍</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../creating_packages.html">创建包</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../conan_repositories.html">使用 Conan 仓库</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developing_packages.html">本地开发包</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../versioning.html">版本控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_features.html">其他重要的 Conan 特性</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ci_tutorial/tutorial.html">CI 教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../devops/devops.html">DevOps 指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../security/security.html">安全性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../integrations.html">集成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">参考</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../knowledge.html">知识</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../incubating.html">孵化中的特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whatsnew.html">Conan 2 中的新特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">更新日志</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">conan</a></nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div class="admonition warning wy-text-center" style="position:sticky;top:0;background: #fcfcfc;padding: inherit;z-index:1" id="conan-banners">
+            
+            <div style="border: 2px solid #4a7d7e; background-color: #e6f2f2; padding: 8px">
+                <p>📖 完整的 Conan 2 培训现已在 JFrog Academy 免费提供：<a href="https://academy.jfrog.com/path/conan-cc-package-manager?utm_source=Conan+Docs" target="_blank">基础</a> 和 <a href="https://academy.jfrog.com/path/conan-2-advanced?utm_source=Conan+Docs" target="_blank">高级</a>。</p>
+              </div>                                                  
+          </div>
+          <!--@ OUTDATED_VERSION_PLACEHOLDER_BEGIN @
+          <div>
+            <div class="admonition warning wy-text-center" style="position:sticky">
+              <p>This document is for an <b>outdated</b> Conan version.
+              <a href="https://docs.conan.org.cn/2/@LATEST_DOC_PAGE_URL@">Click here to read the <b>latest</b> documentation</a></p>
+             </div>
+          </div>
+          @ OUTDATED_VERSION_PLACEHOLDER_END @-->
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../tutorial.html">教程</a></li>
+          <li class="breadcrumb-item"><a href="../consuming_packages.html">使用包</a></li>
+      <li class="breadcrumb-item active">理解使用 conanfile.py 与 conanfile.txt 的灵活性</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/conan-io/docs/blob/release/2.31/tutorial/consuming_packages/the_flexibility_of_conanfile_py.rst" class="fa fa-github">在 GitHub 上编辑</a>
+      </li>
+  </ul>
+  <hr />
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="understanding-the-flexibility-of-using-conanfile-py-vs-conanfile-txt">
+<span id="consuming-packages-flexibility-of-conanfile-py"></span><h1 id="understanding-the-flexibility-of-using-conanfile-py-vs-conanfile-txt"><span id="consuming-packages-flexibility-of-conanfile-py"></span>了解使用 conanfile.py 与 conanfile.txt 的灵活性<a class="headerlink" href="#understanding-the-flexibility-of-conanfile-py-vs-conanfile-txt" title="Link to this heading"></a></h1>
+<p>在先前的示例中，我们在 <em>conanfile.txt</em> 文件中声明了我们的依赖项（<em>Zlib</em> 和 <em>CMake</em>）。让我们来看一下该文件</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><strong>conanfile.txt</strong></span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span>
+<span class="na">zlib/1.3.1</span>
+
+<span class="k">[tool_requires]</span>
+<span class="na">cmake/3.27.9</span>
+
+<span class="k">[generators]</span>
+<span class="na">CMakeDeps</span>
+<span class="na">CMakeToolchain</span>
+</pre></div>
+</div>
+</div>
+<p>对于简单的场景，使用 <em>conanfile.txt</em> 通过 Conan 构建项目已经足够了，但如果需要更多灵活性，你应该使用 <em>conanfile.py</em> 文件，在其中你可以使用 Python 代码来实现诸如动态添加需求、根据其他选项更改选项或为你的需求设置选项等操作。让我们看一个关于如何迁移到 <em>conanfile.py</em> 并使用其中某些功能的示例。</p>
+<p>请首先克隆源代码以重新创建此项目。您可以在 GitHub 的 <a class="reference external" href="https://github.com/conan-io/examples2">examples2 仓库</a>中找到它们。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/conan-io/examples2.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>examples2/tutorial/consuming_packages/conanfile_py
+</pre></div>
+</div>
+<p>检查文件夹的内容，并注意其内容与先前的示例相同，只是用 <em>conanfile.py</em> 代替了 <em>conanfile.txt</em>。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├──<span class="w"> </span>CMakeLists.txt
+├──<span class="w"> </span>conanfile.py
+└──<span class="w"> </span>src
+<span class="w">    </span>└──<span class="w"> </span>main.c
+</pre></div>
+</div>
+<p>请记住，在先前的示例中，<em>conanfile.txt</em> 包含以下信息</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><strong>conanfile.txt</strong></span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span>
+<span class="na">zlib/1.3.1</span>
+
+<span class="k">[tool_requires]</span>
+<span class="na">cmake/3.27.9</span>
+
+<span class="k">[generators]</span>
+<span class="na">CMakeDeps</span>
+<span class="na">CMakeToolchain</span>
+</pre></div>
+</div>
+</div>
+<p>我们将把相同的信息转换为 <em>conanfile.py</em>。这个文件通常被称为 <strong>“Conan 配方”</strong>。它可以用于消费包（就像本例中这样），也可以用于创建包。对于我们当前的情况，它将定义我们的需求（包括库和构建工具）以及用于修改选项和设置我们希望如何消费这些包的逻辑。如果是用这个文件来创建包，它还可以定义（包括但不限于）如何下载包的源代码、如何从这些源码构建二进制文件、如何打包二进制文件，以及关于未来消费者如何消费该包的信息。我们稍后将在 <a class="reference internal" href="../creating_packages.html#tutorial-creating-packages"><span class="std std-ref">Creating Packages</span></a> 一节中解释如何使用 Conan 配方来创建包。</p>
+<p>Conan 配方形式的 <em>conanfile.txt</em> 等效项可能如下所示</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><strong>conanfile.py</strong></span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">conan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConanFile</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CompressorRecipe</span><span class="p">(</span><span class="n">ConanFile</span><span class="p">):</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="s2">"os"</span><span class="p">,</span> <span class="s2">"compiler"</span><span class="p">,</span> <span class="s2">"build_type"</span><span class="p">,</span> <span class="s2">"arch"</span>
+    <span class="n">generators</span> <span class="o">=</span> <span class="s2">"CMakeToolchain"</span><span class="p">,</span> <span class="s2">"CMakeDeps"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">"zlib/1.3.1"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tool_requires</span><span class="p">(</span><span class="s2">"cmake/3.27.9"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>为了创建 Conan 配方，我们声明了一个继承自 <code class="docutils literal notranslate"><span class="pre">ConanFile</span></code> 类的新类。该类具有不同的类属性和方法</p>
+<ul class="simple">
+<li><p><strong>settings</strong> 类属性定义了项目范围内的变量，例如编译器、其版本或操作系统本身，这些变量在我们构建项目时可能会发生变化。这与 Conan 如何管理二进制兼容性有关，因为这些值会影响 Conan 包的 <strong>package ID</strong> 的值。我们稍后将解释 Conan 如何使用此值来管理二进制兼容性。</p></li>
+<li><p><strong>generators</strong> 类属性指定了当我们调用 <strong class="command">conan install</strong> 命令时将运行哪些 Conan 生成器。在本例中，我们像在 <em>conanfile.txt</em> 中一样添加了 <strong>CMakeToolchain</strong> 和 <strong>CMakeDeps</strong>。</p></li>
+<li><p>在 <strong>requirements()</strong> 方法中，我们使用 <code class="docutils literal notranslate"><span class="pre">self.requires()</span></code> 方法声明了 <em>zlib/1.3.1</em> 依赖项。</p></li>
+<li><p>在 <strong>build_requirements()</strong> 方法中，我们使用 <code class="docutils literal notranslate"><span class="pre">self.tool_requires()</span></code> 方法声明了 <em>cmake/3.27.9</em> 依赖项。</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注意</p>
+<p>严格来说，没有必要将工具的依赖项添加到 <code class="docutils literal notranslate"><span class="pre">build_requirements()</span></code> 中，因为理论上此方法中的所有操作都可以在 <code class="docutils literal notranslate"><span class="pre">requirements()</span></code> 方法中完成。然而，<code class="docutils literal notranslate"><span class="pre">build_requirements()</span></code> 提供了一个专门的场所来定义 <code class="docutils literal notranslate"><span class="pre">tool_requires</span></code> 和 <code class="docutils literal notranslate"><span class="pre">test_requires</span></code>，这有助于保持结构条理清晰。有关更多信息，请查看 <a class="reference internal" href="../../reference/conanfile/methods/requirements.html#reference-conanfile-methods-requirements"><span class="std std-ref">requirements()</span></a> 和 <a class="reference internal" href="../../reference/conanfile/methods/build_requirements.html#reference-conanfile-methods-build-requirements"><span class="std std-ref">build_requirements()</span></a> 文档。</p>
+</div>
+<p>你可以检查并发现，运行与先前示例相同的命令将会得到与以前相同的结​​果。</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Windows</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--output-folder<span class="o">=</span>build<span class="w"> </span>--build<span class="o">=</span>missing
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+$<span class="w"> </span>conanbuild.bat
+<span class="c1"># assuming Visual Studio 15 2017 is your VS version and that it matches your default profile</span>
+$<span class="w"> </span>cmake<span class="w"> </span>..<span class="w"> </span>-G<span class="w"> </span><span class="s2">"Visual Studio 15 2017"</span><span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>conan_toolchain.cmake
+$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--config<span class="w"> </span>Release
+...
+Building<span class="w"> </span>with<span class="w"> </span>CMake<span class="w"> </span>version:<span class="w"> </span><span class="m">3</span>.27.9
+...
+<span class="o">[</span><span class="m">100</span>%<span class="o">]</span><span class="w"> </span>Built<span class="w"> </span>target<span class="w"> </span>compressor
+
+$<span class="w"> </span>Release<span class="se">\c</span>ompressor.exe
+Uncompressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">233</span>
+Compressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">147</span>
+ZLIB<span class="w"> </span>VERSION:<span class="w"> </span><span class="m">1</span>.3.1
+$<span class="w"> </span>deactivate_conanbuild.bat
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Linux, macOS</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--output-folder<span class="w"> </span>build<span class="w"> </span>--build<span class="o">=</span>missing
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>conanbuild.sh
+Capturing<span class="w"> </span>current<span class="w"> </span>environment<span class="w"> </span><span class="k">in</span><span class="w"> </span>deactivate_conanbuildenv-release-x86_64.sh
+Configuring<span class="w"> </span>environment<span class="w"> </span>variables
+$<span class="w"> </span>cmake<span class="w"> </span>..<span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>conan_toolchain.cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>.
+...
+Building<span class="w"> </span>with<span class="w"> </span>CMake<span class="w"> </span>version:<span class="w"> </span><span class="m">3</span>.27.9
+...
+<span class="o">[</span><span class="m">100</span>%<span class="o">]</span><span class="w"> </span>Built<span class="w"> </span>target<span class="w"> </span>compressor
+
+$<span class="w"> </span>./compressor
+Uncompressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">233</span>
+Compressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">147</span>
+ZLIB<span class="w"> </span>VERSION:<span class="w"> </span><span class="m">1</span>.3.1
+$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>deactivate_conanbuild.sh
+</pre></div>
+</div>
+</div>
+<p>到目前为止，我们已经实现了使用 <em>conanfile.txt</em> 时具备的相同功能。让我们看看如何利用 <em>conanfile.py</em> 的功能来定义我们希望遵循的项目结构，以及如何使用 Conan 设置和选项添加一些逻辑。</p>
+<section id="use-the-layout-method">
+<span id="consuming-packages-flexibility-of-conanfile-py-use-layout"></span><h2 id="use-the-layout-method"><span id="consuming-packages-flexibility-of-conanfile-py-use-layout"></span>使用 layout() 方法<a class="headerlink" href="#use-the-layout-method" title="Link to this heading"></a></h2>
+<p>在先前的示例中，每次执行 <cite>conan install</cite> 命令时，我们都必须使用 <cite>–output-folder</cite> 参数来定义我们希望在何处创建 Conan 生成的文件。有一种更整洁的方法来决定我们希望 Conan 为构建系统生成文件的地方，这将允许我们决定（例如）是否根据所使用的 CMake 生成器类型采用不同的输出文件夹。你可以直接在 <cite>conanfile.py</cite> 的 <cite>layout()</cite> 方法中定义这一点，并使它在每个平台上都能正常工作而无需添加更多更改。</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text"><strong>conanfile.py</strong></span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">conan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConanFile</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CompressorRecipe</span><span class="p">(</span><span class="n">ConanFile</span><span class="p">):</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="s2">"os"</span><span class="p">,</span> <span class="s2">"compiler"</span><span class="p">,</span> <span class="s2">"build_type"</span><span class="p">,</span> <span class="s2">"arch"</span>
+    <span class="n">generators</span> <span class="o">=</span> <span class="s2">"CMakeToolchain"</span><span class="p">,</span> <span class="s2">"CMakeDeps"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">"zlib/1.3.1"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">os</span> <span class="o">==</span> <span class="s2">"Windows"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">"base64/0.4.0"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">os</span> <span class="o">!=</span> <span class="s2">"Windows"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tool_requires</span><span class="p">(</span><span class="s2">"cmake/3.27.9"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># We make the assumption that if the compiler is msvc the</span>
+        <span class="c1"># CMake generator is multi-config</span>
+        <span class="n">multi</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get_safe</span><span class="p">(</span><span class="s2">"compiler"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"msvc"</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">multi</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folders</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"build"</span><span class="p">,</span> <span class="s2">"generators"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folders</span><span class="o">.</span><span class="n">build</span> <span class="o">=</span> <span class="s2">"build"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folders</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"build"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">build_type</span><span class="p">),</span> <span class="s2">"generators"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folders</span><span class="o">.</span><span class="n">build</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"build"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">build_type</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>如你所见，我们在 <cite>layout()</cite> 方法中定义了 <strong>self.folders.generators</strong> 属性。这是放置由 Conan 生成的所有辅助文件（CMake 工具链和 cmake 依赖项文件）的文件夹。</p>
+<p>请注意，如果是多配置生成器（如 Visual Studio）还是单配置生成器（如 Unix Makefiles），文件夹的定义是不同的。在前一种情况下，无论构建类型如何，文件夹都是相同的，构建系统将在该文件夹内管理不同的构建类型。但像 Unix Makefiles 这样的单配置生成器必须为每个配置使用不同的文件夹（作为不同的 build_type Release/Debug）。在这种情况下，我们添加了一个简单的逻辑：如果编译器名称是 <cite>msvc</cite>，则将其视为多配置。</p>
+<p>检查并确认：运行与先前示例相同的命令，但不带 <cite>–output-folder</cite> 参数，将得到与以前相同的结​​果</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Windows</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--build<span class="o">=</span>missing
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+$<span class="w"> </span>generators<span class="se">\c</span>onanbuild.bat
+<span class="c1"># assuming Visual Studio 15 2017 is your VS version and that it matches your default profile</span>
+$<span class="w"> </span>cmake<span class="w"> </span>..<span class="w"> </span>-G<span class="w"> </span><span class="s2">"Visual Studio 15 2017"</span><span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>generators<span class="se">\c</span>onan_toolchain.cmake
+$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--config<span class="w"> </span>Release
+...
+Building<span class="w"> </span>with<span class="w"> </span>CMake<span class="w"> </span>version:<span class="w"> </span><span class="m">3</span>.27.9
+...
+<span class="o">[</span><span class="m">100</span>%<span class="o">]</span><span class="w"> </span>Built<span class="w"> </span>target<span class="w"> </span>compressor
+
+$<span class="w"> </span>Release<span class="se">\c</span>ompressor.exe
+Uncompressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">233</span>
+Compressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">147</span>
+ZLIB<span class="w"> </span>VERSION:<span class="w"> </span><span class="m">1</span>.3.1
+$<span class="w"> </span>generators<span class="se">\d</span>eactivate_conanbuild.bat
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Linux, macOS</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--build<span class="o">=</span>missing
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build/Release
+$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>./generators/conanbuild.sh
+Capturing<span class="w"> </span>current<span class="w"> </span>environment<span class="w"> </span><span class="k">in</span><span class="w"> </span>deactivate_conanbuildenv-release-x86_64.sh
+Configuring<span class="w"> </span>environment<span class="w"> </span>variables
+$<span class="w"> </span>cmake<span class="w"> </span>../..<span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>generators/conan_toolchain.cmake<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+$<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>.
+...
+Building<span class="w"> </span>with<span class="w"> </span>CMake<span class="w"> </span>version:<span class="w"> </span><span class="m">3</span>.27.9
+...
+<span class="o">[</span><span class="m">100</span>%<span class="o">]</span><span class="w"> </span>Built<span class="w"> </span>target<span class="w"> </span>compressor
+
+$<span class="w"> </span>./compressor
+Uncompressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">233</span>
+Compressed<span class="w"> </span>size<span class="w"> </span>is:<span class="w"> </span><span class="m">147</span>
+ZLIB<span class="w"> </span>VERSION:<span class="w"> </span><span class="m">1</span>.3.1
+$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>./generators/deactivate_conanbuild.sh
+</pre></div>
+</div>
+</div>
+<p>没有必要总是在 <cite>conanfile.py</cite> 中编写这段逻辑。有一些预定义的布局，你可以导入并直接在你的配方中使用。例如，对于 CMake 的情况，Conan 中已经定义了一个 <a class="reference internal" href="../../reference/tools/cmake/cmake_layout.html#cmake-layout"><span class="std std-ref">cmake_layout()</span></a></p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text"><strong>conanfile.py</strong></span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">conan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConanFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">conan.tools.cmake</span><span class="w"> </span><span class="kn">import</span> <span class="n">cmake_layout</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CompressorRecipe</span><span class="p">(</span><span class="n">ConanFile</span><span class="p">):</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="s2">"os"</span><span class="p">,</span> <span class="s2">"compiler"</span><span class="p">,</span> <span class="s2">"build_type"</span><span class="p">,</span> <span class="s2">"arch"</span>
+    <span class="n">generators</span> <span class="o">=</span> <span class="s2">"CMakeToolchain"</span><span class="p">,</span> <span class="s2">"CMakeDeps"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">"zlib/1.3.1"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tool_requires</span><span class="p">(</span><span class="s2">"cmake/3.27.9"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmake_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="use-the-validate-method-to-raise-an-error-for-non-supported-configurations">
+<h2 id="use-the-validate-method-to-raise-an-error-for-non-supported-configurations">使用 validate() 方法为不支持的配置引发错误<a class="headerlink" href="#use-the-validate-method-to-raise-an-error-for-non-supported-configurations" title="Link to this heading"></a></h2>
+<p>当 Conan 加载 <em>conanfile.py</em> 时会求值 <a class="reference internal" href="../../reference/conanfile/methods/validate.html#reference-conanfile-methods-validate"><span class="std std-ref">validate() 方法</span></a>，你可以使用它对输入设置执行检查。例如，如果你的项目在 macOS 上不支持 <em>armv8</em> 架构，你可以引发 <cite>ConanInvalidConfiguration</cite> 异常，使 Conan 返回一个特殊的错误代码。这将表明所使用的设置或选项配置不受支持。</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text"><strong>conanfile.py</strong></span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">conan.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConanInvalidConfiguration</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CompressorRecipe</span><span class="p">(</span><span class="n">ConanFile</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">os</span> <span class="o">==</span> <span class="s2">"Macos"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">arch</span> <span class="o">==</span> <span class="s2">"armv8"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConanInvalidConfiguration</span><span class="p">(</span><span class="s2">"ARM v8 not supported in Macos"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="conditional-requirements-using-a-conanfile-py">
+<h2 id="conditional-requirements-using-a-conanfile-py">使用 conanfile.py 的条件需求<a class="headerlink" href="#conditional-requirements-using-a-conanfile-py" title="Link to this heading"></a></h2>
+<p>你可以向 <a class="reference internal" href="../../reference/conanfile/methods/requirements.html#reference-conanfile-methods-requirements"><span class="std std-ref">requirements() 方法</span></a> 添加一些逻辑，以条件性地添加或删除需求。例如，想象一下你想在 Windows 上添加一个额外的依赖项，或者你想使用系统的 CMake 安装而不是使用 Conan 的 <cite>tool_requires</cite></p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text"><strong>conanfile.py</strong></span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">conan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConanFile</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CompressorRecipe</span><span class="p">(</span><span class="n">ConanFile</span><span class="p">):</span>
+    <span class="c1"># Binary configuration</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="s2">"os"</span><span class="p">,</span> <span class="s2">"compiler"</span><span class="p">,</span> <span class="s2">"build_type"</span><span class="p">,</span> <span class="s2">"arch"</span>
+    <span class="n">generators</span> <span class="o">=</span> <span class="s2">"CMakeToolchain"</span><span class="p">,</span> <span class="s2">"CMakeDeps"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">"zlib/1.3.1"</span><span class="p">)</span>
+
+        <span class="c1"># Add base64 dependency for Windows</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">os</span> <span class="o">==</span> <span class="s2">"Windows"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">"base64/0.4.0"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Use the system's CMake for Windows</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">os</span> <span class="o">!=</span> <span class="s2">"Windows"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tool_requires</span><span class="p">(</span><span class="s2">"cmake/3.27.9"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="use-the-generate-method-to-copy-resources-from-packages">
+<span id="copy-resources-on-generate"></span><h2 id="use-the-generate-method-to-copy-resources-from-packages"><span id="copy-resources-on-generate"></span>使用 generate() 方法从包中复制资源<a class="headerlink" href="#use-the-generate-method-to-copy-resources-from-packages" title="Link to this heading"></a></h2>
+<p>在某些情况下，Conan 包包含对于消费其打包的库有用甚至必要的文件。这些文件范围广泛，从配置文件、资产到项目正确构建或运行所需的特定文件。使用 <a class="reference internal" href="../../reference/conanfile/methods/generate.html#reference-conanfile-methods-generate"><span class="std std-ref">generate() 方法</span></a>，你可以将这些文件从 Conan 缓存复制到你的项目文件夹中，从而确保所有必需的资源都可以直接使用。</p>
+<p>这是一个示例，展示了如何将依赖项的 <code class="docutils literal notranslate"><span class="pre">resdirs</span></code> 目录中的所有资源复制到项目中的 <code class="docutils literal notranslate"><span class="pre">assets</span></code> 目录</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">conan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConanFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">conan.tools.files</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyProject</span><span class="p">(</span><span class="n">ConanFile</span><span class="p">):</span>
+
+    <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Copy all resources from the dependency's resource directory</span>
+        <span class="c1"># to the "assets" folder in the source directory of your project</span>
+        <span class="n">dep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependencies</span><span class="p">[</span><span class="s2">"dep_name"</span><span class="p">]</span>
+        <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"*"</span><span class="p">,</span> <span class="n">dep</span><span class="o">.</span><span class="n">cpp_info</span><span class="o">.</span><span class="n">resdirs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_folder</span><span class="p">,</span> <span class="s2">"assets"</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>然后，在 <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">install</span></code> 步骤之后，所有这些资源文件都将被复制到本地，从而允许你在项目的构建过程中使用它们。有关如何在 <code class="docutils literal notranslate"><span class="pre">generate()</span></code> 方法中从包导入文件的完整示例，你可以参考<a class="reference external" href="https://blog.conan.org.cn/2019/06/26/An-introduction-to-the-Dear-ImGui-library.html">关于使用 Dear ImGui 库的博客文章</a>，其中演示了如何根据图形 API 为该库导入绑定。</p>
+<div class="admonition note">
+<p class="admonition-title">注意</p>
+<p>需要明确的是，复制库（无论是静态库还是共享库）是没有必要的。Conan 的设计初衷是通过使用 <a class="reference internal" href="../../reference/tools.html#conan-tools"><span class="std std-ref">生成器</span></a> 和 <a class="reference internal" href="../../reference/tools/env/virtualrunenv.html#conan-tools-env-virtualrunenv"><span class="std std-ref">环境工具</span></a>，直接从 Conan 本地缓存中的位置使用库，而无需将它们复制到本地文件夹。</p>
+</div>
+</section>
+<section id="use-the-build-method-and-conan-build-command">
+<h2 id="use-the-build-method-and-conan-build-command">使用 build() 方法和 <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">build</span></code> 命令<a class="headerlink" href="#use-the-build-method-and-conan-build-command" title="Link to this heading"></a></h2>
+<p>如果你有一个实现了 <code class="docutils literal notranslate"><span class="pre">build()</span></code> 方法的配方，那么就可以通过单个命令自动调用完整的 <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">install</span> <span class="pre">+</span> <span class="pre">cmake</span> <span class="pre">&lt;configure&gt;</span> <span class="pre">+</span> <span class="pre">cmake</span> <span class="pre">&lt;build&gt;</span></code>（或调用 <code class="docutils literal notranslate"><span class="pre">build()</span></code> 方法使用的构建系统）流程。尽管这可能不是典型的开发人员流程，但在某些情况下它可能是一个方便的快捷方式。</p>
+<p>让我们将此 <code class="docutils literal notranslate"><span class="pre">build()</span></code> 方法添加到我们的配方中</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">conan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConanFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">conan.tools.cmake</span><span class="w"> </span><span class="kn">import</span> <span class="n">CMake</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CompressorRecipe</span><span class="p">(</span><span class="n">ConanFile</span><span class="p">):</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="s2">"os"</span><span class="p">,</span> <span class="s2">"compiler"</span><span class="p">,</span> <span class="s2">"build_type"</span><span class="p">,</span> <span class="s2">"arch"</span>
+    <span class="n">generators</span> <span class="o">=</span> <span class="s2">"CMakeToolchain"</span><span class="p">,</span> <span class="s2">"CMakeDeps"</span>
+
+    <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmake</span> <span class="o">=</span> <span class="n">CMake</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">cmake</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span>
+        <span class="n">cmake</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>所以现在我们只需调用 <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">build</span> <span class="pre">.</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conan<span class="w"> </span>build<span class="w"> </span>.
+...
+Graph<span class="w"> </span>root
+<span class="w">    </span>conanfile.py:<span class="w"> </span>...<span class="se">\c</span>onanfile.py
+Requirements
+<span class="w">    </span>zlib/1.3.1#bfceb3f8904b735f75c2b0df5713b1e6<span class="w"> </span>-<span class="w"> </span>Downloaded<span class="w"> </span><span class="o">(</span>conancenter<span class="o">)</span>
+Build<span class="w"> </span>requirements
+<span class="w">    </span>cmake/3.27.9#32cced101c6df0fab43e8d00bd2483eb<span class="w"> </span>-<span class="w"> </span>Downloaded<span class="w"> </span><span class="o">(</span>conancenter<span class="o">)</span>
+
+<span class="o">========</span><span class="w"> </span>Calling<span class="w"> </span>build<span class="o">()</span><span class="w"> </span><span class="o">========</span>
+conanfile.py:<span class="w"> </span>Calling<span class="w"> </span>build<span class="o">()</span>
+conanfile.py:<span class="w"> </span>Running<span class="w"> </span>CMake.configure<span class="o">()</span>
+conanfile.py:<span class="w"> </span>RUN:<span class="w"> </span>cmake<span class="w"> </span>-G<span class="w"> </span><span class="s2">"Visual Studio 17 2022"</span><span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span><span class="s2">"conan_toolchain.cmake"</span>
+...
+conanfile.py:<span class="w"> </span>Running<span class="w"> </span>CMake.build<span class="o">()</span>
+conanfile.py:<span class="w"> </span>RUN:<span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span><span class="s2">"...\conanfile_py"</span><span class="w"> </span>--config<span class="w"> </span>Release
+</pre></div>
+</div>
+<p>并且我们将看到它是如何首先管理安装依赖项的，然后它将调用 <code class="docutils literal notranslate"><span class="pre">build()</span></code> 方法，该方法为我们调用 CMake 的配置和构建步骤。由于 <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">build</span> <span class="pre">.</span></code> 在内部执行了 <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">install</span></code>，因此它可以接收与 <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">install</span></code> 相同的参数（profile、settings、options、lockfile 等）。</p>
+<div class="admonition note">
+<p class="admonition-title">注意</p>
+<p><strong>最佳实践</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">build</span></code> 命令并非旨在取代或改变使用 CMake 等构建工具以及使用 IDE 的典型开发人员流程。它只是在某些情况下的一个便捷快捷方式，在这些情况下，我们希望轻松地在本地构建项目，而不必键入多条命令或使用 IDE。</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">另请参阅</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://academy.jfrog.com/path/conan-cc-package-manager/conan-2-essentials?utm_source=Conan+Docs">JFrog 学院 Conan 2 核心要点 模块 1，第 3 课：使用 conanfile.py 的灵活性</a></p></li>
+<li><p><a class="reference internal" href="../../examples/tools/cmake/cmake_toolchain/build_project_cmake_presets.html#examples-tools-cmake-toolchain-build-project-presets"><span class="std std-ref">使用 “cmake_layout” + “CMakeToolchain” + “CMakePresets 功能”构建你的项目</span></a>.</p></li>
+<li><p><a class="reference internal" href="../developing_packages/package_layout.html#tutorial-package-layout"><span class="std std-ref">理解 Conan 包布局</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../reference/conanfile/methods.html#reference-conanfile-methods"><span class="std std-ref">所有 conanfile.py 可用方法的文档</span></a>.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="different_configurations.html" class="btn btn-neutral float-left" title="为多种配置构建：Release、Debug、Static 和 Shared" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a> <a href="cross_building_with_conan.html" class="btn btn-neutral float-right" title="如何使用 Conan 交叉编译你的应用程序：host 和 build 上下文" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a></div>
+
+  <hr />
+
+  <div role="contentinfo">
+    <p>© Copyright 2016-2026, JFrog. <span class="lastupdated">最后更新于 2026年7月24日。 </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">版本：2.31 <span class="fa fa-caret-down"></span></span>
+  <div class="rst-other-versions">
+    <dl>
+    <dt>版本</dt>
+    
+        
+            <dd><a href="/2.31/index.html">2.31</a></dd>
+        
+    
+        
+            <dd><a href="/2.30/index.html">2.30</a></dd>
+        
+    
+        
+            <dd><a href="/2.29/index.html">2.29</a></dd>
+        
+    
+        
+            <dd><a href="/2.28/index.html">2.28</a></dd>
+        
+    
+        
+            <dd><a href="/2.27/index.html">2.27</a></dd>
+        
+    
+        
+            <dd><a href="/2.26/index.html">2.26</a></dd>
+        
+    
+        
+            <dd><a href="/2.25/index.html">2.25</a></dd>
+        
+    
+        
+            <dd><a href="/2.24/index.html">2.24</a></dd>
+        
+    
+        
+            <dd><a href="/2.23/index.html">2.23</a></dd>
+        
+    
+        
+            <dd><a href="/2.22/index.html">2.22</a></dd>
+        
+    
+        
+            <dd><a href="/2.21/index.html">2.21</a></dd>
+        
+    
+        
+            <dd><a href="/2.20/index.html">2.20</a></dd>
+        
+    
+        
+            <dd><a href="/2.19/index.html">2.19</a></dd>
+        
+    
+        
+            <dd><a href="/2.18/index.html">2.18</a></dd>
+        
+    
+        
+            <dd><a href="/2.17/index.html">2.17</a></dd>
+        
+    
+        
+            <dd><a href="/2.16/index.html">2.16</a></dd>
+        
+    
+        
+            <dd><a href="/2.15/index.html">2.15</a></dd>
+        
+    
+        
+            <dd><a href="/2.14/index.html">2.14</a></dd>
+        
+    
+        
+            <dd><a href="/2.13/index.html">2.13</a></dd>
+        
+    
+        
+            <dd><a href="/2.12/index.html">2.12</a></dd>
+        
+    
+        
+            <dd><a href="/2.11/index.html">2.11</a></dd>
+        
+    
+        
+            <dd><a href="/2.10/index.html">2.10</a></dd>
+        
+    
+        
+            <dd><a href="/2.9/index.html">2.9</a></dd>
+        
+    
+        
+            <dd><a href="/2.8/index.html">2.8</a></dd>
+        
+    
+        
+            <dd><a href="/2.7/index.html">2.7</a></dd>
+        
+    
+        
+            <dd><a href="/2.6/index.html">2.6</a></dd>
+        
+    
+        
+            <dd><a href="/2.5/index.html">2.5</a></dd>
+        
+    
+        
+            <dd><a href="/2.4/index.html">2.4</a></dd>
+        
+    
+        
+            <dd><a href="/2.3/index.html">2.3</a></dd>
+        
+    
+        
+            <dd><a href="/2.2/index.html">2.2</a></dd>
+        
+    
+        
+            <dd><a href="/2.1/index.html">2.1</a></dd>
+        
+    
+        
+            <dd><a href="/2.0/index.html">2.0</a></dd>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <dd><a href="/2/index.html">2</a></dd>
+        
+    
+    <br />
+        <details>
+            <summary>Conan 1 发行版</summary>
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <dd><a href="/1/index.html">1</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.66/index.html">1.66</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.65/index.html">1.65</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.64/index.html">1.64</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.63/index.html">1.63</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.62/index.html">1.62</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.61/index.html">1.61</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.60/index.html">1.60</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.59/index.html">1.59</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.58/index.html">1.58</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.57/index.html">1.57</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.56/index.html">1.56</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.55/index.html">1.55</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.54/index.html">1.54</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.53/index.html">1.53</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.52/index.html">1.52</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.51/index.html">1.51</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.50/index.html">1.50</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.49/index.html">1.49</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.48/index.html">1.48</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.47/index.html">1.47</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.46/index.html">1.46</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.45/index.html">1.45</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.44/index.html">1.44</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.43/index.html">1.43</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.42/index.html">1.42</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.41/index.html">1.41</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.40/index.html">1.40</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.39/index.html">1.39</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.38/index.html">1.38</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.37/index.html">1.37</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.36/index.html">1.36</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.35/index.html">1.35</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.34/index.html">1.34</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.33/index.html">1.33</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.32/index.html">1.32</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.31/index.html">1.31</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.30/index.html">1.30</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.29/index.html">1.29</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.28/index.html">1.28</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.27/index.html">1.27</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.26/index.html">1.26</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.25/index.html">1.25</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.24/index.html">1.24</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.23/index.html">1.23</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.22/index.html">1.22</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.21/index.html">1.21</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.20/index.html">1.20</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.19/index.html">1.19</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.18/index.html">1.18</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.17/index.html">1.17</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.16/index.html">1.16</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.15/index.html">1.15</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.14/index.html">1.14</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.13/index.html">1.13</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.12/index.html">1.12</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.11/index.html">1.11</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.10/index.html">1.10</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.9/index.html">1.9</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.8/index.html">1.8</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.7/index.html">1.7</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.6/index.html">1.6</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.5/index.html">1.5</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.4/index.html">1.4</a></dd>
+        
+    
+        
+            <dd><a href="/en/1.3/index.html">1.3</a></dd>
+        
+    
+        
+    
+        </details>
+    </dl>
+    <dl>
+        <dt>下载</dt>
+        
+            <dd><a href="/2.31/conan.pdf">PDF</a></dd>
+        
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+<noscript><iframe src="https://#/ns.html?id=GTM-WK44ZFM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+
+ 
+
+
+
+</body></html>
