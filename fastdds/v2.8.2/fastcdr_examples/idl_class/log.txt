@@ -1,0 +1,714 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/build
+Consolidate compiler generated dependencies of target test_ClientServerTypes
+[ 33%] Building CXX object CMakeFiles/test_ClientServerTypes.dir/test_ClientServerTypes.cpp.o
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:2:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp: In function ‘bool clientserver::SerializeToVector(const clientserver::Operation&, std::vector<unsigned char>&)’:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp:15:43: error: variable ‘eprosima::fastcdr::Cdr cdr’ has initializer but incomplete type
+   15 |     eprosima::fastcdr::Cdr cdr(fast_buffer);
+      |                                           ^
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp: In function ‘bool clientserver::DeserializeFromVector(clientserver::Operation&, const std::vector<unsigned char>&)’:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp:25:43: error: variable ‘eprosima::fastcdr::Cdr cdr’ has initializer but incomplete type
+   25 |     eprosima::fastcdr::Cdr cdr(fast_buffer);
+      |                                           ^
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp: In function ‘bool clientserver::SerializeToVector(const clientserver::Result&, std::vector<unsigned char>&)’:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp:37:43: error: variable ‘eprosima::fastcdr::Cdr cdr’ has initializer but incomplete type
+   37 |     eprosima::fastcdr::Cdr cdr(fast_buffer);
+      |                                           ^
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp: In function ‘bool clientserver::DeserializeFromVector(clientserver::Result&, const std::vector<unsigned char>&)’:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.hpp:47:43: error: variable ‘eprosima::fastcdr::Cdr cdr’ has initializer but incomplete type
+   47 |     eprosima::fastcdr::Cdr cdr(fast_buffer);
+      |                                           ^
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp: In function ‘void test_Operation()’:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:13:43: error: ‘MULTIPLICATION’ is not a member of ‘clientserver::Operation’
+   13 |     original.m_operationType = Operation::MULTIPLICATION;
+      |                                           ^~~~~~~~~~~~~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:14:14: error: invalid use of member function ‘int32_t& clientserver::Operation::m_num1()’ (did you forget the ‘()’ ?)
+   14 |     original.m_num1 = 25;
+      |     ~~~~~~~~~^~~~~~
+      |                    ()
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:15:14: error: invalid use of member function ‘int32_t& clientserver::Operation::m_num2()’ (did you forget the ‘()’ ?)
+   15 |     original.m_num2 = 65;
+      |     ~~~~~~~~~^~~~~~
+      |                    ()
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:46:71: error: invalid use of member function ‘clientserver::OPERATIONTYPE& clientserver::Operation::m_operationType()’ (did you forget the ‘()’ ?)
+   46 |     std::cout << "Original:  m_operationType=" << (uint32_t) original.m_operationType
+      |                                                              ~~~~~~~~~^~~~~~~~~~~~~~~
+      |                                                                                      ()
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:50:73: error: invalid use of member function ‘clientserver::OPERATIONTYPE& clientserver::Operation::m_operationType()’ (did you forget the ‘()’ ?)
+   50 |     std::cout << "Recovered:  m_operationType=" << (uint32_t) recovered.m_operationType
+      |                                                               ~~~~~~~~~~^~~~~~~~~~~~~~~
+      |                                                                                        ()
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:55:44: error: invalid operands of types ‘<unresolved overloaded function type>’ and ‘<unresolved overloaded function type>’ to binary ‘operator==’
+   55 |     bool match = (original.m_operationType == recovered.m_operationType) &&
+      |                   ~~~~~~~~~~~~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                            |                            |
+      |                            |                            <unresolved overloaded function type>
+      |                            <unresolved overloaded function type>
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:56:35: error: invalid operands of types ‘<unresolved overloaded function type>’ and ‘<unresolved overloaded function type>’ to binary ‘operator==’
+   56 |                  (original.m_num1 == recovered.m_num1) &&
+      |                   ~~~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~~~
+      |                            |                   |
+      |                            |                   <unresolved overloaded function type>
+      |                            <unresolved overloaded function type>
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:57:35: error: invalid operands of types ‘<unresolved overloaded function type>’ and ‘<unresolved overloaded function type>’ to binary ‘operator==’
+   57 |                  (original.m_num2 == recovered.m_num2);
+      |                   ~~~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~~~
+      |                            |                   |
+      |                            |                   <unresolved overloaded function type>
+      |                            <unresolved overloaded function type>
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp: In function ‘void test_Result()’:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:67:14: error: invalid use of member function ‘int32_t& clientserver::Result::m_result()’ (did you forget the ‘()’ ?)
+   67 |     original.m_result = 100;
+      |     ~~~~~~~~~^~~~~~~~
+      |                      ()
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:41: error: no match for ‘operator<<’ (operand types are ‘std::basic_ostream<char>’ and ‘<unresolved overloaded function type>’)
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~~~~
+      |               |                                     |
+      |               std::basic_ostream<char>              <unresolved overloaded function type>
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:108:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__ostream_type& (*)(std::basic_ostream<_CharT, _Traits>::__ostream_type&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  108 |       operator<<(__ostream_type& (*__pf)(__ostream_type&))
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:108:36: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::basic_ostream<char>::__ostream_type& (*)(std::basic_ostream<char>::__ostream_type&)’ {aka ‘std::basic_ostream<char>& (*)(std::basic_ostream<char>&)’}
+  108 |       operator<<(__ostream_type& (*__pf)(__ostream_type&))
+      |                  ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/ostream:117:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__ios_type& (*)(std::basic_ostream<_CharT, _Traits>::__ios_type&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>; std::basic_ostream<_CharT, _Traits>::__ios_type = std::basic_ios<char>]’
+  117 |       operator<<(__ios_type& (*__pf)(__ios_type&))
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:117:32: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::basic_ostream<char>::__ios_type& (*)(std::basic_ostream<char>::__ios_type&)’ {aka ‘std::basic_ios<char>& (*)(std::basic_ios<char>&)’}
+  117 |       operator<<(__ios_type& (*__pf)(__ios_type&))
+      |                  ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/ostream:127:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::ios_base& (*)(std::ios_base&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  127 |       operator<<(ios_base& (*__pf) (ios_base&))
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:127:30: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::ios_base& (*)(std::ios_base&)’
+  127 |       operator<<(ios_base& (*__pf) (ios_base&))
+      |                  ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/usr/include/c++/11/ostream:166:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  166 |       operator<<(long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:166:23: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long int’
+  166 |       operator<<(long __n)
+      |                  ~~~~~^~~
+/usr/include/c++/11/ostream:170:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  170 |       operator<<(unsigned long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:170:32: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long unsigned int’
+  170 |       operator<<(unsigned long __n)
+      |                  ~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:174:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(bool) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  174 |       operator<<(bool __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:174:23: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘bool’
+  174 |       operator<<(bool __n)
+      |                  ~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:91:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(short int) [with _CharT = char; _Traits = std::char_traits<char>]’
+   91 |     basic_ostream<_CharT, _Traits>::
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:92:22: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘short int’
+   92 |     operator<<(short __n)
+      |                ~~~~~~^~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:181:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(short unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  181 |       operator<<(unsigned short __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:181:33: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘short unsigned int’
+  181 |       operator<<(unsigned short __n)
+      |                  ~~~~~~~~~~~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:105:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(int) [with _CharT = char; _Traits = std::char_traits<char>]’
+  105 |     basic_ostream<_CharT, _Traits>::
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:106:20: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘int’
+  106 |     operator<<(int __n)
+      |                ~~~~^~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:192:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  192 |       operator<<(unsigned int __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:192:31: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘unsigned int’
+  192 |       operator<<(unsigned int __n)
+      |                  ~~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:201:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long long int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  201 |       operator<<(long long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:201:28: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long long int’
+  201 |       operator<<(long long __n)
+      |                  ~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:205:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long long unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  205 |       operator<<(unsigned long long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:205:37: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long long unsigned int’
+  205 |       operator<<(unsigned long long __n)
+      |                  ~~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:220:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(double) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  220 |       operator<<(double __f)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:220:25: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘double’
+  220 |       operator<<(double __f)
+      |                  ~~~~~~~^~~
+/usr/include/c++/11/ostream:224:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(float) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  224 |       operator<<(float __f)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:224:24: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘float’
+  224 |       operator<<(float __f)
+      |                  ~~~~~~^~~
+/usr/include/c++/11/ostream:232:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long double) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  232 |       operator<<(long double __f)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:232:30: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long double’
+  232 |       operator<<(long double __f)
+      |                  ~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:245:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(const void*) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  245 |       operator<<(const void* __p)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:245:30: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘const void*’
+  245 |       operator<<(const void* __p)
+      |                  ~~~~~~~~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:119:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__streambuf_type*) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__streambuf_type = std::basic_streambuf<char>]’
+  119 |     basic_ostream<_CharT, _Traits>::
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:120:34: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::basic_ostream<char>::__streambuf_type*’ {aka ‘std::basic_streambuf<char>*’}
+  120 |     operator<<(__streambuf_type* __sbin)
+      |                ~~~~~~~~~~~~~~~~~~^~~~~~
+In file included from /usr/include/c++/11/string:55,
+                 from /home/hexu/local/fastdds/include/fastrtps/utils/fixed_size_string.hpp:23,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/gen/ClientServerTypes.h:26,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:1:
+/usr/include/c++/11/bits/basic_string.h:6531:5: note: candidate: ‘template<class _CharT, class _Traits, class _Alloc> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&)’
+ 6531 |     operator<<(basic_ostream<_CharT, _Traits>& __os,
+      |     ^~~~~~~~
+/usr/include/c++/11/bits/basic_string.h:6531:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’ and ‘int32_t& (clientserver::Result::*)()’ {aka ‘int& (clientserver::Result::*)()’}
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                                     ^~~~~~~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’ and ‘int32_t (clientserver::Result::*)() const’ {aka ‘int (clientserver::Result::*)() const’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’ and ‘void (clientserver::Result::*)(int32_t)’ {aka ‘void (clientserver::Result::*)(int)’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   couldn’t deduce template parameter ‘_Alloc’
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/gen/ClientServerTypes.h:33,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:1:
+/usr/include/c++/11/bitset:1540:5: note: candidate: ‘template<class _CharT, class _Traits, long unsigned int _Nb> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::bitset<_Nb>&)’
+ 1540 |     operator<<(std::basic_ostream<_CharT, _Traits>& __os,
+      |     ^~~~~~~~
+/usr/include/c++/11/bitset:1540:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘const std::bitset<_Nb>’ and ‘int32_t& (clientserver::Result::*)()’ {aka ‘int& (clientserver::Result::*)()’}
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                                     ^~~~~~~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘const std::bitset<_Nb>’ and ‘int32_t (clientserver::Result::*)() const’ {aka ‘int (clientserver::Result::*)() const’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘const std::bitset<_Nb>’ and ‘void (clientserver::Result::*)(int32_t)’ {aka ‘void (clientserver::Result::*)(int)’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   couldn’t deduce template parameter ‘_Nb’
+In file included from /usr/include/c++/11/bits/ios_base.h:46,
+                 from /usr/include/c++/11/ios:42,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/system_error:279:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::error_code&)’
+  279 |     operator<<(basic_ostream<_CharT, _Traits>& __os, const error_code& __e)
+      |     ^~~~~~~~
+/usr/include/c++/11/system_error:279:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const std::error_code&’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:513:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, _CharT) [with _CharT = char; _Traits = std::char_traits<char>]’
+  513 |     operator<<(basic_ostream<_CharT, _Traits>& __out, _CharT __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:513:62: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘char’
+  513 |     operator<<(basic_ostream<_CharT, _Traits>& __out, _CharT __c)
+      |                                                       ~~~~~~~^~~
+/usr/include/c++/11/ostream:518:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, char)’
+  518 |     operator<<(basic_ostream<_CharT, _Traits>& __out, char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:518:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘char’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:524:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, char)’
+  524 |     operator<<(basic_ostream<char, _Traits>& __out, char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:524:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘char’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:530:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, signed char)’
+  530 |     operator<<(basic_ostream<char, _Traits>& __out, signed char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:530:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘signed char’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:535:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, unsigned char)’
+  535 |     operator<<(basic_ostream<char, _Traits>& __out, unsigned char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:535:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘unsigned char’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:594:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>]’
+  594 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const _CharT* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:594:69: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘const char*’
+  594 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const _CharT* __s)
+      |                                                       ~~~~~~~~~~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:321:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const char*)’
+  321 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:321:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const char*’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:611:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const char*)’
+  611 |     operator<<(basic_ostream<char, _Traits>& __out, const char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:611:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const char*’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:624:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const signed char*)’
+  624 |     operator<<(basic_ostream<char, _Traits>& __out, const signed char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:624:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const signed char*’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:629:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const unsigned char*)’
+  629 |     operator<<(basic_ostream<char, _Traits>& __out, const unsigned char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:629:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const unsigned char*’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:750:5: note: candidate: ‘template<class _Ostream, class _Tp> _Ostream&& std::operator<<(_Ostream&&, const _Tp&)’
+  750 |     operator<<(_Ostream&& __os, const _Tp& __x)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:750:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   couldn’t deduce template parameter ‘_Tp’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                                     ^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:79:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Resetiosflags)’
+   79 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Resetiosflags __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:79:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Resetiosflags’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:109:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setiosflags)’
+  109 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setiosflags __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:109:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setiosflags’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:143:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setbase)’
+  143 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setbase __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:143:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setbase’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:178:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setfill<_CharT>) [with _CharT = char; _Traits = std::char_traits<char>]’
+  178 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setfill<_CharT> __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:178:71: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘std::_Setfill<char>’
+  178 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setfill<_CharT> __f)
+      |                                                      ~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/iomanip:208:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setprecision)’
+  208 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setprecision __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:208:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setprecision’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:238:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setw)’
+  238 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setw __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:238:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   cannot convert ‘original.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setw’
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                            ~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:311:5: note: candidate: ‘template<class _CharT, class _Traits, class _MoneyT> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Put_money<_MoneyT>)’
+  311 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Put_money<_MoneyT> __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:311:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘std::_Put_money<_MoneyT>’ and ‘int32_t& (clientserver::Result::*)()’ {aka ‘int& (clientserver::Result::*)()’}
+   98 |     std::cout << "Original:  m_result=" << original.m_result << "\n";
+      |                                                     ^~~~~~~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘std::_Put_money<_MoneyT>’ and ‘int32_t (clientserver::Result::*)() const’ {aka ‘int (clientserver::Result::*)() const’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   mismatched types ‘std::_Put_money<_MoneyT>’ and ‘void (clientserver::Result::*)(int32_t)’ {aka ‘void (clientserver::Result::*)(int)’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:98:53: note:   couldn’t deduce template parameter ‘_MoneyT’
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:363:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Put_time<_CharT>) [with _CharT = char; _Traits = std::char_traits<char>]’
+  363 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Put_time<_CharT> __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:363:72: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘std::_Put_time<char>’
+  363 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Put_time<_CharT> __f)
+      |                                                      ~~~~~~~~~~~~~~~~~~^~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:42: error: no match for ‘operator<<’ (operand types are ‘std::basic_ostream<char>’ and ‘<unresolved overloaded function type>’)
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~~~~~
+      |               |                                       |
+      |               std::basic_ostream<char>                <unresolved overloaded function type>
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:108:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__ostream_type& (*)(std::basic_ostream<_CharT, _Traits>::__ostream_type&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  108 |       operator<<(__ostream_type& (*__pf)(__ostream_type&))
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:108:36: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::basic_ostream<char>::__ostream_type& (*)(std::basic_ostream<char>::__ostream_type&)’ {aka ‘std::basic_ostream<char>& (*)(std::basic_ostream<char>&)’}
+  108 |       operator<<(__ostream_type& (*__pf)(__ostream_type&))
+      |                  ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/ostream:117:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__ios_type& (*)(std::basic_ostream<_CharT, _Traits>::__ios_type&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>; std::basic_ostream<_CharT, _Traits>::__ios_type = std::basic_ios<char>]’
+  117 |       operator<<(__ios_type& (*__pf)(__ios_type&))
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:117:32: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::basic_ostream<char>::__ios_type& (*)(std::basic_ostream<char>::__ios_type&)’ {aka ‘std::basic_ios<char>& (*)(std::basic_ios<char>&)’}
+  117 |       operator<<(__ios_type& (*__pf)(__ios_type&))
+      |                  ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/ostream:127:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::ios_base& (*)(std::ios_base&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  127 |       operator<<(ios_base& (*__pf) (ios_base&))
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:127:30: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::ios_base& (*)(std::ios_base&)’
+  127 |       operator<<(ios_base& (*__pf) (ios_base&))
+      |                  ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/usr/include/c++/11/ostream:166:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  166 |       operator<<(long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:166:23: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long int’
+  166 |       operator<<(long __n)
+      |                  ~~~~~^~~
+/usr/include/c++/11/ostream:170:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  170 |       operator<<(unsigned long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:170:32: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long unsigned int’
+  170 |       operator<<(unsigned long __n)
+      |                  ~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:174:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(bool) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  174 |       operator<<(bool __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:174:23: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘bool’
+  174 |       operator<<(bool __n)
+      |                  ~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:91:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(short int) [with _CharT = char; _Traits = std::char_traits<char>]’
+   91 |     basic_ostream<_CharT, _Traits>::
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:92:22: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘short int’
+   92 |     operator<<(short __n)
+      |                ~~~~~~^~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:181:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(short unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  181 |       operator<<(unsigned short __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:181:33: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘short unsigned int’
+  181 |       operator<<(unsigned short __n)
+      |                  ~~~~~~~~~~~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:105:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(int) [with _CharT = char; _Traits = std::char_traits<char>]’
+  105 |     basic_ostream<_CharT, _Traits>::
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:106:20: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘int’
+  106 |     operator<<(int __n)
+      |                ~~~~^~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:192:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  192 |       operator<<(unsigned int __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:192:31: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘unsigned int’
+  192 |       operator<<(unsigned int __n)
+      |                  ~~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:201:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long long int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  201 |       operator<<(long long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:201:28: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long long int’
+  201 |       operator<<(long long __n)
+      |                  ~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:205:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long long unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  205 |       operator<<(unsigned long long __n)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:205:37: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long long unsigned int’
+  205 |       operator<<(unsigned long long __n)
+      |                  ~~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:220:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(double) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  220 |       operator<<(double __f)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:220:25: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘double’
+  220 |       operator<<(double __f)
+      |                  ~~~~~~~^~~
+/usr/include/c++/11/ostream:224:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(float) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  224 |       operator<<(float __f)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:224:24: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘float’
+  224 |       operator<<(float __f)
+      |                  ~~~~~~^~~
+/usr/include/c++/11/ostream:232:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long double) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  232 |       operator<<(long double __f)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:232:30: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘long double’
+  232 |       operator<<(long double __f)
+      |                  ~~~~~~~~~~~~^~~
+/usr/include/c++/11/ostream:245:7: note: candidate: ‘std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(const void*) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]’
+  245 |       operator<<(const void* __p)
+      |       ^~~~~~~~
+/usr/include/c++/11/ostream:245:30: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘const void*’
+  245 |       operator<<(const void* __p)
+      |                  ~~~~~~~~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:119:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__streambuf_type*) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__streambuf_type = std::basic_streambuf<char>]’
+  119 |     basic_ostream<_CharT, _Traits>::
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:120:34: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::basic_ostream<char>::__streambuf_type*’ {aka ‘std::basic_streambuf<char>*’}
+  120 |     operator<<(__streambuf_type* __sbin)
+      |                ~~~~~~~~~~~~~~~~~~^~~~~~
+In file included from /usr/include/c++/11/string:55,
+                 from /home/hexu/local/fastdds/include/fastrtps/utils/fixed_size_string.hpp:23,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/gen/ClientServerTypes.h:26,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:1:
+/usr/include/c++/11/bits/basic_string.h:6531:5: note: candidate: ‘template<class _CharT, class _Traits, class _Alloc> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&)’
+ 6531 |     operator<<(basic_ostream<_CharT, _Traits>& __os,
+      |     ^~~~~~~~
+/usr/include/c++/11/bits/basic_string.h:6531:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’ and ‘int32_t& (clientserver::Result::*)()’ {aka ‘int& (clientserver::Result::*)()’}
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                                       ^~~~~~~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’ and ‘int32_t (clientserver::Result::*)() const’ {aka ‘int (clientserver::Result::*)() const’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’ and ‘void (clientserver::Result::*)(int32_t)’ {aka ‘void (clientserver::Result::*)(int)’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   couldn’t deduce template parameter ‘_Alloc’
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/gen/ClientServerTypes.h:33,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:1:
+/usr/include/c++/11/bitset:1540:5: note: candidate: ‘template<class _CharT, class _Traits, long unsigned int _Nb> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::bitset<_Nb>&)’
+ 1540 |     operator<<(std::basic_ostream<_CharT, _Traits>& __os,
+      |     ^~~~~~~~
+/usr/include/c++/11/bitset:1540:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘const std::bitset<_Nb>’ and ‘int32_t& (clientserver::Result::*)()’ {aka ‘int& (clientserver::Result::*)()’}
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                                       ^~~~~~~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘const std::bitset<_Nb>’ and ‘int32_t (clientserver::Result::*)() const’ {aka ‘int (clientserver::Result::*)() const’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘const std::bitset<_Nb>’ and ‘void (clientserver::Result::*)(int32_t)’ {aka ‘void (clientserver::Result::*)(int)’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   couldn’t deduce template parameter ‘_Nb’
+In file included from /usr/include/c++/11/bits/ios_base.h:46,
+                 from /usr/include/c++/11/ios:42,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/system_error:279:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::error_code&)’
+  279 |     operator<<(basic_ostream<_CharT, _Traits>& __os, const error_code& __e)
+      |     ^~~~~~~~
+/usr/include/c++/11/system_error:279:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const std::error_code&’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:513:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, _CharT) [with _CharT = char; _Traits = std::char_traits<char>]’
+  513 |     operator<<(basic_ostream<_CharT, _Traits>& __out, _CharT __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:513:62: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘char’
+  513 |     operator<<(basic_ostream<_CharT, _Traits>& __out, _CharT __c)
+      |                                                       ~~~~~~~^~~
+/usr/include/c++/11/ostream:518:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, char)’
+  518 |     operator<<(basic_ostream<_CharT, _Traits>& __out, char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:518:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘char’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:524:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, char)’
+  524 |     operator<<(basic_ostream<char, _Traits>& __out, char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:524:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘char’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:530:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, signed char)’
+  530 |     operator<<(basic_ostream<char, _Traits>& __out, signed char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:530:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘signed char’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:535:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, unsigned char)’
+  535 |     operator<<(basic_ostream<char, _Traits>& __out, unsigned char __c)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:535:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘unsigned char’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:594:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>]’
+  594 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const _CharT* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:594:69: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘const char*’
+  594 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const _CharT* __s)
+      |                                                       ~~~~~~~~~~~~~~^~~
+In file included from /usr/include/c++/11/ostream:829,
+                 from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/bits/ostream.tcc:321:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const char*)’
+  321 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/bits/ostream.tcc:321:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const char*’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:611:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const char*)’
+  611 |     operator<<(basic_ostream<char, _Traits>& __out, const char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:611:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const char*’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:624:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const signed char*)’
+  624 |     operator<<(basic_ostream<char, _Traits>& __out, const signed char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:624:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const signed char*’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:629:5: note: candidate: ‘template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const unsigned char*)’
+  629 |     operator<<(basic_ostream<char, _Traits>& __out, const unsigned char* __s)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:629:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘const unsigned char*’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /usr/include/c++/11/iostream:39,
+                 from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:4:
+/usr/include/c++/11/ostream:750:5: note: candidate: ‘template<class _Ostream, class _Tp> _Ostream&& std::operator<<(_Ostream&&, const _Tp&)’
+  750 |     operator<<(_Ostream&& __os, const _Tp& __x)
+      |     ^~~~~~~~
+/usr/include/c++/11/ostream:750:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   couldn’t deduce template parameter ‘_Tp’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                                       ^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:79:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Resetiosflags)’
+   79 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Resetiosflags __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:79:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Resetiosflags’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:109:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setiosflags)’
+  109 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setiosflags __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:109:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setiosflags’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:143:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setbase)’
+  143 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setbase __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:143:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setbase’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:178:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setfill<_CharT>) [with _CharT = char; _Traits = std::char_traits<char>]’
+  178 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setfill<_CharT> __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:178:71: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘std::_Setfill<char>’
+  178 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setfill<_CharT> __f)
+      |                                                      ~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/iomanip:208:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setprecision)’
+  208 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setprecision __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:208:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setprecision’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:238:5: note: candidate: ‘template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setw)’
+  238 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Setw __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:238:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   cannot convert ‘recovered.clientserver::Result::m_result’ (type ‘<unresolved overloaded function type>’) to type ‘std::_Setw’
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                             ~~~~~~~~~~^~~~~~~~
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:311:5: note: candidate: ‘template<class _CharT, class _Traits, class _MoneyT> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Put_money<_MoneyT>)’
+  311 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Put_money<_MoneyT> __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:311:5: note:   template argument deduction/substitution failed:
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘std::_Put_money<_MoneyT>’ and ‘int32_t& (clientserver::Result::*)()’ {aka ‘int& (clientserver::Result::*)()’}
+  100 |     std::cout << "Recovered:  m_result=" << recovered.m_result << "\n";
+      |                                                       ^~~~~~~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘std::_Put_money<_MoneyT>’ and ‘int32_t (clientserver::Result::*)() const’ {aka ‘int (clientserver::Result::*)() const’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   mismatched types ‘std::_Put_money<_MoneyT>’ and ‘void (clientserver::Result::*)(int32_t)’ {aka ‘void (clientserver::Result::*)(int)’}
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:100:55: note:   couldn’t deduce template parameter ‘_MoneyT’
+In file included from /home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:5:
+/usr/include/c++/11/iomanip:363:5: note: candidate: ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Put_time<_CharT>) [with _CharT = char; _Traits = std::char_traits<char>]’
+  363 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Put_time<_CharT> __f)
+      |     ^~~~~~~~
+/usr/include/c++/11/iomanip:363:72: note:   no known conversion for argument 2 from ‘<unresolved overloaded function type>’ to ‘std::_Put_time<char>’
+  363 |     operator<<(basic_ostream<_CharT, _Traits>& __os, _Put_time<_CharT> __f)
+      |                                                      ~~~~~~~~~~~~~~~~~~^~~
+/home/hexu/git/Collection.Of.Cpp.Utility.Tools/fastdds/v2.8.2/fastcdr_examples/idl_class/test_ClientServerTypes.cpp:103:37: error: invalid operands of types ‘<unresolved overloaded function type>’ and ‘<unresolved overloaded function type>’ to binary ‘operator==’
+  103 |     bool match = (original.m_result == recovered.m_result);
+      |                   ~~~~~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~~~~~
+      |                            |                     |
+      |                            |                     <unresolved overloaded function type>
+      |                            <unresolved overloaded function type>
+gmake[2]: *** [CMakeFiles/test_ClientServerTypes.dir/build.make:76：CMakeFiles/test_ClientServerTypes.dir/test_ClientServerTypes.cpp.o] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:83：CMakeFiles/test_ClientServerTypes.dir/all] 错误 2
+gmake: *** [Makefile:91：all] 错误 2

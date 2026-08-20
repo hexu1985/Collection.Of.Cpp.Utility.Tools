@@ -30,7 +30,6 @@ using InstanceHandle_t = eprosima::fastrtps::rtps::InstanceHandle_t;
 
 namespace clientserver {
 
-
     OperationPubSubType::OperationPubSubType()
     {
         setName("clientserver::Operation");

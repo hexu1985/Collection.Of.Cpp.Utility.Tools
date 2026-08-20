@@ -65,16 +65,6 @@ class Cdr;
 
 namespace clientserver {
     /*!
-     * @brief This class represents the enumeration RESULTTYPE defined by the user in the IDL file.
-     * @ingroup CLIENTSERVERTYPES
-     */
-    enum RESULTTYPE : uint32_t
-    {
-        GOOD_RESULT,
-        ERROR_RESULT,
-        SERVER_NOT_READY
-    };
-    /*!
      * @brief This class represents the enumeration OPERATIONTYPE defined by the user in the IDL file.
      * @ingroup CLIENTSERVERTYPES
      */
@@ -144,50 +134,6 @@ namespace clientserver {
          */
         eProsima_user_DllExport bool operator !=(
                 const Operation& x) const;
-
-        /*!
-         * @brief This function copies the value in member m_guid
-         * @param _m_guid New value to be copied in member m_guid
-         */
-        eProsima_user_DllExport void m_guid(
-                const std::string& _m_guid);
-
-        /*!
-         * @brief This function moves the value in member m_guid
-         * @param _m_guid New value to be moved in member m_guid
-         */
-        eProsima_user_DllExport void m_guid(
-                std::string&& _m_guid);
-
-        /*!
-         * @brief This function returns a constant reference to member m_guid
-         * @return Constant reference to member m_guid
-         */
-        eProsima_user_DllExport const std::string& m_guid() const;
-
-        /*!
-         * @brief This function returns a reference to member m_guid
-         * @return Reference to member m_guid
-         */
-        eProsima_user_DllExport std::string& m_guid();
-        /*!
-         * @brief This function sets a value in member m_operationId
-         * @param _m_operationId New value for member m_operationId
-         */
-        eProsima_user_DllExport void m_operationId(
-                int32_t _m_operationId);
-
-        /*!
-         * @brief This function returns the value of member m_operationId
-         * @return Value of member m_operationId
-         */
-        eProsima_user_DllExport int32_t m_operationId() const;
-
-        /*!
-         * @brief This function returns a reference to member m_operationId
-         * @return Reference to member m_operationId
-         */
-        eProsima_user_DllExport int32_t& m_operationId();
 
         /*!
          * @brief This function sets a value in member m_operationType
@@ -306,8 +252,6 @@ namespace clientserver {
 
     private:
 
-        std::string m_m_guid;
-        int32_t m_m_operationId;
         clientserver::OPERATIONTYPE m_m_operationType;
         int32_t m_m_num1;
         int32_t m_m_num2;
@@ -371,69 +315,6 @@ namespace clientserver {
          */
         eProsima_user_DllExport bool operator !=(
                 const Result& x) const;
-
-        /*!
-         * @brief This function copies the value in member m_guid
-         * @param _m_guid New value to be copied in member m_guid
-         */
-        eProsima_user_DllExport void m_guid(
-                const std::string& _m_guid);
-
-        /*!
-         * @brief This function moves the value in member m_guid
-         * @param _m_guid New value to be moved in member m_guid
-         */
-        eProsima_user_DllExport void m_guid(
-                std::string&& _m_guid);
-
-        /*!
-         * @brief This function returns a constant reference to member m_guid
-         * @return Constant reference to member m_guid
-         */
-        eProsima_user_DllExport const std::string& m_guid() const;
-
-        /*!
-         * @brief This function returns a reference to member m_guid
-         * @return Reference to member m_guid
-         */
-        eProsima_user_DllExport std::string& m_guid();
-        /*!
-         * @brief This function sets a value in member m_operationId
-         * @param _m_operationId New value for member m_operationId
-         */
-        eProsima_user_DllExport void m_operationId(
-                int32_t _m_operationId);
-
-        /*!
-         * @brief This function returns the value of member m_operationId
-         * @return Value of member m_operationId
-         */
-        eProsima_user_DllExport int32_t m_operationId() const;
-
-        /*!
-         * @brief This function returns a reference to member m_operationId
-         * @return Reference to member m_operationId
-         */
-        eProsima_user_DllExport int32_t& m_operationId();
-
-        /*!
-         * @brief This function sets a value in member m_resultType
-         * @param _m_resultType New value for member m_resultType
-         */
-        eProsima_user_DllExport void m_resultType(
-                clientserver::RESULTTYPE _m_resultType);
-
-        /*!
-         * @brief This function returns the value of member m_resultType
-         * @return Value of member m_resultType
-         */
-        eProsima_user_DllExport clientserver::RESULTTYPE m_resultType() const;
-
-        /*!
-         * @brief This function returns a reference to member m_resultType
-         * @return Reference to member m_resultType
-         */
-        eProsima_user_DllExport clientserver::RESULTTYPE& m_resultType();
 
         /*!
          * @brief This function sets a value in member m_result
@@ -514,9 +395,6 @@ namespace clientserver {
 
     private:
 
-        std::string m_m_guid;
-        int32_t m_m_operationId;
-        clientserver::RESULTTYPE m_m_resultType;
         int32_t m_m_result;
     };
 } // namespace clientserver
