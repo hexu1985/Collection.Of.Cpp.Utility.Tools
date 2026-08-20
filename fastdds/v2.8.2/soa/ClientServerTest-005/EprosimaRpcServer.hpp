@@ -111,12 +111,18 @@ private:
                 return soa_on_dds::SERVICE_DESERIALIZE_ERROR;
             }
 
-            m_process_function(arg, res);
+            try {
+                m_process_function(arg, res);
+            } catch (...) {
+                return soa_on_dds::UPPER_LAYER_APPLICATION_ERROR;
+            }
 
             if (!res.SerializeToVector(response_payload)) {
                 std::cout << "SerializeToVector failed" << std::endl;
                 return soa_on_dds::SERVICE_SERIALIZE_ERROR;
             }
+
+            return soa_on_dds::SUCCESS;
         }
 
         std::function<void(const Argument&, Result&)> m_process_function;

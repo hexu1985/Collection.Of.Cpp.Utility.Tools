@@ -19,6 +19,9 @@
 
 #include "EprosimaServer.h"
 
+#include <stdexcept>
+#include <functional>
+
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
@@ -30,22 +33,17 @@ using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 using namespace clientserver;
 using namespace std;
+using namespace std::placeholders;
 
 EprosimaServer::EprosimaServer()
     : mp_participant(nullptr)
     , m_n_served(0)
-    , m_operationsListener(nullptr)
-    , m_resultsListener(nullptr)
 {
-    m_operationsListener.mp_up = this;
-    m_resultsListener.mp_up = this;
-
 }
 
 EprosimaServer::~EprosimaServer()
 {
-    mp_operation_sub.reset();
-    mp_result_pub.reset();
+    mp_rpc_server.reset();
     EprosimaParticipantManager::delete_participant(mp_participant);
 }
 
@@ -71,11 +69,7 @@ bool EprosimaServer::init()
         return false;
     }
 
-    if (!init_result_pub()) {
-        return false;
-    }
-
-    if (!init_operation_sub()) {
+    if (!init_rpc_server()) {
         return false;
     }
 
@@ -103,49 +97,23 @@ bool EprosimaServer::init_participant() {
     return true;
 }
 
-bool EprosimaServer::init_operation_sub() {
-    mp_operation_sub.reset(new EprosimaSubWrapper);
-    EprosimaSubWrapper::Config config;
-    config.participant = mp_participant;
-    config.type_support.reset(new soa_on_dds::RPC_RequestPubSubType());
-    config.topic_name = "soa.rpc.compute.request";
-    config.data_reader_listener = &this->m_operationsListener;
-
-    DataReaderQos rqos;
-    rqos.history().kind = KEEP_LAST_HISTORY_QOS;
-    rqos.history().depth = 1000;
-    rqos.resource_limits().max_samples = 1500;
-    rqos.resource_limits().allocated_samples = 1000;
-    config.data_reader_qos = rqos;
-
-    if (!mp_operation_sub->init(config)) {
+bool EprosimaServer::init_rpc_server() {
+    if (mp_participant == nullptr) {
         return false;
     }
 
-    return true;
+    mp_rpc_server.reset(new soa_on_dds::EprosimaRpcServer("compute", 3, mp_participant));
+    mp_rpc_server->register_method<clientserver::Operation, clientserver::Result>("operation", std::bind(&EprosimaServer::operation_handle, this, _1, _2));
+    return mp_rpc_server->start();
 }
 
-bool EprosimaServer::init_result_pub() {
-    mp_result_pub.reset(new EprosimaPubWrapper);
-    EprosimaPubWrapper::Config config; 
-    config.participant = mp_participant;
-    config.type_support.reset(new soa_on_dds::RPC_ResponsePubSubType());
-    config.topic_name = "soa.rpc.compute.response";
-    config.data_writer_listener = &this->m_resultsListener;
-
-    DataWriterQos wqos;
-    wqos.history().kind = KEEP_LAST_HISTORY_QOS;
-    wqos.history().depth = 1000;
-    wqos.resource_limits().max_samples = 1500;
-    wqos.resource_limits().allocated_samples = 1000;
-    wqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
-    config.data_writer_qos = wqos;
-
-    if (!mp_result_pub->init(config)) {
-        return false;
+void EprosimaServer::operation_handle(
+        const clientserver::Operation &operation, 
+        clientserver::Result& result) 
+{
+    if (calculate(operation.m_operationType, operation.m_num1, operation.m_num2, &result.m_result) != soa_on_dds::SUCCESS) {
+        throw std::runtime_error("calculate error");
     }
-
-    return true;
 }
 
 soa_on_dds::ErrorCode EprosimaServer::calculate(
@@ -185,47 +153,3 @@ soa_on_dds::ErrorCode EprosimaServer::calculate(
     return soa_on_dds::SUCCESS;
 }
 
-void EprosimaServer::OperationListener::on_data_available(
-        DataReader* /*reader*/)
-{
-    //std::cout << "EprosimaServer::OperationListener::on_data_available" << std::endl;
-    SampleInfo m_sampleInfo;
-    mp_up->mp_operation_sub->take_next_sample((void*)&m_rpc_request, &m_sampleInfo);
-    if (m_sampleInfo.valid_data)
-    {
-        ++mp_up->m_n_served;
-        m_rpc_response.header(m_rpc_request.header());
-        clientserver::Operation operation;
-        soa_on_dds::ErrorCode ec = soa_on_dds::SUCCESS;
-        int32_t result = 0;
-        if (operation.DeserializeFromVector(m_rpc_request.request_payload())) {
-            #if 0
-            std::cout << "operation:  m_operationType=" << (uint32_t) operation.m_operationType 
-                << ", m_num1=" << operation.m_num1
-                << ", m_num2=" << operation.m_num2 << "\n";
-            #endif
-            ec = mp_up->calculate(
-                operation.m_operationType,
-                operation.m_num1,
-                operation.m_num2,
-                &result);
-            //std::cout << "result: " << result << std::endl;
-        } else {
-            ec = soa_on_dds::SERVICE_DESERIALIZE_ERROR;
-            std::cout << "operation.DeserializeFromVector failed!" << std::endl;
-        }
-        clientserver::Result idl_result;
-        idl_result.m_result = result;
-        std::vector<uint8_t> response_payload;
-        if (idl_result.SerializeToVector(response_payload)) {
-            m_rpc_response.response_payload(response_payload);
-            //std::cout << "response_payload.size(): " << response_payload.size() << std::endl;
-        } else {
-            ec = soa_on_dds::SERVICE_SERIALIZE_ERROR;
-            std::cout << "idl_result.SerializeToVector failed!" << std::endl;
-        }
-        m_rpc_response.error_code(ec);
-        mp_up->mp_result_pub->write((void*)&m_rpc_response);
-        //std::cout << "mp_up->mp_result_pub->write((void*)&m_rpc_response);" << std::endl;
-    }
-}

@@ -22,16 +22,12 @@
 
 #include "soa_on_dds_types.h"
 #include "ClientServerTypes.hpp"
-#include "EprosimaPubWrapper.hpp"
-#include "EprosimaSubWrapper.hpp"
+#include "EprosimaRpcServer.hpp"
 
 #include <memory>
 
 class EprosimaServer
 {
-    friend class OperationListener;
-    friend class ResultListener;
-
 public:
 
     EprosimaServer();
@@ -47,15 +43,17 @@ public:
     void serve(
             uint32_t samples);
 
+    void operation_handle(
+            const clientserver::Operation &operation, 
+            clientserver::Result& result);
+
 private:
     bool init_participant(); 
-    bool init_operation_sub(); 
-    bool init_result_pub(); 
+    bool init_rpc_server(); 
 
     eprosima::fastdds::dds::DomainParticipant* mp_participant;
 
-    std::unique_ptr<EprosimaSubWrapper> mp_operation_sub;
-    std::unique_ptr<EprosimaPubWrapper> mp_result_pub;
+    std::unique_ptr<soa_on_dds::EprosimaRpcServer> mp_rpc_server;
 
     soa_on_dds::ErrorCode calculate(
             clientserver::Operation::OPERATIONTYPE type,
@@ -66,49 +64,6 @@ private:
 public:
 
     uint32_t m_n_served;
-
-    class OperationListener : public eprosima::fastdds::dds::DataReaderListener
-    {
-    public:
-
-        OperationListener(
-                EprosimaServer* up)
-            : mp_up(up)
-        {
-        }
-
-        ~OperationListener() override
-        {
-        }
-
-        EprosimaServer* mp_up;
-
-        void on_data_available(
-                eprosima::fastdds::dds::DataReader* reader) override;
-
-        soa_on_dds::RPC_Request m_rpc_request;
-        soa_on_dds::RPC_Response m_rpc_response;
-
-    }
-    m_operationsListener;
-
-    class ResultListener : public eprosima::fastdds::dds::DataWriterListener
-    {
-    public:
-
-        ResultListener(
-                EprosimaServer* up)
-            : mp_up(up)
-        {
-        }
-
-        ~ResultListener() override
-        {
-        }
-
-        EprosimaServer* mp_up;
-    }
-    m_resultsListener;
 };
 
 #endif /* EPROSIMASERVER_H_ */
