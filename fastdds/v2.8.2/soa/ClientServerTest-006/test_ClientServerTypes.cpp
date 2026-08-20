@@ -16,7 +16,7 @@ void test_Operation() {
     // 序列化到 vector
     std::vector<uint8_t> serialized;
     bool ret;
-    ret = original.SerializeToVector(serialized);
+    ret = SerializeToVector(original, serialized);
     if (ret) {
         std::cout << "SerializeToVector success!" << std::endl;
     } else {
@@ -34,7 +34,7 @@ void test_Operation() {
     
     // 反序列化
     Operation recovered;
-    ret = recovered.DeserializeFromVector(serialized);
+    ret = DeserializeFromVector(recovered, serialized);
     if (ret) {
         std::cout << "DeserializeFromVector success!" << std::endl;
     } else {
@@ -68,7 +68,7 @@ void test_Result() {
     // 序列化到 vector
     std::vector<uint8_t> serialized;
     bool ret;
-    ret = original.SerializeToVector(serialized);
+    ret = SerializeToVector(original, serialized);
     if (ret) {
         std::cout << "SerializeToVector success!" << std::endl;
     } else {
@@ -86,7 +86,7 @@ void test_Result() {
     
     // 反序列化
     Result recovered;
-    ret = recovered.DeserializeFromVector(serialized);
+    ret = DeserializeFromVector(recovered, serialized);
     if (ret) {
         std::cout << "DeserializeFromVector success!" << std::endl;
     } else {
