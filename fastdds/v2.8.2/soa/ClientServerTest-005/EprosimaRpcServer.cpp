@@ -117,6 +117,7 @@ void EprosimaRpcServer::register_method_helper(const std::string& method_name, I
 }
 
 void EprosimaRpcServer::do_register_method(const std::string& method_name, IMethodHandlerPtr method_handler) {
+    //std::cout << "EprosimaRpcClient::do_register_method" << std::endl;
     m_method_handlers[method_name]= method_handler;
 }
 
@@ -133,7 +134,7 @@ void EprosimaRpcServer::on_data_available() {
 }
 
 void EprosimaRpcServer::do_recv_request() {
-    std::cout << "EprosimaRpcClient::do_recv_response" << std::endl;
+    //std::cout << "EprosimaRpcServer::do_recv_request" << std::endl;
     if (m_request_sub == nullptr) {
         std::cout << "m_request_sub is nullptr" << std::endl;
         return;
@@ -142,7 +143,7 @@ void EprosimaRpcServer::do_recv_request() {
     int count = 0;
     auto rpc_request = std::make_shared<soa_on_dds::RPC_Request>();
     while (m_request_sub->take_next_sample((void*) rpc_request.get(), &m_sample_info) == ReturnCode_t::RETCODE_OK ) {
-        if (m_sample_info.instance_state == eprosima::fastdds::dds::ALIVE_INSTANCE_STATE) {
+        if (m_sample_info.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE) {
             continue;
         }
         auto method_handler = get_method_handler(rpc_request->header().method_name());
@@ -202,6 +203,12 @@ EprosimaRpcServer::RequestSubListener::~RequestSubListener() {
 
 void EprosimaRpcServer::RequestSubListener::on_data_available(
         eprosima::fastdds::dds::DataReader* reader) {
+    if (m_up == nullptr) {
+        std::cout << "m_up is nullptr" << std::endl;
+        return;
+    }
+
+    m_up->on_data_available();
 }
 
 EprosimaRpcServer::ResponsePubListener::ResponsePubListener() {

@@ -122,6 +122,7 @@ soa_on_dds::ErrorCode EprosimaServer::calculate(
         int32_t num2,
         int32_t* result)
 {
+    std::cout << "EprosimaServer::calculate" << std::endl;
     switch (type)
     {
         case Operation::SUBTRACTION:

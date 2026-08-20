@@ -72,7 +72,7 @@ int main(
         cout << "example: " << argv[0] << " 2 + 5 " << endl;
         return 1;
     }
-//    init_log();
+    //init_log();
 
     int32_t num1 = atoi(argv[1]);
     std::string op_str = argv[2];
