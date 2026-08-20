@@ -106,7 +106,7 @@ private:
             Argument arg;
             Result res;
 
-            if (!arg.DeserializeFromVector(request_payload)) {
+            if (!DeserializeFromVector(arg, request_payload)) {
                 std::cout << "DeserializeFromVector failed" << std::endl;
                 return soa_on_dds::SERVICE_DESERIALIZE_ERROR;
             }
@@ -117,7 +117,7 @@ private:
                 return soa_on_dds::UPPER_LAYER_APPLICATION_ERROR;
             }
 
-            if (!res.SerializeToVector(response_payload)) {
+            if (!SerializeToVector(res, response_payload)) {
                 std::cout << "SerializeToVector failed" << std::endl;
                 return soa_on_dds::SERVICE_SERIALIZE_ERROR;
             }
