@@ -5,3 +5,4 @@
 - [封装基础类](ClientServerTest-003)
 - [增加soa_on_dds_types.idl](ClientServerTest-004)
 - [rpc_client封装](ClientServerTest-005-client)
+- [rpc_server封装](ClientServerTest-005)
