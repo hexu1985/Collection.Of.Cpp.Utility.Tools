@@ -22,7 +22,7 @@ endif()
 add_executable(test_ClientServerTypes test_ClientServerTypes.cpp
     gen/ClientServerTypes.cxx
     gen/ClientServerTypes.h
-    test_ClientServerTypes.hpp
+    ClientServerTypesUtils.hpp
     )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gen)
 
