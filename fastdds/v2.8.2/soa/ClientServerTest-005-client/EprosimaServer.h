@@ -58,7 +58,7 @@ private:
     std::unique_ptr<EprosimaPubWrapper> mp_result_pub;
 
     soa_on_dds::ErrorCode calculate(
-            clientserver::Operation::OPERATIONTYPE type,
+            clientserver::OPERATIONTYPE type,
             int32_t num1,
             int32_t num2,
             int32_t* result);

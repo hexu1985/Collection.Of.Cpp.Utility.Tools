@@ -31,7 +31,7 @@ int main(
         int argc,
         char** argv)
 {
-//    init_log();
+    //init_log();
     cout << "Starting server" << endl;
 
     EprosimaServer server;

@@ -19,33 +19,33 @@ using std::endl;
 using std::atoi;
 using namespace clientserver;
 
-Operation::OPERATIONTYPE to_operation_type(const std::string& op_str) {
+OPERATIONTYPE to_operation_type(const std::string& op_str) {
     if (op_str.empty()) {
-        return Operation::ADDITION;
+        return ADDITION;
     }
     switch (op_str[0]) {
     case '+':
-        return Operation::ADDITION;
+        return ADDITION;
     case '-':
-        return Operation::SUBTRACTION;
+        return SUBTRACTION;
     case '*':
-        return Operation::MULTIPLICATION;
+        return MULTIPLICATION;
     case '/':
-        return Operation::DIVISION;
+        return DIVISION;
     default:
-        return Operation::ADDITION;
+        return ADDITION;
     }
 }
 
-int calculate(int32_t num1, Operation::OPERATIONTYPE op, int32_t num2) {
+int calculate(int32_t num1, OPERATIONTYPE op, int32_t num2) {
     switch (op) {
-    case Operation::ADDITION:
+    case ADDITION:
         return num1 + num2;
-    case Operation::SUBTRACTION:
+    case SUBTRACTION:
         return num1 - num2;
-    case Operation::MULTIPLICATION:
+    case MULTIPLICATION:
         return num1 * num2;
-    case Operation::DIVISION:
+    case DIVISION:
         return num1 / num2;
     default:
         return 0;
@@ -72,13 +72,13 @@ int main(
         cout << "example: " << argv[0] << " 2 + 5 " << endl;
         return 1;
     }
-//    init_log();
+    //init_log();
 
     int32_t num1 = atoi(argv[1]);
     std::string op_str = argv[2];
     int32_t num2 = atoi(argv[3]);
 
-    Operation::OPERATIONTYPE op = to_operation_type(op_str);
+    OPERATIONTYPE op = to_operation_type(op_str);
     int32_t local_res = calculate(num1, op, num2);
     cout << "calculate local: " << num1 << op_str << num2 << "=" << local_res << endl;
 

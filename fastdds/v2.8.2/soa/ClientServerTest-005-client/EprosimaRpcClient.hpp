@@ -47,7 +47,7 @@ public:
         }
 
         std::vector<uint8_t> request_payload;
-        if (!arg.SerializeToVector(request_payload)) {
+        if (!SerializeToVector(arg, request_payload)) {
             std::cout << "SerializeToVector failed" << std::endl;
             return soa_on_dds::CLIENT_SERIALIZE_ERROR;
         }
@@ -61,7 +61,7 @@ public:
 
         remove_pending_request(request_id);
 
-        if (!res.DeserializeFromVector(rpc_response->response_payload())) {
+        if (!DeserializeFromVector(res, rpc_response->response_payload())) {
             std::cout << "DeserializeFromVector failed" << std::endl;
             return soa_on_dds::CLIENT_DESERIALIZE_ERROR;
         }

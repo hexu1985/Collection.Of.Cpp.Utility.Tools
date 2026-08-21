@@ -27,9 +27,6 @@ EprosimaRpcClient::EprosimaRpcClient(const std::string& client_id, const std::st
 }
 
 EprosimaRpcClient::~EprosimaRpcClient() {
-    m_request_pub_listener.m_up = nullptr;
-    m_response_sub_listener.m_up = nullptr;
-
     m_request_pub.reset();
     m_response_sub.reset();
 }
@@ -239,10 +236,12 @@ void EprosimaRpcClient::RequestPubListener::on_publication_matched(
 
     if (info.current_count_change == 1)
     {
+        std::cout << "EprosimaRpcClient::RequestPubListener matched" << std::endl;
         m_up->m_request_pub_matched++;
     }
     else if (info.current_count_change == -1)
     {
+        std::cout << "EprosimaRpcClient::RequestPubListener unmatched" << std::endl;
         m_up->m_request_pub_matched--;
     }
     else
@@ -270,10 +269,12 @@ void EprosimaRpcClient::ResponseSubListener::on_subscription_matched(
 
     if (info.current_count_change == 1)
     {
+        std::cout << "EprosimaRpcClient::ResponseSubListener matched" << std::endl;
         m_up->m_response_sub_matched++;
     }
     else if (info.current_count_change == -1)
     {
+        std::cout << "EprosimaRpcClient::ResponseSubListener unmatched" << std::endl;
         m_up->m_response_sub_matched--;
     }
     else
