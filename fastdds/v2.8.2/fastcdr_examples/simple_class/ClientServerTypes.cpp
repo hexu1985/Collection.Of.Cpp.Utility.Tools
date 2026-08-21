@@ -21,7 +21,7 @@ bool Operation::DeserializeFromVector(const std::vector<uint8_t>& input) {
 
     uint32_t operationType; 
     cdr >> operationType >> m_num1 >> m_num2;
-    m_operationType = (clientserver::Operation::OPERATIONTYPE) operationType; 
+    m_operationType = (OPERATIONTYPE) operationType; 
     return true;
 }
 

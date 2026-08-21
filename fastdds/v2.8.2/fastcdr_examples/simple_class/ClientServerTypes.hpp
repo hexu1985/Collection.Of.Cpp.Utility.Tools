@@ -5,16 +5,17 @@
 
 namespace clientserver {
 
+enum OPERATIONTYPE : uint32_t
+{
+    ADDITION,
+    SUBTRACTION,
+    MULTIPLICATION,
+    DIVISION,
+};
+
 class Operation
 {
 public:
-    enum OPERATIONTYPE : uint32_t
-    {
-        ADDITION,
-        SUBTRACTION,
-        MULTIPLICATION,
-        DIVISION,
-    };
     OPERATIONTYPE m_operationType;
     int32_t m_num1;
     int32_t m_num2;

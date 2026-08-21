@@ -9,7 +9,7 @@ void test_Operation() {
     // 创建测试数据
     Operation original;
 
-    original.m_operationType = Operation::MULTIPLICATION;
+    original.m_operationType = MULTIPLICATION;
     original.m_num1 = 25;
     original.m_num2 = 65;
     
