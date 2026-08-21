@@ -21,7 +21,8 @@
 #define EPROSIMACLIENT_H_
 
 #include "soa_on_dds_types.h"
-#include "ClientServerTypes.hpp"
+#include "ClientServerTypes.h"
+#include "ClientServerTypesUtils.hpp"
 #include "EprosimaRpcClient.hpp"
 
 #include <memory>
@@ -37,7 +38,7 @@ public:
     bool init();
 
     soa_on_dds::ErrorCode calculate(
-            clientserver::Operation::OPERATIONTYPE type,
+            clientserver::OPERATIONTYPE type,
             int32_t num1,
             int32_t num2,
             int32_t* result);

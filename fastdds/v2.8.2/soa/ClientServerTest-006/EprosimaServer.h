@@ -21,7 +21,8 @@
 #define EPROSIMASERVER_H_
 
 #include "soa_on_dds_types.h"
-#include "ClientServerTypes.hpp"
+#include "ClientServerTypes.h"
+#include "ClientServerTypesUtils.hpp"
 #include "EprosimaRpcServer.hpp"
 
 #include <memory>
@@ -56,7 +57,7 @@ private:
     std::unique_ptr<soa_on_dds::EprosimaRpcServer> mp_rpc_server;
 
     soa_on_dds::ErrorCode calculate(
-            clientserver::Operation::OPERATIONTYPE type,
+            clientserver::OPERATIONTYPE type,
             int32_t num1,
             int32_t num2,
             int32_t* result);

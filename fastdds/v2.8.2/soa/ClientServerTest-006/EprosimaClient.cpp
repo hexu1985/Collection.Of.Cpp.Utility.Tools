@@ -91,7 +91,7 @@ bool EprosimaClient::init_rpc_client() {
 }
 
 soa_on_dds::ErrorCode EprosimaClient::calculate(
-        Operation::OPERATIONTYPE type,
+        OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result) {
@@ -99,19 +99,19 @@ soa_on_dds::ErrorCode EprosimaClient::calculate(
         return soa_on_dds::CLIENT_NOT_INITIALIZE;
     }
 
-    clientserver::Operation operation;
-    operation.m_operationType = type;
-    operation.m_num1 = num1;
-    operation.m_num2 = num2;
+    Operation operation;
+    operation.m_operationType(type);
+    operation.m_num1(num1);
+    operation.m_num2(num2);
 
-    clientserver::Result idl_result;
+    Result idl_result;
 
     auto error_code = mp_rpc_client->call("operation", operation, idl_result);
     if (error_code != soa_on_dds::SUCCESS) {
         return error_code;
     }
 
-    *result = idl_result.m_result;
+    *result = idl_result.m_result();
 
     return soa_on_dds::SUCCESS;
 }
