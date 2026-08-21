@@ -156,7 +156,7 @@ bool EprosimaClient::init_result_sub() {
 }
 
 soa_on_dds::ErrorCode EprosimaClient::calculate(
-        Operation::OPERATIONTYPE type,
+        OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result)

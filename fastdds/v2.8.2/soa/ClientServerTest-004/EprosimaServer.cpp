@@ -149,30 +149,30 @@ bool EprosimaServer::init_result_pub() {
 }
 
 soa_on_dds::ErrorCode EprosimaServer::calculate(
-        Operation::OPERATIONTYPE type,
+        OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result)
 {
     switch (type)
     {
-        case Operation::SUBTRACTION:
+        case SUBTRACTION:
         {
             *result = num1 - num2;
             break;
         }
-        case Operation::ADDITION:
+        case ADDITION:
         {
             *result = num1 + num2;
             break;
         }
 
-        case Operation::MULTIPLICATION:
+        case MULTIPLICATION:
         {
             *result = num1 * num2;
             break;
         }
-        case Operation::DIVISION:
+        case DIVISION:
         {
             if (num2 == 0)
             {
