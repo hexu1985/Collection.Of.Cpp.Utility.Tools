@@ -103,13 +103,13 @@ bool EprosimaServer::init_rpc_server() {
     }
 
     mp_rpc_server.reset(new soa_on_dds::EprosimaRpcServer("compute", 3, mp_participant));
-    mp_rpc_server->register_method<clientserver::Operation, clientserver::Result>("operation", std::bind(&EprosimaServer::operation_handle, this, _1, _2));
+    mp_rpc_server->register_method<Operation, Result>("operation", std::bind(&EprosimaServer::operation_handle, this, _1, _2));
     return mp_rpc_server->start();
 }
 
 void EprosimaServer::operation_handle(
-        const clientserver::Operation &operation, 
-        clientserver::Result& result) 
+        const Operation &operation, 
+        Result& result) 
 {
     if (calculate(operation.m_operationType, operation.m_num1, operation.m_num2, &result.m_result) != soa_on_dds::SUCCESS) {
         throw std::runtime_error("calculate error");
@@ -117,7 +117,7 @@ void EprosimaServer::operation_handle(
 }
 
 soa_on_dds::ErrorCode EprosimaServer::calculate(
-        Operation::OPERATIONTYPE type,
+        OPERATIONTYPE type,
         int32_t num1,
         int32_t num2,
         int32_t* result)
@@ -125,23 +125,23 @@ soa_on_dds::ErrorCode EprosimaServer::calculate(
     std::cout << "EprosimaServer::calculate" << std::endl;
     switch (type)
     {
-        case Operation::SUBTRACTION:
+        case SUBTRACTION:
         {
             *result = num1 - num2;
             break;
         }
-        case Operation::ADDITION:
+        case ADDITION:
         {
             *result = num1 + num2;
             break;
         }
 
-        case Operation::MULTIPLICATION:
+        case MULTIPLICATION:
         {
             *result = num1 * num2;
             break;
         }
-        case Operation::DIVISION:
+        case DIVISION:
         {
             if (num2 == 0)
             {
