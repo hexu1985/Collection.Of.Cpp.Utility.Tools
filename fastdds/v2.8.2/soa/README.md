@@ -7,3 +7,4 @@
 - [rpc_client封装(自定义结构体)](ClientServerTest-005-client)
 - [基础完整版(自定义结构体)](ClientServerTest-005)
 - [基础完整版(ClientServerTypes.idl)](ClientServerTest-006)
+- [基础完整版(ClientServerTypes.idl):删除EprosimaParticipantManager](ClientServerTest-007)
