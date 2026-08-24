@@ -1,7 +1,11 @@
 #include "EprosimaRpcUtils.hpp"
 
+#include <fastdds/dds/domain/DomainParticipantFactory.hpp>
+
 #include <unistd.h>
 #include <sys/types.h>
+
+using namespace eprosima::fastdds::dds;
 
 namespace {
 
@@ -37,3 +41,21 @@ long EprosimaRpcUtility::generate_rpc_session_id() {
     return static_cast<long>(getpid());
 }
 
+EprosimaRpcUtility::ParticipantPtr* EprosimaRpcUtility::get_default_rpc_participant() {
+    return nullptr;
+}
+
+EprosimaRpcUtility::ParticipantPtr 
+EprosimaRpcUtility::create_participant(DomainId_t domain_id,
+    const DomainParticipantQos& qos, DomainParticipantListener* listen) {
+    auto participant = DomainParticipantFactory::get_instance()->create_participant(domain_id, qos, listen, StatusMask::none());
+    if (participant == nullptr) {
+        return nullptr;
+    }
+
+    return participant;
+}
+
+void EprosimaRpcUtility::delete_participant(ParticipantPtr part) {
+    DomainParticipantFactory::get_instance()->delete_participant(part);
+}

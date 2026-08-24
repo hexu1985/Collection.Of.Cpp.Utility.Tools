@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <fastdds/dds/domain/DomainParticipant.hpp>
 
 class EprosimaRpcUtility {
 public:
@@ -9,4 +10,14 @@ public:
 
     static std::string generate_rpc_client_id(const std::string& client_name);
     static long generate_rpc_session_id();
+
+    using ParticipantPtr = eprosima::fastdds::dds::DomainParticipant*;
+    static ParticipantPtr* get_default_rpc_participant();
+
+    static ParticipantPtr create_participant(
+        eprosima::fastdds::dds::DomainId_t domain_id,
+        const eprosima::fastdds::dds::DomainParticipantQos& qos,
+        eprosima::fastdds::dds::DomainParticipantListener* listen=nullptr); 
+
+    static void delete_participant(ParticipantPtr part);
 };
