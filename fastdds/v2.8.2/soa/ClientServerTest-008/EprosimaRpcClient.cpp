@@ -21,6 +21,10 @@ EprosimaRpcClient::EprosimaRpcClient(const std::string& client_name, const std::
     m_service_name(service_name), m_participant(participant) {
     //std::cout << "EprosimaRpcClient::EprosimaRpcClient" << std::endl;
 
+    if (m_participant == nullptr) {
+        m_participant = EprosimaRpcUtility::get_default_rpc_participant();
+    }
+
     m_client_id = EprosimaRpcUtility::generate_rpc_client_id(client_name);
     //std::cout << "m_client_id: " << m_client_id << std::endl;
 

@@ -49,7 +49,6 @@ private:
     bool init_participant(); 
     bool init_rpc_client(); 
 
-    eprosima::fastdds::dds::DomainParticipant* mp_participant;
     std::unique_ptr<soa_on_dds::EprosimaRpcClient> mp_rpc_client;
 };
 

@@ -49,11 +49,6 @@ public:
             clientserver::Result& result);
 
 private:
-    bool init_participant(); 
-    bool init_rpc_server(); 
-
-    eprosima::fastdds::dds::DomainParticipant* mp_participant;
-
     std::unique_ptr<soa_on_dds::EprosimaRpcServer> mp_rpc_server;
 
     soa_on_dds::ErrorCode calculate(

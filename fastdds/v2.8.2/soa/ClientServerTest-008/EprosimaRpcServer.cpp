@@ -34,6 +34,10 @@ EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name,
     m_service_name(service_name),
     m_workers(adjust_thread_pool_size(thread_pool_size)) {
 
+    if (m_participant == nullptr) {
+        m_participant = EprosimaRpcUtility::get_default_rpc_participant();
+    }
+
     m_request_sub_listener.m_up = this;
     m_response_pub_listener.m_up = this;
 }

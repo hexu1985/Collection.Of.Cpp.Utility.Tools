@@ -23,6 +23,31 @@ std::string get_host_name() {
     return hostname;
 }
 
+class DefaultRpcParticipant {
+public:
+    DefaultRpcParticipant() {
+        DomainParticipantQos pqos;
+        pqos.wire_protocol().builtin.discovery_config.use_SIMPLE_EndpointDiscoveryProtocol = true;
+        pqos.wire_protocol().builtin.discovery_config.discoveryProtocol =
+            eprosima::fastrtps::rtps::DiscoveryProtocol::SIMPLE;
+        pqos.wire_protocol().builtin.discovery_config.m_simpleEDP.use_PublicationReaderANDSubscriptionWriter = true;
+        pqos.wire_protocol().builtin.discovery_config.m_simpleEDP.use_PublicationWriterANDSubscriptionReader = true;
+        pqos.wire_protocol().builtin.discovery_config.leaseDuration = eprosima::fastrtps::c_TimeInfinite;
+        pqos.name("DefaultRpcParticipant");
+
+        const eprosima::fastdds::dds::DomainId_t rpc_domain_id = 40;
+        m_participant = EprosimaRpcUtility::create_participant(rpc_domain_id, pqos);
+    }
+
+    ~DefaultRpcParticipant() {
+        if (m_participant != nullptr) {
+            EprosimaRpcUtility::delete_participant(m_participant);
+        }
+    }
+
+    eprosima::fastdds::dds::DomainParticipant* m_participant=nullptr;
+};
+
 }   // namespace
 
 std::string EprosimaRpcUtility::generate_rpc_request_topic(const std::string& service_name) {
@@ -41,8 +66,9 @@ long EprosimaRpcUtility::generate_rpc_session_id() {
     return static_cast<long>(getpid());
 }
 
-EprosimaRpcUtility::ParticipantPtr* EprosimaRpcUtility::get_default_rpc_participant() {
-    return nullptr;
+EprosimaRpcUtility::ParticipantPtr EprosimaRpcUtility::get_default_rpc_participant() {
+    static DefaultRpcParticipant default_rpc_participant;
+    return default_rpc_participant.m_participant;
 }
 
 EprosimaRpcUtility::ParticipantPtr 
