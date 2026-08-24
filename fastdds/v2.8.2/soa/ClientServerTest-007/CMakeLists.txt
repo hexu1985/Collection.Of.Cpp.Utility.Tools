@@ -50,8 +50,6 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaPubWrapper.hpp
     EprosimaSubWrapper.cpp
     EprosimaSubWrapper.hpp
-    EprosimaParticipantManager.cpp
-    EprosimaParticipantManager.hpp
     EprosimaClientTest.cpp
     EprosimaClientTest.h
     threadsafe_queue.hpp

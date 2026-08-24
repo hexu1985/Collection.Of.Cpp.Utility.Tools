@@ -27,7 +27,7 @@
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 
 #include "soa_on_dds_typesPubSubTypes.h"
-#include "EprosimaParticipantManager.hpp"
+#include "EprosimaRpcUtility.hpp"
 
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
@@ -44,7 +44,7 @@ EprosimaServer::EprosimaServer()
 EprosimaServer::~EprosimaServer()
 {
     mp_rpc_server.reset();
-    EprosimaParticipantManager::delete_participant(mp_participant);
+    EprosimaRpcUtility::delete_participant(mp_participant);
 }
 
 void EprosimaServer::serve()
@@ -87,7 +87,7 @@ bool EprosimaServer::init_participant() {
     pqos.wire_protocol().builtin.discovery_config.leaseDuration = eprosima::fastrtps::c_TimeInfinite;
     pqos.name("server_RTPSParticipant");
 
-    mp_participant = EprosimaParticipantManager::create_participant(0, pqos);
+    mp_participant = EprosimaRpcUtility::create_participant(0, pqos);
 
     if (mp_participant == nullptr)
     {
