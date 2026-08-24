@@ -61,6 +61,7 @@ bool EprosimaClient::init()
 }
 
 bool EprosimaClient::init_participant() {
+    //std::cout << "EprosimaClient::init_participant" << std::endl;
     //CREATE THE PARTICIPANT
     DomainParticipantQos pqos;
     pqos.wire_protocol().builtin.discovery_config.use_SIMPLE_EndpointDiscoveryProtocol = true;
@@ -86,6 +87,7 @@ bool EprosimaClient::init_rpc_client() {
         return false;
     }
 
+    //std::cout << "EprosimaClient::init_rpc_client" << std::endl;
     mp_rpc_client.reset(new soa_on_dds::EprosimaRpcClient("client", "compute", mp_participant));
     return mp_rpc_client->init();
 }

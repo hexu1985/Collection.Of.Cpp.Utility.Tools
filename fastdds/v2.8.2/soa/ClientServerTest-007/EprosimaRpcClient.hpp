@@ -31,7 +31,7 @@ private:
     using RequestInfoPtr = std::shared_ptr<RequestInfo>;
 
 public:
-    EprosimaRpcClient(const std::string& client_id, const std::string& service_name,
+    EprosimaRpcClient(const std::string& client_name, const std::string& service_name,
             eprosima::fastdds::dds::DomainParticipant* participant=nullptr);
 
     virtual ~EprosimaRpcClient();

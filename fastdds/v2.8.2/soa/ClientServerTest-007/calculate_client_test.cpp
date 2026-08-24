@@ -85,7 +85,10 @@ int main(
     cout << "Starting client" << endl;
 
     EprosimaClient client;
-    client.init();
+    if (!client.init()) {
+        cout << "client init failed" << endl;
+        return -1;
+    }
 
     while (!client.isReady())
     {
