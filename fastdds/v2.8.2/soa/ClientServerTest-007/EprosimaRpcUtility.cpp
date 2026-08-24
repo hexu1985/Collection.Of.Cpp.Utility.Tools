@@ -1,4 +1,4 @@
-#include "EprosimaRpcUtils.hpp"
+#include "EprosimaRpcUtility.hpp"
 
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 

@@ -1,5 +1,5 @@
 #include "EprosimaRpcClient.hpp"
-#include "EprosimaRpcUtils.hpp"
+#include "EprosimaRpcUtility.hpp"
 #include "soa_on_dds_typesPubSubTypes.h"
 
 #include <sys/types.h>
