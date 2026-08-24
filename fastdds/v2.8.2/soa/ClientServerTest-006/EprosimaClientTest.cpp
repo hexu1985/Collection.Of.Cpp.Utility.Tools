@@ -63,6 +63,10 @@ double EprosimaClientTest::run(
         {
             break;
         }
+        if (res != 30) 
+        {
+            break;
+        }
     }
     m_t2 = std::chrono::steady_clock::now();
     if (isam == samples)
