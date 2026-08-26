@@ -12,7 +12,7 @@ public:
     static long generate_rpc_session_id();
 
     using ParticipantPtr = eprosima::fastdds::dds::DomainParticipant*;
-    static ParticipantPtr* get_default_rpc_participant();
+    static ParticipantPtr get_default_rpc_participant();
 
     static ParticipantPtr create_participant(
         eprosima::fastdds::dds::DomainId_t domain_id,

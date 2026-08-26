@@ -41,7 +41,7 @@ long EprosimaRpcUtility::generate_rpc_session_id() {
     return static_cast<long>(getpid());
 }
 
-EprosimaRpcUtility::ParticipantPtr* EprosimaRpcUtility::get_default_rpc_participant() {
+EprosimaRpcUtility::ParticipantPtr EprosimaRpcUtility::get_default_rpc_participant() {
     return nullptr;
 }
 
