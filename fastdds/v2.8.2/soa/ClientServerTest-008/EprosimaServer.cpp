@@ -26,9 +26,6 @@
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 
-#include "soa_on_dds_typesPubSubTypes.h"
-#include "EprosimaRpcUtility.hpp"
-
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 using namespace clientserver;

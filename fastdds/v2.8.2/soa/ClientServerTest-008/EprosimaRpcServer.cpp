@@ -144,7 +144,7 @@ void EprosimaRpcServer::do_recv_request() {
         return;
     }
 
-    int count = 0;
+    size_t count = 0;
     auto rpc_request = std::make_shared<soa_on_dds::RPC_Request>();
     while (m_request_sub->take_next_sample((void*) rpc_request.get(), &m_sample_info) == ReturnCode_t::RETCODE_OK ) {
         if (m_sample_info.instance_state != eprosima::fastdds::dds::ALIVE_INSTANCE_STATE) {
@@ -206,7 +206,7 @@ EprosimaRpcServer::RequestSubListener::~RequestSubListener() {
 }
 
 void EprosimaRpcServer::RequestSubListener::on_data_available(
-        eprosima::fastdds::dds::DataReader* reader) {
+        eprosima::fastdds::dds::DataReader* /*reader*/) {
     if (m_up == nullptr) {
         std::cout << "m_up is nullptr" << std::endl;
         return;
