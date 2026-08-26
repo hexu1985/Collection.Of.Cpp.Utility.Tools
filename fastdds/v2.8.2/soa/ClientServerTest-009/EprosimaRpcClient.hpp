@@ -64,7 +64,7 @@ public:
         }
 
         ResponsePromisePtr response_promise = std::make_shared<ResponsePromise>();
-        long request_id = send_request(method_name, request_payload, response_promise);
+        long request_id = send_request(method_name, request_payload, response_promise, nullptr);
 
         auto response_future = response_promise->get_future();
         auto rpc_response = response_future.get();
@@ -85,6 +85,18 @@ public:
     template <typename Argument, typename Result>
     void async_call(const std::string& method_name, const Argument& arg,
             std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback) {
+        if (!is_ready()) {
+            callback(soa_on_dds::SERVICE_NOT_AVAILABLE, nullptr);
+        }
+
+        std::vector<uint8_t> request_payload;
+        if (!SerializeToVector(arg, request_payload)) {
+            callback(soa_on_dds::CLIENT_SERIALIZE_ERROR, nullptr);
+        }
+
+        IResponseProcessorPtr response_processor = std::make_shared<ResponseProcessor<Result>>(callback);
+        
+        send_request(method_name, request_payload, nullptr, response_processor);
     }
 
 private:
@@ -95,7 +107,7 @@ private:
     bool init_response_sub();
 
     long send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
-        ResponsePromisePtr response_promise); 
+        ResponsePromisePtr response_promise, IResponseProcessorPtr response_processor); 
 
     void on_data_available();
 
@@ -147,15 +159,15 @@ private:
         ~ResponseProcessor() override {}
         
         void process(std::shared_ptr<RPC_Response> rpc_response) override {
-            auto result = std::make_shared<Result>();
             if (rpc_response->error_code() != soa_on_dds::SUCCESS) {
-                m_callback(rpc_response->error_code(), result);
+                m_callback(rpc_response->error_code(), nullptr);
                 return;
             }
 
+            auto result = std::make_shared<Result>();
             if (!DeserializeFromVector(*result, rpc_response->response_payload())) {
                 std::cout << "DeserializeFromVector failed" << std::endl;
-                m_callback(soa_on_dds::CLIENT_DESERIALIZE_ERROR, result);
+                m_callback(soa_on_dds::CLIENT_DESERIALIZE_ERROR, nullptr);
                 return;
             }
 

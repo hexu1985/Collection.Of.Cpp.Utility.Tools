@@ -114,12 +114,15 @@ bool EprosimaRpcClient::init_response_sub() {
     return true;
 }
 
-long EprosimaRpcClient::send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
-        ResponsePromisePtr response_promise) {
+long EprosimaRpcClient::send_request(const std::string& method_name, 
+        const std::vector<uint8_t>& request_payload,
+        ResponsePromisePtr response_promise,
+        IResponseProcessorPtr response_processor) {
     auto request = make_rpc_request(method_name, request_payload);
     auto request_info = std::make_shared<RequestInfo>();
     request_info->request = request;
     request_info->response_promise = response_promise;
+    request_info->response_processor = response_processor;
 
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
 
