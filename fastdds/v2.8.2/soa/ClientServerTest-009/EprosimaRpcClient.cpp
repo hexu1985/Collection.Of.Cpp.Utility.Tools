@@ -309,8 +309,7 @@ void EprosimaRpcClient::ResponseSubListener::on_subscription_matched(
 }
 
 void EprosimaRpcClient::ResponseSubListener::on_data_available(
-        DataReader*)
-{
+        DataReader*) {
     if (m_up == nullptr) {
         std::cout << "m_up is nullptr" << std::endl;
         return;
@@ -318,3 +317,10 @@ void EprosimaRpcClient::ResponseSubListener::on_data_available(
 
     m_up->on_data_available();
 }
+
+EprosimaRpcClient::IResponseProcessor::IResponseProcessor() {
+}
+
+EprosimaRpcClient::IResponseProcessor::~IResponseProcessor() {
+}
+        

@@ -95,7 +95,6 @@ public:
         }
 
         IResponseProcessorPtr response_processor = std::make_shared<ResponseProcessor<Result>>(callback);
-        
         send_request(method_name, request_payload, nullptr, response_processor);
     }
 
@@ -153,7 +152,7 @@ private:
     m_response_sub_listener;
 
     template <typename Result>
-    class ResponseProcessor {
+    class ResponseProcessor : public IResponseProcessor {
     public:
         ResponseProcessor(std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback): m_callback(callback) {};
         ~ResponseProcessor() override {}

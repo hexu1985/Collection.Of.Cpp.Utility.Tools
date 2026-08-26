@@ -42,6 +42,8 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaRpcClient.hpp
     EprosimaRpcUtility.cpp
     EprosimaRpcUtility.hpp
+    EprosimaAsyncClient.cpp
+    EprosimaAsyncClient.h
     EprosimaClient.cpp
     EprosimaClient.h
     EprosimaServer.cpp
