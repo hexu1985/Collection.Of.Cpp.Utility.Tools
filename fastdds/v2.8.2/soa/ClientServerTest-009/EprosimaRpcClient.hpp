@@ -17,6 +17,16 @@ namespace soa_on_dds {
 
 class EprosimaRpcClient {
 private:
+    class IResponseProcessor {
+    public:
+        IResponseProcessor();
+        virtual ~IResponseProcessor();
+        
+        virtual void process(std::shared_ptr<RPC_Response> rpc_response) = 0;
+    };
+
+    using IResponseProcessorPtr = std::shared_ptr<IResponseProcessor>;
+
     using RequestPtr = std::shared_ptr<soa_on_dds::RPC_Request>;
     using ResponsePtr = std::shared_ptr<soa_on_dds::RPC_Response>;
     using ResponsePromise = std::promise<ResponsePtr>;
@@ -25,6 +35,7 @@ private:
     struct RequestInfo {
         RequestPtr request;
         ResponsePromisePtr response_promise;
+        IResponseProcessorPtr response_processor;
         // call timestamps
     };
     
@@ -67,6 +78,11 @@ public:
         }
 
         return soa_on_dds::SUCCESS;
+    }
+
+    template <typename Argument, typename Result>
+    void async_call(const std::string& method_name, const Argument& arg,
+            std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> call_back) {
     }
 
 private:
@@ -147,7 +163,7 @@ private:
     eprosima::fastdds::dds::DomainParticipant* m_participant=nullptr;
     std::unique_ptr<EprosimaPubWrapper> m_request_pub;
     std::unique_ptr<EprosimaSubWrapper> m_response_sub;
-    worker_thread m_worker;
+    worker_thread m_main_thread;
 };
 
 }   // namespace soa_on_dds

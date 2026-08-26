@@ -121,7 +121,7 @@ long EprosimaRpcClient::send_request(const std::string& method_name, const std::
     request_info->request = request;
     request_info->response_promise = response_promise;
 
-    m_worker.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
+    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
 
     return request->header().request_id();
 }
@@ -142,11 +142,11 @@ void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
 }
 
 void EprosimaRpcClient::on_data_available() {
-    m_worker.submit(std::bind(&EprosimaRpcClient::do_recv_response, this));
+    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_recv_response, this));
 }
 
 void EprosimaRpcClient::remove_pending_request(long request_id) {
-    m_worker.submit(std::bind(&EprosimaRpcClient::do_remove_pending_request, this, request_id));
+    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_remove_pending_request, this, request_id));
 }
 
 void EprosimaRpcClient::do_remove_pending_request(long request_id) {
@@ -198,6 +198,7 @@ void EprosimaRpcClient::dispatch_response(std::shared_ptr<RPC_Response> rpc_resp
         return;
     }
 
+    // TODO: 同步或是异步
     request_info->response_promise->set_value(rpc_response);
 }
 
