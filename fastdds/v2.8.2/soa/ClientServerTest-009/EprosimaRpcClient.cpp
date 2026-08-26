@@ -198,8 +198,16 @@ void EprosimaRpcClient::dispatch_response(std::shared_ptr<RPC_Response> rpc_resp
         return;
     }
 
-    // TODO: 同步或是异步
-    request_info->response_promise->set_value(rpc_response);
+    if (request_info->response_promise != nullptr) {
+        request_info->response_promise->set_value(rpc_response);
+    }
+
+    if (request_info->response_processor != nullptr) {
+        // TODO: call in callback thread
+        request_info->response_processor->process(rpc_response);
+    }
+
+    do_remove_pending_request(request_id);
 }
 
 EprosimaRpcClient::RequestPtr EprosimaRpcClient::make_rpc_request(

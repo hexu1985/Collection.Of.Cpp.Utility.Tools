@@ -70,7 +70,9 @@ public:
         auto rpc_response = response_future.get();
         assert(rpc_response != nullptr);
 
-        remove_pending_request(request_id);
+        if (rpc_response->error_code() != soa_on_dds::SUCCESS) {
+            return rpc_response->error_code();
+        }
 
         if (!DeserializeFromVector(res, rpc_response->response_payload())) {
             std::cout << "DeserializeFromVector failed" << std::endl;
@@ -82,7 +84,7 @@ public:
 
     template <typename Argument, typename Result>
     void async_call(const std::string& method_name, const Argument& arg,
-            std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> call_back) {
+            std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback) {
     }
 
 private:
@@ -137,6 +139,31 @@ private:
                 const eprosima::fastdds::dds::SubscriptionMatchedStatus& info) override;
     }
     m_response_sub_listener;
+
+    template <typename Result>
+    class ResponseProcessor {
+    public:
+        ResponseProcessor(std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback): m_callback(callback) {};
+        ~ResponseProcessor() override {}
+        
+        void process(std::shared_ptr<RPC_Response> rpc_response) override {
+            auto result = std::make_shared<Result>();
+            if (rpc_response->error_code() != soa_on_dds::SUCCESS) {
+                m_callback(rpc_response->error_code(), result);
+                return;
+            }
+
+            if (!DeserializeFromVector(*result, rpc_response->response_payload())) {
+                std::cout << "DeserializeFromVector failed" << std::endl;
+                m_callback(soa_on_dds::CLIENT_DESERIALIZE_ERROR, result);
+                return;
+            }
+
+            m_callback(soa_on_dds::SUCCESS, result);
+        }
+
+        std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> m_callback;
+    };
 
     std::atomic<bool> m_is_ready{false};
 
