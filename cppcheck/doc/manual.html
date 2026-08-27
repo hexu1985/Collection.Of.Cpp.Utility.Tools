@@ -1,0 +1,1343 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body><h1 id="introduction">Introduction</h1>
+<p>Cppcheck is an analysis tool for C/C++ code. It provides unique code
+analysis to detect bugs and focuses on detecting undefined behaviour and
+dangerous coding constructs. The goal is to detect only real errors in
+the code, and generate as few false positives (wrongly reported
+warnings) as possible. Cppcheck is designed to analyze your C/C++ code
+even if it has non-standard syntax, as is common in for example embedded
+projects.</p>
+<p>Supported code and platforms:</p>
+<ul>
+<li>Cppcheck checks non-standard code that contains various compiler
+extensions, inline assembly code, etc.</li>
+<li>Cppcheck should be compilable by any compiler that supports C++11 or
+later.</li>
+<li>Cppcheck is cross-platform and is used in various posix/windows/etc
+environments.</li>
+</ul>
+<p>The checks in Cppcheck are not perfect. There are bugs that should be
+found, that Cppcheck fails to detect.</p>
+<h2 id="about-static-analysis">About static analysis</h2>
+<p>The kinds of bugs that you can find with static analysis are:</p>
+<ul>
+<li>Undefined behavior</li>
+<li>Using dangerous code patterns</li>
+<li>Coding style</li>
+</ul>
+<p>There are many bugs that you can not find with static analysis.
+Static analysis tools do not have human knowledge about what your
+program is intended to do. If the output from your program is valid but
+unexpected, then in most cases this is not detected by static analysis
+tools. For instance, if your small program writes “Helo” on the screen
+instead of “Hello”, it is unlikely that any tool will complain about
+that.</p>
+<p>Static analysis should be used as a complement in your quality
+assurance. It does not replace any of:</p>
+<ul>
+<li>Careful design</li>
+<li>Testing</li>
+<li>Dynamic analysis</li>
+<li>Fuzzing</li>
+</ul>
+<h1 id="getting-started">Getting started</h1>
+<h2 id="gui">GUI</h2>
+<p>It is not required but creating a new project file is a good first
+step. There are a few options you can tweak to get good results.</p>
+<p>In the project settings dialog, the first option you see is “Import
+project”. It is recommended that you use this feature if you can.
+Cppcheck can import:</p>
+<ul>
+<li>Visual studio solution / project</li>
+<li>Compile database, which can be generated from CMake/qbs/etc build
+files</li>
+<li>Borland C++ Builder 6</li>
+</ul>
+<p>When you have filled out the project settings and clicked on OK, the
+Cppcheck analysis will start.</p>
+<h2 id="command-line">Command line</h2>
+<h3 id="first-test">First test</h3>
+<p>Here is some simple code:</p>
+<pre><code>int main()
+{
+    char a[10];
+    a[10] = 0;
+    return 0;
+}</code></pre>
+<p>If you save that into <code>file1.c</code> and execute:</p>
+<pre><code>cppcheck file1.c</code></pre>
+<p>The output from Cppcheck will then be:</p>
+<pre><code>Checking file1.c...
+[file1.c:4]: (error) Array 'a[10]' index 10 out of bounds</code></pre>
+<h3 id="checking-all-files-in-a-folder">Checking all files in a
+folder</h3>
+<p>Normally a program has many source files. Cppcheck can check all
+source files in a directory:</p>
+<pre><code>cppcheck path</code></pre>
+<p>If <code>path</code> is a folder, then Cppcheck will recursively
+check all source files in this folder:</p>
+<pre><code>Checking path/file1.cpp...
+1/2 files checked 50% done
+Checking path/file2.cpp...
+2/2 files checked 100% done</code></pre>
+<h3 id="check-files-manually-or-use-project-file">Check files manually
+or use project file</h3>
+<p>With Cppcheck you can check files manually by specifying files/paths
+to check and settings. Or you can use a build environment, such as CMake
+or Visual Studio.</p>
+<p>We don’t know which approach (project file or manual configuration)
+will give you the best results. It is recommended that you try both. It
+is possible that you will get different results so that to find the
+largest amount of bugs you need to use both approaches. Later chapters
+will describe this in more detail.</p>
+<h3 id="check-files-matching-a-given-file-filter">Check files matching a
+given file filter</h3>
+<p>With <code>--file-filter=&lt;str&gt;</code> you can configure file
+filter(s) and then only those files matching the filter will be
+checked.</p>
+<p>You can use <code>**</code>, <code>*</code> and <code>?</code> in the
+file filter pattern.</p>
+<ul>
+<li><code>**</code> matches zero or more characters, including path
+separators.</li>
+<li><code>*</code> matches zero or more characters, excluding path
+separators.</li>
+<li><code>?</code> matches any single character except path
+separators.</li>
+</ul>
+<p>For example, this command below means that <code>src/test1.cpp</code>
+could be checked, but <code>src/file2.cpp</code> and
+<code>src/test/file1.cpp</code> will not be checked:</p>
+<pre><code>cppcheck src/ --file-filter=src/test*</code></pre>
+<p>Cppcheck first collects all files in the specified directory, then
+applies the filter. Therefore, the filter pattern must include the
+directory path you specified.</p>
+<p>A common use case for <code>--file-filter</code> is to check a
+project, but only check certain files:</p>
+<pre><code>cppcheck --project=compile_commands.json --file-filter=src/*.c</code></pre>
+<p>Typically a <code>compile_commands.json</code> contains absolute
+paths. However no matter if <code>compile_commands.json</code> contains
+absolute paths or relative paths, the option
+<code>--file-filter=src/*.c</code> would mean that:</p>
+<ul>
+<li>a file with relative path <code>test1.c</code> is not checked.</li>
+<li>a file with relative path <code>src/test2.c</code> can be
+checked.</li>
+<li>a file with relative path <code>src/test3.cpp</code> is not
+checked.</li>
+</ul>
+<h3 id="ignore-files-matching-a-given-pattern">Ignore files matching a
+given pattern</h3>
+<p>With <code>-i &lt;str&gt;</code> you can configure filename/directory
+patterns that should be ignored.</p>
+<p>A file that is ignored will not be checked directly (the complete
+translation unit is skipped). Any header <code>#include</code>’d from a
+source file which is not ignored is checked indirectly, regardless if
+the header is ignored.</p>
+<blockquote>
+<p><em>Note</em>: If you want to filter out warnings for a header file,
+then <code>-i</code> will not work. Use suppressions instead.</p>
+</blockquote>
+<p>You can use <code>**</code>, <code>*</code> and <code>?</code> in the
+pattern to specify excluded folders/files.</p>
+<ul>
+<li><code>**</code> matches zero or more characters, including path
+separators.</li>
+<li><code>*</code> matches zero or more characters, excluding path
+separators.</li>
+<li><code>?</code> matches any single character except path
+separators.</li>
+</ul>
+<p>A use case for <code>-i</code> is to check a project, but exclude
+certain files/folders:</p>
+<pre><code>cppcheck --project=compile_commands.json -itest</code></pre>
+<p>Typically a <code>compile_commands.json</code> contains absolute
+paths. However no matter if <code>compile_commands.json</code> contains
+absolute paths or relative paths, the option <code>-itest</code> would
+mean that:</p>
+<ul>
+<li>a file with relative path <code>test1.cpp</code> can be
+checked.</li>
+<li>a file with relative path <code>test/somefile.cpp</code> is not
+checked</li>
+</ul>
+<h3 id="clang-parser-experimental">Clang parser (experimental)</h3>
+<p>By default Cppcheck uses an internal C/C++ parser. However there is
+an experimental option to use the Clang parser instead.</p>
+<p>Install <code>clang</code>. Then use Cppcheck option
+<code>--clang</code>.</p>
+<p>Cppcheck executes clang with the -ast-dump option, imports the
+output, converts it to Cppcheck’s internal format, and then performs
+standard analysis.</p>
+<p>You can also pass a custom Clang executable to the option by using
+for example <code>--clang=clang-10</code>. You can also pass it with a
+path. On Windows it will append the <code>.exe</code> extension unless
+you use a path.</p>
+<h2 id="severities">Severities</h2>
+<p>The possible severities for messages are:</p>
+<p><strong>error</strong></p>
+<p>when code is executed there is either undefined behavior or other
+error, such as a memory leak or resource leak</p>
+<p><strong>warning</strong></p>
+<p>when code is executed there might be undefined behavior</p>
+<p><strong>style</strong></p>
+<p>stylistic issues, such as unused functions, redundant code,
+constness, operator precedence, possible mistakes.</p>
+<p><strong>performance</strong></p>
+<p>run time performance suggestions based on common knowledge, though it
+is not certain any measurable speed difference will be achieved by
+fixing these messages.</p>
+<p><strong>portability</strong></p>
+<p>portability warnings. Implementation defined behavior. 64-bit
+portability. Some undefined behavior that probably works “as you want”,
+etc.</p>
+<p><strong>information</strong></p>
+<p>configuration problems, which does not relate to the syntactical
+correctness, but the used Cppcheck configuration could be improved.</p>
+<h2 id="possible-speedup-analysis-of-template-code">Possible speedup
+analysis of template code</h2>
+<p>Cppcheck instantiates the templates in your code.</p>
+<p>If your templates are recursive, this can lead to slow analysis and
+high memory usage. Cppcheck will write information messages when there
+are potential problems.</p>
+<p>Example code:</p>
+<pre><code>template &lt;int i&gt;
+void a()
+{
+    a&lt;i+1&gt;();
+}
+
+void foo()
+{
+    a&lt;0&gt;();
+}</code></pre>
+<p>Cppcheck output:</p>
+<pre><code>test.cpp:4:5: information: TemplateSimplifier: max template
+recursion (100) reached for template 'a&lt;101&gt;'. You might
+want to limit Cppcheck recursion. [templateRecursion]
+    a&lt;i+1&gt;();
+    ^</code></pre>
+<p>As you can see Cppcheck has instantiated <code>a&lt;i+1&gt;</code>
+until <code>a&lt;101&gt;</code> was reached and then it bails out.</p>
+<p>To limit template recursion, you can:</p>
+<ul>
+<li>add template specialisation</li>
+<li>configure Cppcheck, which can be done in the GUI project file
+dialog</li>
+</ul>
+<p>Example code with template specialisation:</p>
+<pre><code>template &lt;int i&gt;
+void a()
+{
+    a&lt;i+1&gt;();
+}
+
+void foo()
+{
+    a&lt;0&gt;();
+}
+
+#ifdef __cppcheck__
+template&lt;&gt; void a&lt;3&gt;() {}
+#endif</code></pre>
+<p>You can pass <code>-D__cppcheck__</code> when checking this code.</p>
+<h1 id="cppcheck-build-folder">Cppcheck build folder</h1>
+<p>Using a Cppcheck build folder is not mandatory but it is
+recommended.</p>
+<p>Cppcheck save analyzer information in that folder.</p>
+<p>The advantages are:</p>
+<ul>
+<li>It speeds up the analysis as it makes incremental analysis possible.
+Only changed files are analyzed when you recheck.</li>
+<li>Whole program analysis also when multiple threads are used.</li>
+</ul>
+<p>On the command line you configure that through
+<code>--cppcheck-build-dir=path</code>. Example:</p>
+<pre><code>mkdir b
+
+# All files are analyzed
+cppcheck --cppcheck-build-dir=b src
+
+# Faster! Results of unchanged files are reused
+cppcheck --cppcheck-build-dir=b src</code></pre>
+<p>In the GUI it is configured in the project settings.</p>
+<h1 id="importing-a-project">Importing a project</h1>
+<p>You can import some project files and build configurations into
+Cppcheck.</p>
+<h2 id="cppcheck-gui-project">Cppcheck GUI project</h2>
+<p>You can import and use Cppcheck GUI project files in the command line
+tool:</p>
+<pre><code>cppcheck --project=foobar.cppcheck</code></pre>
+<p>The Cppcheck GUI has a few options that are not available in the
+command line directly. To use these options, you can import a GUI
+project file. The command line tool usage is kept intentionally simple
+and the options are therefore limited.</p>
+<p>To ignore certain folders in the project, you can use
+<code>-i</code>. This will skip the analysis of source files in the
+<code>foo</code> folder.</p>
+<pre><code>cppcheck --project=foobar.cppcheck -ifoo</code></pre>
+<h2 id="compilation-database-cmake-etc.">Compilation database (CMake
+etc.)</h2>
+<p>Many build systems can generate a compilation database (a JSON file
+containing compilation commands for each source file). Example
+<code>cmake</code> command to generate the file:</p>
+<pre><code>cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .</code></pre>
+<p>When you have a <code>compile_commands.json</code> file, you can run
+Cppcheck like this:</p>
+<pre><code>cppcheck --project=compile_commands.json</code></pre>
+<p>By default only 1 configuration is checked because that is consistent
+with the compilation. If you want to check more configurations, you can
+use <code>--max-configs</code> or <code>--force</code>. For example:</p>
+<pre><code>cppcheck --project=compile_commands.json --force</code></pre>
+<p>To ignore certain folders you can use <code>-i</code>. This will skip
+analysis of source files in the <code>foo</code> folder.</p>
+<pre><code>cppcheck --project=compile_commands.json -ifoo</code></pre>
+<h2 id="visual-studio">Visual Studio</h2>
+<p>You can run Cppcheck on individual project files
+(<code>*.vcxproj</code>) or on a whole solution (<code>*.sln</code>) or
+(<code>*.slnx</code>).</p>
+<p>Running Cppcheck on an entire Visual Studio solution:</p>
+<pre><code>cppcheck --project=foobar.sln</code></pre>
+<p>Running Cppcheck on an entire Visual Studio 2026 solution:</p>
+<pre><code>cppcheck --project=foobar.slnx</code></pre>
+<p>Running Cppcheck on a Visual Studio project:</p>
+<pre><code>cppcheck --project=foobar.vcxproj</code></pre>
+<p>Both options will analyze all available configurations in the
+project(s). Limiting on a single configuration:</p>
+<pre><code>cppcheck --project=foobar.sln "--project-configuration=Release|Win32"</code></pre>
+<p>In the <code>Cppcheck GUI</code> you have the option to only analyze
+a single debug configuration. If you want to use this option on the
+command line, then create a <code>Cppcheck GUI</code> project with this
+activated and then import the GUI project file on the command line.</p>
+<p>To ignore certain folders in the project, you can use
+<code>-i</code>. This will skip analysis of source files in the
+<code>foo</code> folder.</p>
+<pre><code>cppcheck --project=foobar.vcxproj -ifoo</code></pre>
+<h2 id="c-builder-6">C++ Builder 6</h2>
+<p>Running Cppcheck on a C++ Builder 6 project:</p>
+<pre><code>cppcheck --project=foobar.bpr</code></pre>
+<p>To ignore certain folders in the project, you can use
+<code>-i</code>. This will skip analysis of source files in the
+<code>foo</code> folder.</p>
+<pre><code>cppcheck --project=foobar.bpr -ifoo</code></pre>
+<h2 id="other">Other</h2>
+<p>If you generate a compilation database, then it is possible to import
+that in Cppcheck.</p>
+<h3 id="makefile">Makefile</h3>
+<p>In Linux you can convert a Makefile to a
+<code>compile_commands.json</code> using for instance <code>bear</code>
+(build ear) utility:</p>
+<pre><code>bear -- make</code></pre>
+<p>If you don’t use Linux, there are Python scripts that converts a
+Makefile into a compilation database.</p>
+<h1 id="preprocessor-settings">Preprocessor settings</h1>
+<p>If you use <code>--project</code>, then Cppcheck will automatically
+use the preprocessor settings in the imported project file and likely
+you don’t have to configure anything extra.</p>
+<p>If you don’t use <code>--project</code>, then a bit of manual
+preprocessor configuration might be required. However Cppcheck has
+automatic configuration of defines.</p>
+<h2 id="automatic-configuration-of-preprocessor-defines">Automatic
+configuration of preprocessor defines</h2>
+<p>Cppcheck automatically test different combinations of preprocessor
+defines to achieve as high coverage in the analysis as possible.</p>
+<p>Here is a file that has 3 bugs (when <code>x</code>, <code>y</code>,
+<code>z</code> are assigned).</p>
+<pre><code>#ifdef A
+    x=100/0;
+    #ifdef B
+        y=100/0;
+    #endif
+#else
+    z=100/0;
+#endif
+
+#ifndef C
+#error C must be defined
+#endif</code></pre>
+<p>The flag <code>-D</code> tells Cppcheck that a name is defined.
+Cppcheck will only analyze configurations that contain this define.</p>
+<p>The flag <code>-U</code> tells Cppcheck that a name is not defined.
+Cppcheck will only analyze configurations that does not contain this
+define.</p>
+<p>The flag <code>--force</code> and <code>--max-configs</code> is used
+to control how many combinations are checked. When <code>-D</code> is
+used, Cppcheck will only check 1 configuration unless these are
+used.</p>
+<p>Example:</p>
+<pre><code># test all configurations
+# all bugs are found
+cppcheck test.c
+
+# only test configuration "-DA"
+# No bug is found; because C is not defined the #error will cause a preprocessor error
+cppcheck -DA test.c
+
+# only test configuration "-DA -DC"
+# The first bug is found
+cppcheck -DA -DC test.c
+
+# Test all configurations that does not define "A"
+# The last bug is found
+cppcheck -UA test.c
+
+# All configurations with "-DA" are tested
+# The two first bugs are found
+cppcheck --force -DA test.c
+
+# only test 1 valid configuration
+# Bug(s) will be found
+cppcheck --max-configs=1 test.c
+
+# test 2 valid configurations with "X" defined.
+# Bug(s) will be found
+cppcheck --max-configs=2 -DX test.c</code></pre>
+<h2 id="include-paths">Include paths</h2>
+<p>To add an include path, use <code>-I</code> followed by the path.</p>
+<p>Cppcheck’s preprocessor basically handles includes like any other
+preprocessor. However, while other preprocessors stop working when they
+encounter a missing header, Cppcheck will just print an information
+message and continues parsing the code.</p>
+<p>The purpose of this behaviour is that Cppcheck is meant to work
+without necessarily seeing the entire code. Actually, it is recommended
+to not give all include paths. While it is useful for Cppcheck to see
+the declaration of a class when checking the implementation of its
+members, passing standard library headers is discouraged, because the
+analysis will not work fully and lead to a longer checking time. For
+such cases, <code>.cfg</code> files are the preferred way to provide
+information about the implementation of functions and types to Cppcheck,
+see below for more information.</p>
+<h1 id="platform">Platform</h1>
+<p>You should use a platform configuration that matches your target
+environment.</p>
+<p>By default Cppcheck uses native platform configuration that works
+well if your code is compiled and executed locally.</p>
+<p>Cppcheck has builtin configurations for Unix and Windows targets. You
+can easily use these with the <code>--platform</code> command line
+flag.</p>
+<p>You can also create your own custom platform configuration in a XML
+file. Here is an example:</p>
+<pre><code>&lt;?xml version="1"?&gt;
+&lt;platform&gt;
+  &lt;char_bit&gt;8&lt;/char_bit&gt;
+  &lt;default-sign&gt;signed&lt;/default-sign&gt;
+  &lt;sizeof&gt;
+    &lt;short&gt;2&lt;/short&gt;
+    &lt;int&gt;4&lt;/int&gt;
+    &lt;long&gt;4&lt;/long&gt;
+    &lt;long-long&gt;8&lt;/long-long&gt;
+    &lt;float&gt;4&lt;/float&gt;
+    &lt;double&gt;8&lt;/double&gt;
+    &lt;long-double&gt;12&lt;/long-double&gt;
+    &lt;pointer&gt;4&lt;/pointer&gt;
+    &lt;size_t&gt;4&lt;/size_t&gt;
+    &lt;wchar_t&gt;2&lt;/wchar_t&gt;
+  &lt;/sizeof&gt;
+&lt;/platform&gt;</code></pre>
+<h1 id="cc-standard">C/C++ standard</h1>
+<p>Use <code>--std</code> on the command line to specify a C/C++
+standard.</p>
+<p>Cppcheck assumes that the code is compatible with the latest C/C++
+standard, but it is possible to override this.</p>
+<p>The available options are:</p>
+<ul>
+<li>c89: C code is C89 compatible</li>
+<li>c99: C code is C99 compatible</li>
+<li>c11: C code is C11 compatible</li>
+<li>c17: C code is C17 compatible</li>
+<li>c23: C code is C23 compatible (default)</li>
+<li>c++03: C++ code is C++03 compatible</li>
+<li>c++11: C++ code is C++11 compatible</li>
+<li>c++14: C++ code is C++14 compatible</li>
+<li>c++17: C++ code is C++17 compatible</li>
+<li>c++20: C++ code is C++20 compatible</li>
+<li>c++23: C++ code is C++23 compatible</li>
+<li>c++26: C++ code is C++26 compatible (default)</li>
+</ul>
+<h1 id="cppcheck-build-dir">Cppcheck build dir</h1>
+<p>It’s a good idea to use a Cppcheck build dir. On the command line use
+<code>--cppcheck-build-dir</code>. In the GUI, the build dir is
+configured in the project options.</p>
+<p>Rechecking code will be much faster. Cppcheck does not analyse
+unchanged code. The old warnings are loaded from the build dir and
+reported again.</p>
+<p>Whole program analysis does not work when multiple threads are used
+unless you use a Cppcheck build dir. For instance, the unusedFunction
+warnings require whole program analysis.</p>
+<h1 id="suppressions">Suppressions</h1>
+<p>If you want to filter out certain errors from being generated, then
+it is possible to suppress these.</p>
+<p>If you encounter a false positive, please report it to the Cppcheck
+team so that the issue can be fixed.</p>
+<h2 id="plain-text-suppressions">Plain text suppressions</h2>
+<p>The format for an error suppression is one of:</p>
+<pre><code>[error id]:[filename]:[line]
+[error id]:[filename2]
+[error id]</code></pre>
+<p>The <code>error id</code> is the id that you want to suppress. The id
+of a warning is shown in brackets in the normal Cppcheck text
+output.</p>
+<p>The <code>error id</code> and <code>filename</code> patterns may
+contain <code>**</code>, <code>*</code> or <code>?</code>.</p>
+<ul>
+<li><code>**</code> matches zero or more characters, including path
+separators.</li>
+<li><code>*</code> matches zero or more characters, excluding path
+separators.</li>
+<li><code>?</code> matches any single character except path
+separators.</li>
+</ul>
+<p>It is recommended to use forward-slash <code>/</code> in the filename
+pattern as path separator on all operating systems.</p>
+<h3 id="command-line-suppression">Command line suppression</h3>
+<p>The <code>--suppress=</code> command line option is used to specify
+suppressions on the command line. Example:</p>
+<pre><code>cppcheck --suppress=memleak:src/file1.cpp src/</code></pre>
+<h3 id="suppressions-in-a-file">Suppressions in a file</h3>
+<p>You can create a suppressions file for example as follows:</p>
+<pre><code>// suppress memleak and exceptNew errors in the file src/file1.cpp
+memleak:src/file1.cpp
+exceptNew:src/file1.cpp
+
+uninitvar // suppress all uninitvar errors in all files</code></pre>
+<p>Note that you may add empty lines and comments in the suppressions
+file. Comments must start with <code>#</code> or <code>//</code> and be
+at the start of the line, or after the suppression line.</p>
+<p>The usage of the suppressions file is as follows:</p>
+<pre><code>cppcheck --suppressions-list=suppressions.txt src/</code></pre>
+<h2 id="xml-suppressions">XML suppressions</h2>
+<p>You can specify suppressions in a XML file, for example as
+follows:</p>
+<pre><code>&lt;?xml version="1.0"?&gt;
+&lt;suppressions&gt;
+  &lt;suppress&gt;
+    &lt;id&gt;uninitvar&lt;/id&gt;
+    &lt;fileName&gt;src/file1.c&lt;/fileName&gt;
+    &lt;lineNumber&gt;10&lt;/lineNumber&gt;
+    &lt;symbolName&gt;var&lt;/symbolName&gt;
+  &lt;/suppress&gt;
+&lt;/suppressions&gt;</code></pre>
+<p>The <code>id</code> and <code>fileName</code> patterns may contain
+<code>**</code>, <code>*</code> or <code>?</code>.</p>
+<ul>
+<li><code>**</code> matches zero or more characters, including path
+separators.</li>
+<li><code>*</code> matches zero or more characters, excluding path
+separators.</li>
+<li><code>?</code> matches any single character except path
+separators.</li>
+</ul>
+<p>The XML format is extensible and may be extended with further
+attributes in the future.</p>
+<p>The usage of the suppressions file is as follows:</p>
+<pre><code>cppcheck --suppress-xml=suppressions.xml src/</code></pre>
+<h2 id="inline-suppressions">Inline suppressions</h2>
+<p>Suppressions can also be added directly in the code by adding
+comments that contain special keywords. Note that adding comments
+sacrifices the readability of the code somewhat.</p>
+<p>This code will normally generate an error message:</p>
+<pre><code>void f() {
+    char arr[5];
+    arr[10] = 0;
+}</code></pre>
+<p>The output is:</p>
+<pre><code>cppcheck test.c
+[test.c:3]: (error) Array 'arr[5]' index 10 out of bounds</code></pre>
+<p>To activate inline suppressions:</p>
+<pre><code>cppcheck --inline-suppr test.c</code></pre>
+<h3 id="format">Format</h3>
+<p>You can suppress a warning <code>aaaa</code> with:</p>
+<pre><code>// cppcheck-suppress aaaa</code></pre>
+<p>Suppressing multiple ids in one comment by using <code>[]</code>:</p>
+<pre><code>// cppcheck-suppress [aaaa, bbbb]</code></pre>
+<p>Suppressing warnings <code>aaaa</code> on a block of code:</p>
+<pre><code>// cppcheck-suppress-begin aaaa
+...
+// cppcheck-suppress-end aaaa</code></pre>
+<p>Suppressing multiple ids on a block of code:</p>
+<pre><code>// cppcheck-suppress-begin [aaaa, bbbb]
+...
+// cppcheck-suppress-end [aaaa, bbbb]</code></pre>
+<p>Suppressing warnings <code>aaaa</code> for a whole file:</p>
+<pre><code>// cppcheck-suppress-file aaaa</code></pre>
+<p>Suppressing multiple ids for a whole file:</p>
+<pre><code>// cppcheck-suppress-file [aaaa, bbbb]</code></pre>
+<p>Suppressing warnings <code>aaaa</code> where macro is used:</p>
+<pre><code>// cppcheck-suppress-macro aaaa
+#define MACRO ...
+...
+x = MACRO; // &lt;- aaaa warnings are suppressed here</code></pre>
+<p>Suppressing multiple ids where macro is used:</p>
+<pre><code>// cppcheck-suppress-macro [aaaa, bbbb]
+#define MACRO ...
+...
+x = MACRO; // &lt;- aaaa and bbbb warnings are suppressed here</code></pre>
+<h3 id="comment-before-code-or-on-same-line">Comment before code or on
+same line</h3>
+<p>The comment can be put before the code or at the same line as the
+code.</p>
+<p>Before the code:</p>
+<pre><code>void f() {
+    char arr[5];
+
+    // cppcheck-suppress arrayIndexOutOfBounds
+    arr[10] = 0;
+}</code></pre>
+<p>Or at the same line as the code:</p>
+<pre><code>void f() {
+    char arr[5];
+
+    arr[10] = 0;  // cppcheck-suppress arrayIndexOutOfBounds
+}</code></pre>
+<p>The suppression comment and the line of code may be separated by
+additional comments or empty lines:</p>
+<pre><code>void f() {
+    char arr[5];
+
+    // cppcheck-suppress arrayIndexOutOfBounds
+
+    arr[10] = 0;
+
+    // cppcheck-suppress arrayIndexOutOfBounds
+    // Set the tenth element of arr to zero
+    arr[10] = 0;
+}</code></pre>
+<p>In the example below there are 2 lines with code and 1 suppression
+comment. The suppression comment only applies to 1 line:
+<code>a = b + c;</code>.</p>
+<pre><code>void f() {
+    a = b + c; // cppcheck-suppress abc
+    d = e + f;
+}</code></pre>
+<p>As a special case for backwards compatibility, if you have a
+<code>{</code> on its own line and a suppression comment after that,
+then that will suppress warnings for both the current and next line.
+This example will suppress <code>abc</code> warnings both for
+<code>{</code> and for <code>a = b + c;</code>:</p>
+<pre><code>void f()
+{ // cppcheck-suppress abc
+    a = b + c;
+}</code></pre>
+<h3 id="multiple-suppressions">Multiple suppressions</h3>
+<p>For a line of code there might be several warnings you want to
+suppress.</p>
+<p>There are several options;</p>
+<p>Using 2 suppression comments before code:</p>
+<pre><code>void f() {
+    char arr[5];
+
+    // cppcheck-suppress arrayIndexOutOfBounds
+    // cppcheck-suppress zerodiv
+    arr[10] = arr[10] / 0;
+}</code></pre>
+<p>Using 1 suppression comment before the code:</p>
+<pre><code>void f() {
+    char arr[5];
+
+    // cppcheck-suppress[arrayIndexOutOfBounds,zerodiv]
+    arr[10] = arr[10] / 0;
+}</code></pre>
+<p>Suppression comment on the same line as the code:</p>
+<pre><code>void f() {
+    char arr[5];
+
+    arr[10] = arr[10] / 0;  // cppcheck-suppress[arrayIndexOutOfBounds,zerodiv]
+}</code></pre>
+<h3 id="symbol-name">Symbol name</h3>
+<p>You can specify that the inline suppression only applies to a
+specific symbol:</p>
+<pre><code>// cppcheck-suppress aaaa symbolName=arr</code></pre>
+<p>Or:</p>
+<pre><code>// cppcheck-suppress[aaaa symbolName=arr, bbbb]</code></pre>
+<h3 id="comment-about-suppression">Comment about suppression</h3>
+<p>You can write comments about a suppression as follows:</p>
+<pre><code>// cppcheck-suppress[warningid] some comment
+// cppcheck-suppress warningid ; some comment
+// cppcheck-suppress warningid // some comment</code></pre>
+<h1 id="xml-output">XML output</h1>
+<p>Cppcheck can generate output in XML format. Use <code>--xml</code> to
+enable this format.</p>
+<p>A sample command to check a file and output errors in the XML
+format:</p>
+<pre><code>cppcheck --xml file1.cpp</code></pre>
+<p>Here is a sample report:</p>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;results version="2"&gt;
+  &lt;cppcheck version="1.66"/&gt;
+  &lt;errors&gt;
+    &lt;error id="someError" severity="error" msg="short error text"
+       verbose="long error text" inconclusive="true" cwe="312"&gt;
+      &lt;location file0="file.c" file="file.h" line="1"/&gt;
+   &lt;/error&gt;
+  &lt;/errors&gt;
+&lt;/results&gt;</code></pre>
+<h2 id="the-error-element">The <code>&lt;error&gt;</code> element</h2>
+<p>Each error is reported in a <code>&lt;error&gt;</code> element.
+Attributes:</p>
+<p><strong>id</strong></p>
+<p>id of error, and which are valid symbolnames</p>
+<p><strong>severity</strong></p>
+<p>error/warning/style/performance/portability/information</p>
+<p><strong>msg</strong></p>
+<p>the error message in short format</p>
+<p><strong>verbose</strong></p>
+<p>the error message in long format</p>
+<p><strong>inconclusive</strong></p>
+<p>this attribute is only used when the error message is
+inconclusive</p>
+<p><strong>cwe</strong></p>
+<p>CWE ID for the problem; note that this attribute is only used when
+the CWE ID for the message is known</p>
+<p><strong>remark</strong></p>
+<p>Optional attribute. The related remark/justification from a remark
+comment.</p>
+<h2 id="the-location-element">The <code>&lt;location&gt;</code>
+element</h2>
+<p>All locations related to an error are listed with
+<code>&lt;location&gt;</code> elements. The primary location is listed
+first.</p>
+<p>Attributes:</p>
+<p><strong>file</strong></p>
+<p>filename, both relative and absolute paths are possible</p>
+<p><strong>file0</strong></p>
+<p>name of the source file (optional)</p>
+<p><strong>line</strong></p>
+<p>line number</p>
+<p><strong>info</strong></p>
+<p>short information for each location (optional)</p>
+<h1 id="reformatting-the-text-output">Reformatting the text output</h1>
+<p>If you want to reformat the output so that it looks different, then
+you can use templates.</p>
+<h2 id="predefined-output-formats">Predefined output formats</h2>
+<p>To get Visual Studio compatible output, you can use
+<code>--template=vs</code>:</p>
+<pre><code>cppcheck --template=vs samples/arrayIndexOutOfBounds/bad.c</code></pre>
+<p>This output will look like this:</p>
+<pre><code>Checking samples/arrayIndexOutOfBounds/bad.c ...
+samples/arrayIndexOutOfBounds/bad.c(6): error: Array
+'a[2]' accessed at index 2, which is out of bounds.</code></pre>
+<p>To get GCC-compatible output, you can use
+<code>--template=gcc</code>:</p>
+<pre><code>cppcheck --template=gcc samples/arrayIndexOutOfBounds/bad.c</code></pre>
+<p>The output will look like this:</p>
+<pre><code>Checking samples/arrayIndexOutOfBounds/bad.c ...
+samples/arrayIndexOutOfBounds/bad.c:6:6: warning: Array
+'a[2]' accessed at index 2, which is out of bounds. [arrayIndexOutOfBounds]
+a[2] = 0;
+  ^</code></pre>
+<h2 id="user-defined-output-format-single-line">User defined output
+format (single line)</h2>
+<p>You can write your own pattern. For instance:</p>
+<pre><code>cppcheck \
+--template="{file}:{line}:{column}: {severity}:{message}" \
+samples/arrayIndexOutOfBounds/bad.c</code></pre>
+<p>The output will then look like this:</p>
+<pre><code>Checking samples/arrayIndexOutOfBounds/bad.c ...
+samples/arrayIndexOutOfBounds/bad.c:6:6: error: Array
+'a[2]' accessed at index 2, which is out of bounds.</code></pre>
+<p>A comma separated format:</p>
+<pre><code>cppcheck \
+--template="{file},{line},{severity},{id},{message}" \
+samples/arrayIndexOutOfBounds/bad.c</code></pre>
+<p>The output will look like this:</p>
+<pre><code>Checking samples/arrayIndexOutOfBounds/bad.c ...
+samples/arrayIndexOutOfBounds/bad.c,6,error,arrayIndexOutOfBounds,
+Array 'a[2]' accessed at index 2, which is out of bounds.</code></pre>
+<h2 id="user-defined-output-format-multi-line">User defined output
+format (multi-line)</h2>
+<p>Many warnings have multiple locations. Example code:</p>
+<pre><code>void f(int *p)
+{
+    *p = 3;       // line 3
+}
+
+int main()
+{
+    int *p = 0;   // line 8
+    f(p);         // line 9
+    return 0;
+}</code></pre>
+<p>There is a possible null pointer dereference at line 3. Cppcheck can
+show how it came to that conclusion by showing extra location
+information. You need to use both <code>--template</code> and
+<code>--template-location</code> at the command line, for example:</p>
+<pre><code>cppcheck \
+--template="{file}:{line}: {severity}: {message}\n{code}" \
+--template-location="{file}:{line}: note: {info}\n{code}" multiline.c</code></pre>
+<p>The output from Cppcheck is:</p>
+<pre><code>Checking multiline.c ...
+multiline.c:3: warning: Possible null pointer dereference: p
+    *p = 3;
+     ^
+multiline.c:8: note: Assignment 'p=0', assigned value is 0
+    int *p = 0;
+             ^
+multiline.c:9: note: Calling function 'f', 1st argument 'p' value is 0
+    f(p);
+      ^
+multiline.c:3: note: Null pointer dereference
+    *p = 3;
+     ^</code></pre>
+<p>The first line in the warning is formatted by the
+<code>--template</code> format.</p>
+<p>The other lines in the warning are formatted by the
+<code>--template-location</code> format.</p>
+<h3 id="format-specifiers-for---template">Format specifiers for
+<code>--template</code></h3>
+<p>The available specifiers for <code>--template</code> are:</p>
+<p><strong>{file}</strong></p>
+<p>File name</p>
+<p><strong>{line}</strong></p>
+<p>Line number</p>
+<p><strong>{column}</strong></p>
+<p>Column number</p>
+<p><strong>{callstack}</strong></p>
+<p>Write all locations. Each location is written in
+<code>[{file}:{line}]</code> format and the locations are separated by
+<code>-&gt;</code>. For instance it might look like:
+<code>[multiline.c:8] -&gt; [multiline.c:9] -&gt; [multiline.c:3]</code></p>
+<p><strong>{inconclusive:text}</strong></p>
+<p>If warning is inconclusive, then the given text is written. The given
+text can be any text that does not contain <code>}</code>. Example:
+<code>{inconclusive:inconclusive,}</code></p>
+<p><strong>{severity}</strong></p>
+<p>error/warning/style/performance/portability/information</p>
+<p><strong>{message}</strong></p>
+<p>The warning message</p>
+<p><strong>{id}</strong></p>
+<p>Warning id</p>
+<p><strong>{remark}</strong></p>
+<p>The remark text if a remark comment has been provided</p>
+<p><strong>{code}</strong></p>
+<p>The real code</p>
+<p><strong>\t</strong></p>
+<p>Tab</p>
+<p><strong>\n</strong></p>
+<p>Newline</p>
+<p><strong>\r</strong></p>
+<p>Carriage return</p>
+<h3 id="format-specifiers-for---template-location">Format specifiers for
+<code>--template-location</code></h3>
+<p>The available specifiers for <code>--template-location</code>
+are:</p>
+<p><strong>{file}</strong></p>
+<p>File name</p>
+<p><strong>{line}</strong></p>
+<p>Line number</p>
+<p><strong>{column}</strong></p>
+<p>Column number</p>
+<p><strong>{info}</strong></p>
+<p>Information message about the current location</p>
+<p><strong>{code}</strong></p>
+<p>The real code</p>
+<p><strong>\t</strong></p>
+<p>Tab</p>
+<p><strong>\n</strong></p>
+<p>Newline</p>
+<p><strong>\r</strong></p>
+<p>Carriage return</p>
+<h1 id="justifications-for-warnings-in-the-report">Justifications for
+warnings in the report</h1>
+<p>You can add remark comments in the source code that justify why there
+is a warning/violation.</p>
+<p>Such a remark comment shall:</p>
+<ul>
+<li>start with REMARK.</li>
+<li>can either be added above the source code that generates the
+warning, or after the code on the same line.</li>
+</ul>
+<p>Example code:</p>
+<pre><code>void foo(void) {
+    // REMARK Initialize x with 0
+    int x = 0;
+}</code></pre>
+<p>In Cppcheck text output, the remarks are not shown by default, you
+can use <code>--template</code> option <code>{remark}</code> to show
+remarks:</p>
+<pre><code>$ ./cppcheck --enable=style \
+--template="{file}:{line}: {message} [{id}]\\n{remark}" test1.c
+
+Checking test1.c ...
+test1.c:4: Variable 'x' is assigned a value that is never used. [unreadVariable]
+Initialize x with 0</code></pre>
+<p>In XML output, the comment text is provided in a <code>remark</code>
+attribute:</p>
+<pre><code>$ ./cppcheck --enable=style --xml test1.c
+...
+remark="Initialize x with 0"
+...</code></pre>
+<h1 id="addons">Addons</h1>
+<p>Addons are scripts that analyse Cppcheck dump files to check
+compatibility with secure coding standards and to locate issues.</p>
+<p>Cppcheck is distributed with a few addons which are listed below.</p>
+<h2 id="supported-addons">Supported addons</h2>
+<h3 id="misra.py"><code>misra.py</code></h3>
+<p><a href="https://github.com/cppcheck-opensource/cppcheck/blob/main/addons/misra.py"><code>misra.py</code></a>
+is used to verify compliance with MISRA C 2012, a proprietary set of
+guidelines to avoid questionable code, developed for embedded
+systems.</p>
+<p>The <code>misra.py</code> script does not provide rule texts, those
+should be downloaded from <a href="https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools">MISRA</a>.</p>
+<p>To load the rule texts, create a configuration file. Example
+<code>misra.json</code>:</p>
+<pre><code>{
+    "script": "misra.py",
+    "args": [
+        "--rule-texts=misra_c_2012__headlines_for_cppcheck - AMD1+AMD2.txt"
+    ],
+    "ctu": true
+}</code></pre>
+<p>To use that <code>misra.json</code> in Cppcheck analysis, use option
+<code>--addon=misra.json</code>:</p>
+<pre><code>cppcheck --addon=misra.json --enable=style somefile.c</code></pre>
+<p>Misra checkers in open source Cppcheck only cover MISRA rules
+partially and for full coverage use Cppcheck Premium.</p>
+<h3 id="namingng.py"><code>namingng.py</code></h3>
+<p><a href="https://github.com/cppcheck-opensource/cppcheck/blob/main/addons/namingng.py"><code>namingng.py</code></a>
+allows you to configure and check naming conventions.</p>
+<p>You need to have a configuration file that defines your naming
+conventions. By default the filename <code>namingng.config.json</code>
+is used but there is an option so you can use any filename you want.</p>
+<p>Example configuration of naming conventions:</p>
+<pre><code>{
+    "RE_VARNAME": ["[a-z]*[a-zA-Z0-9_]*\\Z"],
+    "RE_PRIVATE_MEMBER_VARIABLE": null,
+    "RE_FUNCTIONNAME": ["[a-z0-9A-Z]*\\Z"],
+    "_comment": "comments can be added to the config with underscore-prefixed keys",
+    "include_guard": {
+        "input": "path",
+        "prefix": "GUARD_",
+        "case": "upper",
+        "max_linenr": 5,
+        "RE_HEADERFILE": "[^/].*\\.h\\Z",
+        "required": true
+    },
+    "var_prefixes": {"uint32_t": "ui32"},
+    "function_prefixes": {"uint16_t": "ui16",
+                          "uint32_t": "ui32"}
+}</code></pre>
+<h3 id="threadsafety.py"><code>threadsafety.py</code></h3>
+<p><a href="https://github.com/cppcheck-opensource/cppcheck/blob/main/addons/threadsafety.py"><code>threadsafety.py</code></a>
+analyses Cppcheck dump files to locate thread safety issues like static
+local objects used by multiple threads.</p>
+<h3 id="y2038.py"><code>y2038.py</code></h3>
+<p><a href="https://github.com/cppcheck-opensource/cppcheck/blob/main/addons/y2038.py"><code>y2038.py</code></a>
+checks source code for <a href="https://en.wikipedia.org/wiki/Year_2038_problem">year 2038
+problem</a> safety.</p>
+<h2 id="running-addons">Running addons</h2>
+<p>Addons can be executed with the <code>--addon</code> option:</p>
+<pre><code>cppcheck --addon=namingng.py somefile.c</code></pre>
+<p>Likewise, if you have created your own script, you can execute
+that:</p>
+<pre><code>cppcheck --addon=mychecks.py somefile.c</code></pre>
+<p>You can configure how you want to execute an addon in a JSON file.
+For example:</p>
+<pre><code>{
+    "script": "mychecks.py",
+    "args": [
+        "--some-option"
+    ],
+    "ctu": false
+}</code></pre>
+<p>To use that JSON file to execute your addon, use the
+<code>--addon</code> option:</p>
+<pre><code>cppcheck --addon=mychecks.json somefile.c</code></pre>
+<p>Cppcheck search for addons in the local folder first and then in the
+installation folder. A different path can be specified explicitly, for
+instance:</p>
+<pre><code>cppcheck --addon=path/to/my-addon.py somefile.c</code></pre>
+<h1 id="library-configuration">Library configuration</h1>
+<p>When external libraries are used, such as WinAPI, POSIX, gtk, Qt,
+etc., Cppcheck has no information about functions, types, or macros
+contained in those libraries. Cppcheck then fails to detect various
+problems in the code, or might even abort the analysis. But this can be
+fixed by using the appropriate configuration files.</p>
+<p>Cppcheck already contains configurations for several libraries. They
+can be loaded as described below. Note that the configuration for the
+standard libraries of C and C++, <code>std.cfg</code>, is always loaded
+by Cppcheck. If you create or update a configuration file for a popular
+library, we would appreciate if you supplied it to the Cppcheck
+project.</p>
+<h2 id="using-a-.cfg-file">Using a <code>.cfg</code> file</h2>
+<p>To use a <code>.cfg</code> file shipped with Cppcheck, pass the
+<code>--library=&lt;lib&gt;</code> option. The table below shows the
+currently existing libraries:</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th><code>.cfg</code> file</th>
+<th>Library</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>avr.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>bento4.cfg</code></td>
+<td><a href="http://www.bento4.com/">Bento4</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>boost.cfg</code></td>
+<td><a href="http://www.boost.org/">Boost</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>bsd.cfg</code></td>
+<td><a href="https://www.freebsd.org/">BSD</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cairo.cfg</code></td>
+<td><a href="https://www.cairographics.org/">cairo</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cppcheck-lib.cfg</code></td>
+<td><a href="http://cppcheck.net/">Cppcheck</a></td>
+<td>Used in selfcheck of the Cppcheck code base</td>
+</tr>
+<tr>
+<td><code>cppunit.cfg</code></td>
+<td><a href="https://sourceforge.net/projects/cppunit/">CppUnit</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dpdk.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>embedded_sql.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>emscripten.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ginac.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>gnu.cfg</code></td>
+<td><a href="https://www.gnu.org/">GNU</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>googletest.cfg</code></td>
+<td><a href="https://github.com/google/googletest">GoogleTest</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>gtk.cfg</code></td>
+<td><a href="https://www.gtk.org/">GTK</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>icu.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kde.cfg</code></td>
+<td><a href="https://kde.org/">KDE</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>libcerror.cfg</code></td>
+<td><a href="https://github.com/libyal/libcerror">libcerror</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>libcurl.cfg</code></td>
+<td><a href="https://curl.se/libcurl/">libcurl</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>libsigc++.cfg</code></td>
+<td><a href="https://github.com/libsigcplusplus/libsigcplusplus">libsigc++</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>lua.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>mfc.cfg</code></td>
+<td><a href="https://learn.microsoft.com/en-us/cpp/mfc/mfc-desktop-applications">MFC</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>microsoft_atl.cfg</code></td>
+<td><a href="https://learn.microsoft.com/en-us/cpp/atl/active-template-library-atl-concepts">ATL</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>microsoft_sal.cfg</code></td>
+<td><a href="https://learn.microsoft.com/en-us/cpp/c-runtime-library/sal-annotations">SAL
+annotations</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>microsoft_unittest.cfg</code></td>
+<td><a href="https://learn.microsoft.com/en-us/visualstudio/test/microsoft-visualstudio-testtools-cppunittestframework-api-reference">CppUnitTest</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>motif.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>nspr.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ntl.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>opencv2.cfg</code></td>
+<td><a href="https://opencv.org/">OpenCV</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>opengl.cfg</code></td>
+<td><a href="https://opengl.org/">OpenGL</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>openmp.cfg</code></td>
+<td><a href="https://www.openmp.org/">OpenMP</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>openssl.cfg</code></td>
+<td><a href="https://www.openssl.org/">OpenSSL</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>pcre.cfg</code></td>
+<td><a href="https://pcre.org/">PCRE</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>posix.cfg</code></td>
+<td><a href="https://pubs.opengroup.org/onlinepubs/9699919799/">POSIX</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>python.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>qt.cfg</code></td>
+<td><a href="https://doc.qt.io/qt.html">Qt</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ruby.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>sdl.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>sfml.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>sqlite3.cfg</code></td>
+<td><a href="https://www.sqlite.org/">SQLite</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>std.cfg</code></td>
+<td>C/C++ standard library</td>
+<td>Loaded by default</td>
+</tr>
+<tr>
+<td><code>tinyxml2.cfg</code></td>
+<td><a href="https://github.com/leethomason/tinyxml2">TinyXML-2</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>vcl.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>windows.cfg</code></td>
+<td><a href="https://learn.microsoft.com/en-us/windows/win32/">Win32
+API</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>wxsqlite3.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>wxsvg.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>wxwidgets.cfg</code></td>
+<td><a href="https://www.wxwidgets.org/">wxWidgets</a></td>
+<td></td>
+</tr>
+<tr>
+<td><code>zephyr.cfg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>zlib.cfg</code></td>
+<td><a href="https://www.zlib.net/">zlib</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="creating-a-custom-.cfg-file">Creating a custom <code>.cfg</code>
+file</h2>
+<p>You can create and use your own <code>.cfg</code> files for your
+projects. Use <code>--check-library</code> to get hints about what you
+should configure.</p>
+<p>You can use the <code>Library Editor</code> in the
+<code>Cppcheck GUI</code> to edit configuration files. It is available
+in the <code>View</code> menu.</p>
+<p>The <code>.cfg</code> file format is documented in the
+<code>Reference: Cppcheck .cfg format</code> (<a href="https://cppcheck.sourceforge.io/reference-cfg-format.pdf" class="uri">https://cppcheck.sourceforge.io/reference-cfg-format.pdf</a>)
+document.</p>
+<h1 id="html-report">HTML report</h1>
+<p>You can convert the XML output from Cppcheck into a HTML report.
+You’ll need Python and the pygments module (<a href="http://pygments.org/" class="uri">http://pygments.org/</a>) for
+this to work. In the Cppcheck source tree there is a folder htmlreport
+that contains a script that transforms a Cppcheck XML file into HTML
+output.</p>
+<p>This command generates the help screen:</p>
+<pre><code>htmlreport/cppcheck-htmlreport -h</code></pre>
+<p>The output screen says:</p>
+<pre><code>Usage: cppcheck-htmlreport [options]
+
+Options:
+   -h, --help      show this help message and exit
+   --file=FILE     The cppcheck xml output file to read defects from.
+                   Default is reading from stdin.
+   --report-dir=REPORT_DIR
+                   The directory where the html report content is written.
+   --source-dir=SOURCE_DIR|URL
+                   Base directory where source code files can be found, or
+                   a URL to a remote GitHub/GitLab repository including a
+                   branch, e.g.:
+                     --source-dir=https://github.com/&lt;username&gt;/&lt;repo&gt;/blob/&lt;branch&gt;/</code></pre>
+<p>Example usage:</p>
+<pre><code>cppcheck gui/test.cpp --xml 2&gt; err.xml
+cppcheck-htmlreport --file=err.xml --report-dir=test1 --source-dir=.</code></pre>
+<p>or</p>
+<pre><code>cppcheck gui/test.cpp --xml 2&gt; err.xml
+cppcheck-htmlreport --file=err.xml --report-dir=test1 \
+     --source-dir=https://github.com/&lt;username&gt;/&lt;repo&gt;/blob/&lt;branch&gt;/</code></pre>
+<h2 id="choosing-between-local-annotated-html-and-remote-repository-links">Choosing
+between local annotated HTML and remote repository links</h2>
+<p><code>cppcheck-htmlreport</code> supports two modes for linking to
+source files:</p>
+<ul>
+<li>Local annotated HTML files (default when <code>--source-dir</code>
+is a filesystem path)</li>
+<li>Remote GitHub/GitLab links (when <code>--source-dir</code> is a
+URL)</li>
+</ul>
+<p>Pointing <code>--source-dir</code> to a filesystem path generates
+local annotated HTML files. This is useful when you need a fully
+self-contained report that works offline, includes inline annotations,
+and is ideal for small or medium projects where generation is fast.
+Using a remote GitHub/GitLab URL avoids generating per-file HTML and
+keeps the summary report lightweight and fast to produce. This mode is
+ideal when the source is already hosted online and local duplication is
+unnecessary. Remote mode is especially helpful when the HTML report may
+be public or widely distributed but the source code should remain
+private, since access control is handled by the hosting service. In
+general, local mode fits air-gapped environments, while remote mode
+works best for CI workflows and large or private repositories.</p>
+<h1 id="check-level">Check level</h1>
+<h2 id="reduced">Reduced</h2>
+<p>The “reduced” check level performs a limited data flow analysis. If
+developers want to run Cppcheck directly during development and require
+faster results than “normal” provides, then this reduced checking can be
+an option.</p>
+<h2 id="normal">Normal</h2>
+<p>The “normal” check level is chosen by default. Our aim is that this
+checking level will provide an effective checking in “reasonable”
+time.</p>
+<p>The “normal” check level should be useful during active
+development:</p>
+<ul>
+<li>checking files while you edit them.</li>
+<li>block changes to the repo</li>
+<li>etc.</li>
+</ul>
+<h2 id="exhaustive">Exhaustive</h2>
+<p>When you can wait longer for the results you can enable the
+“exhaustive” checking, by using the option
+<code>--check-level=exhaustive</code>.</p>
+<p>Exhaustive checking level should be useful for scenarios where you
+can wait for results. For instance:</p>
+<ul>
+<li>nightly builds</li>
+<li>etc.</li>
+</ul>
+<h1 id="speeding-up-analysis">Speeding up analysis</h1>
+<h2 id="limit-preprocessor-configurations">Limit preprocessor
+configurations</h2>
+<p>For performance reasons it might be a good idea to limit preprocessor
+configurations to check.</p>
+<h2 id="limit-valueflow-max-if-count">Limit ValueFlow: max
+<code>if</code> count</h2>
+<p>The command line option
+<code>--performance-valueflow-max-if-count</code> adjusts the max count
+for number of <code>if</code> in a function.</p>
+<p>When that limit is exceeded, there is a limitation of data flow in
+that function. It is not drastic:</p>
+<ul>
+<li>Analysis of other functions are not affected.</li>
+<li>It’s only for some specific data flow analysis, we have data flow
+analysis that is always executed.</li>
+<li>All checks are always executed. There can still be plenty of
+warnings in the limited function.</li>
+</ul>
+<p>There is data flow analysis that slows down exponentially when number
+of <code>if</code> increase. And the limit is intended to avoid that
+analysis time explodes.</p>
+<h2 id="gui-options">GUI options</h2>
+<p>In the GUI there are various options to limit analysis.</p>
+<p>In the GUI:</p>
+<ul>
+<li>Open the project dialog.</li>
+<li>In the “Analysis” tab there are several options.</li>
+</ul>
+<p>If you want to use these limitations on the command line too, you can
+import the GUI project file with <code>--project</code>.</p>
+</body></html>
