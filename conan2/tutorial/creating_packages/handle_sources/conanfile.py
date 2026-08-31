@@ -22,7 +22,9 @@ class helloRecipe(ConanFile):
     def source(self):
         # Please, be aware that using the head of the branch instead of an immutable tag
         # or commit is not a good practice in general as the branch may change the contents
-        get(self, "https://github.com/conan-io/libhello/archive/refs/heads/main.zip", 
+        #get(self, "https://github.com/conan-io/libhello/archive/refs/heads/main.zip", 
+        #          strip_root=True)
+        get(self, "https://gitee.com/hexu1985/Collection.Of.Cpp.Utility.Tools/raw/master/conan2/libhello-main.zip", 
                   strip_root=True)
 
     def config_options(self):
