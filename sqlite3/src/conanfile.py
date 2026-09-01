@@ -21,10 +21,7 @@ class SQLite3Conan(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "build_shell": [True, False],
-        "enable_fts5": [True, False],
-        "enable_rtree": [True, False],
-        "enable_json": [True, False]
+        "build_shell": [True, False]
     }
     default_options = {
         "shared": False,
