@@ -45,7 +45,8 @@ class helloRecipe(ConanFile):
 
     def source(self):
         git = Git(self)
-        git.clone(url="https://github.com/conan-io/libhello.git", target=".")
+        #git.clone(url="https://github.com/conan-io/libhello.git", target=".")
+        git.clone(url="https://gitee.com/hexu1985/libhello.git", target=".")
         # Please, be aware that using the head of the branch instead of an immutable tag
         # or commit is not a good practice in general
         git.checkout("with_tests")
