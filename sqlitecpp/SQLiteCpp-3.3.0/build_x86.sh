@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+cmake -S. -Bbuild_x86 -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DBUILD_SHARED_LIBS=ON \
+        -DSQLITECPP_USE_ASAN=OFF -DSQLITECPP_USE_GCOV=OFF \
+        -DSQLITECPP_BUILD_EXAMPLES=OFF -DSQLITECPP_BUILD_TESTS=OFF
+cmake --build build_x86 -j1
