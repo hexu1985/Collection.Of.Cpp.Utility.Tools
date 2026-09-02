@@ -48,6 +48,10 @@ public:
             const clientserver::Operation &operation, 
             clientserver::Result& result);
 
+    void operation_handle_sleep_10s(
+            const clientserver::Operation &operation, 
+            clientserver::Result& result);
+
 private:
     std::unique_ptr<soa_on_dds::EprosimaRpcServer> mp_rpc_server;
 

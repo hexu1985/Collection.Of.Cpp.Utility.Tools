@@ -62,6 +62,8 @@ bool EprosimaServer::init()
 {
     mp_rpc_server.reset(new soa_on_dds::EprosimaRpcServer("compute.service", 3));
     mp_rpc_server->register_method<Operation, Result>("operation", std::bind(&EprosimaServer::operation_handle, this, _1, _2));
+
+    mp_rpc_server->register_method<Operation, Result>("operation_slow", std::bind(&EprosimaServer::operation_handle_sleep_10s, this, _1, _2));
     return mp_rpc_server->start();
 }
 
@@ -69,11 +71,27 @@ void EprosimaServer::operation_handle(
         const Operation &operation, 
         Result& result) 
 {
+    std::cout << "EprosimaServer::operation_handle begin" << std::endl;
     int32_t m_result = 0;
     if (calculate(operation.m_operationType(), operation.m_num1(), operation.m_num2(), &m_result) != soa_on_dds::SUCCESS) {
         throw std::runtime_error("calculate error");
     }
     result.m_result(m_result);
+    std::cout << "EprosimaServer::operation_handle end" << std::endl;
+}
+
+void EprosimaServer::operation_handle_sleep_10s(
+        const Operation &operation, 
+        Result& result) 
+{
+    std::cout << "EprosimaServer::operation_handle_sleep_10s begin" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    int32_t m_result = 0;
+    if (calculate(operation.m_operationType(), operation.m_num1(), operation.m_num2(), &m_result) != soa_on_dds::SUCCESS) {
+        throw std::runtime_error("calculate error");
+    }
+    result.m_result(m_result);
+    std::cout << "EprosimaServer::operation_handle_sleep_10s end" << std::endl;
 }
 
 soa_on_dds::ErrorCode EprosimaServer::calculate(
