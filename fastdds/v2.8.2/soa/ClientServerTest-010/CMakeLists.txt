@@ -54,6 +54,8 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaSubWrapper.hpp
     EprosimaClientTest.cpp
     EprosimaClientTest.h
+    timer.cpp
+    timer.hpp
     threadsafe_queue.hpp
     worker_thread.hpp
     gen/soa_on_dds_types.cxx

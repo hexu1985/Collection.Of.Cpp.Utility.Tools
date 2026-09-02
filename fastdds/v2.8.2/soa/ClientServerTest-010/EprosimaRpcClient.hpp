@@ -83,6 +83,12 @@ public:
     }
 
     template <typename Argument, typename Result>
+    soa_on_dds::ErrorCode call_timed(const std::string& method_name, const Argument& arg, Result& res,
+            std::chrono::milliseconds timeout) {
+        return soa_on_dds::SUCCESS;
+    }
+
+    template <typename Argument, typename Result>
     void async_call(const std::string& method_name, const Argument& arg,
             std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback) {
         if (!is_ready()) {
@@ -98,7 +104,25 @@ public:
         send_request(method_name, request_payload, nullptr, response_processor);
     }
 
+    template <typename Argument, typename Result>
+    void async_call(const std::string& method_name, const Argument& arg,
+            std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback,
+            std::chrono::milliseconds timeout) {
+    }
+
 private:
+    template <typename Argument, typename Result>
+    soa_on_dds::ErrorCode call_helper(const std::string& method_name, const Argument& arg, Result& res,
+            std::chrono::milliseconds timeout) {
+        return soa_on_dds::SUCCESS;
+    }
+
+    template <typename Argument, typename Result>
+    void async_call_helper(const std::string& method_name, const Argument& arg,
+            std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback,
+            std::chrono::milliseconds timeout) {
+    }
+
     EprosimaRpcClient(const EprosimaRpcClient&)=delete;
     const EprosimaRpcClient& operator =(const EprosimaRpcClient&)=delete;
 
