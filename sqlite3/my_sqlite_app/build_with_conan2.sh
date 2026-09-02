@@ -5,10 +5,10 @@
 # 如果需要认证
 #conan remote login jfrog your_username -p your_password
 
-#conan build . --build=missing -r artifactory
-#conan build . -r artifactory
+source build/Release/generators/conanbuild.sh
 
-mkdir build && cd build
-conan install ..
-cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
-cmake --build .
+conan install . -r artifactory
+cmake -S. -Bbuild -DCMAKE_TOOLCHAIN_FILE=build/Release/generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+
+source build/Release/generators/deactivate_conanbuild.sh

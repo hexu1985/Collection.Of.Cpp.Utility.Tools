@@ -8,8 +8,15 @@ class MySqliteAppConan(ConanFile):
     version = "1.0.0"
     
     # 依赖配置
-    requires = "sqlite3/3.31.1"
+    requires = "sqlite3/3.31.1@baselib/test"
     
+    # 为依赖项设置选项
+    default_options = {
+        "sqlite3/*:shared": True,  # 关键：要求 sqlite3 也是 shared
+        # 如果你的项目也需要 shared，可以在这里设置
+        # "shared": True,
+    }
+
     # 设置
     settings = "os", "compiler", "build_type", "arch"
     
