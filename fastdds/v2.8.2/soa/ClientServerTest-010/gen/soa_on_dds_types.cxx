@@ -37,14 +37,16 @@ using namespace eprosima::fastcdr::exception;
 
 soa_on_dds::RPC_Header::RPC_Header()
 {
-    // m_method_name com.eprosima.idl.parser.typecode.StringTypeCode@27f723
+    // m_method_name com.eprosima.idl.parser.typecode.StringTypeCode@13c27452
     m_method_name ="";
-    // m_client_id com.eprosima.idl.parser.typecode.StringTypeCode@670b40af
+    // m_client_id com.eprosima.idl.parser.typecode.StringTypeCode@262b2c86
     m_client_id ="";
-    // m_session_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4923ab24
+    // m_session_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@371a67ec
     m_session_id = 0;
-    // m_request_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@44c8afef
+    // m_request_id com.eprosima.idl.parser.typecode.PrimitiveTypeCode@5ed828d
     m_request_id = 0;
+    // m_timestamp_ms com.eprosima.idl.parser.typecode.PrimitiveTypeCode@50d0686
+    m_timestamp_ms = 0;
 
 }
 
@@ -54,6 +56,7 @@ soa_on_dds::RPC_Header::~RPC_Header()
 
 
 
+
 }
 
 soa_on_dds::RPC_Header::RPC_Header(
@@ -63,6 +66,7 @@ soa_on_dds::RPC_Header::RPC_Header(
     m_client_id = x.m_client_id;
     m_session_id = x.m_session_id;
     m_request_id = x.m_request_id;
+    m_timestamp_ms = x.m_timestamp_ms;
 }
 
 soa_on_dds::RPC_Header::RPC_Header(
@@ -72,6 +76,7 @@ soa_on_dds::RPC_Header::RPC_Header(
     m_client_id = std::move(x.m_client_id);
     m_session_id = x.m_session_id;
     m_request_id = x.m_request_id;
+    m_timestamp_ms = x.m_timestamp_ms;
 }
 
 soa_on_dds::RPC_Header& soa_on_dds::RPC_Header::operator =(
@@ -82,6 +87,7 @@ soa_on_dds::RPC_Header& soa_on_dds::RPC_Header::operator =(
     m_client_id = x.m_client_id;
     m_session_id = x.m_session_id;
     m_request_id = x.m_request_id;
+    m_timestamp_ms = x.m_timestamp_ms;
 
     return *this;
 }
@@ -94,6 +100,7 @@ soa_on_dds::RPC_Header& soa_on_dds::RPC_Header::operator =(
     m_client_id = std::move(x.m_client_id);
     m_session_id = x.m_session_id;
     m_request_id = x.m_request_id;
+    m_timestamp_ms = x.m_timestamp_ms;
 
     return *this;
 }
@@ -102,7 +109,7 @@ bool soa_on_dds::RPC_Header::operator ==(
         const RPC_Header& x) const
 {
 
-    return (m_method_name == x.m_method_name && m_client_id == x.m_client_id && m_session_id == x.m_session_id && m_request_id == x.m_request_id);
+    return (m_method_name == x.m_method_name && m_client_id == x.m_client_id && m_session_id == x.m_session_id && m_request_id == x.m_request_id && m_timestamp_ms == x.m_timestamp_ms);
 }
 
 bool soa_on_dds::RPC_Header::operator !=(
@@ -127,6 +134,9 @@ size_t soa_on_dds::RPC_Header::getMaxCdrSerializedSize(
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
+    current_alignment += 8 + eprosima::fastcdr::Cdr::alignment(current_alignment, 8);
+
+
 
     return current_alignment - initial_alignment;
 }
@@ -149,6 +159,9 @@ size_t soa_on_dds::RPC_Header::getCdrSerializedSize(
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
 
+    current_alignment += 8 + eprosima::fastcdr::Cdr::alignment(current_alignment, 8);
+
+
 
     return current_alignment - initial_alignment;
 }
@@ -161,6 +174,7 @@ void soa_on_dds::RPC_Header::serialize(
     scdr << m_client_id.c_str();
     scdr << m_session_id;
     scdr << m_request_id;
+    scdr << m_timestamp_ms;
 
 }
 
@@ -172,6 +186,7 @@ void soa_on_dds::RPC_Header::deserialize(
     dcdr >> m_client_id;
     dcdr >> m_session_id;
     dcdr >> m_request_id;
+    dcdr >> m_timestamp_ms;
 }
 
 /*!
@@ -304,11 +319,40 @@ int32_t& soa_on_dds::RPC_Header::request_id()
     return m_request_id;
 }
 
+/*!
+ * @brief This function sets a value in member timestamp_ms
+ * @param _timestamp_ms New value for member timestamp_ms
+ */
+void soa_on_dds::RPC_Header::timestamp_ms(
+        uint64_t _timestamp_ms)
+{
+    m_timestamp_ms = _timestamp_ms;
+}
+
+/*!
+ * @brief This function returns the value of member timestamp_ms
+ * @return Value of member timestamp_ms
+ */
+uint64_t soa_on_dds::RPC_Header::timestamp_ms() const
+{
+    return m_timestamp_ms;
+}
+
+/*!
+ * @brief This function returns a reference to member timestamp_ms
+ * @return Reference to member timestamp_ms
+ */
+uint64_t& soa_on_dds::RPC_Header::timestamp_ms()
+{
+    return m_timestamp_ms;
+}
+
 
 size_t soa_on_dds::RPC_Header::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t current_align = current_alignment;
+
 
 
 
@@ -328,14 +372,14 @@ void soa_on_dds::RPC_Header::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-        
+         
 }
 
 soa_on_dds::RPC_Request::RPC_Request()
 {
-    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@1ee807c6
+    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@12028586
 
-    // m_request_payload com.eprosima.idl.parser.typecode.SequenceTypeCode@76a4d6c
+    // m_request_payload com.eprosima.idl.parser.typecode.SequenceTypeCode@17776a8
 
 
 }
@@ -550,11 +594,11 @@ void soa_on_dds::RPC_Request::serializeKey(
 
 soa_on_dds::RPC_Response::RPC_Response()
 {
-    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@1ee807c6
+    // m_header com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@12028586
 
-    // m_error_code com.eprosima.idl.parser.typecode.EnumTypeCode@12028586
+    // m_error_code com.eprosima.idl.parser.typecode.EnumTypeCode@7fad8c79
     m_error_code = soa_on_dds::SUCCESS;
-    // m_response_payload com.eprosima.idl.parser.typecode.SequenceTypeCode@17776a8
+    // m_response_payload com.eprosima.idl.parser.typecode.SequenceTypeCode@71a794e5
 
 
 }

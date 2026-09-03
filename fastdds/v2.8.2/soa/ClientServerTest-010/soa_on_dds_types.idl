@@ -20,6 +20,7 @@ struct RPC_Header {
     string client_id;
     long session_id;
     long request_id;
+    unsigned long long timestamp_ms;
 };
 
 struct RPC_Request {

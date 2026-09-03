@@ -230,6 +230,25 @@ namespace soa_on_dds {
          */
         eProsima_user_DllExport int32_t& request_id();
 
+        /*!
+         * @brief This function sets a value in member timestamp_ms
+         * @param _timestamp_ms New value for member timestamp_ms
+         */
+        eProsima_user_DllExport void timestamp_ms(
+                uint64_t _timestamp_ms);
+
+        /*!
+         * @brief This function returns the value of member timestamp_ms
+         * @return Value of member timestamp_ms
+         */
+        eProsima_user_DllExport uint64_t timestamp_ms() const;
+
+        /*!
+         * @brief This function returns a reference to member timestamp_ms
+         * @return Reference to member timestamp_ms
+         */
+        eProsima_user_DllExport uint64_t& timestamp_ms();
+
 
         /*!
          * @brief This function returns the maximum serialized size of an object
@@ -294,6 +313,7 @@ namespace soa_on_dds {
         std::string m_client_id;
         int32_t m_session_id;
         int32_t m_request_id;
+        uint64_t m_timestamp_ms;
     };
     /*!
      * @brief This class represents the structure RPC_Request defined by the user in the IDL file.

@@ -37,11 +37,11 @@ using namespace eprosima::fastcdr::exception;
 
 clientserver::Operation::Operation()
 {
-    // m_m_operationType com.eprosima.idl.parser.typecode.EnumTypeCode@6d3af739
+    // m_m_operationType com.eprosima.idl.parser.typecode.EnumTypeCode@543788f3
     m_m_operationType = clientserver::ADDITION;
-    // m_m_num1 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@1da51a35
+    // m_m_num1 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@6d3af739
     m_m_num1 = 0;
-    // m_m_num2 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@16022d9d
+    // m_m_num2 com.eprosima.idl.parser.typecode.PrimitiveTypeCode@1da51a35
     m_m_num2 = 0;
 
 }
@@ -280,7 +280,7 @@ void clientserver::Operation::serializeKey(
 
 clientserver::Result::Result()
 {
-    // m_m_result com.eprosima.idl.parser.typecode.PrimitiveTypeCode@7ba18f1b
+    // m_m_result com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4bb4de6a
     m_m_result = 0;
 
 }
