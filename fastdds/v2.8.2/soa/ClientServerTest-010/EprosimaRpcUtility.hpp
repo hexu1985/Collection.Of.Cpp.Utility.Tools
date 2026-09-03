@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 
@@ -10,6 +11,9 @@ public:
 
     static std::string generate_rpc_client_id(const std::string& client_name);
     static long generate_rpc_session_id();
+
+    static uint64_t get_current_time_ms();
+    static std::string ms_to_string(uint64_t ms);
 
     using ParticipantPtr = eprosima::fastdds::dds::DomainParticipant*;
     static ParticipantPtr get_default_rpc_participant();

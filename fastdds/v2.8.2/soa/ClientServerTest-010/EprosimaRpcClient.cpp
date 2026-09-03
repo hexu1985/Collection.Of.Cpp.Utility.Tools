@@ -1,6 +1,7 @@
 #include "EprosimaRpcClient.hpp"
 #include "EprosimaRpcUtility.hpp"
 #include "soa_on_dds_typesPubSubTypes.h"
+#include "timer.hpp"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -15,6 +16,15 @@ using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 
 using namespace soa_on_dds;
+
+namespace {
+
+inline void set_send_timestamp_ms(soa_on_dds::RPC_Request& request) {
+    auto timestamp_ms = EprosimaRpcUtility::get_current_time_ms();
+    request.header().timestamp_ms(timestamp_ms); 
+}
+
+}   // namespace
 
 EprosimaRpcClient::EprosimaRpcClient(const std::string& client_name, const std::string& service_name,
             eprosima::fastdds::dds::DomainParticipant* participant):
@@ -53,6 +63,12 @@ bool EprosimaRpcClient::init() {
 
     if (!init_response_sub()) {
         return false;
+    }
+
+    // 创建一个空函数timer，提前触发timer thread创建
+    {
+        auto timer = Timer{[](){}, std::chrono::milliseconds{100}};
+        timer.start();
     }
 
     return true;
@@ -124,6 +140,7 @@ long EprosimaRpcClient::send_request(const std::string& method_name,
     request_info->request = request;
     request_info->response_promise = response_promise;
     request_info->response_processor = response_processor;
+    request_info->timestamps_ms = EprosimaRpcUtility::get_current_time_ms();
 
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
 
@@ -137,6 +154,7 @@ long EprosimaRpcClient::send_request(const std::string& method_name,
 void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
     auto request = request_info->request;
     auto response_promise = request_info->response_promise;
+    set_send_timestamp_ms(*request);
     if (!m_request_pub->write((void*)request.get())) {
         auto response = make_rpc_response(request, soa_on_dds::CLIENT_SEND_REQUEST_ERROR);
         response_promise->set_value(response);

@@ -25,6 +25,11 @@ size_t adjust_thread_pool_size(size_t thread_pool_size) {
     return thread_pool_size;
 }
 
+inline void set_send_timestamp_ms(soa_on_dds::RPC_Response& response) {
+    auto timestamp_ms = EprosimaRpcUtility::get_current_time_ms();
+    response.header().timestamp_ms(timestamp_ms); 
+}
+
 }   // namespace 
 
 EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name, 
@@ -196,6 +201,7 @@ void EprosimaRpcServer::do_send_response(ResponsePtr rpc_response) {
         return;
     }
 
+    set_send_timestamp_ms(*rpc_response);
     m_response_pub->write((void*)rpc_response.get());
 }
 

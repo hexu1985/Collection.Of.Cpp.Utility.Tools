@@ -2,6 +2,8 @@
 
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 
+#include <chrono>
+#include <ctime>
 #include <unistd.h>
 #include <sys/types.h>
 
@@ -64,6 +66,23 @@ std::string EprosimaRpcUtility::generate_rpc_client_id(const std::string& client
 
 long EprosimaRpcUtility::generate_rpc_session_id() {
     return static_cast<long>(getpid());
+}
+
+uint64_t EprosimaRpcUtility::get_current_time_ms() {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()
+            ).count();
+}
+
+std::string EprosimaRpcUtility::ms_to_string(uint64_t ms) {
+    std::chrono::milliseconds duration(ms);
+    std::chrono::system_clock::time_point tp(duration);
+    std::time_t time = std::chrono::system_clock::to_time_t(tp);
+    std::tm* tm = std::gmtime(&time);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+    int millis = ms % 1000;
+    return std::string(buffer) + "." + std::to_string(millis);
 }
 
 EprosimaRpcUtility::ParticipantPtr EprosimaRpcUtility::get_default_rpc_participant() {

@@ -36,7 +36,7 @@ private:
         RequestPtr request;
         ResponsePromisePtr response_promise;
         IResponseProcessorPtr response_processor;
-        // call timestamps
+        uint64_t timestamps_ms=0;
     };
     
     using RequestInfoPtr = std::shared_ptr<RequestInfo>;
@@ -69,7 +69,7 @@ public:
     }
 
     template <typename Argument, typename Result>
-    void async_call(const std::string& method_name, const Argument& arg,
+    void async_call_timed(const std::string& method_name, const Argument& arg,
             std::function<void(soa_on_dds::ErrorCode, std::shared_ptr<Result>)> callback,
             std::chrono::milliseconds timeout) {
         return this->async_call_helper(method_name, arg, callback, timeout);
