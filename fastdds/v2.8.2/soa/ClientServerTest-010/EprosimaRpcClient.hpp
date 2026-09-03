@@ -90,7 +90,7 @@ private:
         }
 
         ResponsePromisePtr response_promise = std::make_shared<ResponsePromise>();
-        long request_id = send_request(method_name, request_payload, response_promise, nullptr);
+        long request_id = send_request(method_name, request_payload, response_promise, nullptr, timeout);
 
         auto response_future = response_promise->get_future();
         auto rpc_response = response_future.get();
@@ -122,7 +122,7 @@ private:
         }
 
         IResponseProcessorPtr response_processor = std::make_shared<ResponseProcessor<Result>>(callback);
-        send_request(method_name, request_payload, nullptr, response_processor);
+        send_request(method_name, request_payload, nullptr, response_processor, timeout);
     }
 
     EprosimaRpcClient(const EprosimaRpcClient&)=delete;
@@ -132,7 +132,8 @@ private:
     bool init_response_sub();
 
     long send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
-        ResponsePromisePtr response_promise, IResponseProcessorPtr response_processor); 
+        ResponsePromisePtr response_promise, IResponseProcessorPtr response_processor,
+        std::chrono::milliseconds timeout); 
 
     void on_data_available();
 

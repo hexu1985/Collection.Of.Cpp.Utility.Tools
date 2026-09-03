@@ -117,7 +117,8 @@ bool EprosimaRpcClient::init_response_sub() {
 long EprosimaRpcClient::send_request(const std::string& method_name, 
         const std::vector<uint8_t>& request_payload,
         ResponsePromisePtr response_promise,
-        IResponseProcessorPtr response_processor) {
+        IResponseProcessorPtr response_processor,
+        std::chrono::milliseconds timeout) {
     auto request = make_rpc_request(method_name, request_payload);
     auto request_info = std::make_shared<RequestInfo>();
     request_info->request = request;
@@ -125,6 +126,10 @@ long EprosimaRpcClient::send_request(const std::string& method_name,
     request_info->response_processor = response_processor;
 
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
+
+    if (timeout != std::chrono::milliseconds::zero()) {
+        // TODO: start timer
+    }
 
     return request->header().request_id();
 }
