@@ -1,7 +1,6 @@
 #include "EprosimaRpcClient.hpp"
 #include "EprosimaRpcUtility.hpp"
 #include "soa_on_dds_typesPubSubTypes.h"
-#include "timer.hpp"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -26,10 +25,16 @@ inline void set_send_timestamp_ms(soa_on_dds::RPC_Request& request) {
 
 }   // namespace
 
+std::shared_ptr<EprosimaRpcClient> EprosimaRpcClient::create_rpc_client(
+        const std::string& client_name, const std::string& service_name,
+        eprosima::fastdds::dds::DomainParticipant* participant) {
+    return std::shared_ptr<EprosimaRpcClient>(new EprosimaRpcClient(client_name, service_name, participant));
+}
+
 EprosimaRpcClient::EprosimaRpcClient(const std::string& client_name, const std::string& service_name,
             eprosima::fastdds::dds::DomainParticipant* participant):
     m_service_name(service_name), m_participant(participant) {
-    //std::cout << "EprosimaRpcClient::EprosimaRpcClient" << std::endl;
+    std::cout << "EprosimaRpcClient::EprosimaRpcClient" << std::endl;
 
     if (m_participant == nullptr) {
         m_participant = EprosimaRpcUtility::get_default_rpc_participant();
@@ -50,6 +55,7 @@ EprosimaRpcClient::EprosimaRpcClient(const std::string& client_name, const std::
 EprosimaRpcClient::~EprosimaRpcClient() {
     m_request_pub.reset();
     m_response_sub.reset();
+    std::cout << "EprosimaRpcClient::~EprosimaRpcClient" << std::endl;
 }
 
 bool EprosimaRpcClient::init() {
@@ -63,12 +69,6 @@ bool EprosimaRpcClient::init() {
 
     if (!init_response_sub()) {
         return false;
-    }
-
-    // 创建一个空函数timer，提前触发timer thread创建
-    {
-        auto timer = Timer{[](){}, std::chrono::milliseconds{100}};
-        timer.start();
     }
 
     return true;
@@ -145,7 +145,8 @@ long EprosimaRpcClient::send_request(const std::string& method_name,
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
 
     if (timeout != std::chrono::milliseconds::zero()) {
-        // TODO: start timer
+        // TODO
+//        auto timer = std::make_shared<Timer>([]);
     }
 
     return request->header().request_id();
@@ -188,7 +189,7 @@ void EprosimaRpcClient::do_recv_response() {
         if (is_valid_response(m_cached_response)) {
             auto rpc_response = m_cached_response;
             m_cached_response = std::make_shared<soa_on_dds::RPC_Response>();
-            dispatch_response(rpc_response);
+            do_dispatch_response(rpc_response);
         }
     }
 }
@@ -207,7 +208,7 @@ bool EprosimaRpcClient::is_valid_response(ResponsePtr rpc_response) {
     return true;
 }
 
-void EprosimaRpcClient::dispatch_response(std::shared_ptr<RPC_Response> rpc_response) {
+void EprosimaRpcClient::do_dispatch_response(std::shared_ptr<RPC_Response> rpc_response) {
     long request_id = rpc_response->header().request_id();
     auto request_info = get_request_info(request_id);
     if (request_info == nullptr) {
@@ -346,4 +347,4 @@ EprosimaRpcClient::IResponseProcessor::IResponseProcessor() {
 
 EprosimaRpcClient::IResponseProcessor::~IResponseProcessor() {
 }
-        
+

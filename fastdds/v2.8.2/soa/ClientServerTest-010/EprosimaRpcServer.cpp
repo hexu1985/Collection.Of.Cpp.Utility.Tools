@@ -38,6 +38,7 @@ EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name,
     m_participant(participant),
     m_service_name(service_name),
     m_workers(adjust_thread_pool_size(thread_pool_size)) {
+    std::cout << "EprosimaRpcServer::EprosimaRpcServer" << std::endl;
 
     if (m_participant == nullptr) {
         m_participant = EprosimaRpcUtility::get_default_rpc_participant();
@@ -49,6 +50,7 @@ EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name,
 
 EprosimaRpcServer::~EprosimaRpcServer() {
     stop();
+    std::cout << "EprosimaRpcServer::~EprosimaRpcServer" << std::endl;
 }
 
 bool EprosimaRpcServer::start() {

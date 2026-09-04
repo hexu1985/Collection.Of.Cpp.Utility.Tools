@@ -4,6 +4,7 @@
 #include "EprosimaPubWrapper.hpp"
 #include "EprosimaSubWrapper.hpp"
 #include "worker_thread.hpp"
+#include "timer.hpp"
 
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 
@@ -15,7 +16,7 @@
 
 namespace soa_on_dds {
 
-class EprosimaRpcClient {
+class EprosimaRpcClient : public std::enable_shared_from_this<EprosimaRpcClient> {
 private:
     class IResponseProcessor {
     public:
@@ -31,18 +32,20 @@ private:
     using ResponsePtr = std::shared_ptr<soa_on_dds::RPC_Response>;
     using ResponsePromise = std::promise<ResponsePtr>;
     using ResponsePromisePtr = std::shared_ptr<ResponsePromise>;
+    using TimerPtr = std::shared_ptr<Timer>;
 
     struct RequestInfo {
         RequestPtr request;
         ResponsePromisePtr response_promise;
         IResponseProcessorPtr response_processor;
         uint64_t timestamps_ms=0;
+        TimerPtr timer;
     };
     
     using RequestInfoPtr = std::shared_ptr<RequestInfo>;
 
 public:
-    EprosimaRpcClient(const std::string& client_name, const std::string& service_name,
+    static std::shared_ptr<EprosimaRpcClient> create_rpc_client(const std::string& client_name, const std::string& service_name,
             eprosima::fastdds::dds::DomainParticipant* participant=nullptr);
 
     virtual ~EprosimaRpcClient();
@@ -76,6 +79,9 @@ public:
     }
 
 private:
+    EprosimaRpcClient(const std::string& client_name, const std::string& service_name,
+            eprosima::fastdds::dds::DomainParticipant* participant);
+
     template <typename Argument, typename Result>
     soa_on_dds::ErrorCode call_helper(const std::string& method_name, const Argument& arg, Result& res,
             std::chrono::milliseconds timeout) {
@@ -145,7 +151,7 @@ private:
     void do_remove_pending_request(long request_id);
 
     bool is_valid_response(ResponsePtr rpc_response);
-    void dispatch_response(ResponsePtr rpc_response);
+    void do_dispatch_response(ResponsePtr rpc_response);
 
     class RequestPubListener : public eprosima::fastdds::dds::DataWriterListener {
     public:

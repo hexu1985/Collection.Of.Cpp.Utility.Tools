@@ -46,7 +46,7 @@ EprosimaAsyncClient::~EprosimaAsyncClient()
 bool EprosimaAsyncClient::init()
 {
     //std::cout << "EprosimaAsyncClient::init_rpc_client" << std::endl;
-    mp_rpc_client.reset(new soa_on_dds::EprosimaRpcClient("client", "compute.service"));
+    mp_rpc_client = soa_on_dds::EprosimaRpcClient::create_rpc_client("client", "compute.service");
     return mp_rpc_client->init();
 }
 
