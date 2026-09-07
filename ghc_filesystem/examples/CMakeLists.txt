@@ -10,6 +10,7 @@ message( STATUS "CMAKE_PROJECT_NAME = ${CMAKE_PROJECT_NAME}" )
 message( STATUS "PROJECT_SOURCE_DIR = ${PROJECT_SOURCE_DIR}" )
 
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 FOREACH (src_file ${SOURCES})
     get_filename_component(exe_file ${src_file} NAME_WLE)
