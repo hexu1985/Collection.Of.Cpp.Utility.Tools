@@ -64,6 +64,8 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     gen/soa_on_dds_typesPubSubTypes.h
     gen/ClientServerTypes.cxx
     gen/ClientServerTypes.h
+    EprosimaClientTimed.cpp
+    EprosimaClientTimed.h
     )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gen)
 
