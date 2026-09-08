@@ -99,6 +99,8 @@ bool EprosimaRpcClient::init_request_pub() {
     wqos.history().depth = 2;
     wqos.resource_limits().max_samples = 50;
     wqos.resource_limits().allocated_samples = 50;
+    wqos.endpoint().history_memory_policy =
+        eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     config.data_writer_qos = wqos;
 
     if (!m_request_pub->init(config)) {
@@ -121,6 +123,8 @@ bool EprosimaRpcClient::init_response_sub() {
     rqos.history().depth = 100;
     rqos.resource_limits().max_samples = 100;
     rqos.resource_limits().allocated_samples = 100;
+    rqos.endpoint().history_memory_policy =
+        eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     config.data_reader_qos = rqos;
 
     if (!m_response_sub->init(config)) {
