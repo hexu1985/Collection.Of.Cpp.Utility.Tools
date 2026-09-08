@@ -97,6 +97,8 @@ bool HelloWorldSubscriber::init(
     // CREATE THE READER
     DataReaderQos rqos = DATAREADER_QOS_DEFAULT;
     rqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+    rqos.endpoint().history_memory_policy =
+        eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
 
     if (use_env)
     {

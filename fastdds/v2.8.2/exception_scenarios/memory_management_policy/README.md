@@ -124,3 +124,50 @@ typedef enum MemoryManagementPolicy{
 }MemoryManagementPolicy_t;
 ```
 
+-----
+
+
+### 我改了writer端的qos，但是接收反序列化报如下错误：
+```
+2026-09-08 10:54:57.148 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+```
+是不是reader的qos也需要调整？
+
+**是的，完全正确。** 你遇到的错误正是因为没有同步调整 **Reader（订阅端）** 的 QoS 导致的。
+
+### 错误原因分析
+
+这个错误信息非常明确：
+- **Change payload size of '1040' bytes**：你尝试发送的数据实际大小为 **1040** 字节。
+- **history payload size of '271' bytes**：接收端的 Reader History 当前配置的最大容量仅为 **271** 字节。
+- **cannot be resized**：最关键的一点，它明确告诉你“无法调整大小”，这意味着你 Reader 端的内存策略（`history_memory_policy`）很可能设置为了 `PREALLOCATED`（完全预分配），在这种策略下，缓冲区大小是固定的，无法扩容。
+
+你的 Writer 端修改 QoS 允许发送更大的数据，但 Reader 端还在用旧的小容量缓冲区接收，自然就会报错。
+
+### 解决方案
+
+你需要为 **Reader 端**应用与 Writer 端一致的 QoS 设置：
+
+#### 调整为允许扩容的策略
+这是对你当前操作最直接的修复。在订阅端创建 `DataReader` 时，将内存策略改为允许重新分配的模式。
+
+```cpp
+// 获取默认 QoS
+DataReaderQos rqos = DATAREADER_QOS_DEFAULT;
+// 设置为允许在必要时重新分配内存，以匹配你 Writer 端的设置
+rqos.endpoint().history_memory_policy =
+    eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+// 或者更极端的完全动态分配
+// rqos.endpoint().history_memory_policy =
+//     eprosima::fastrtps::rtps::DYNAMIC_RESERVE_MEMORY_MODE;
+
+// 创建 DataReader
+reader_ = subscriber_->create_datareader(topic_, rqos, &callbacks_);
+```
+设置后，当收到 1040 字节的数据时，Reader 的历史缓存就能自动扩容以适应新数据了。
+
+### 核心原则：发布与订阅的 QoS 需配对
+
+在 Fast DDS 中，**Writer 和 Reader 的 QoS 必须兼容**。资源管理相关的设置（如 `history_memory_policy` 和 `resource_limits`）虽然不需要完全一致，但接收端的能力必须大于等于发送端的实际需求。你的错误正是这个原则的典型体现。
+
+因此，但凡你修改了 Writer 端对数据大小的限制（比如改为发送更大的数据），**务必同步检查和调整 Reader 端的对应配置**，通常最简单的做法就是让它们保持相同的内存策略。配置完成后，这个问题应该就能解决了。如果还有其他问题，欢迎继续提问。
