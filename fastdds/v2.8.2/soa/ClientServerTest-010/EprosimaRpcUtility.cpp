@@ -2,6 +2,7 @@
 
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 
+#include <unordered_map>
 #include <chrono>
 #include <ctime>
 #include <unistd.h>
@@ -104,3 +105,27 @@ EprosimaRpcUtility::create_participant(DomainId_t domain_id,
 void EprosimaRpcUtility::delete_participant(ParticipantPtr part) {
     DomainParticipantFactory::get_instance()->delete_participant(part);
 }
+
+std::string EprosimaRpcUtility::error_code_to_string(soa_on_dds::ErrorCode code) {
+    using namespace soa_on_dds;
+
+    static const std::unordered_map<ErrorCode, std::string> errorMap = {
+        {ErrorCode::SUCCESS, "SUCCESS"},
+        {ErrorCode::UPPER_LAYER_APPLICATION_ERROR, "UPPER_LAYER_APPLICATION_ERROR"},
+        {ErrorCode::CLIENT_SERIALIZE_ERROR, "CLIENT_SERIALIZE_ERROR"},
+        {ErrorCode::CLIENT_DESERIALIZE_ERROR, "CLIENT_DESERIALIZE_ERROR"},
+        {ErrorCode::SERVICE_SERIALIZE_ERROR, "SERVICE_SERIALIZE_ERROR"},
+        {ErrorCode::SERVICE_DESERIALIZE_ERROR, "SERVICE_DESERIALIZE_ERROR"},
+        {ErrorCode::SERVICE_NOT_AVAILABLE, "SERVICE_NOT_AVAILABLE"},
+        {ErrorCode::METHOD_NOT_REGISTER, "METHOD_NOT_REGISTER"},
+        {ErrorCode::REQUEST_TIMEOUT, "REQUEST_TIMEOUT"},
+        {ErrorCode::CLIENT_SEND_REQUEST_ERROR, "CLIENT_SEND_REQUEST_ERROR"},
+        {ErrorCode::CLIENT_NOT_INITIALIZE, "CLIENT_NOT_INITIALIZE"}
+    };
+
+    auto it = errorMap.find(code);
+    if (it != errorMap.end())
+        return it->second;
+    return "UNKNOWN_ERROR_CODE";
+}
+

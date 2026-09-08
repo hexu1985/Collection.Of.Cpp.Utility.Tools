@@ -4,6 +4,8 @@
 #include <string>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 
+#include "soa_on_dds_types.h"
+
 class EprosimaRpcUtility {
 public:
     static std::string generate_rpc_request_topic(const std::string& service_name);
@@ -14,6 +16,8 @@ public:
 
     static uint64_t get_current_time_ms();
     static std::string ms_to_string(uint64_t ms);
+
+    static std::string error_code_to_string(soa_on_dds::ErrorCode code);
 
     using ParticipantPtr = eprosima::fastdds::dds::DomainParticipant*;
     static ParticipantPtr get_default_rpc_participant();
