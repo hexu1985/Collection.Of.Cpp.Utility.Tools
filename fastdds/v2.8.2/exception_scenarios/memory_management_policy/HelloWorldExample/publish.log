@@ -1,0 +1,59 @@
+Starting publisher.
+Publisher running 10 samples.
+2026-09-08 10:21:30.729 [DATA_WRITER Warning] DataWriterImpl::enable() ok, RTPSWriter.GUID[01.0f.7c.f8.b5.97.0c.c9.01.00.00.00|0.0.1.3] <=> TOPIC[HelloWorldTopic] <=> reliability.kind[RELIABLE] <=> TYPE[HelloWorld]
+=== DataWriterQos ===
+durability.kind: TRANSIENT_LOCAL_DURABILITY_QOS
+durability_service.service_cleanup_delay: 0s 0ns
+durability_service.history_kind: KEEP_LAST_HISTORY_QOS
+durability_service.history_depth: 1
+durability_service.max_samples: -1
+durability_service.max_instances: -1
+durability_service.max_samples_per_instance: -1
+deadline.period: 2147483647s 4294967295ns
+latency_budget.duration: 0s 0ns
+liveliness.kind: AUTOMATIC_LIVELINESS_QOS
+liveliness.lease_duration: 2147483647s 4294967295ns
+liveliness.announcement_period: 2147483647s 4294967295ns
+reliability.kind: RELIABLE_RELIABILITY_QOS
+reliability.max_blocking_time: 0s 100000000ns
+destination_order.kind: BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS
+history.kind: KEEP_LAST_HISTORY_QOS
+history.depth: 1
+resource_limits.max_samples: 5000
+resource_limits.max_instances: 10
+resource_limits.max_samples_per_instance: 400
+resource_limits.allocated_samples: 100
+transport_priority.value: 0
+lifespan.duration: 2147483647s 4294967295ns
+user_data.size: 0
+ownership.kind: SHARED_OWNERSHIP_QOS
+ownership_strength.value: 0
+writer_data_lifecycle.autodispose_unregistered_instances: 1
+representation.m_value.size: 0
+publish_mode.kind: SYNCHRONOUS_PUBLISH_MODE
+properties.properties.size: 0
+properties.binary_properties.size: 0
+=================================
+ (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:555) -> Function enable
+2026-09-08 10:21:32.534 [RTPS_TRANSPORT_SHM Warning] Buffer is being invalidated, segment_size may be insufficient (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemManager.hpp:113) -> Function invalidate_if_not_processing
+Publisher matched.
+Message's length: 1024 with index: 1 SENT
+2026-09-08 10:21:32.729 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 2 SENT
+2026-09-08 10:21:33.729 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 3 SENT
+2026-09-08 10:21:34.730 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 4 SENT
+2026-09-08 10:21:35.730 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 5 SENT
+2026-09-08 10:21:36.730 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 6 SENT
+2026-09-08 10:21:37.730 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 7 SENT
+2026-09-08 10:21:38.731 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 8 SENT
+2026-09-08 10:21:39.731 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 9 SENT
+2026-09-08 10:21:40.731 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change
+Message's length: 1024 with index: 10 SENT
+2026-09-08 10:21:41.732 [DATA_WRITER Warning] Data serialization returned false:TOPIC[HelloWorldTopic] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/publisher/DataWriterImpl.cpp:1096) -> Function perform_create_new_change

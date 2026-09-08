@@ -44,7 +44,9 @@ bool HelloWorldPublisher::init(
         bool use_env)
 {
     hello_.index(0);
-    hello_.message("HelloWorld");
+    std::string message;
+    message.assign(1024, 'A');
+    hello_.message(message);
     DomainParticipantQos pqos = PARTICIPANT_QOS_DEFAULT;
     pqos.name("Participant_pub");
     auto factory = DomainParticipantFactory::get_instance();
@@ -170,7 +172,7 @@ void HelloWorldPublisher::runThread(
         {
             if (publish(false))
             {
-                std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
+                std::cout << "Message's length: " << hello_.message().length() << " with index: " << hello_.index()
                           << " SENT" << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
@@ -186,7 +188,7 @@ void HelloWorldPublisher::runThread(
             }
             else
             {
-                std::cout << "Message: " << hello_.message() << " with index: " << hello_.index()
+                std::cout << "Message's length: " << hello_.message().length() << " with index: " << hello_.index()
                           << " SENT" << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep));
