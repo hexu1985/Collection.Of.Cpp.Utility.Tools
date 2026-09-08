@@ -106,3 +106,21 @@ myPubSubType->m_typeSize = type_size;
 ### ⚙️ 注意事项
 
 使用这个函数时，一个关键的背景是内存策略的设置。`getMaxCdrSerializedSize`计算出的最大尺寸，是为 **`PREALLOCATED`**（完全预分配）这类策略准备的。如果你将内存策略设为`DYNAMIC`（完全动态分配），该函数返回的值可能就不作为实际分配的依据了，因为系统会按需扩容。因此，它需要与你选择的QoS策略协同使用。
+
+-----
+
+### include/fastdds/rtps/resources/ResourceManagement.h 
+
+```cpp
+/**
+ * Enum MemoryuManagementPolicy_t, indicated the way memory is managed in terms of dealing with CacheChanges
+ */
+
+typedef enum MemoryManagementPolicy{
+    PREALLOCATED_MEMORY_MODE, //!< Preallocated memory. Size set to the data type maximum. Largest memory footprint but smallest allocation count.
+    PREALLOCATED_WITH_REALLOC_MEMORY_MODE, //!< Default size preallocated, requires reallocation when a bigger message arrives. Smaller memory footprint at the cost of an increased allocation count.
+    DYNAMIC_RESERVE_MEMORY_MODE, //< Dynamic allocation at the time of message arrival. Least memory footprint but highest allocation count.
+    DYNAMIC_REUSABLE_MEMORY_MODE //< Like DYNAMIC_RESERVE_MEMORY_MODE but allocated memory is reused for future messages. Smaller allocation count at the cost of an increased memory footprint.
+}MemoryManagementPolicy_t;
+```
+
