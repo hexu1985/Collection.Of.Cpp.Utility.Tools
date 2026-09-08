@@ -114,7 +114,7 @@ bool EprosimaRpcClient::init_response_sub() {
     return true;
 }
 
-long EprosimaRpcClient::send_request(const std::string& method_name, 
+void EprosimaRpcClient::send_request(const std::string& method_name, 
         const std::vector<uint8_t>& request_payload,
         ResponsePromisePtr response_promise,
         IResponseProcessorPtr response_processor) {
@@ -125,16 +125,14 @@ long EprosimaRpcClient::send_request(const std::string& method_name,
     request_info->response_processor = response_processor;
 
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
-
-    return request->header().request_id();
 }
 
 void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
     auto request = request_info->request;
     auto response_promise = request_info->response_promise;
     if (!m_request_pub->write((void*)request.get())) {
-        auto response = make_rpc_response(request, soa_on_dds::CLIENT_SEND_REQUEST_ERROR);
-        response_promise->set_value(response);
+        auto rpc_response = make_rpc_response(request, soa_on_dds::CLIENT_SEND_REQUEST_ERROR);
+        set_reponse(request_info, rpc_response);
         std::cout << "m_request_pub->write failed" << std::endl;
         return;
     }
@@ -148,14 +146,6 @@ void EprosimaRpcClient::on_data_available() {
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_recv_response, this));
 }
 
-void EprosimaRpcClient::remove_pending_request(long request_id) {
-    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_remove_pending_request, this, request_id));
-}
-
-void EprosimaRpcClient::do_remove_pending_request(long request_id) {
-    m_pending_requests.erase(request_id);
-}
-
 void EprosimaRpcClient::do_recv_response() {
     //std::cout << "EprosimaRpcClient::do_recv_response" << std::endl;
     while (m_response_sub->take_next_sample((void*) m_cached_response.get(), &m_sample_info) == ReturnCode_t::RETCODE_OK ) {
@@ -165,7 +155,7 @@ void EprosimaRpcClient::do_recv_response() {
         if (is_valid_response(m_cached_response)) {
             auto rpc_response = m_cached_response;
             m_cached_response = std::make_shared<soa_on_dds::RPC_Response>();
-            dispatch_response(rpc_response);
+            do_dispatch_response(rpc_response);
         }
     }
 }
@@ -184,7 +174,7 @@ bool EprosimaRpcClient::is_valid_response(ResponsePtr rpc_response) {
     return true;
 }
 
-void EprosimaRpcClient::dispatch_response(std::shared_ptr<RPC_Response> rpc_response) {
+void EprosimaRpcClient::do_dispatch_response(std::shared_ptr<RPC_Response> rpc_response) {
     long request_id = rpc_response->header().request_id();
     auto request_info = get_request_info(request_id);
     if (request_info == nullptr) {
@@ -201,6 +191,13 @@ void EprosimaRpcClient::dispatch_response(std::shared_ptr<RPC_Response> rpc_resp
         return;
     }
 
+    set_reponse(request_info, rpc_response);
+}
+
+void EprosimaRpcClient::set_reponse(RequestInfoPtr request_info, ResponsePtr rpc_response) {
+    auto request_id= request_info->request->header().request_id();
+    m_pending_requests.erase(request_id);
+
     if (request_info->response_promise != nullptr) {
         request_info->response_promise->set_value(rpc_response);
     }
@@ -209,8 +206,6 @@ void EprosimaRpcClient::dispatch_response(std::shared_ptr<RPC_Response> rpc_resp
         // TODO: call in callback thread
         request_info->response_processor->process(rpc_response);
     }
-
-    do_remove_pending_request(request_id);
 }
 
 EprosimaRpcClient::RequestPtr EprosimaRpcClient::make_rpc_request(

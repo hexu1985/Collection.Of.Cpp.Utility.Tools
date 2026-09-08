@@ -64,7 +64,7 @@ public:
         }
 
         ResponsePromisePtr response_promise = std::make_shared<ResponsePromise>();
-        long request_id = send_request(method_name, request_payload, response_promise, nullptr);
+        send_request(method_name, request_payload, response_promise, nullptr);
 
         auto response_future = response_promise->get_future();
         auto rpc_response = response_future.get();
@@ -105,20 +105,18 @@ private:
     bool init_request_pub();
     bool init_response_sub();
 
-    long send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
+    void send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
         ResponsePromisePtr response_promise, IResponseProcessorPtr response_processor); 
 
     void on_data_available();
 
-    void remove_pending_request(long request_id); 
+    void set_reponse(RequestInfoPtr request_info, ResponsePtr rpc_response); 
 
     void do_send_request(RequestInfoPtr request_info);
     void do_recv_response();
 
-    void do_remove_pending_request(long request_id);
-
     bool is_valid_response(ResponsePtr rpc_response);
-    void dispatch_response(ResponsePtr rpc_response);
+    void do_dispatch_response(ResponsePtr rpc_response);
 
     class RequestPubListener : public eprosima::fastdds::dds::DataWriterListener {
     public:
