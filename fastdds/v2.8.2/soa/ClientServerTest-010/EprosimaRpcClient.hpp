@@ -32,14 +32,12 @@ private:
     using ResponsePtr = std::shared_ptr<soa_on_dds::RPC_Response>;
     using ResponsePromise = std::promise<ResponsePtr>;
     using ResponsePromisePtr = std::shared_ptr<ResponsePromise>;
-    using TimerPtr = std::shared_ptr<Timer>;
 
     struct RequestInfo {
         RequestPtr request;
         ResponsePromisePtr response_promise;
         IResponseProcessorPtr response_processor;
         uint64_t timestamps_ms=0;
-        TimerPtr timer;
     };
     
     using RequestInfoPtr = std::shared_ptr<RequestInfo>;
@@ -96,7 +94,7 @@ private:
         }
 
         ResponsePromisePtr response_promise = std::make_shared<ResponsePromise>();
-        long request_id = send_request(method_name, request_payload, response_promise, nullptr, timeout);
+        send_request(method_name, request_payload, response_promise, nullptr, timeout);
 
         auto response_future = response_promise->get_future();
         auto rpc_response = response_future.get();
@@ -137,21 +135,22 @@ private:
     bool init_request_pub();
     bool init_response_sub();
 
-    long send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
+    void send_request(const std::string& method_name, const std::vector<uint8_t>& request_payload,
         ResponsePromisePtr response_promise, IResponseProcessorPtr response_processor,
         std::chrono::milliseconds timeout); 
 
     void on_data_available();
 
-    void remove_pending_request(long request_id); 
+    void set_reponse(RequestInfoPtr request_info, ResponsePtr rpc_response); 
 
     void do_send_request(RequestInfoPtr request_info);
     void do_recv_response();
 
-    void do_remove_pending_request(long request_id);
-
     bool is_valid_response(ResponsePtr rpc_response);
     void do_dispatch_response(ResponsePtr rpc_response);
+
+    void on_request_timeout(RequestInfoPtr request_info);
+    void do_process_request_timeout(RequestInfoPtr request_info);
 
     class RequestPubListener : public eprosima::fastdds::dds::DataWriterListener {
     public:

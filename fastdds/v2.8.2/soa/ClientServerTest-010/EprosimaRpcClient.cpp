@@ -134,7 +134,7 @@ bool EprosimaRpcClient::init_response_sub() {
     return true;
 }
 
-long EprosimaRpcClient::send_request(const std::string& method_name, 
+void EprosimaRpcClient::send_request(const std::string& method_name, 
         const std::vector<uint8_t>& request_payload,
         ResponsePromisePtr response_promise,
         IResponseProcessorPtr response_processor,
@@ -149,11 +149,16 @@ long EprosimaRpcClient::send_request(const std::string& method_name,
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_send_request, this, request_info));
 
     if (timeout != std::chrono::milliseconds::zero()) {
-        // TODO
-//        auto timer = std::make_shared<Timer>([]);
+        std::weak_ptr<EprosimaRpcClient> weak_self = this->shared_from_this();
+        Timer timer([weak_self, request_info]() {
+                auto self = weak_self.lock();
+                if (self == nullptr) {
+                    return;
+                }
+                self->on_request_timeout(request_info);
+                }, timeout);
+        timer.start();
     }
-
-    return request->header().request_id();
 }
 
 void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
@@ -161,8 +166,8 @@ void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
     auto response_promise = request_info->response_promise;
     set_send_timestamp_ms(*request);
     if (!m_request_pub->write((void*)request.get())) {
-        auto response = make_rpc_response(request, soa_on_dds::CLIENT_SEND_REQUEST_ERROR);
-        response_promise->set_value(response);
+        auto rpc_response = make_rpc_response(request, soa_on_dds::CLIENT_SEND_REQUEST_ERROR);
+        set_reponse(request_info, rpc_response);
         std::cout << "m_request_pub->write failed" << std::endl;
         return;
     }
@@ -174,14 +179,6 @@ void EprosimaRpcClient::do_send_request(RequestInfoPtr request_info) {
 
 void EprosimaRpcClient::on_data_available() {
     m_main_thread.submit(std::bind(&EprosimaRpcClient::do_recv_response, this));
-}
-
-void EprosimaRpcClient::remove_pending_request(long request_id) {
-    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_remove_pending_request, this, request_id));
-}
-
-void EprosimaRpcClient::do_remove_pending_request(long request_id) {
-    m_pending_requests.erase(request_id);
 }
 
 void EprosimaRpcClient::do_recv_response() {
@@ -229,6 +226,23 @@ void EprosimaRpcClient::do_dispatch_response(std::shared_ptr<RPC_Response> rpc_r
         return;
     }
 
+    set_reponse(request_info, rpc_response);
+}
+
+void EprosimaRpcClient::on_request_timeout(RequestInfoPtr request_info) {
+    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_process_request_timeout, this, request_info));
+}
+
+void EprosimaRpcClient::do_process_request_timeout(RequestInfoPtr request_info) {
+    auto request = request_info->request;
+    auto rpc_response = make_rpc_response(request, soa_on_dds::REQUEST_TIMEOUT);
+    set_reponse(request_info, rpc_response);
+}
+
+void EprosimaRpcClient::set_reponse(RequestInfoPtr request_info, ResponsePtr rpc_response) {
+    auto request_id= request_info->request->header().request_id();
+    m_pending_requests.erase(request_id);
+
     if (request_info->response_promise != nullptr) {
         request_info->response_promise->set_value(rpc_response);
     }
@@ -237,8 +251,6 @@ void EprosimaRpcClient::do_dispatch_response(std::shared_ptr<RPC_Response> rpc_r
         // TODO: call in callback thread
         request_info->response_processor->process(rpc_response);
     }
-
-    do_remove_pending_request(request_id);
 }
 
 EprosimaRpcClient::RequestPtr EprosimaRpcClient::make_rpc_request(
