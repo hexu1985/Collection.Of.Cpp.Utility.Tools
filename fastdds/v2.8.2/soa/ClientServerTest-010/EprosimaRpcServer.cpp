@@ -32,6 +32,12 @@ inline void set_send_timestamp_ms(soa_on_dds::RPC_Response& response) {
 
 }   // namespace 
 
+std::shared_ptr<EprosimaRpcServer> EprosimaRpcServer::create_rpc_server(
+        const std::string& service_name, size_t thread_pool_size, 
+        eprosima::fastdds::dds::DomainParticipant* participant) {
+    return std::shared_ptr<EprosimaRpcServer>(new EprosimaRpcServer(service_name, thread_pool_size, participant));
+}
+
 EprosimaRpcServer::EprosimaRpcServer(const std::string& service_name, 
         size_t thread_pool_size, 
         eprosima::fastdds::dds::DomainParticipant* participant): 

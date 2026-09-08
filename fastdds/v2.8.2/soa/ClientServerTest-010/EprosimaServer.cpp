@@ -60,7 +60,7 @@ void EprosimaServer::serve(
 
 bool EprosimaServer::init()
 {
-    mp_rpc_server.reset(new soa_on_dds::EprosimaRpcServer("compute.service", 3));
+    mp_rpc_server = soa_on_dds::EprosimaRpcServer::create_rpc_server("compute.service", 3);
     mp_rpc_server->register_method<Operation, Result>("operation", std::bind(&EprosimaServer::operation_handle, this, _1, _2));
 
     mp_rpc_server->register_method<Operation, Result>("operation_slow", std::bind(&EprosimaServer::operation_handle_sleep_10s, this, _1, _2));

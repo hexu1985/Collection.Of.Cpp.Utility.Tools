@@ -53,7 +53,7 @@ public:
             clientserver::Result& result);
 
 private:
-    std::unique_ptr<soa_on_dds::EprosimaRpcServer> mp_rpc_server;
+    std::shared_ptr<soa_on_dds::EprosimaRpcServer> mp_rpc_server;
 
     soa_on_dds::ErrorCode calculate(
             clientserver::OPERATIONTYPE type,

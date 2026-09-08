@@ -32,7 +32,7 @@ private:
     using ResponsePtr = std::shared_ptr<soa_on_dds::RPC_Response>;
 
 public:
-    EprosimaRpcServer(const std::string& service_name, size_t thread_pool_size, eprosima::fastdds::dds::DomainParticipant* participant=nullptr);
+    static std::shared_ptr<EprosimaRpcServer> create_rpc_server(const std::string& service_name, size_t thread_pool_size, eprosima::fastdds::dds::DomainParticipant* participant=nullptr);
 
     virtual ~EprosimaRpcServer();
 
@@ -50,6 +50,8 @@ public:
     void unregister_method(const std::string& method_name);
 
 private:
+    EprosimaRpcServer(const std::string& service_name, size_t thread_pool_size, eprosima::fastdds::dds::DomainParticipant* participant=nullptr);
+
     bool init_request_sub();
     bool init_response_pub();
 
