@@ -1,0 +1,65 @@
+Starting subscriber.
+2026-09-08 10:54:41.400 [RTPS_TRANSPORT_SHM Warning] (ID:135694045263680) Port 7412 Zombie. Reset the port (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:1012) -> Function open_port_internal
+2026-09-08 10:54:41.401 [RTPS_TRANSPORT_SHM Warning] (ID:135694045263680) Port 7413 Zombie. Reset the port (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemGlobal.hpp:1012) -> Function open_port_internal
+Subscriber running. Please press enter to stop the Subscriber
+2026-09-08 10:54:41.413 [DATA_READER Warning] DataReaderImpl::enable() ok, RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] <=> TOPIC[HelloWorldTopic] <=> reliability.kind[RELIABLE] <=> TYPE[HelloWorld]
+=== DataReaderQos ===
+durability.kind: VOLATILE_DURABILITY_QOS
+deadline.period: 2147483647s 4294967295ns
+latency_budget.duration: 0s 0ns
+liveliness.kind: AUTOMATIC_LIVELINESS_QOS
+liveliness.lease_duration: 2147483647s 4294967295ns
+liveliness.announcement_period: 2147483647s 4294967295ns
+reliability.kind: RELIABLE_RELIABILITY_QOS
+reliability.max_blocking_time: 0s 100000000ns
+destination_order.kind: BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS
+history.kind: KEEP_LAST_HISTORY_QOS
+history.depth: 1
+resource_limits.max_samples: 5000
+resource_limits.max_instances: 10
+resource_limits.max_samples_per_instance: 400
+resource_limits.allocated_samples: 100
+user_data.size: 0
+ownership.kind: SHARED_OWNERSHIP_QOS
+time_based_filter.minimum_separation: 0s 0ns
+reader_data_lifecycle.autopurge_no_writer_samples_delay: 2147483647s 4294967295ns
+reader_data_lifecycle.autopurge_disposed_samples_delay: 2147483647s 4294967295ns
+durability_service.service_cleanup_delay: 0s 0ns
+durability_service.history_kind: KEEP_LAST_HISTORY_QOS
+durability_service.history_depth: 1
+durability_service.max_samples: -1
+durability_service.max_instances: -1
+durability_service.max_samples_per_instance: -1
+lifespan.duration: 2147483647s 4294967295ns
+representation.m_value.size: 0
+type_consistency.kind: ALLOW_TYPE_COERCION
+type_consistency.ignore_sequence_bounds: 1
+type_consistency.ignore_string_bounds: 1
+type_consistency.ignore_member_names: 0
+type_consistency.prevent_type_widening: 0
+type_consistency.force_type_validation: 0
+=================================
+ (/home/hexu/git/fast-dds-v2.8.2/src/cpp/fastdds/subscriber/DataReaderImpl.cpp:440) -> Function enable
+2026-09-08 10:54:47.139 [RTPS_TRANSPORT_SHM Warning] Buffer is being invalidated, segment_size may be insufficient (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/transport/shared_mem/SharedMemManager.hpp:113) -> Function invalidate_if_not_processing
+Subscriber matched.
+2026-09-08 10:54:48.144 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:48.144 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 1:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:49.145 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:49.145 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 2:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:50.145 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:50.145 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 3:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:51.145 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:51.145 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 4:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:52.146 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:52.146 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 5:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:53.146 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:53.147 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 6:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:54.147 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:54.147 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 7:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:55.147 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:55.147 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 8:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:56.148 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:56.148 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 9:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+2026-09-08 10:54:57.148 [RTPS_READER_HISTORY Error] Change payload size of '1040' bytes is larger than the history payload size of '271' bytes and cannot be resized. (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/history/ReaderHistory.cpp:61) -> Function can_change_be_added_nts
+2026-09-08 10:54:57.148 [RTPS_MSG_IN Warning] (ID:135693948913216) ReaderHistory fail to add change 10:RTPSReader.GUID[01.0f.7c.f8.27.9b.54.64.01.00.00.00|0.0.1.4] (/home/hexu/git/fast-dds-v2.8.2/src/cpp/rtps/reader/StatefulReader.cpp:536) -> Function processDataMsg
+Subscriber unmatched.

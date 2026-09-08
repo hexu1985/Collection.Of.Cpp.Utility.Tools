@@ -104,6 +104,8 @@ bool HelloWorldPublisher::init(
 
     // CREATE THE WRITER
     DataWriterQos wqos = DATAWRITER_QOS_DEFAULT;
+    wqos.endpoint().history_memory_policy =
+        eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
 
     if (use_env)
     {
