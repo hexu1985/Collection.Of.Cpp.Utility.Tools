@@ -64,6 +64,23 @@ void init_log() {
     Log::ReportFunctions(true);  // 显示函数名（可选）
 }
 
+void test_client_timed(EprosimaClientTimed& client, int32_t num1, const std::string& op_str, int32_t num2, int32_t local_res, std::chrono::milliseconds timeout) {
+    int32_t res = 0;
+    OPERATIONTYPE op = to_operation_type(op_str);
+    soa_on_dds::ErrorCode ec = client.calculate(op, num1, num2, &res, timeout);
+    if (ec != soa_on_dds::SUCCESS) {
+        cout << "client.calculate failed: " << EprosimaRpcUtility::error_code_to_string(ec) << endl;
+        return;
+    }
+    cout << "calculate remote: " << num1 << op_str << num2 << "=" << res << endl;
+
+    if (local_res == res) {
+        cout << "remote result is correct!" << endl;
+    } else {
+        cout << "remote result is incorrect!" << endl;
+    }
+}
+
 int main(
         int argc,
         char** argv)
@@ -97,19 +114,12 @@ int main(
     }
     std::cout << "client.calculate" << std::endl;
 
-    int32_t res = 0;
-    soa_on_dds::ErrorCode ec = client.calculate(op, num1, num2, &res, std::chrono::milliseconds(2000));
-    if (ec != soa_on_dds::SUCCESS) {
-        cout << "client.calculate failed: " << EprosimaRpcUtility::error_code_to_string(ec) << endl;
-        return 1;
-    }
-    cout << "calculate remote: " << num1 << op_str << num2 << "=" << res << endl;
+    test_client_timed(client, num1, op_str, num2, local_res, std::chrono::milliseconds(2000));
 
-    if (local_res == res) {
-        cout << "remote result is correct!" << endl;
-    } else {
-        cout << "remote result is incorrect!" << endl;
-    }
+    test_client_timed(client, num1, op_str, num2, local_res, std::chrono::milliseconds(12000));
+
+    std::cout << "entry any key to exit: " << std::endl;
+    std::cin.get();
 
     cout << "EVERYTHING STOPPED FINE" << endl;
 

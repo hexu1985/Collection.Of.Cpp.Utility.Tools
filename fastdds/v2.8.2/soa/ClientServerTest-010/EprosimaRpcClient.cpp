@@ -150,12 +150,13 @@ void EprosimaRpcClient::send_request(const std::string& method_name,
 
     if (timeout != std::chrono::milliseconds::zero()) {
         std::weak_ptr<EprosimaRpcClient> weak_self = this->shared_from_this();
-        Timer timer([weak_self, request_info]() {
+        long request_id = request->header().request_id();
+        Timer timer([weak_self, request_id]() {
                 auto self = weak_self.lock();
                 if (self == nullptr) {
                     return;
                 }
-                self->on_request_timeout(request_info);
+                self->on_request_timeout(request_id);
                 }, timeout);
         timer.start();
     }
@@ -213,7 +214,7 @@ void EprosimaRpcClient::do_dispatch_response(std::shared_ptr<RPC_Response> rpc_r
     long request_id = rpc_response->header().request_id();
     auto request_info = get_request_info(request_id);
     if (request_info == nullptr) {
-        std::cout << "Not found request_info by request_id[" << request_id << "]" << std::endl;
+        std::cout << "do_dispatch_response Not found request_info by request_id[" << request_id << "]" << std::endl;
         return;
     }
 
@@ -227,22 +228,28 @@ void EprosimaRpcClient::do_dispatch_response(std::shared_ptr<RPC_Response> rpc_r
     }
 
     set_reponse(request_info, rpc_response);
+
+    remove_pending_request(request_id);
 }
 
-void EprosimaRpcClient::on_request_timeout(RequestInfoPtr request_info) {
-    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_process_request_timeout, this, request_info));
+void EprosimaRpcClient::on_request_timeout(long request_id) {
+    m_main_thread.submit(std::bind(&EprosimaRpcClient::do_process_request_timeout, this, request_id));
 }
 
-void EprosimaRpcClient::do_process_request_timeout(RequestInfoPtr request_info) {
+void EprosimaRpcClient::do_process_request_timeout(long request_id) {
+    auto request_info = get_request_info(request_id);
+    if (request_info == nullptr) {
+        std::cout << "do_process_request_timeout: Not found request_info by request_id[" << request_id << "]" << std::endl;
+        return;
+    }
     auto request = request_info->request;
     auto rpc_response = make_rpc_response(request, soa_on_dds::REQUEST_TIMEOUT);
     set_reponse(request_info, rpc_response);
+
+    remove_pending_request(request_id);
 }
 
 void EprosimaRpcClient::set_reponse(RequestInfoPtr request_info, ResponsePtr rpc_response) {
-    auto request_id= request_info->request->header().request_id();
-    m_pending_requests.erase(request_id);
-
     if (request_info->response_promise != nullptr) {
         request_info->response_promise->set_value(rpc_response);
     }
@@ -282,6 +289,9 @@ EprosimaRpcClient::RequestInfoPtr EprosimaRpcClient::get_request_info(long reque
     return iter->second;
 }
 
+void EprosimaRpcClient::remove_pending_request(long request_id) {
+    m_pending_requests.erase(request_id);
+}
 EprosimaRpcClient::RequestPubListener::RequestPubListener() {
 }
 

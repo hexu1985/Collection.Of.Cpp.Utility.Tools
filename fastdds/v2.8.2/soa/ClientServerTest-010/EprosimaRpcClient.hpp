@@ -149,8 +149,8 @@ private:
     bool is_valid_response(ResponsePtr rpc_response);
     void do_dispatch_response(ResponsePtr rpc_response);
 
-    void on_request_timeout(RequestInfoPtr request_info);
-    void do_process_request_timeout(RequestInfoPtr request_info);
+    void on_request_timeout(long request_id);
+    void do_process_request_timeout(long request_id);
 
     class RequestPubListener : public eprosima::fastdds::dds::DataWriterListener {
     public:
@@ -228,6 +228,7 @@ private:
     RequestPtr make_rpc_request(const std::string& method_name, const std::vector<uint8_t>& request_payload);
     ResponsePtr make_rpc_response(RequestPtr rpc_request, soa_on_dds::ErrorCode error_code);
     RequestInfoPtr get_request_info(long request_id);
+    void remove_pending_request(long request_id); 
 
 private:
     eprosima::fastdds::dds::DomainParticipant* m_participant=nullptr;
