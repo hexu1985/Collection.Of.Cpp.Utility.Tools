@@ -1,8 +1,10 @@
 
 file_list=(
-soa_on_dds_types.idl
+gen/soa_on_dds_types.cxx
+gen/soa_on_dds_types.h
 thread_pool.hpp
 threadsafe_queue.hpp
+worker_thread.hpp
 timer.hpp
 EprosimaSubWrapper.hpp
 EprosimaPubWrapper.hpp
@@ -19,6 +21,6 @@ EprosimaRpcUtility.cpp
 
 for file in ${file_list[@]}
 do
-  echo "$file"
+#  echo "$file"
   cat $file
 done

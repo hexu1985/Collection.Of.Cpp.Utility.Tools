@@ -1,0 +1,211 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1">
+  <diagram id="rpc_class_diagram" name="RPC Class Diagram">
+    <mxGraphModel dx="2964" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cls_rpc_header" value="RPC_Header" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="80" y="120" width="240" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="rpc_header_attrs" value="- m_method_name: std::string&#xa;- m_client_id: std::string&#xa;- m_session_id: int32_t&#xa;- m_request_id: int32_t&#xa;- m_timestamp_ms: uint64_t" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=11;" parent="cls_rpc_header" vertex="1">
+          <mxGeometry y="30" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="rpc_header_methods" value="+ RPC_Header()&#xa;+ ~RPC_Header()&#xa;+ method_name(const std::string&amp;)&#xa;+ method_name() const : const std::string&amp;&#xa;+ client_id(const std::string&amp;)&#xa;+ client_id() const : const std::string&amp;&#xa;+ session_id(int32_t)&#xa;+ session_id() const : int32_t&#xa;+ request_id(int32_t)&#xa;+ request_id() const : int32_t&#xa;+ timestamp_ms(uint64_t)&#xa;+ timestamp_ms() const : uint64_t&#xa;+ getMaxCdrSerializedSize(size_t) : size_t&#xa;+ getCdrSerializedSize(const RPC_Header&amp;, size_t) : size_t&#xa;+ serialize(eprosima::fastcdr::Cdr&amp;) const&#xa;+ deserialize(eprosima::fastcdr::Cdr&amp;)&#xa;+ getKeyMaxCdrSerializedSize(size_t) : size_t&#xa;+ isKeyDefined() : bool&#xa;+ serializeKey(eprosima::fastcdr::Cdr&amp;) const" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_rpc_header" vertex="1">
+          <mxGeometry y="120" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_rpc_request" value="RPC_Request" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="-110" y="940" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="rpc_request_attrs" value="- m_header: RPC_Header&#xa;- m_request_payload: std::vector&lt;uint8_t&gt;" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=11;" parent="cls_rpc_request" vertex="1">
+          <mxGeometry y="30" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rpc_request_methods" value="+ RPC_Request()&#xa;+ ~RPC_Request()&#xa;+ header(const RPC_Header&amp;)&#xa;+ header() : RPC_Header&amp;&#xa;+ request_payload(const std::vector&lt;uint8_t&gt;&amp;)&#xa;+ request_payload() : std::vector&lt;uint8_t&gt;&amp;&#xa;+ serialize(Cdr&amp;) const&#xa;+ deserialize(Cdr&amp;)&#xa;+ getMaxCdrSerializedSize(size_t) : size_t&#xa;+ getCdrSerializedSize(const RPC_Request&amp;, size_t) : size_t" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_rpc_request" vertex="1">
+          <mxGeometry y="80" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_rpc_response" value="RPC_Response" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="330" y="1080" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="rpc_response_attrs" value="- m_header: RPC_Header&#xa;- m_error_code: ErrorCode&#xa;- m_response_payload: std::vector&lt;uint8_t&gt;" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=11;" parent="cls_rpc_response" vertex="1">
+          <mxGeometry y="30" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rpc_response_methods" value="+ RPC_Response()&#xa;+ ~RPC_Response()&#xa;+ header(const RPC_Header&amp;)&#xa;+ header() : RPC_Header&amp;&#xa;+ error_code(ErrorCode)&#xa;+ error_code() const : ErrorCode&#xa;+ response_payload(const std::vector&lt;uint8_t&gt;&amp;)&#xa;+ response_payload() : std::vector&lt;uint8_t&gt;&amp;&#xa;+ serialize(Cdr&amp;) const&#xa;+ deserialize(Cdr&amp;)" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_rpc_response" vertex="1">
+          <mxGeometry y="80" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="enum_error_code" value="&lt;&lt;enumeration&gt;&gt;&#xa;ErrorCode" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="130" y="670" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="error_code_values" value="SUCCESS&#xa;UPPER_LAYER_APPLICATION_ERROR&#xa;CLIENT_SERIALIZE_ERROR&#xa;CLIENT_DESERIALIZE_ERROR&#xa;SERVICE_SERIALIZE_ERROR&#xa;SERVICE_DESERIALIZE_ERROR&#xa;SERVICE_NOT_AVAILABLE&#xa;METHOD_NOT_REGISTER&#xa;REQUEST_TIMEOUT&#xa;CLIENT_SEND_REQUEST_ERROR&#xa;CLIENT_NOT_INITIALIZE" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="enum_error_code" vertex="1">
+          <mxGeometry y="40" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_client" value="EprosimaRpcClient" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="400" y="120" width="280" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="client_attrs" value="- m_is_ready: std::atomic&lt;bool&gt;&#xa;- m_request_pub_matched: std::atomic&lt;int&gt;&#xa;- m_response_sub_matched: std::atomic&lt;int&gt;&#xa;- m_client_id: std::string&#xa;- m_service_name: std::string&#xa;- m_session_id: long&#xa;- m_request_id_generator: std::atomic&lt;long&gt;&#xa;- m_sample_info: SampleInfo&#xa;- m_cached_response: ResponsePtr&#xa;- m_pending_requests: std::unordered_map&lt;long, RequestInfoPtr&gt;&#xa;- m_participant: DomainParticipant*&#xa;- m_request_pub: std::unique_ptr&lt;EprosimaPubWrapper&gt;&#xa;- m_response_sub: std::unique_ptr&lt;EprosimaSubWrapper&gt;&#xa;- m_main_thread: worker_thread" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_client" vertex="1">
+          <mxGeometry y="30" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="client_methods" value="+ create_rpc_client(...) : std::shared_ptr&lt;EprosimaRpcClient&gt;&#xa;+ ~EprosimaRpcClient()&#xa;+ init() : bool&#xa;+ is_ready() : bool&#xa;+ call&lt;Argument, Result&gt;(...) : ErrorCode&#xa;+ call_timed&lt;Argument, Result&gt;(...) : ErrorCode&#xa;+ async_call&lt;Argument, Result&gt;(...)&#xa;+ async_call_timed&lt;Argument, Result&gt;(...)&#xa;- call_helper&lt;Argument, Result&gt;(...) : ErrorCode&#xa;- async_call_helper&lt;Argument, Result&gt;(...)&#xa;- init_request_pub() : bool&#xa;- init_response_sub() : bool&#xa;- send_request(...)&#xa;- on_data_available()&#xa;- set_reponse(...)&#xa;- do_send_request(...)&#xa;- do_recv_response()&#xa;- is_valid_response(...) : bool&#xa;- do_dispatch_response(...)&#xa;- on_request_timeout(...)&#xa;- do_process_request_timeout(...)&#xa;- make_rpc_request(...) : RequestPtr&#xa;- make_rpc_response(...) : ResponsePtr&#xa;- get_request_info(...) : RequestInfoPtr&#xa;- remove_pending_request(...)" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=9;" parent="cls_client" vertex="1">
+          <mxGeometry y="180" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_server" value="EprosimaRpcServer" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="400" y="630" width="280" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="server_attrs" value="- m_participant: DomainParticipant*&#xa;- m_request_sub: std::unique_ptr&lt;EprosimaSubWrapper&gt;&#xa;- m_response_pub: std::unique_ptr&lt;EprosimaPubWrapper&gt;&#xa;- m_service_name: std::string&#xa;- m_thread_pool_size: size_t&#xa;- m_main_thread: worker_thread&#xa;- m_workers: thread_pool&#xa;- m_method_handlers: std::unordered_map&lt;std::string, IMethodHandlerPtr&gt;&#xa;- m_sample_info: SampleInfo" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_server" vertex="1">
+          <mxGeometry y="30" width="280" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="server_methods" value="+ create_rpc_server(...) : std::shared_ptr&lt;EprosimaRpcServer&gt;&#xa;+ ~EprosimaRpcServer()&#xa;+ start() : bool&#xa;+ stop()&#xa;+ register_method&lt;Argument, Result&gt;(...)&#xa;+ unregister_method(...)&#xa;- init_request_sub() : bool&#xa;- init_response_pub() : bool&#xa;- register_method_helper(...)&#xa;- do_register_method(...)&#xa;- do_unregister_method(...)&#xa;- do_stop()&#xa;- on_data_available()&#xa;- do_recv_request()&#xa;- do_send_response(...)&#xa;- get_method_handler(...) : IMethodHandlerPtr&#xa;- make_rpc_response(...) : ResponsePtr&#xa;- process_request(...)" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=9;" parent="cls_server" vertex="1">
+          <mxGeometry y="160" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_pub_wrapper" value="EprosimaPubWrapper" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="760" y="120" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="pub_attrs" value="- m_participant: DomainParticipant*&#xa;- m_type_support: TypeSupport&#xa;- m_subscriber: Subscriber*&#xa;- m_topic: Topic*&#xa;- m_data_reader: DataReader*" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_pub_wrapper" vertex="1">
+          <mxGeometry y="30" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pub_methods" value="+ EprosimaPubWrapper()&#xa;+ ~EprosimaPubWrapper()&#xa;+ init(const Config&amp;) : bool&#xa;+ write(void*) : bool&#xa;- reset()" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_pub_wrapper" vertex="1">
+          <mxGeometry y="110" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_sub_wrapper" value="EprosimaSubWrapper" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="760" y="320" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="sub_attrs" value="- m_participant: DomainParticipant*&#xa;- m_type_support: TypeSupport&#xa;- m_publisher: Publisher*&#xa;- m_topic: Topic*&#xa;- m_data_writer: DataWriter*" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_sub_wrapper" vertex="1">
+          <mxGeometry y="30" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sub_methods" value="+ EprosimaSubWrapper()&#xa;+ ~EprosimaSubWrapper()&#xa;+ init(const Config&amp;) : bool&#xa;+ take_next_sample(void*, SampleInfo*) : ReturnCode_t&#xa;- reset()" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_sub_wrapper" vertex="1">
+          <mxGeometry y="110" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_worker" value="worker_thread" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1020" y="120" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="worker_attrs" value="- done: std::atomic_bool&#xa;- work_queue: threadsafe_queue&lt;std::function&lt;void()&gt;&gt;&#xa;- work_thread: std::thread" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_worker" vertex="1">
+          <mxGeometry y="30" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="worker_methods" value="+ worker_thread()&#xa;+ ~worker_thread()&#xa;+ submit&lt;FunctionType&gt;(FunctionType)&#xa;- work_loop()&#xa;- stop()" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_worker" vertex="1">
+          <mxGeometry y="80" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_pool" value="thread_pool" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1020" y="280" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="pool_attrs" value="- done: std::atomic_bool&#xa;- work_queue: threadsafe_queue&lt;std::function&lt;void()&gt;&gt;&#xa;- threads: std::vector&lt;std::thread&gt;&#xa;- joiner: join_threads" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_pool" vertex="1">
+          <mxGeometry y="30" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pool_methods" value="+ thread_pool(unsigned)&#xa;+ ~thread_pool()&#xa;+ submit&lt;FunctionType&gt;(FunctionType)&#xa;- worker_thread()&#xa;- stop()" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_pool" vertex="1">
+          <mxGeometry y="90" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_join" value="join_threads" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1130" y="520" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="join_attrs" value="- threads: std::vector&lt;std::thread&gt;&amp;" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_join" vertex="1">
+          <mxGeometry y="30" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="join_methods" value="+ join_threads(std::vector&lt;std::thread&gt;&amp;)&#xa;+ ~join_threads()" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_join" vertex="1">
+          <mxGeometry y="60" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_queue" value="threadsafe_queue&lt;T&gt;" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="750" y="910" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="queue_attrs" value="- mut: mutable std::mutex&#xa;- data_queue: std::queue&lt;T&gt;&#xa;- data_cond: std::condition_variable" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_queue" vertex="1">
+          <mxGeometry y="30" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="queue_methods" value="+ push(T)&#xa;+ wait_and_pop(T&amp;)&#xa;+ wait_and_pop() : std::shared_ptr&lt;T&gt;&#xa;+ try_pop(T&amp;) : bool&#xa;+ try_pop() : std::shared_ptr&lt;T&gt;&#xa;+ empty() const : bool" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=9;" parent="cls_queue" vertex="1">
+          <mxGeometry y="80" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_timer" value="Timer" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1020" y="710" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="timer_attrs" value="- pimpl_: std::shared_ptr&lt;Impl&gt;&#xa;+ Callback = std::function&lt;void()&gt;&#xa;+ Interval = std::chrono::microseconds&#xa;+ enum Type { once, repeat }" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_timer" vertex="1">
+          <mxGeometry y="30" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="timer_methods" value="+ Timer(Callback, Interval, Type)&#xa;+ start()&#xa;+ cancel()&#xa;+ isActive() : bool" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_timer" vertex="1">
+          <mxGeometry y="80" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_timer_mgr" value="TimerManager" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="940" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="timer_mgr_attrs" value="- timer_list_: std::list&lt;TimerPtr&gt;&#xa;- timer_list_mutex_: std::mutex&#xa;- timer_list_cond_: std::condition_variable&#xa;- current_expire_time_point_: TimePoint&#xa;- timer_check_thread_: std::thread&#xa;- stopped_: std::atomic&lt;bool&gt;" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=9;" parent="cls_timer_mgr" vertex="1">
+          <mxGeometry y="30" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="timer_mgr_methods" value="+ start()&#xa;+ stop()&#xa;+ isRunning() : bool&#xa;+ insert(TimerPtr)&#xa;- insert_timer(TimerPtr)&#xa;- check_timer_once()&#xa;- check_timer_loop()" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=9;" parent="cls_timer_mgr" vertex="1">
+          <mxGeometry y="100" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_utility" value="EprosimaRpcUtility" style="swimlane;html=1;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="1300" y="120" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="utility_attrs" value="+ ParticipantPtr = DomainParticipant*" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_utility" vertex="1">
+          <mxGeometry y="30" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="utility_methods" value="+ generate_rpc_request_topic(const std::string&amp;) : std::string&#xa;+ generate_rpc_response_topic(const std::string&amp;) : std::string&#xa;+ generate_rpc_client_id(const std::string&amp;) : std::string&#xa;+ generate_rpc_session_id() : long&#xa;+ get_current_time_ms() : uint64_t&#xa;+ ms_to_string(uint64_t) : std::string&#xa;+ error_code_to_string(ErrorCode) : std::string&#xa;+ get_default_rpc_participant() : ParticipantPtr&#xa;+ create_participant(DomainId_t, const DomainParticipantQos&amp;, DomainParticipantListener*) : ParticipantPtr&#xa;+ delete_participant(ParticipantPtr)" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=9;" parent="cls_utility" vertex="1">
+          <mxGeometry y="50" width="220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_method_handler" value="IMethodHandler&#xa;(EprosimaRpcServer::inner)" style="swimlane;html=1;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="760" y="520" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="method_handler_methods" value="+ IMethodHandler()&#xa;+ ~IMethodHandler()&#xa;+ process(const std::vector&lt;uint8_t&gt;&amp;, std::vector&lt;uint8_t&gt;&amp;) : ErrorCode" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_method_handler" vertex="1">
+          <mxGeometry y="30" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cls_response_processor" value="IResponseProcessor&#xa;(EprosimaRpcClient::inner)" style="swimlane;html=1;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="760" y="640" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="response_processor_methods" value="+ IResponseProcessor()&#xa;+ ~IResponseProcessor()&#xa;+ process(std::shared_ptr&lt;RPC_Response&gt;) : void" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;" parent="cls_response_processor" vertex="1">
+          <mxGeometry y="30" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_req_header" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_rpc_request" target="cls_rpc_header" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_resp_header" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_rpc_response" target="cls_rpc_header" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_resp_enum" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_rpc_response" target="enum_error_code" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_client_pub" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" parent="1" source="cls_client" target="cls_pub_wrapper" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_client_sub" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_client" target="cls_sub_wrapper" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_client_worker" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_client" target="cls_worker" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_server_sub" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" parent="1" source="cls_server" target="cls_sub_wrapper" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_server_pub" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_server" target="cls_pub_wrapper" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_server_worker" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_server" target="cls_worker" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_server_pool" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.9;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_server" target="cls_pool" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_pool_join" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="cls_pool" target="cls_join" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_worker_queue" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="cls_worker" target="cls_queue" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_pool_queue" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="cls_pool" target="cls_queue" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_timer_mgr" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="cls_timer" target="cls_timer_mgr" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_server_handler" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_server" target="cls_method_handler" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_client_processor" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;exitX=1;exitY=0.1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="cls_client" target="cls_response_processor" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_client_utility" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;dashed=1;" parent="1" source="cls_client" target="cls_utility" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_server_utility" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;dashed=1;" parent="1" source="cls_server" target="cls_utility" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="Legend:&#xa;──&gt; Composition (contains)&#xa;---&gt; Dependency (uses)&#xa;◆ Aggregation" style="text;html=1;align=left;verticalAlign=top;spacing=5;fontSize=10;fontStyle=2;fillColor=#f5f5f5;strokeColor=#cccccc;" parent="1" vertex="1">
+          <mxGeometry x="1300" y="400" width="200" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
