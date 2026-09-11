@@ -89,3 +89,6 @@ target_link_libraries(calculate_client_test_pressure fastrtps fastcdr tinyxml2::
 add_executable(calculate_client_test_timed calculate_client_test_timed.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test_timed fastrtps fastcdr tinyxml2::tinyxml2)
 
+add_executable(calculate_client_test_async_timed calculate_client_test_async_timed.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+target_link_libraries(calculate_client_test_async_timed fastrtps fastcdr tinyxml2::tinyxml2)
+
