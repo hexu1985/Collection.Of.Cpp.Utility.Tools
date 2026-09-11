@@ -1,5 +1,8 @@
 #pragma once
 
+#include <unistd.h>
+#include <string>
+
 namespace Socket {
 
 namespace host {
