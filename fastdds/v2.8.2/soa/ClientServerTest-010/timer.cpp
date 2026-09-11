@@ -127,10 +127,11 @@ void TimerManager::insert_timer(TimerPtr timer) {
         if ((*iter) == timer) { // the timer already in timer_list_
             return;
         }
-        if ((*iter)->expire_time_point > timer->expire_time_point) {
+        if ((*iter)->expire_time_point >= timer->expire_time_point) {
             timer_list_.insert(iter, timer);
             break;
         }
+        iter++;
     }
 
     if (iter == end) {  // reached the end of timer_list_
