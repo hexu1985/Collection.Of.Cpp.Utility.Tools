@@ -4,6 +4,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <list>
+#include <iostream>
 
 using Clock = std::chrono::system_clock;
 using TimePoint = Clock::time_point;
@@ -123,12 +124,14 @@ void TimerManager::insert_timer(TimerPtr timer) {
 
     while (iter != end) {   // insert timer to timer_list_ by expire_time_point ascending order
         if ((*iter) == timer) { // the timer already in timer_list_
+            std::cout << "the timer already in timer_list_" << std::endl;
             return;
         }
-        if ((*iter)->expire_time_point > timer->expire_time_point) {
+        if ((*iter)->expire_time_point >= timer->expire_time_point) {
             timer_list_.insert(iter, timer);
             break;
         }
+        iter++;
     }
 
     if (iter == end) {  // reached the end of timer_list_
