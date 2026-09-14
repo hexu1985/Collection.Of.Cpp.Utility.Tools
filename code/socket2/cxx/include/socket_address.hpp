@@ -1,11 +1,11 @@
-// socket_address.hpp
 #pragma once
+
+#include "socket_exception.hpp"
 
 #include <cstdint>
 #include <cstring>
 #include <string>
 #include <vector>
-#include <stdexcept>
 #include <optional>
 #include <cerrno>
 #include <cstddef>
@@ -32,19 +32,7 @@ enum class AddrType {
     DGRAM,
 };
 
-// ---------- 异常 ----------
-class AddressError : public std::runtime_error {
-public:
-    explicit AddressError(const std::string& msg, int errnum = 0)
-        : std::runtime_error(msg), errnum_(errnum) {}
-
-    int errnum() const noexcept { return errnum_; }
-
-private:
-    int errnum_;
-};
-
-// ---------- 内部辅助（inline） ----------
+// ---------- 内部辅助 ----------
 namespace detail {
 
 inline int to_af(Family f) {
@@ -92,59 +80,62 @@ public:
 
     ~Address() = default;
 
-    // ===== 从字符串构造（不做 DNS）=====
+    // ===== 静态构造：异常版本 =====
     static Address from_ip(const std::string& ip, uint16_t port,
                            Family family = Family::UNSPEC) {
-        Address addr;
-
-        if (family == Family::UNSPEC || family == Family::INET) {
-            auto* sin = reinterpret_cast<struct sockaddr_in*>(&addr.storage_);
-            sin->sin_family = AF_INET;
-            sin->sin_port = htons(port);
-            if (::inet_pton(AF_INET, ip.c_str(), &sin->sin_addr) == 1) {
-                addr.len_ = sizeof(struct sockaddr_in);
-                addr.family_ = Family::INET;
-                return addr;
-            }
+        std::error_code ec;
+        Address addr = from_ip(ip, port, family, ec);
+        if (ec) {
+            throw AddressError(ec, "from_ip failed: " + ip +
+                                   ":" + std::to_string(port));
         }
-
-        if (family == Family::UNSPEC || family == Family::INET6) {
-            auto* sin6 = reinterpret_cast<struct sockaddr_in6*>(&addr.storage_);
-            sin6->sin6_family = AF_INET6;
-            sin6->sin6_port = htons(port);
-            if (::inet_pton(AF_INET6, ip.c_str(), &sin6->sin6_addr) == 1) {
-                addr.len_ = sizeof(struct sockaddr_in6);
-                addr.family_ = Family::INET6;
-                return addr;
-            }
-        }
-
         return addr;
     }
 
-    // ===== Unix 域 =====
+    // ===== 静态构造：错误码版本 =====
+    static Address from_ip(const std::string& ip, uint16_t port,
+                           Family family, std::error_code& ec) noexcept {
+        Address addr;
+        addr.from_ip_impl(ip, port, family, ec);
+        return addr;
+    }
+
     static Address from_unix(const std::string& path) {
-        Address addr;
-        if (path.size() >= sizeof(((struct sockaddr_un*)nullptr)->sun_path)) {
-            return addr;
+        std::error_code ec;
+        Address addr = from_unix(path, ec);
+        if (ec) {
+            throw AddressError(ec, "from_unix failed: " + path);
         }
-
-        auto* sun = reinterpret_cast<struct sockaddr_un*>(&addr.storage_);
-        sun->sun_family = AF_UNIX;
-        std::strncpy(sun->sun_path, path.c_str(), sizeof(sun->sun_path) - 1);
-        sun->sun_path[sizeof(sun->sun_path) - 1] = '\0';
-
-        addr.len_ = static_cast<socklen_t>(
-            offsetof(struct sockaddr_un, sun_path) + path.size() + 1);
-        addr.family_ = Family::UNIX;
         return addr;
     }
 
-    // ===== DNS 解析 =====
+    static Address from_unix(const std::string& path,
+                             std::error_code& ec) noexcept {
+        Address addr;
+        addr.from_unix_impl(path, ec);
+        return addr;
+    }
+
+    // ===== DNS 解析：异常版本 =====
     static std::vector<Address> resolve_all(const std::string& host,
                                             uint16_t port,
                                             Family family = Family::UNSPEC,
                                             AddrType type = AddrType::STREAM) {
+        std::error_code ec;
+        auto out = resolve_all(host, port, family, type, ec);
+        if (ec) throw AddressError(ec, "resolve_all failed: " + host);
+        return out;
+    }
+
+    // ===== DNS 解析：错误码版本 =====
+    static std::vector<Address> resolve_all(const std::string& host,
+                                            uint16_t port,
+                                            Family family,
+                                            AddrType type,
+                                            std::error_code& ec) noexcept {
+        ec.clear();
+        std::vector<Address> out;
+
         struct addrinfo hints{};
         hints.ai_family = detail::to_af(family);
         hints.ai_socktype = detail::to_socktype(type);
@@ -156,15 +147,14 @@ public:
         struct addrinfo* result = nullptr;
         int rc = ::getaddrinfo(node, port_str.c_str(), &hints, &result);
         if (rc != 0) {
-            throw AddressError(std::string("getaddrinfo: ") + gai_strerror(rc), rc);
+            ec = make_gai_error_code(rc);
+            return out;
         }
 
-        std::vector<Address> out;
         for (auto* p = result; p != nullptr; p = p->ai_next) {
             out.push_back(Address::from_sockaddr(p->ai_addr, p->ai_addrlen));
         }
         ::freeaddrinfo(result);
-
         return out;
     }
 
@@ -172,23 +162,94 @@ public:
                            Family family = Family::UNSPEC,
                            AddrType type = AddrType::STREAM) {
         auto all = resolve_all(host, port, family, type);
+        if (all.empty()) {
+            throw AddressError("resolve: no address for " + host);
+        }
         return all.front();
+    }
+
+    static Address resolve(const std::string& host, uint16_t port,
+                           Family family, AddrType type,
+                           std::error_code& ec) noexcept {
+        auto all = resolve_all(host, port, family, type, ec);
+        if (ec) return Address{};
+        if (all.empty()) {
+            ec = make_gai_error_code(EAI_NONAME);
+            return Address{};
+        }
+        return all.front();
+    }
+
+    // ===== 常用地址 =====
+    static Address any(uint16_t port, Family family = Family::INET) {
+        std::error_code ec;
+        auto a = any(port, family, ec);
+        if (ec) throw AddressError(ec, "any() failed");
+        return a;
+    }
+
+    static Address any(uint16_t port, Family family, std::error_code& ec) noexcept {
+        ec.clear();
+        Address addr;
+        if (family == Family::INET) {
+            auto* sin = reinterpret_cast<struct sockaddr_in*>(&addr.storage_);
+            sin->sin_family = AF_INET;
+            sin->sin_port = htons(port);
+            sin->sin_addr.s_addr = htonl(INADDR_ANY);
+            addr.len_ = sizeof(struct sockaddr_in);
+            addr.family_ = Family::INET;
+            return addr;
+        }
+        if (family == Family::INET6) {
+            auto* sin6 = reinterpret_cast<struct sockaddr_in6*>(&addr.storage_);
+            sin6->sin6_family = AF_INET6;
+            sin6->sin6_port = htons(port);
+            sin6->sin6_addr = in6addr_any;
+            addr.len_ = sizeof(struct sockaddr_in6);
+            addr.family_ = Family::INET6;
+            return addr;
+        }
+        ec = std::make_error_code(std::errc::invalid_argument);
+        return addr;
+    }
+
+    static Address loopback(uint16_t port, Family family = Family::INET) {
+        std::error_code ec;
+        auto a = loopback(port, family, ec);
+        if (ec) throw AddressError(ec, "loopback() failed");
+        return a;
+    }
+
+    static Address loopback(uint16_t port, Family family,
+                            std::error_code& ec) noexcept {
+        ec.clear();
+        Address addr;
+        if (family == Family::INET) {
+            auto* sin = reinterpret_cast<struct sockaddr_in*>(&addr.storage_);
+            sin->sin_family = AF_INET;
+            sin->sin_port = htons(port);
+            sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+            addr.len_ = sizeof(struct sockaddr_in);
+            addr.family_ = Family::INET;
+            return addr;
+        }
+        if (family == Family::INET6) {
+            auto* sin6 = reinterpret_cast<struct sockaddr_in6*>(&addr.storage_);
+            sin6->sin6_family = AF_INET6;
+            sin6->sin6_port = htons(port);
+            sin6->sin6_addr = in6addr_loopback;
+            addr.len_ = sizeof(struct sockaddr_in6);
+            addr.family_ = Family::INET6;
+            return addr;
+        }
+        ec = std::make_error_code(std::errc::invalid_argument);
+        return addr;
     }
 
     // ===== 从 sockaddr 构造 =====
     static Address from_sockaddr(const struct sockaddr* sa, socklen_t len) {
         Address addr;
-        if (sa == nullptr || len == 0) {
-            return addr;
-        }
-
-        if (len > sizeof(addr.storage_)) {
-            return addr;
-        }
-
-        std::memcpy(&addr.storage_, sa, len);
-        addr.len_ = len;
-        addr.family_ = detail::from_af(sa->sa_family);
+        addr.from_sockaddr_impl(sa, len);
         return addr;
     }
 
@@ -221,9 +282,7 @@ public:
     }
 
     std::string to_string() const {
-        if (family_ == Family::UNIX) {
-            return ip();
-        }
+        if (family_ == Family::UNIX) return ip();
         if (family_ == Family::INET6) {
             return "[" + ip() + "]:" + std::to_string(port());
         }
@@ -249,6 +308,8 @@ public:
     bool is_ipv6() const noexcept { return family_ == Family::INET6; }
     bool is_unix() const noexcept { return family_ == Family::UNIX; }
     bool empty() const noexcept { return family_ == Family::UNSPEC; }
+
+    explicit operator bool() const noexcept { return !empty(); }
 
     // ===== 底层访问 =====
     const struct sockaddr* sockaddr_ptr() const noexcept {
@@ -303,6 +364,71 @@ private:
         std::memset(&storage_, 0, sizeof(storage_));
         len_ = 0;
         family_ = Family::UNSPEC;
+    }
+
+    // ---------- 内部实现 ----------
+
+    void from_ip_impl(const std::string& ip, uint16_t port,
+                      Family family, std::error_code& ec) noexcept {
+        ec.clear();
+        clear();
+
+        if (family == Family::UNSPEC || family == Family::INET) {
+            auto* sin = reinterpret_cast<struct sockaddr_in*>(&storage_);
+            sin->sin_family = AF_INET;
+            sin->sin_port = htons(port);
+            if (::inet_pton(AF_INET, ip.c_str(), &sin->sin_addr) == 1) {
+                len_ = sizeof(struct sockaddr_in);
+                family_ = Family::INET;
+                return;
+            }
+        }
+
+        if (family == Family::UNSPEC || family == Family::INET6) {
+            auto* sin6 = reinterpret_cast<struct sockaddr_in6*>(&storage_);
+            sin6->sin6_family = AF_INET6;
+            sin6->sin6_port = htons(port);
+            if (::inet_pton(AF_INET6, ip.c_str(), &sin6->sin6_addr) == 1) {
+                len_ = sizeof(struct sockaddr_in6);
+                family_ = Family::INET6;
+                return;
+            }
+        }
+
+        ec = std::make_error_code(std::errc::invalid_argument);
+    }
+
+    void from_unix_impl(const std::string& path,
+                        std::error_code& ec) noexcept {
+        ec.clear();
+        clear();
+
+        constexpr size_t kSunPathCap =
+            sizeof(((struct sockaddr_un*)nullptr)->sun_path);
+
+        if (path.size() >= kSunPathCap) {
+            ec = std::make_error_code(std::errc::filename_too_long);
+            return;
+        }
+
+        auto* sun = reinterpret_cast<struct sockaddr_un*>(&storage_);
+        sun->sun_family = AF_UNIX;
+        std::strncpy(sun->sun_path, path.c_str(), kSunPathCap - 1);
+        sun->sun_path[kSunPathCap - 1] = '\0';
+
+        len_ = static_cast<socklen_t>(
+            offsetof(struct sockaddr_un, sun_path) + path.size() + 1);
+        family_ = Family::UNIX;
+    }
+
+    void from_sockaddr_impl(const struct sockaddr* sa, socklen_t len) noexcept {
+        clear();
+        if (sa == nullptr || len == 0) return;
+        if (len > sizeof(storage_)) return;
+
+        std::memcpy(&storage_, sa, len);
+        len_ = len;
+        family_ = detail::from_af(sa->sa_family);
     }
 };
 

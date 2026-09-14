@@ -1,14 +1,12 @@
-// socket.hpp
 #pragma once
 
 #include "socket_address.hpp"
+#include "socket_exception.hpp"
 
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <optional>
 #include <utility>
-#include <stdexcept>
 #include <cerrno>
 
 #include <unistd.h>
@@ -18,31 +16,29 @@
 
 namespace Socket {
 
-// ---------- 异常 ----------
-class SocketError : public std::runtime_error {
-public:
-    explicit SocketError(const std::string& msg, int errnum = 0)
-        : std::runtime_error(msg), errnum_(errnum) {}
-
-    int errnum() const noexcept { return errnum_; }
-
-private:
-    int errnum_;
-};
-
 // ---------- Socket ----------
 class Socket {
 public:
-    // ===== 构造 / 析构 =====
-
-    // 默认构造：不创建 fd，延迟到 bind/connect 时按地址族创建
+    // ============================================================
+    // 构造 / 析构
+    // ============================================================
     Socket() noexcept = default;
 
-    // 显式指定族和类型，立即创建 fd
+    // ---- 异常版本 ----
     Socket(Family family, AddrType type) {
-        create(detail::to_af(family), detail::to_socktype(type));
+        create(detail::to_af(family), detail::to_socktype(type), type);
         family_ = family;
         type_ = type;
+    }
+
+    // ---- 错误码版本 ----
+    Socket(Family family, AddrType type, std::error_code& ec) noexcept {
+        ec.clear();
+        create(detail::to_af(family), detail::to_socktype(type), type, ec);
+        if (!ec) {
+            family_ = family;
+            type_ = type;
+        }
     }
 
     // 从已有 fd 构造（供 accept 内部使用）
@@ -70,36 +66,83 @@ public:
 
     ~Socket() { close(); }
 
-    // ===== 服务端 =====
+    bool valid() const noexcept { return fd_ >= 0; }
+    explicit operator bool() const noexcept { return fd_ >= 0; }
 
+    // ============================================================
+    // 服务端
+    // ============================================================
+
+    // ---- bind：异常版本 ----
     void bind(const Address& addr) {
-        ensure_created(addr.family(),
-                       type_ == AddrType::STREAM ? AddrType::STREAM : AddrType::DGRAM);
-        if (::bind(fd_, addr.sockaddr_ptr(), addr.sockaddr_len()) != 0) {
-            throw SocketError("bind failed: " + addr.to_string(), errno);
+        std::error_code ec;
+        bind(addr, ec);
+        if (ec) {
+            throw SocketError(ec, "bind failed: " + addr.to_string());
         }
     }
 
+    // ---- bind：错误码版本 ----
+    void bind(const Address& addr, std::error_code& ec) noexcept {
+        ec.clear();
+        if (!ensure_created(addr.family(), type_, ec)) return;
+        if (::bind(fd_, addr.sockaddr_ptr(), addr.sockaddr_len()) != 0) {
+            ec = std::error_code(errno, std::system_category());
+        }
+    }
+
+    // ---- listen：异常版本 ----
     void listen(int backlog = 5) {
+        std::error_code ec;
+        listen(backlog, ec);
+        if (ec) {
+            throw SocketError(ec, "listen failed");
+        }
+    }
+
+    // ---- listen：错误码版本 ----
+    void listen(int backlog, std::error_code& ec) noexcept {
+        ec.clear();
         if (fd_ < 0) {
-            throw SocketError("listen on uninitialized socket");
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
         }
         if (::listen(fd_, backlog) != 0) {
-            throw SocketError("listen failed", errno);
+            ec = std::error_code(errno, std::system_category());
         }
     }
 
-    // 返回 (conn, peer_addr)，对应 Python 的 conn, addr = s.accept()
+    // ---- accept：异常版本 ----
     std::pair<Socket, Address> accept() {
+        std::error_code ec;
+        auto r = accept(ec);
+        if (ec) {
+            throw SocketError(ec, "accept failed");
+        }
+        return r;
+    }
+
+    // ---- accept：错误码版本 ----
+    std::pair<Socket, Address> accept(std::error_code& ec) noexcept {
+        ec.clear();
         if (fd_ < 0) {
-            throw SocketError("accept on uninitialized socket");
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return {Socket(), Address()};
         }
 
         struct sockaddr_storage storage;
         socklen_t len = sizeof(storage);
-        int conn_fd = ::accept(fd_, reinterpret_cast<struct sockaddr*>(&storage), &len);
+
+        int conn_fd;
+        do {
+            conn_fd = ::accept(fd_,
+                               reinterpret_cast<struct sockaddr*>(&storage),
+                               &len);
+        } while (conn_fd < 0 && errno == EINTR);
+
         if (conn_fd < 0) {
-            throw SocketError("accept failed", errno);
+            ec = std::error_code(errno, std::system_category());
+            return {Socket(), Address()};
         }
 
         Address peer = Address::from_sockaddr(
@@ -107,54 +150,104 @@ public:
         return {Socket(conn_fd, peer.family(), type_), std::move(peer)};
     }
 
-    // ===== 客户端 =====
+    // ============================================================
+    // 客户端
+    // ============================================================
 
+    // ---- connect(Address)：异常版本 ----
     void connect(const Address& addr) {
-        ensure_created(addr.family(),
-                       type_ == AddrType::STREAM ? AddrType::STREAM : AddrType::DGRAM);
-        if (::connect(fd_, addr.sockaddr_ptr(), addr.sockaddr_len()) != 0) {
-            throw SocketError("connect failed: " + addr.to_string(), errno);
+        std::error_code ec;
+        connect(addr, ec);
+        if (ec) {
+            throw SocketError(ec, "connect failed: " + addr.to_string());
         }
     }
 
-    // 便捷重载：域名 + 端口，内部走 Address::resolve
-    void connect(const std::string& host, uint16_t port,
-                 Family family = Family::UNSPEC) {
-        Address addr = Address::resolve(host, port, family,
-                                        type_ == AddrType::STREAM
-                                            ? AddrType::STREAM : AddrType::DGRAM);
-        connect(addr);
+    // ---- connect(Address)：错误码版本 ----
+    void connect(const Address& addr, std::error_code& ec) noexcept {
+        ec.clear();
+        if (!ensure_created(addr.family(), type_, ec)) return;
+
+        int rc;
+        do {
+            rc = ::connect(fd_, addr.sockaddr_ptr(), addr.sockaddr_len());
+        } while (rc < 0 && errno == EINTR);
+
+        if (rc != 0) {
+            ec = std::error_code(errno, std::system_category());
+        }
     }
 
-    // ===== 数据收发（TCP） =====
+    // ---- connect(host, port)：异常版本 ----
+    void connect(const std::string& host, uint16_t port,
+                 Family family = Family::UNSPEC) {
+        std::error_code ec;
+        connect(host, port, family, ec);
+        if (ec) {
+            throw SocketError(ec, "connect failed: " + host + ":" + std::to_string(port));
+        }
+    }
 
-    // 返回实际收到的字节；对端关闭时返回空 vector
+    // ---- connect(host, port)：错误码版本 ----
+    // 注意：resolve 失败时 ec 是 gai_category 的码
+    void connect(const std::string& host, uint16_t port,
+                 Family family, std::error_code& ec) noexcept {
+        ec.clear();
+        Address addr = Address::resolve(host, port, family, type_, ec);
+        if (ec) return;
+        connect(addr, ec);
+    }
+
+    // ============================================================
+    // 数据收发（TCP）
+    // ============================================================
+
+    // ---- recv(size_t)：异常版本 ----
     std::vector<uint8_t> recv(size_t bufsize) {
+        std::error_code ec;
+        auto v = recv(bufsize, ec);
+        if (ec) {
+            throw SocketError(ec, "recv failed");
+        }
+        return v;
+    }
+
+    // ---- recv(size_t)：错误码版本 ----
+    // 对端关闭时返回空 vector 且 ec 为空；出错时 ec 非空
+    std::vector<uint8_t> recv(size_t bufsize, std::error_code& ec) noexcept {
+        ec.clear();
         std::vector<uint8_t> buf(bufsize);
-        ssize_t n = recv_impl(buf.data(), bufsize);
-        if (n < 0) return {};
+        ssize_t n = recv_impl(buf.data(), bufsize, ec);
+        if (ec) return {};
         buf.resize(static_cast<size_t>(n));
         return buf;
     }
 
-    // 写入调用方缓冲区，返回实际字节数
+    // ---- recv(void*, size_t)：异常版本 ----
     size_t recv(void* buf, size_t bufsize) {
-        ssize_t n = recv_impl(buf, bufsize);
-        if (n < 0) return 0;
+        std::error_code ec;
+        size_t n = recv(buf, bufsize, ec);
+        if (ec) {
+            throw SocketError(ec, "recv failed");
+        }
+        return n;
+    }
+
+    // ---- recv(void*, size_t)：错误码版本 ----
+    // 返回实际字节数；对端关闭返回 0 且 ec 为空；出错返回 0 且 ec 非空
+    size_t recv(void* buf, size_t bufsize, std::error_code& ec) noexcept {
+        ec.clear();
+        ssize_t n = recv_impl(buf, bufsize, ec);
+        if (ec) return 0;
         return static_cast<size_t>(n);
     }
 
-    // 确保全部发出，对应 Python 的 sendall
+    // ---- sendall：异常版本 ----
     void sendall(const void* data, size_t len) {
-        auto* p = static_cast<const uint8_t*>(data);
-        size_t sent = 0;
-        while (sent < len) {
-            ssize_t n = ::send(fd_, p + sent, len - sent, MSG_NOSIGNAL);
-            if (n < 0) {
-                if (errno == EINTR) continue;
-                throw SocketError("sendall failed", errno);
-            }
-            sent += static_cast<size_t>(n);
+        std::error_code ec;
+        sendall(data, len, ec);
+        if (ec) {
+            throw SocketError(ec, "sendall failed");
         }
     }
 
@@ -166,26 +259,91 @@ public:
         sendall(data.data(), data.size());
     }
 
-    // 对应 Python 的 send，返回实际发送字节数，可能少于 len
+    // ---- sendall：错误码版本 ----
+    void sendall(const void* data, size_t len, std::error_code& ec) noexcept {
+        ec.clear();
+        auto* p = static_cast<const uint8_t*>(data);
+        size_t sent = 0;
+        while (sent < len) {
+            ssize_t n = ::send(fd_, p + sent, len - sent, MSG_NOSIGNAL);
+            if (n < 0) {
+                if (errno == EINTR) continue;
+                ec = std::error_code(errno, std::system_category());
+                return;
+            }
+            if (n == 0) {
+                // 理论上阻塞 socket 不会返回 0，但防御性处理
+                ec = std::make_error_code(std::errc::io_error);
+                return;
+            }
+            sent += static_cast<size_t>(n);
+        }
+    }
+
+    void sendall(const std::vector<uint8_t>& data, std::error_code& ec) noexcept {
+        sendall(data.data(), data.size(), ec);
+    }
+
+    void sendall(const std::string& data, std::error_code& ec) noexcept {
+        sendall(data.data(), data.size(), ec);
+    }
+
+    // ---- send：异常版本 ----
     size_t send(const void* data, size_t len) {
-        ssize_t n = ::send(fd_, data, len, MSG_NOSIGNAL);
+        std::error_code ec;
+        size_t n = send(data, len, ec);
+        if (ec) {
+            throw SocketError(ec, "send failed");
+        }
+        return n;
+    }
+
+    // ---- send：错误码版本 ----
+    size_t send(const void* data, size_t len, std::error_code& ec) noexcept {
+        ec.clear();
+        ssize_t n;
+        do {
+            n = ::send(fd_, data, len, MSG_NOSIGNAL);
+        } while (n < 0 && errno == EINTR);
+
         if (n < 0) {
-            throw SocketError("send failed", errno);
+            ec = std::error_code(errno, std::system_category());
+            return 0;
         }
         return static_cast<size_t>(n);
     }
 
-    // ===== UDP =====
+    // ============================================================
+    // UDP
+    // ============================================================
 
+    // ---- recvfrom：异常版本 ----
     std::pair<std::vector<uint8_t>, Address> recvfrom(size_t bufsize) {
+        std::error_code ec;
+        auto r = recvfrom(bufsize, ec);
+        if (ec) {
+            throw SocketError(ec, "recvfrom failed");
+        }
+        return r;
+    }
+
+    // ---- recvfrom：错误码版本 ----
+    std::pair<std::vector<uint8_t>, Address>
+    recvfrom(size_t bufsize, std::error_code& ec) noexcept {
+        ec.clear();
         std::vector<uint8_t> buf(bufsize);
         struct sockaddr_storage storage;
         socklen_t len = sizeof(storage);
 
-        ssize_t n = ::recvfrom(fd_, buf.data(), bufsize, 0,
-                               reinterpret_cast<struct sockaddr*>(&storage), &len);
+        ssize_t n;
+        do {
+            n = ::recvfrom(fd_, buf.data(), bufsize, 0,
+                           reinterpret_cast<struct sockaddr*>(&storage), &len);
+        } while (n < 0 && errno == EINTR);
+
         if (n < 0) {
-            throw SocketError("recvfrom failed", errno);
+            ec = std::error_code(errno, std::system_category());
+            return {{}, Address()};
         }
 
         buf.resize(static_cast<size_t>(n));
@@ -194,13 +352,14 @@ public:
         return {std::move(buf), std::move(peer)};
     }
 
+    // ---- sendto：异常版本 ----
     size_t sendto(const void* data, size_t len, const Address& addr) {
-        ssize_t n = ::sendto(fd_, data, len, 0,
-                             addr.sockaddr_ptr(), addr.sockaddr_len());
-        if (n < 0) {
-            throw SocketError("sendto failed: " + addr.to_string(), errno);
+        std::error_code ec;
+        size_t n = sendto(data, len, addr, ec);
+        if (ec) {
+            throw SocketError(ec, "sendto failed: " + addr.to_string());
         }
-        return static_cast<size_t>(n);
+        return n;
     }
 
     size_t sendto(const std::vector<uint8_t>& data, const Address& addr) {
@@ -211,111 +370,156 @@ public:
         return sendto(data.data(), data.size(), addr);
     }
 
-    // ===== 选项与状态 =====
+    // ---- sendto：错误码版本 ----
+    size_t sendto(const void* data, size_t len, const Address& addr,
+                  std::error_code& ec) noexcept {
+        ec.clear();
+        ssize_t n;
+        do {
+            n = ::sendto(fd_, data, len, 0,
+                         addr.sockaddr_ptr(), addr.sockaddr_len());
+        } while (n < 0 && errno == EINTR);
 
-    // 对应 Python 的 settimeout
-    // nullopt = 阻塞，0 = 非阻塞，正数 = 超时秒数
-    void settimeout(std::optional<double> seconds) {
-        if (fd_ < 0) {
-            throw SocketError("settimeout on uninitialized socket");
+        if (n < 0) {
+            ec = std::error_code(errno, std::system_category());
+            return 0;
         }
-
-        if (!seconds.has_value()) {
-            // 恢复阻塞
-            int flags = ::fcntl(fd_, F_GETFL, 0);
-            if (flags < 0 || ::fcntl(fd_, F_SETFL, flags & ~O_NONBLOCK) < 0) {
-                throw SocketError("settimeout(blocking) failed", errno);
-            }
-            struct timeval tv{0, 0};
-            ::setsockopt(fd_, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
-            ::setsockopt(fd_, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
-            return;
-        }
-
-        if (*seconds == 0.0) {
-            // 非阻塞
-            int flags = ::fcntl(fd_, F_GETFL, 0);
-            if (flags < 0 || ::fcntl(fd_, F_SETFL, flags | O_NONBLOCK) < 0) {
-                throw SocketError("settimeout(nonblocking) failed", errno);
-            }
-            return;
-        }
-
-        // 正数超时：用 SO_RCVTIMEO / SO_SNDTIMEO
-        struct timeval tv;
-        tv.tv_sec = static_cast<time_t>(*seconds);
-        tv.tv_usec = static_cast<suseconds_t>((*seconds - tv.tv_sec) * 1e6);
-        if (::setsockopt(fd_, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) != 0 ||
-            ::setsockopt(fd_, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) != 0) {
-            throw SocketError("settimeout failed", errno);
-        }
+        return static_cast<size_t>(n);
     }
 
-    // 对应 SO_REUSEADDR，服务端重启时避免 TIME_WAIT 报错
-    void set_reuseaddr(bool enable = true) {
-        if (fd_ < 0) {
-            throw SocketError("set_reuseaddr on uninitialized socket");
-        }
-        int val = enable ? 1 : 0;
-        if (::setsockopt(fd_, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) != 0) {
-            throw SocketError("set_reuseaddr failed", errno);
-        }
+    size_t sendto(const std::vector<uint8_t>& data, const Address& addr,
+                  std::error_code& ec) noexcept {
+        return sendto(data.data(), data.size(), addr, ec);
     }
 
-    // 对应 SO_REUSEPORT（Linux），多进程/多线程负载均衡
-    void set_reuseport(bool enable = true) {
-        if (fd_ < 0) {
-            throw SocketError("set_reuseport on uninitialized socket");
-        }
-        int val = enable ? 1 : 0;
-        if (::setsockopt(fd_, SOL_SOCKET, SO_REUSEPORT, &val, sizeof(val)) != 0) {
-            throw SocketError("set_reuseport failed", errno);
-        }
+    size_t sendto(const std::string& data, const Address& addr,
+                  std::error_code& ec) noexcept {
+        return sendto(data.data(), data.size(), addr, ec);
     }
 
-    // 对应 getsockname
+    // ============================================================
+    // 查询
+    // ============================================================
+
+    // ---- getsockname：异常版本 ----
     Address getsockname() const {
+        std::error_code ec;
+        Address a = getsockname(ec);
+        if (ec) {
+            throw SocketError(ec, "getsockname failed");
+        }
+        return a;
+    }
+
+    // ---- getsockname：错误码版本 ----
+    Address getsockname(std::error_code& ec) const noexcept {
+        ec.clear();
         if (fd_ < 0) {
-            throw SocketError("getsockname on uninitialized socket");
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return {};
         }
         struct sockaddr_storage storage;
         socklen_t len = sizeof(storage);
-        if (::getsockname(fd_, reinterpret_cast<struct sockaddr*>(&storage), &len) != 0) {
-            throw SocketError("getsockname failed", errno);
+        if (::getsockname(fd_, reinterpret_cast<struct sockaddr*>(&storage),
+                          &len) != 0) {
+            ec = std::error_code(errno, std::system_category());
+            return {};
         }
         return Address::from_sockaddr(
             reinterpret_cast<struct sockaddr*>(&storage), len);
     }
 
-    // 对应 getpeername
+    // ---- getpeername：异常版本 ----
     Address getpeername() const {
+        std::error_code ec;
+        Address a = getpeername(ec);
+        if (ec) {
+            throw SocketError(ec, "getpeername failed");
+        }
+        return a;
+    }
+
+    // ---- getpeername：错误码版本 ----
+    Address getpeername(std::error_code& ec) const noexcept {
+        ec.clear();
         if (fd_ < 0) {
-            throw SocketError("getpeername on uninitialized socket");
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return {};
         }
         struct sockaddr_storage storage;
         socklen_t len = sizeof(storage);
-        if (::getpeername(fd_, reinterpret_cast<struct sockaddr*>(&storage), &len) != 0) {
-            throw SocketError("getpeername failed", errno);
+        if (::getpeername(fd_, reinterpret_cast<struct sockaddr*>(&storage),
+                          &len) != 0) {
+            ec = std::error_code(errno, std::system_category());
+            return {};
         }
         return Address::from_sockaddr(
             reinterpret_cast<struct sockaddr*>(&storage), len);
     }
 
-    // 对应 close
+    // ============================================================
+    // 关闭 / 半关闭
+    // ============================================================
     void close() noexcept {
         if (fd_ >= 0) {
+            // Linux close(2) 在 EINTR 时不重试（fd 可能已释放）
             ::close(fd_);
             fd_ = -1;
         }
     }
 
-    // 对应 shutdown(SHUT_WR / SHUT_RDWR)
+    // ---- shutdown_write：异常版本 ----
     void shutdown_write() {
-        if (fd_ >= 0) ::shutdown(fd_, SHUT_WR);
+        std::error_code ec;
+        shutdown_write(ec);
+        if (ec) {
+            throw SocketError(ec, "shutdown_write failed");
+        }
     }
 
+    // ---- shutdown_write：错误码版本 ----
+    void shutdown_write(std::error_code& ec) noexcept {
+        ec.clear();
+        if (fd_ < 0) return;
+        if (::shutdown(fd_, SHUT_WR) != 0) {
+            ec = std::error_code(errno, std::system_category());
+        }
+    }
+
+    // ---- shutdown_read：异常版本 ----
+    void shutdown_read() {
+        std::error_code ec;
+        shutdown_read(ec);
+        if (ec) {
+            throw SocketError(ec, "shutdown_read failed");
+        }
+    }
+
+    // ---- shutdown_read：错误码版本 ----
+    void shutdown_read(std::error_code& ec) noexcept {
+        ec.clear();
+        if (fd_ < 0) return;
+        if (::shutdown(fd_, SHUT_RD) != 0) {
+            ec = std::error_code(errno, std::system_category());
+        }
+    }
+
+    // ---- shutdown_both：异常版本 ----
     void shutdown_both() {
-        if (fd_ >= 0) ::shutdown(fd_, SHUT_RDWR);
+        std::error_code ec;
+        shutdown_both(ec);
+        if (ec) {
+            throw SocketError(ec, "shutdown_both failed");
+        }
+    }
+
+    // ---- shutdown_both：错误码版本 ----
+    void shutdown_both(std::error_code& ec) noexcept {
+        ec.clear();
+        if (fd_ < 0) return;
+        if (::shutdown(fd_, SHUT_RDWR) != 0) {
+            ec = std::error_code(errno, std::system_category());
+        }
     }
 
     bool closed() const noexcept { return fd_ < 0; }
@@ -331,33 +535,58 @@ private:
     Family family_ = Family::UNSPEC;
     AddrType type_ = AddrType::STREAM;
 
-    void create(int af, int socktype) {
+    // ---- create：异常版本 ----
+    void create(int af, int socktype, AddrType type) {
+        std::error_code ec;
+        create(af, socktype, type, ec);
+        if (ec) {
+            throw SocketError(ec, "socket creation failed");
+        }
+    }
+
+    // ---- create：错误码版本 ----
+    void create(int af, int socktype, AddrType type,
+                std::error_code& ec) noexcept {
+        ec.clear();
         fd_ = ::socket(af, socktype, 0);
         if (fd_ < 0) {
-            throw SocketError("socket creation failed", errno);
+            ec = std::error_code(errno, std::system_category());
+            fd_ = -1;
         }
+        (void)type; // 保留参数以便后续扩展
     }
 
     // 如果 fd 未创建，按地址族和类型创建；已创建则检查族是否匹配
-    void ensure_created(Family family, AddrType type) {
+    // 返回 false 表示 ec 非空
+    bool ensure_created(Family family, AddrType type,
+                        std::error_code& ec) noexcept {
+        ec.clear();
         if (fd_ < 0) {
-            create(detail::to_af(family), detail::to_socktype(type));
+            create(detail::to_af(family), detail::to_socktype(type), type, ec);
+            if (ec) return false;
             family_ = family;
             type_ = type;
         } else if (family_ != Family::UNSPEC && family_ != family) {
-            throw SocketError("socket family mismatch");
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return false;
         }
+        return true;
     }
 
-    ssize_t recv_impl(void* buf, size_t bufsize) {
+    // 返回实际收到的字节数；对端关闭返回 0 且 ec 为空；出错返回 -1 且 ec 非空
+    ssize_t recv_impl(void* buf, size_t bufsize,
+                      std::error_code& ec) noexcept {
+        ec.clear();
         if (fd_ < 0) {
-            throw SocketError("recv on uninitialized socket");
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return -1;
         }
         while (true) {
             ssize_t n = ::recv(fd_, buf, bufsize, 0);
             if (n < 0 && errno == EINTR) continue;
             if (n < 0) {
-                throw SocketError("recv failed", errno);
+                ec = std::error_code(errno, std::system_category());
+                return -1;
             }
             return n;  // n == 0 表示对端关闭
         }
