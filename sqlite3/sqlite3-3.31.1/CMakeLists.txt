@@ -36,6 +36,7 @@ endif()
 # 设置一些常用的编译选项 (可根据需要开启或关闭)
 # 更多选项参考: https://www.sqlite.org/compile.html
 target_compile_definitions(sqlite3 PRIVATE
+    SQLITE_ENABLE_COLUMN_METADATA
     # 启用FTS5全文搜索扩展
     # SQLITE_ENABLE_FTS5
     # 启用RTREE空间索引扩展
