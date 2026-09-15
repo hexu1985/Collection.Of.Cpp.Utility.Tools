@@ -42,18 +42,10 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     EprosimaRpcClient.hpp
     EprosimaRpcUtility.cpp
     EprosimaRpcUtility.hpp
-    EprosimaAsyncClient.cpp
-    EprosimaAsyncClient.h
-    EprosimaClient.cpp
-    EprosimaClient.h
-    EprosimaServer.cpp
-    EprosimaServer.h
     EprosimaPubWrapper.cpp
     EprosimaPubWrapper.hpp
     EprosimaSubWrapper.cpp
     EprosimaSubWrapper.hpp
-    EprosimaClientTest.cpp
-    EprosimaClientTest.h
     timer.cpp
     timer.hpp
     threadsafe_queue.hpp
@@ -62,33 +54,66 @@ set(DDS_CLIENTSERVERTEST_SOURCES
     gen/soa_on_dds_types.h
     gen/soa_on_dds_typesPubSubTypes.cxx
     gen/soa_on_dds_typesPubSubTypes.h
-    gen/ClientServerTypes.cxx
-    gen/ClientServerTypes.h
-    EprosimaClientTimed.cpp
-    EprosimaClientTimed.h
-    EprosimaAsyncClientTimed.cpp
-    EprosimaAsyncClientTimed.h
-    )
+)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gen)
 
-add_executable(calculate_server_test calculate_server_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+add_executable(calculate_server_test 
+    calculate_server_test.cpp 
+    EprosimaServer.cpp
+    EprosimaServer.h
+    gen/ClientServerTypes.cxx
+    gen/ClientServerTypes.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_server_test fastrtps fastcdr tinyxml2::tinyxml2)
 
-add_executable(calculate_client_test calculate_client_test.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+add_executable(calculate_client_test 
+    calculate_client_test.cpp 
+    EprosimaClient.cpp
+    EprosimaClient.h
+    gen/ClientServerTypes.cxx
+    gen/ClientServerTypes.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test fastrtps fastcdr tinyxml2::tinyxml2)
 
-add_executable(calculate_client_test_async calculate_client_test_async.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+add_executable(calculate_client_test_async 
+    calculate_client_test_async.cpp 
+    EprosimaAsyncClient.cpp
+    EprosimaAsyncClient.h
+    gen/ClientServerTypes.cxx
+    gen/ClientServerTypes.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test_async fastrtps fastcdr tinyxml2::tinyxml2)
 
 add_executable(test_ClientServerTypes test_ClientServerTypes.cpp gen/ClientServerTypes.cxx)
 target_link_libraries(test_ClientServerTypes fastrtps fastcdr tinyxml2::tinyxml2)
 
-add_executable(calculate_client_test_pressure calculate_client_test_pressure.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+add_executable(calculate_client_test_pressure 
+    calculate_client_test_pressure.cpp 
+    EprosimaClient.cpp
+    EprosimaClient.h
+    EprosimaClientTest.cpp
+    EprosimaClientTest.h
+    gen/ClientServerTypes.cxx
+    gen/ClientServerTypes.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test_pressure fastrtps fastcdr tinyxml2::tinyxml2)
 
-add_executable(calculate_client_test_timed calculate_client_test_timed.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+add_executable(calculate_client_test_timed 
+    calculate_client_test_timed.cpp 
+    gen/ClientServerTypes.cxx
+    gen/ClientServerTypes.h
+    EprosimaClientTimed.cpp
+    EprosimaClientTimed.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test_timed fastrtps fastcdr tinyxml2::tinyxml2)
 
-add_executable(calculate_client_test_async_timed calculate_client_test_async_timed.cpp ${DDS_CLIENTSERVERTEST_SOURCES})
+add_executable(calculate_client_test_async_timed 
+    calculate_client_test_async_timed.cpp 
+    gen/ClientServerTypes.cxx
+    gen/ClientServerTypes.h
+    EprosimaAsyncClientTimed.cpp
+    EprosimaAsyncClientTimed.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test_async_timed fastrtps fastcdr tinyxml2::tinyxml2)
 
