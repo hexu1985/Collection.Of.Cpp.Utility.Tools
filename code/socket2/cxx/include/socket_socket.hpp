@@ -26,7 +26,7 @@ public:
 
     // ---- 异常版本 ----
     Socket(Family family, AddrType type) {
-        create(detail::to_af(family), detail::to_socktype(type), type);
+        create(detail::to_af(family), detail::to_socktype(type));
         family_ = family;
         type_ = type;
     }
@@ -34,7 +34,7 @@ public:
     // ---- 错误码版本 ----
     Socket(Family family, AddrType type, std::error_code& ec) noexcept {
         ec.clear();
-        create(detail::to_af(family), detail::to_socktype(type), type, ec);
+        create(detail::to_af(family), detail::to_socktype(type), ec);
         if (!ec) {
             family_ = family;
             type_ = type;
@@ -85,7 +85,6 @@ public:
     // ---- bind：错误码版本 ----
     void bind(const Address& addr, std::error_code& ec) noexcept {
         ec.clear();
-        if (!ensure_created(addr.family(), type_, ec)) return;
         if (::bind(fd_, addr.sockaddr_ptr(), addr.sockaddr_len()) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -166,7 +165,6 @@ public:
     // ---- connect(Address)：错误码版本 ----
     void connect(const Address& addr, std::error_code& ec) noexcept {
         ec.clear();
-        if (!ensure_created(addr.family(), type_, ec)) return;
 
         int rc;
         do {
@@ -536,16 +534,16 @@ private:
     AddrType type_ = AddrType::STREAM;
 
     // ---- create：异常版本 ----
-    void create(int af, int socktype, AddrType type) {
+    void create(int af, int socktype) {
         std::error_code ec;
-        create(af, socktype, type, ec);
+        create(af, socktype, ec);
         if (ec) {
             throw SocketError(ec, "socket creation failed");
         }
     }
 
     // ---- create：错误码版本 ----
-    void create(int af, int socktype, AddrType type,
+    void create(int af, int socktype,
                 std::error_code& ec) noexcept {
         ec.clear();
         fd_ = ::socket(af, socktype, 0);
@@ -553,24 +551,6 @@ private:
             ec = std::error_code(errno, std::system_category());
             fd_ = -1;
         }
-        (void)type; // 保留参数以便后续扩展
-    }
-
-    // 如果 fd 未创建，按地址族和类型创建；已创建则检查族是否匹配
-    // 返回 false 表示 ec 非空
-    bool ensure_created(Family family, AddrType type,
-                        std::error_code& ec) noexcept {
-        ec.clear();
-        if (fd_ < 0) {
-            create(detail::to_af(family), detail::to_socktype(type), type, ec);
-            if (ec) return false;
-            family_ = family;
-            type_ = type;
-        } else if (family_ != Family::UNSPEC && family_ != family) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return false;
-        }
-        return true;
     }
 
     // 返回实际收到的字节数；对端关闭返回 0 且 ec 为空；出错返回 -1 且 ec 非空
