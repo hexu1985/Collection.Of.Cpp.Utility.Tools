@@ -1,0 +1,20 @@
+module clientserver {
+
+enum OPERATIONTYPE {
+    ADDITION,
+    SUBTRACTION,
+    MULTIPLICATION,
+    DIVISION
+};
+
+struct Operation {
+    OPERATIONTYPE m_operationType;
+    long m_num1;
+    long m_num2;
+};
+
+struct Result {
+    long m_result;
+};
+
+};  // clientserver
