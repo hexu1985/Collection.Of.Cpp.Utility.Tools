@@ -32,4 +32,30 @@ public:
     static void delete_participant(ParticipantPtr part);
 };
 
+struct VoidType {
+};
+
+inline
+bool SerializeToVector(const VoidType&, std::vector<uint8_t>& output) {
+    output.clear();
+    return true;
+}
+
+inline
+bool DeserializeFromVector(VoidType&, const std::vector<uint8_t>& input) {
+    return true;
+}
+
+inline
+bool SerializeToVector(const std::string& str, std::vector<uint8_t>& output) {
+    output.assign(str.begin(), str.end());
+    return true;
+}
+
+inline
+bool DeserializeFromVector(std::string& str, const std::vector<uint8_t>& input) {
+    str.assign(input.begin(), input.end());
+    return true;
+}
+
 }   // namespace soa_on_dds

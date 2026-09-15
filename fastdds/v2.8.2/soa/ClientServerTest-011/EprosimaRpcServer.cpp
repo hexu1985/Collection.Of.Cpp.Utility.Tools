@@ -1,5 +1,4 @@
 #include "EprosimaRpcServer.hpp"
-#include "EprosimaRpcUtility.hpp"
 #include "soa_on_dds_typesPubSubTypes.h"
 
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>

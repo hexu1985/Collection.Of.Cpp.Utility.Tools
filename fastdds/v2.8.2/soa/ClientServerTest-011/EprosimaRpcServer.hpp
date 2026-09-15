@@ -3,6 +3,7 @@
 #include "soa_on_dds_types.h"
 #include "EprosimaPubWrapper.hpp"
 #include "EprosimaSubWrapper.hpp"
+#include "EprosimaRpcUtility.hpp"
 #include "worker_thread.hpp"
 #include "thread_pool.hpp"
 

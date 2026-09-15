@@ -32,7 +32,7 @@ bool DaytimeServer::init()
     return mp_rpc_server->start();
 }
 
-void DaytimeServer::daytime_handle(VoidType& arg, std::string& res) {
+void DaytimeServer::daytime_handle(const VoidType& arg, std::string& res) {
     std::cout << "EprosimaServer::daytime_handle begin" << std::endl;
     (void) arg;
     auto now = std::chrono::system_clock::now();
@@ -41,7 +41,7 @@ void DaytimeServer::daytime_handle(VoidType& arg, std::string& res) {
     std::tm tm_buf{};                       // 每个线程用自己的缓冲区
     if (localtime_r(&t, &tm_buf) == nullptr) {   // 可重入版本
         std::cerr << "localtime_r failed\n";
-        return 1;
+        return;
     }
 
     char buf[64];

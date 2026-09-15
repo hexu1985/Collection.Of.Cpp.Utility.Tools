@@ -15,7 +15,7 @@ public:
     //Serve indefinitely.
     void serve();
 
-    void daytime_handle(soa_on_dds::VoidType& arg,
+    void daytime_handle(const soa_on_dds::VoidType& arg,
             std::string& res);
 
 private:

@@ -117,3 +117,9 @@ add_executable(calculate_client_test_async_timed
     ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(calculate_client_test_async_timed fastrtps fastcdr tinyxml2::tinyxml2)
 
+add_executable(daytime_server_test 
+    daytime_server_test.cpp 
+    DaytimeServer.cpp
+    DaytimeServer.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
+target_link_libraries(daytime_server_test fastrtps fastcdr tinyxml2::tinyxml2)
