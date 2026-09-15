@@ -123,3 +123,11 @@ add_executable(daytime_server_test
     DaytimeServer.h
     ${DDS_CLIENTSERVERTEST_SOURCES})
 target_link_libraries(daytime_server_test fastrtps fastcdr tinyxml2::tinyxml2)
+
+add_executable(daytime_client_test 
+    daytime_client_test.cpp 
+    DaytimeClient.cpp
+    DaytimeClient.h
+    ${DDS_CLIENTSERVERTEST_SOURCES})
+target_link_libraries(daytime_client_test fastrtps fastcdr tinyxml2::tinyxml2)
+

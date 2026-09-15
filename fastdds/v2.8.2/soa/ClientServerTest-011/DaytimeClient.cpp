@@ -4,7 +4,6 @@
 
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
-using namespace clientserver;
 
 DaytimeClient::DaytimeClient()
 {
@@ -24,9 +23,10 @@ bool DaytimeClient::init()
 
 std::string DaytimeClient::get_daytime() {
     std::string res;
-    auto error_code = mp_rpc_client->call("daytime", VoidType{}, res);
+    auto error_code = mp_rpc_client->call("daytime", soa_on_dds::VoidType{}, res);
     if (error_code != soa_on_dds::SUCCESS) {
-        std::cout << "DaytimeClient::get_daytime error: " << (int) error_code << std::endl;
+        std::cout << "DaytimeClient::get_daytime error: " 
+            << soa_on_dds::EprosimaRpcUtility::error_code_to_string(error_code) << std::endl;
         return {};
     }
 
