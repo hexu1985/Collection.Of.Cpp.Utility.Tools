@@ -44,7 +44,7 @@ EprosimaClient::EprosimaClient()
 EprosimaClient::~EprosimaClient()
 {
     mp_rpc_client.reset();
-    EprosimaRpcUtility::delete_participant(mp_participant);
+    soa_on_dds::EprosimaRpcUtility::delete_participant(mp_participant);
 }
 
 bool EprosimaClient::init()
@@ -72,7 +72,7 @@ bool EprosimaClient::init_participant() {
     pqos.wire_protocol().builtin.discovery_config.leaseDuration = eprosima::fastrtps::c_TimeInfinite;
     pqos.name( "client_RTPSParticipant");
 
-    mp_participant = EprosimaRpcUtility::create_participant(0, pqos);
+    mp_participant = soa_on_dds::EprosimaRpcUtility::create_participant(0, pqos);
 
     if (mp_participant == nullptr)
     {

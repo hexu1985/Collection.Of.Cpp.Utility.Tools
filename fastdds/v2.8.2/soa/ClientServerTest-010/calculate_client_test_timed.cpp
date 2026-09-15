@@ -69,7 +69,7 @@ void test_client_timed(EprosimaClientTimed& client, int32_t num1, const std::str
     OPERATIONTYPE op = to_operation_type(op_str);
     soa_on_dds::ErrorCode ec = client.calculate(op, num1, num2, &res, timeout);
     if (ec != soa_on_dds::SUCCESS) {
-        cout << "client.calculate failed: " << EprosimaRpcUtility::error_code_to_string(ec) << endl;
+        cout << "client.calculate failed: " << soa_on_dds::EprosimaRpcUtility::error_code_to_string(ec) << endl;
         return;
     }
     cout << "calculate remote: " << num1 << op_str << num2 << "=" << res << endl;

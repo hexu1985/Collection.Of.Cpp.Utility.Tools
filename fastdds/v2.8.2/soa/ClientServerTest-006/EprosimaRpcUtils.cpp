@@ -1,5 +1,7 @@
 #include "EprosimaRpcUtils.hpp"
 
+namespace soa_on_dds {
+
 namespace {
 
 const char* rpc_common_prefix = "soa.rpc.";
@@ -15,3 +17,5 @@ std::string EprosimaRpcUtility::generate_rpc_request_topic(const std::string& se
 std::string EprosimaRpcUtility::generate_rpc_response_topic(const std::string& service_name) {
     return rpc_common_prefix+service_name+rpc_response_suffix;
 }
+
+}   // namespace soa_on_dds

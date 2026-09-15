@@ -7,6 +7,8 @@
 
 using namespace eprosima::fastdds::dds;
 
+namespace soa_on_dds {
+
 namespace {
 
 const char* rpc_common_prefix = "soa.rpc.";
@@ -85,3 +87,5 @@ EprosimaRpcUtility::create_participant(DomainId_t domain_id,
 void EprosimaRpcUtility::delete_participant(ParticipantPtr part) {
     DomainParticipantFactory::get_instance()->delete_participant(part);
 }
+
+}   // namespace soa_on_dds

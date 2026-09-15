@@ -3,6 +3,8 @@
 #include <string>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 
+namespace soa_on_dds {
+
 class EprosimaRpcUtility {
 public:
     static std::string generate_rpc_request_topic(const std::string& service_name);
@@ -21,3 +23,5 @@ public:
 
     static void delete_participant(ParticipantPtr part);
 };
+
+}   // namespace soa_on_dds

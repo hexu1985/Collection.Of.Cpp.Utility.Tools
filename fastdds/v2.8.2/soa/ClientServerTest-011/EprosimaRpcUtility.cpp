@@ -10,6 +10,8 @@
 
 using namespace eprosima::fastdds::dds;
 
+namespace soa_on_dds {
+
 namespace {
 
 const char* rpc_common_prefix = "soa.rpc.";
@@ -129,3 +131,4 @@ std::string EprosimaRpcUtility::error_code_to_string(soa_on_dds::ErrorCode code)
     return "UNKNOWN_ERROR_CODE";
 }
 
+}   // namespace soa_on_dds
