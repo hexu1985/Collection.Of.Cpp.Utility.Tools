@@ -16,7 +16,7 @@
 #include <netdb.h>
 #include <sys/un.h>
 
-namespace Socket {
+namespace unpsock {
 
 // ---------- 地址族 ----------
 enum class Family {
@@ -432,4 +432,4 @@ private:
     }
 };
 
-} // namespace Socket
+} // namespace unpsock

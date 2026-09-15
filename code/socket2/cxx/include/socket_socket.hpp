@@ -14,7 +14,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-namespace Socket {
+namespace unpsock {
 
 // ---------- Socket ----------
 class Socket {
@@ -573,4 +573,4 @@ private:
     }
 };
 
-} // namespace Socket
+} // namespace unpsock

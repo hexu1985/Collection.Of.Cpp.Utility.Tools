@@ -6,7 +6,7 @@
 #include <system_error>
 #include <netdb.h>
 
-namespace Socket {
+namespace unpsock {
 
 // ============================================================
 // getaddrinfo 错误码的 error_category
@@ -70,4 +70,4 @@ public:
         : SocketException(ec, what) {}
 };
 
-} // namespace Socket
+} // namespace unpsock

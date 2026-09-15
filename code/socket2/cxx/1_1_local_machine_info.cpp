@@ -1,13 +1,15 @@
 #include "socket.hpp"
 #include <iostream>
 
+using namespace unpsock;
+
 void print_machine_info() {
     // 1. 获取本机主机名
-    std::string hostname = Socket::host::local_hostname();
+    std::string hostname = host::local_hostname();
 
     // 2. 解析主机名，拿到所有地址（IPv4 + IPv6）
     //    内部走 getaddrinfo，替代已废弃的 gethostbyname
-    auto addrs = Socket::Address::resolve_all(hostname, 0);
+    auto addrs = Address::resolve_all(hostname, 0);
 
     // 3. 输出
     std::cout << "Host name: " << hostname << "\n";

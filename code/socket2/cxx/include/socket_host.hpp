@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string>
 
-namespace Socket {
+namespace unpsock {
 
 namespace host {
 
@@ -19,4 +19,4 @@ inline std::string local_hostname() {
 
 }   // namespace host
 
-}   // namespace Socket
+}   // namespace unpsock
