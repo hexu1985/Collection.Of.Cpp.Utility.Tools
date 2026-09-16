@@ -1,4 +1,5 @@
 #include "socket.hpp"
+#include <cstdlib>
 #include <iostream>
 #include <string>
 
