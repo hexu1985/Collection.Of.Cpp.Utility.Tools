@@ -459,79 +459,14 @@ public:
     }
 
     // ============================================================
-    // getsockopt / setsockopt
-    // ============================================================
-
-    // ---- getsockopt：异常版本 ----
-    void getsockopt(int level, int optname,
-                      void* buf, socklen_t* len) const {
-        std::error_code ec;
-        getsockopt(level, optname, buf, len, ec);
-        if (ec) {
-            throw SocketError(ec, "getsockopt failed: level=" +
-                                   std::to_string(level) +
-                                   " optname=" + std::to_string(optname));
-        }
-    }
-
-    // ---- getsockopt：错误码版本 ----
-    void getsockopt(int level, int optname,
-                      void* buf, socklen_t* len,
-                      std::error_code& ec) const noexcept {
-        ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
-        if (buf == nullptr || len == nullptr) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return;
-        }
-        if (::getsockopt(fd_, level, optname, buf, len) != 0) {
-            ec = std::error_code(errno, std::system_category());
-            return;
-        }
-    }
-
-    // ---- setsockopt：异常版本 ----
-    void setsockopt(int level, int optname,
-                    const void* buf, socklen_t len) {
-        std::error_code ec;
-        setsockopt(level, optname, buf, len, ec);
-        if (ec) {
-            throw SocketError(ec, "setsockopt failed: level=" +
-                                   std::to_string(level) +
-                                   " optname=" + std::to_string(optname));
-        }
-    }
-
-    // ---- setsockopt：错误码版本 ----
-    void setsockopt(int level, int optname,
-                    const void* buf, socklen_t len,
-                    std::error_code& ec) noexcept {
-        ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
-        if (buf == nullptr) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return;
-        }
-        if (::setsockopt(fd_, level, optname, buf, len) != 0) {
-            ec = std::error_code(errno, std::system_category());
-        }
-    }
-
-    // ============================================================
     // 类型安全便利接口（模板）
     // ============================================================
 
     // ---- get：T 必须是 POD，且其大小正好是内核期望的大小 ----
     template <typename T>
-    T getsockopt_as(int level, int optname) const {
+    T getsockopt(int level, int optname) const {
         std::error_code ec;
-        T out = getsockopt_as<T>(level, optname, ec);
+        T out = getsockopt<T>(level, optname, ec);
         if (ec) {
             throw SocketError(ec, "getsockopt_as failed: level=" +
                                    std::to_string(level) +
@@ -541,12 +476,12 @@ public:
     }
 
     template <typename T>
-    T getsockopt_as(int level, int optname,
+    T getsockopt(int level, int optname,
                     std::error_code& ec) const noexcept {
         ec.clear();
         T v{};
         socklen_t len = static_cast<socklen_t>(sizeof(T));
-        getsockopt(level, optname, &v, &len, ec);
+        getsockopt_impl(level, optname, &v, &len, ec);
         if (ec) return T{};
         if (len != sizeof(T)) {
             ec = std::make_error_code(std::errc::invalid_argument);
@@ -557,9 +492,9 @@ public:
 
     // ---- set ----
     template <typename T>
-    void setsockopt_as(int level, int optname, const T& value) {
+    void setsockopt(int level, int optname, const T& value) {
         std::error_code ec;
-        setsockopt_as<T>(level, optname, value, ec);
+        setsockopt<T>(level, optname, value, ec);
         if (ec) {
             throw SocketError(ec, "setsockopt_as failed: level=" +
                                    std::to_string(level) +
@@ -568,9 +503,9 @@ public:
     }
 
     template <typename T>
-    void setsockopt_as(int level, int optname, const T& value,
+    void setsockopt(int level, int optname, const T& value,
                        std::error_code& ec) noexcept {
-        setsockopt(level, optname, &value,
+        setsockopt_impl(level, optname, &value,
                    static_cast<socklen_t>(sizeof(T)), ec);
     }
 
@@ -580,98 +515,98 @@ public:
 
     // ---- SO_REUSEADDR ----
     bool reuse_addr() const {
-        return getsockopt_as<int>(SOL_SOCKET, SO_REUSEADDR) != 0;
+        return getsockopt<int>(SOL_SOCKET, SO_REUSEADDR) != 0;
     }
     
     void set_reuse_addr(bool on) {
-        setsockopt_as<int>(SOL_SOCKET, SO_REUSEADDR, on ? 1 : 0);
+        setsockopt<int>(SOL_SOCKET, SO_REUSEADDR, on ? 1 : 0);
     }
 
     // ---- SO_REUSEPORT ----
     bool reuse_port() const {
-        return getsockopt_as<int>(SOL_SOCKET, SO_REUSEPORT) != 0;
+        return getsockopt<int>(SOL_SOCKET, SO_REUSEPORT) != 0;
     }
 
     void set_reuse_port(bool on) {
-        setsockopt_as<int>(SOL_SOCKET, SO_REUSEPORT, on ? 1 : 0);
+        setsockopt<int>(SOL_SOCKET, SO_REUSEPORT, on ? 1 : 0);
     }
 
     // ---- SO_KEEPALIVE ----
     bool keep_alive() const {
-        return getsockopt_as<int>(SOL_SOCKET, SO_KEEPALIVE) != 0;
+        return getsockopt<int>(SOL_SOCKET, SO_KEEPALIVE) != 0;
     }
 
     void set_keep_alive(bool on) {
-        setsockopt_as<int>(SOL_SOCKET, SO_KEEPALIVE, on ? 1 : 0);
+        setsockopt<int>(SOL_SOCKET, SO_KEEPALIVE, on ? 1 : 0);
     }
 
     // ---- TCP_NODELAY ----
     bool tcp_nodelay() const {
-        return getsockopt_as<int>(IPPROTO_TCP, TCP_NODELAY) != 0;
+        return getsockopt<int>(IPPROTO_TCP, TCP_NODELAY) != 0;
     }
 
     void set_tcp_nodelay(bool on) {
-        setsockopt_as<int>(IPPROTO_TCP, TCP_NODELAY, on ? 1 : 0);
+        setsockopt<int>(IPPROTO_TCP, TCP_NODELAY, on ? 1 : 0);
     }
 
     // ---- SO_BROADCAST（UDP） ----
     bool broadcast() const {
-        return getsockopt_as<int>(SOL_SOCKET, SO_BROADCAST) != 0;
+        return getsockopt<int>(SOL_SOCKET, SO_BROADCAST) != 0;
     }
 
     void set_broadcast(bool on) {
-        setsockopt_as<int>(SOL_SOCKET, SO_BROADCAST, on ? 1 : 0);
+        setsockopt<int>(SOL_SOCKET, SO_BROADCAST, on ? 1 : 0);
     }
 
     // ---- SO_RCVBUF / SO_SNDBUF ----
     int recv_buffer_size() const {
-        return getsockopt_as<int>(SOL_SOCKET, SO_RCVBUF);
+        return getsockopt<int>(SOL_SOCKET, SO_RCVBUF);
     }
 
     void set_recv_buffer_size(int bytes) {
-        setsockopt_as<int>(SOL_SOCKET, SO_RCVBUF, bytes);
+        setsockopt<int>(SOL_SOCKET, SO_RCVBUF, bytes);
     }
 
     int send_buffer_size() const {
-        return getsockopt_as<int>(SOL_SOCKET, SO_SNDBUF);
+        return getsockopt<int>(SOL_SOCKET, SO_SNDBUF);
     }
 
     void set_send_buffer_size(int bytes) {
-        setsockopt_as<int>(SOL_SOCKET, SO_SNDBUF, bytes);
+        setsockopt<int>(SOL_SOCKET, SO_SNDBUF, bytes);
     }
 
     // ---- SO_LINGER ----
     struct linger linger_opt() const {
-        return getsockopt_as<struct linger>(SOL_SOCKET, SO_LINGER);
+        return getsockopt<struct linger>(SOL_SOCKET, SO_LINGER);
     }
 
     void set_linger(bool on, int seconds) {
         struct linger l{};
         l.l_onoff  = on ? 1 : 0;
         l.l_linger = seconds;
-        setsockopt_as<struct linger>(SOL_SOCKET, SO_LINGER, l);
+        setsockopt<struct linger>(SOL_SOCKET, SO_LINGER, l);
     }
 
     // ---- SO_RCVTIMEO / SO_SNDTIMEO ----
     // 传入 std::chrono::milliseconds，内部转成 timeval
     void set_recv_timeout(std::chrono::milliseconds ms) {
         struct timeval tv = to_timeval(ms);
-        setsockopt_as<struct timeval>(SOL_SOCKET, SO_RCVTIMEO, tv);
+        setsockopt<struct timeval>(SOL_SOCKET, SO_RCVTIMEO, tv);
     }
 
     void set_send_timeout(std::chrono::milliseconds ms) {
         struct timeval tv = to_timeval(ms);
-        setsockopt_as<struct timeval>(SOL_SOCKET, SO_SNDTIMEO, tv);
+        setsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO, tv);
     }
 
     std::chrono::milliseconds recv_timeout() const {
         return to_milliseconds(
-            getsockopt_as<struct timeval>(SOL_SOCKET, SO_RCVTIMEO));
+            getsockopt<struct timeval>(SOL_SOCKET, SO_RCVTIMEO));
     }
 
     std::chrono::milliseconds send_timeout() const {
         return to_milliseconds(
-            getsockopt_as<struct timeval>(SOL_SOCKET, SO_SNDTIMEO));
+            getsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO));
     }
 
     // ============================================================
@@ -799,7 +734,72 @@ private:
             return n;  // n == 0 表示对端关闭
         }
     }
-    
+
+    // ============================================================
+    // getsockopt / setsockopt
+    // ============================================================
+
+    // ---- getsockopt：异常版本 ----
+    void getsockopt_impl(int level, int optname,
+                      void* buf, socklen_t* len) const {
+        std::error_code ec;
+        getsockopt_impl(level, optname, buf, len, ec);
+        if (ec) {
+            throw SocketError(ec, "getsockopt failed: level=" +
+                                   std::to_string(level) +
+                                   " optname=" + std::to_string(optname));
+        }
+    }
+
+    // ---- getsockopt：错误码版本 ----
+    void getsockopt_impl(int level, int optname,
+                      void* buf, socklen_t* len,
+                      std::error_code& ec) const noexcept {
+        ec.clear();
+        if (fd_ < 0) {
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
+        }
+        if (buf == nullptr || len == nullptr) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        if (::getsockopt(fd_, level, optname, buf, len) != 0) {
+            ec = std::error_code(errno, std::system_category());
+            return;
+        }
+    }
+
+    // ---- setsockopt：异常版本 ----
+    void setsockopt_impl(int level, int optname,
+                    const void* buf, socklen_t len) {
+        std::error_code ec;
+        setsockopt_impl(level, optname, buf, len, ec);
+        if (ec) {
+            throw SocketError(ec, "setsockopt failed: level=" +
+                                   std::to_string(level) +
+                                   " optname=" + std::to_string(optname));
+        }
+    }
+
+    // ---- setsockopt：错误码版本 ----
+    void setsockopt_impl(int level, int optname,
+                    const void* buf, socklen_t len,
+                    std::error_code& ec) noexcept {
+        ec.clear();
+        if (fd_ < 0) {
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
+        }
+        if (buf == nullptr) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        if (::setsockopt(fd_, level, optname, buf, len) != 0) {
+            ec = std::error_code(errno, std::system_category());
+        }
+    }
+
 private:
     int fd_ = -1;
     Family family_ = Family::UNSPEC;

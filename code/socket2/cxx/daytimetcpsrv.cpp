@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     int port = std::stoi(argv[1]);
 
     Socket listen_sock(Family::INET, AddrType::STREAM);
-    listen_sock.setsockopt_as<int>(SOL_SOCKET, SO_REUSEADDR, 1);
+    listen_sock.setsockopt<int>(SOL_SOCKET, SO_REUSEADDR, 1);
 
     auto servaddr = Address::any(port, Family::INET);
     listen_sock.bind(servaddr);
