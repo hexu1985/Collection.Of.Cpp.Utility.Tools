@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -I./include -g
+CXXFLAGS = -Wall -std=c++17 -I./unpsock -g
 
 SOURCES = $(shell ls *.cpp)
 PROGRAMS = $(patsubst %.cpp,%,$(SOURCES))
