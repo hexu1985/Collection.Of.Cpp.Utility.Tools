@@ -459,6 +459,48 @@ public:
     }
 
     // ============================================================
+    // 非阻塞开关
+    // ============================================================
+
+    // 异常版
+    void set_nonblocking(bool enable = true) {
+        std::error_code ec;
+        set_nonblocking(enable, ec);
+        if (ec) throw SocketError(ec, "set_nonblocking failed");
+    }
+
+    // 错误码版
+    void set_nonblocking(bool enable, std::error_code& ec) noexcept {
+        ec.clear();
+
+        int flags = ::fcntl(fd_, F_GETFL, 0);
+        if (flags < 0) { ec = std::error_code(errno, std::system_category()); return; }
+
+        if (enable) flags |= O_NONBLOCK;
+        else        flags &= ~O_NONBLOCK;
+
+        if (::fcntl(fd_, F_SETFL, flags) < 0) { ec = std::error_code(errno, std::system_category()); return; }
+    }
+
+    // 查询：无 ec 版返回 bool（失败 false），有 ec 版精确报错
+    bool is_nonblocking() const {
+        std::error_code ec;
+        bool v = is_nonblocking(ec);
+        if (ec) {
+            throw SocketError(ec, "is_nonblocking failed");
+        }
+        return v;
+    }
+
+    bool is_nonblocking(std::error_code& ec) const noexcept {
+        ec.clear();
+
+        int flags = ::fcntl(fd_, F_GETFL, 0);
+        if (flags < 0) { ec = std::error_code(errno, std::system_category()); return false; }
+        return (flags & O_NONBLOCK) != 0;
+    }
+
+    // ============================================================
     // 类型安全便利接口（模板）
     // ============================================================
 
