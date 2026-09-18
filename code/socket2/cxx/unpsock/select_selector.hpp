@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cerrno>
 #include <system_error>
+#include <optional>
 
 namespace unpsock {
 
@@ -16,10 +17,11 @@ public:
     SelectSelector() = default;
     ~SelectSelector() override = default;
 
+private:
     // ============================================================
     // add
     // ============================================================
-    void add(int fd, Event events, std::error_code& ec) override {
+    void add_impl(int fd, Event events, std::error_code& ec) override {
         ec.clear();
         if (fd < 0 || fd >= FD_SETSIZE) {
             ec = std::make_error_code(std::errc::invalid_argument);
@@ -35,7 +37,7 @@ public:
     // ============================================================
     // modify
     // ============================================================
-    void modify(int fd, Event events, std::error_code& ec) override {
+    void modify_impl(int fd, Event events, std::error_code& ec) override {
         ec.clear();
         if (fd < 0 || fd >= FD_SETSIZE) {
             ec = std::make_error_code(std::errc::invalid_argument);
@@ -52,7 +54,7 @@ public:
     // ============================================================
     // remove
     // ============================================================
-    void remove(int fd, std::error_code& ec) override {
+    void remove_impl(int fd, std::error_code& ec) override {
         ec.clear();
         auto it = map_.find(fd);
         if (it == map_.end()) {
@@ -65,7 +67,7 @@ public:
     // ============================================================
     // wait
     // ============================================================
-    std::vector<ReadyEvent> wait(
+    std::vector<ReadyEvent> wait_impl(
         std::optional<std::chrono::milliseconds> timeout,
         std::error_code& ec) override
     {

@@ -92,8 +92,10 @@ public:
         add(fd, events, ec);
         if (ec) throw SelectorError(ec, "selector add failed: " + ec.message());
     }
-    // 错误码版（纯虚，由后端实现）
-    virtual void add(int fd, Event events, std::error_code& ec) = 0;
+
+    void add(int fd, Event events, std::error_code& ec) {
+        return add_impl(fd, events, ec);
+    }
 
     // ============================================================
     // modify
@@ -104,7 +106,9 @@ public:
         if (ec) throw SelectorError(ec, "selector modify failed: " + ec.message());
     }
 
-    virtual void modify(int fd, Event events, std::error_code& ec) = 0;
+    void modify(int fd, Event events, std::error_code& ec) {
+        return modify_impl(fd, events, ec);
+    }
 
     // ============================================================
     // remove
@@ -115,7 +119,9 @@ public:
         if (ec) throw SelectorError(ec, "selector remove failed: " + ec.message());
     }
 
-    virtual void remove(int fd, std::error_code& ec) = 0;
+    void remove(int fd, std::error_code& ec) {
+        return remove_impl(fd, ec);
+    }
 
     // ============================================================
     // wait
@@ -129,10 +135,11 @@ public:
         return r;
     }
 
-    // 错误码版：失败返回空 vector，ec 出参
-    virtual std::vector<ReadyEvent> wait(
+    std::vector<ReadyEvent> wait(
         std::optional<std::chrono::milliseconds> timeout,
-        std::error_code& ec) = 0;
+        std::error_code& ec) {
+        return wait_impl(timeout, ec);
+    }
 
     // ============================================================
     // 便捷：用 Socket 注册（成对提供）
@@ -160,6 +167,17 @@ public:
     void remove(const Socket& s, std::error_code& ec) {
         remove(s.fileno(), ec);
     }
+
+private:
+    virtual void add_impl(int fd, Event events, std::error_code& ec) = 0;
+
+    virtual void modify_impl(int fd, Event events, std::error_code& ec) = 0;
+
+    virtual void remove_impl(int fd, std::error_code& ec) = 0;
+
+    virtual std::vector<ReadyEvent> wait_impl(
+        std::optional<std::chrono::milliseconds> timeout,
+        std::error_code& ec) = 0;
 };
 
 } // namespace mysock
