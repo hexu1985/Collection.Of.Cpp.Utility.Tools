@@ -10,3 +10,5 @@
 - [基础完整版(ClientServerTypes.idl):删除EprosimaParticipantManager](ClientServerTest-007)
 - [基础完整版(ClientServerTypes.idl):增加EprosimaRpcUtility::get_default_rpc_participant](ClientServerTest-008)
 - [基础完整版(ClientServerTypes.idl):增加async_call](ClientServerTest-009)
+- [基础完整版(ClientServerTypes.idl):增加call_timed和async_call_timed](ClientServerTest-010)
+- [基础完整版(ClientServerTypes.idl):增加VoidType和string类型的序列化和反序列化](ClientServerTest-011)
