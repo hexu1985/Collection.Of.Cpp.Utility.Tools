@@ -1,21 +1,20 @@
-// select_selector.hpp
+// poll_selector.hpp
 #pragma once
 
 #include "socket_selector.hpp"
 
-#include <sys/select.h>
-#include <map>
+#include <poll.h>
+#include <unordered_map>
 #include <algorithm>
 #include <cerrno>
 #include <system_error>
-#include <optional>
 
 namespace unpsock {
 
-class SelectSelector : public Selector {
+class PollSelector : public Selector {
 public:
-    SelectSelector() = default;
-    ~SelectSelector() override = default;
+    PollSelector() = default;
+    ~PollSelector() override = default;
 
 private:
     // ============================================================
@@ -23,7 +22,7 @@ private:
     // ============================================================
     void add_impl(int fd, Event events, std::error_code& ec) override {
         ec.clear();
-        if (fd < 0 || fd >= FD_SETSIZE) {
+        if (fd < 0) {
             ec = std::make_error_code(std::errc::invalid_argument);
             return;
         }
@@ -39,7 +38,7 @@ private:
     // ============================================================
     void modify_impl(int fd, Event events, std::error_code& ec) override {
         ec.clear();
-        if (fd < 0 || fd >= FD_SETSIZE) {
+        if (fd < 0) {
             ec = std::make_error_code(std::errc::invalid_argument);
             return;
         }
@@ -73,33 +72,22 @@ private:
     {
         ec.clear();
 
-        fd_set readfds, writefds, exceptfds;
-        FD_ZERO(&readfds);
-        FD_ZERO(&writefds);
-        FD_ZERO(&exceptfds);
-
-        int maxfd = -1;
+        std::vector<struct pollfd> pfds;
+        pfds.reserve(map_.size());
         for (const auto& [fd, ev] : map_) {
-            // add 时已检查过，这里再防一手
-            if (fd < 0 || fd >= FD_SETSIZE) continue;
-
-            if (has_event(ev, Event::Read))  FD_SET(fd, &readfds);
-            if (has_event(ev, Event::Write)) FD_SET(fd, &writefds);
-            FD_SET(fd, &exceptfds);   // 总是关心异常
-            maxfd = std::max(maxfd, fd);
+            struct pollfd p{};
+            p.fd = fd;
+            p.events = to_poll(ev);
+            pfds.push_back(p);
         }
 
-        struct timeval tv;
-        struct timeval* tvp = nullptr;
-        if (timeout.has_value()) {
-            tv.tv_sec  = timeout->count() / 1000;
-            tv.tv_usec = (timeout->count() % 1000) * 1000;
-            tvp = &tv;
-        }
+        int timeout_ms = timeout.has_value()
+            ? static_cast<int>(timeout->count())
+            : -1;
 
         int n;
         do {
-            n = ::select(maxfd + 1, &readfds, &writefds, &exceptfds, tvp);
+            n = ::poll(pfds.data(), pfds.size(), timeout_ms);
         } while (n < 0 && errno == EINTR);
 
         if (n < 0) {
@@ -110,31 +98,47 @@ private:
 
         std::vector<ReadyEvent> result;
         result.reserve(static_cast<size_t>(n));
-        for (const auto& [fd, ev] : map_) {
-            Event ready = Event::None;
-            if (FD_ISSET(fd, &readfds))   ready = ready | Event::Read;
-            if (FD_ISSET(fd, &writefds))  ready = ready | Event::Write;
-            if (FD_ISSET(fd, &exceptfds)) ready = ready | Event::Error;
+        for (const auto& p : pfds) {
+            if (p.revents == 0) continue;
+            Event ready = from_poll(p.revents);
             if (ready != Event::None) {
-                result.push_back({fd, ready});
+                result.push_back({p.fd, ready});
             }
         }
         return result;
     }
 
-    SelectSelector(const SelectSelector&) = delete;
-    SelectSelector& operator=(const SelectSelector&) = delete;
+    PollSelector(const PollSelector&) = delete;
+    PollSelector& operator=(const PollSelector&) = delete;
 
-    SelectSelector(SelectSelector&& other) = delete;
-    SelectSelector& operator=(SelectSelector&& other) = delete;
+    PollSelector(PollSelector&& other) = delete;
+    PollSelector& operator=(PollSelector&& other) = delete;
 
 private:
-    std::map<int, Event> map_;
+    std::unordered_map<int, Event> map_;
+
+    static short to_poll(Event e) {
+        short v = 0;
+        if (has_event(e, Event::Read))   v |= POLLIN;
+        if (has_event(e, Event::Write))  v |= POLLOUT;
+        // POLLERR/POLLHUP 总是被报告，不需要显式请求
+        return v;
+    }
+
+    static Event from_poll(short revents) {
+        Event ev = Event::None;
+        if (revents & (POLLIN | POLLPRI)) ev = ev | Event::Read;
+        if (revents & POLLOUT)            ev = ev | Event::Write;
+        if (revents & POLLERR)            ev = ev | Event::Error;
+        if (revents & POLLHUP)            ev = ev | Event::Hangup;
+        if (revents & POLLNVAL)           ev = ev | Event::Error;
+        return ev;
+    }
 };
 
 inline
-std::unique_ptr<Selector> make_select_selector() {
-    return std::make_unique<SelectSelector>();
+std::unique_ptr<Selector> make_poll_selector() {
+    return std::make_unique<PollSelector>();
 }
 
 } // namespace unpsock
