@@ -13,6 +13,9 @@ namespace unpsock {
 
 class SelectSelector : public Selector {
 public:
+    SelectSelector() = default;
+    ~SelectSelector() override = default;
+
     // ============================================================
     // add
     // ============================================================
@@ -130,8 +133,19 @@ public:
         return result;
     }
 
+    SelectSelector(const SelectSelector&) = delete;
+    SelectSelector& operator=(const SelectSelector&) = delete;
+
+    SelectSelector(SelectSelector&& other) = delete;
+    SelectSelector& operator=(SelectSelector&& other) = delete;
+
 private:
     std::map<int, Event> map_;
 };
+
+inline
+std::unique_ptr<Selector> make_select_selector() {
+    return std::make_unique<SelectSelector>();
+}
 
 } // namespace unpsock

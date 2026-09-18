@@ -80,6 +80,7 @@ public:
 // ---------- Selector 抽象接口 ----------
 class Selector {
 public:
+    Selector() = default;
     virtual ~Selector() = default;
 
     // ============================================================
