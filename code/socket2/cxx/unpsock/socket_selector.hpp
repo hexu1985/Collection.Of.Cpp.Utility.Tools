@@ -90,7 +90,7 @@ public:
     void add(int fd, Event events) {
         std::error_code ec;
         add(fd, events, ec);
-        if (ec) throw SelectorError(ec, "selector add failed: " + ec.message());
+        if (ec) throw SelectorError(ec, "selector add failed");
     }
 
     void add(int fd, Event events, std::error_code& ec) {
@@ -103,7 +103,7 @@ public:
     void modify(int fd, Event events) {
         std::error_code ec;
         modify(fd, events, ec);
-        if (ec) throw SelectorError(ec, "selector modify failed: " + ec.message());
+        if (ec) throw SelectorError(ec, "selector modify failed");
     }
 
     void modify(int fd, Event events, std::error_code& ec) {
@@ -116,7 +116,7 @@ public:
     void remove(int fd) {
         std::error_code ec;
         remove(fd, ec);
-        if (ec) throw SelectorError(ec, "selector remove failed: " + ec.message());
+        if (ec) throw SelectorError(ec, "selector remove failed");
     }
 
     void remove(int fd, std::error_code& ec) {
@@ -131,7 +131,7 @@ public:
         std::optional<std::chrono::milliseconds> timeout = std::nullopt) {
         std::error_code ec;
         auto r = wait(timeout, ec);
-        if (ec) throw SelectorError(ec, "selector wait failed: " + ec.message());
+        if (ec) throw SelectorError(ec, "selector wait failed");
         return r;
     }
 
