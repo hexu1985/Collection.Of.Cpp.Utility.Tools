@@ -42,7 +42,7 @@ bool SerializeToVector(const VoidType&, std::vector<uint8_t>& output) {
 }
 
 inline
-bool DeserializeFromVector(VoidType&, const std::vector<uint8_t>& input) {
+bool DeserializeFromVector(VoidType&, const std::vector<uint8_t>&) {
     return true;
 }
 

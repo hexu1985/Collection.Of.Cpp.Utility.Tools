@@ -6,6 +6,8 @@
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/topic/Topic.hpp>
 
+namespace soa_on_dds {
+
 class EprosimaSubWrapper {
 public:
     struct Config {
@@ -45,3 +47,4 @@ private:
     eprosima::fastdds::dds::DataReader* m_data_reader=nullptr;
 };
 
+}   // namespace soa_on_dds
