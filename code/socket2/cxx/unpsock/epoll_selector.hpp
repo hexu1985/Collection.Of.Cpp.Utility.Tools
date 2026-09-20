@@ -1,7 +1,7 @@
 // epoll_selector.hpp
 #pragma once
 
-#include "selector.hpp"
+#include "socket_selector.hpp"
 
 #include <sys/epoll.h>
 #include <unistd.h>
@@ -9,38 +9,28 @@
 #include <cerrno>
 #include <system_error>
 
-namespace mysock {
+namespace unpsock {
 
 class EpollSelector : public Selector {
 public:
-    // 构造失败通过静态工厂返回 ec 更自然，这里用默认构造 + 内部记录初始化错误
-    EpollSelector() : epfd_(-1) {
+    EpollSelector() = default;
+
+    void init() {
+        std::error_code ec;
+        if (!init(ec)) {
+            throw SelectorError(ec, "init failed");
+        }
+    }
+
+    bool init(std::error_code& ec) {
+        ec.clear();
         epfd_ = ::epoll_create1(EPOLL_CLOEXEC);
         // 构造阶段无法通过 ec 出参返回，这里记录一个标志，第一次使用时暴露
-        if (epfd_ < 0) init_errno_ = errno;
-    }
-
-    bool check_init() const {
-    }
-
-    bool check_init(std::error_code& ec) const {
         if (epfd_ < 0) {
-            ec = std::error_code(init_errno_ ? init_errno_ : EBADF,
-                                 std::system_category());
+            ec = std::error_code(errno, std::system_category());
             return false;
         }
         return true;
-    }
-
-    // 供工厂使用的静态工厂：带 ec 的构造
-    static std::unique_ptr<EpollSelector> create(std::error_code& ec) {
-        ec.clear();
-        auto p = std::unique_ptr<EpollSelector>(new EpollSelector());
-        if (p->epfd_ < 0) {
-            ec = std::error_code(p->init_errno_, std::system_category());
-            p.reset();
-        }
-        return p;
     }
 
     ~EpollSelector() override {
@@ -80,7 +70,7 @@ private:
     // ============================================================
     // modify
     // ============================================================
-    void modify(int fd, Event events, std::error_code& ec) override {
+    void modify_impl(int fd, Event events, std::error_code& ec) override {
         ec.clear();
         if (!check_init(ec)) return;
         if (fd < 0) {
@@ -107,7 +97,7 @@ private:
     // ============================================================
     // remove
     // ============================================================
-    void remove(int fd, std::error_code& ec) override {
+    void remove_impl(int fd, std::error_code& ec) override {
         ec.clear();
         if (!check_init(ec)) return;
         auto it = map_.find(fd);
@@ -128,7 +118,7 @@ private:
     // ============================================================
     // wait
     // ============================================================
-    std::vector<ReadyEvent> wait(
+    std::vector<ReadyEvent> wait_impl(
         std::optional<std::chrono::milliseconds> timeout,
         std::error_code& ec) override
     {
@@ -165,8 +155,15 @@ private:
 
 private:
     int epfd_ = -1;
-    int init_errno_ = 0;
     std::unordered_map<int, Event> map_;
+
+    bool check_init(std::error_code& ec) const {
+        if (epfd_ < 0) {
+            ec = std::error_code(EBADF,  std::system_category());
+            return false;
+        }
+        return true;
+    }
 
     static uint32_t to_epoll(Event e) {
         uint32_t v = 0;
@@ -188,4 +185,14 @@ private:
     }
 };
 
-} // namespace mysock
+inline
+std::unique_ptr<Selector> make_epoll_selector(std::error_code& ec) {
+    ec.clear();
+    auto p = std::unique_ptr<EpollSelector>(new EpollSelector());
+    if (!p->init(ec)) {
+        return nullptr;
+    }
+    return p;
+}
+
+} // namespace unpsock
