@@ -14,7 +14,7 @@
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 
-using namespace soa_on_dds;
+namespace soa_on_dds {
 
 EprosimaRpcClient::EprosimaRpcClient(const std::string& client_name, const std::string& service_name,
             eprosima::fastdds::dds::DomainParticipant* participant):
@@ -306,3 +306,5 @@ void EprosimaRpcClient::ResponseSubListener::on_data_available(
 
     m_up->on_data_available();
 }
+
+}   // namespace soa_on_dds

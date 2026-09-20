@@ -6,6 +6,8 @@
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
 #include <fastdds/dds/topic/Topic.hpp>
 
+namespace soa_on_dds {
+
 class EprosimaPubWrapper {
 public:
     struct Config {
@@ -43,3 +45,5 @@ private:
 
     eprosima::fastdds::dds::DataWriter* m_data_writer=nullptr;
 };
+
+}   // namespace soa_on_dds

@@ -8,7 +8,7 @@
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 
-using namespace soa_on_dds;
+namespace soa_on_dds {
 
 namespace {
 
@@ -226,3 +226,6 @@ EprosimaRpcServer::IMethodHandler::IMethodHandler() {
 
 EprosimaRpcServer::IMethodHandler::~IMethodHandler() {
 }
+
+}   // namespace soa_on_dds
+

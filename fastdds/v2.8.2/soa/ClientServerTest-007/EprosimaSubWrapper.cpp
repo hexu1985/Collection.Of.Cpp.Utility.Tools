@@ -1,5 +1,7 @@
 #include "EprosimaSubWrapper.hpp"
 
+namespace soa_on_dds {
+
 EprosimaSubWrapper::~EprosimaSubWrapper() {
     reset();
 }
@@ -70,3 +72,6 @@ eprosima::fastrtps::types::ReturnCode_t EprosimaSubWrapper::take_next_sample(voi
 
     return m_data_reader->take_next_sample(data, info);
 }
+
+}   // namespace soa_on_dds
+

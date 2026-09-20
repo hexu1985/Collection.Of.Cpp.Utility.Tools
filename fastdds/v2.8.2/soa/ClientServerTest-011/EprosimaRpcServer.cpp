@@ -243,5 +243,6 @@ EprosimaRpcServer::IMethodHandler::IMethodHandler() {
 
 EprosimaRpcServer::IMethodHandler::~IMethodHandler() {
 }
+
 }   // namespace soa_on_dds
 
