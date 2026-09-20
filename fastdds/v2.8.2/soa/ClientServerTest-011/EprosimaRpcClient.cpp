@@ -13,7 +13,7 @@
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
 
-using namespace soa_on_dds;
+namespace soa_on_dds {
 
 namespace {
 
@@ -373,3 +373,4 @@ EprosimaRpcClient::IResponseProcessor::IResponseProcessor() {
 EprosimaRpcClient::IResponseProcessor::~IResponseProcessor() {
 }
 
+}   // namespace soa_on_dds

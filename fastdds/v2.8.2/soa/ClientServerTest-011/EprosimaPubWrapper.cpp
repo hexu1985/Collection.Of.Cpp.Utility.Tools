@@ -1,5 +1,7 @@
 #include "EprosimaPubWrapper.hpp"
 
+namespace soa_on_dds {
+
 EprosimaPubWrapper::~EprosimaPubWrapper() {
     reset();
 }
@@ -69,4 +71,6 @@ bool EprosimaPubWrapper::write(void* data) {
 
     return m_data_writer->write(data);
 }
+
+}   // namespace soa_on_dds
 
