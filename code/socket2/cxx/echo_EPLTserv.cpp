@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     // ---- 监听 socket ----
     Socket serv_sock(Family::INET, AddrType::STREAM);
-    serv_sock.set_reuse_addr(true);   // 可选但推荐，避免重启时 EADDRINUSE
+    serv_sock.set_reuse_addr(true);
 
     auto serv_addr = Address::any(std::atoi(argv[1]), Family::INET);
     serv_sock.bind(serv_addr);
@@ -27,18 +27,18 @@ int main(int argc, char* argv[])
     sel.init();
     sel.add(serv_sock, Event::Read);
 
-    // key = fd，value = 客户端 Socket
     std::unordered_map<int, Socket> clients;
 
-    const int BUF_SIZE = 100;
+    const int BUF_SIZE = 4;
     while (true) {
         // 永久阻塞（原程序 epoll_wait(..., -1)）
         auto ready = sel.wait();   // timeout = nullopt
+        std::cout << "return epoll_wait" << std::endl;
 
         for (const auto& ev : ready) {
             int fd = ev.fd;
 
-            // 处理异常/挂断（epoll 总会报告）
+            // 异常/挂断处理
             if (has_event(ev.events, Event::Error) ||
                     has_event(ev.events, Event::Hangup)) {
                 if (fd != serv_sock.fileno()) {
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
                     clients.erase(it);
                     std::cout << "closed client: " << fd << std::endl;
                 } else {
-                    conn.sendall(data);       // echo
+                    conn.sendall(data);     // echo
                 }
             }
         }

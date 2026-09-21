@@ -170,6 +170,7 @@ private:
         // 默认加 EPOLLET？这里不用 ET，和 poll/select 语义保持一致（水平触发）
         if (has_event(e, Event::Read))  v |= EPOLLIN;
         if (has_event(e, Event::Write)) v |= EPOLLOUT;
+        if (has_edge_trigger(e))        v |= EPOLLET;   // ← 关键
         // EPOLLERR / EPOLLHUP 总是被报告，无需显式请求
         return v;
     }

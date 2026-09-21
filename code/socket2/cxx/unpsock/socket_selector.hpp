@@ -18,16 +18,30 @@ enum class Event : uint32_t {
     Write  = 1 << 1,
     Error  = 1 << 2,
     Hangup = 1 << 3,
+
+    // ---- 模式位（高位，仅作标志，不会被当作事件报告）----
+    EdgeTrigger = 1u << 16,   // 边缘触发（仅 epoll/kqueue 支持）    
 };
 
 inline Event operator|(Event a, Event b) {
     return static_cast<Event>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
 }
+
 inline Event operator&(Event a, Event b) {
     return static_cast<Event>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
 }
+
 inline bool has_event(Event set, Event e) {
     return (static_cast<uint32_t>(set) & static_cast<uint32_t>(e)) != 0;
+}
+
+// 新增：分离"纯事件位"和"模式位"
+inline Event event_bits(Event e) {
+    return static_cast<Event>(static_cast<uint32_t>(e) & 0xFFu);
+}
+
+inline bool has_edge_trigger(Event e) {
+    return has_event(e, Event::EdgeTrigger);
 }
 
 struct ReadyEvent {
