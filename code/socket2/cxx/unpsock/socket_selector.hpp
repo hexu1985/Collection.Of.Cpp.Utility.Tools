@@ -96,6 +96,9 @@ class Selector {
 public:
     Selector() = default;
     virtual ~Selector() = default;
+    
+    // 默认：不支持 ET
+    virtual bool supports_edge_trigger() const noexcept { return false; }
 
     // ============================================================
     // add

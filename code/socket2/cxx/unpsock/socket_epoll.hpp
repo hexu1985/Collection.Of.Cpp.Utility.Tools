@@ -40,6 +40,8 @@ public:
     EpollSelector(const EpollSelector&) = delete;
     EpollSelector& operator=(const EpollSelector&) = delete;
 
+    bool supports_edge_trigger() const noexcept override { return true; }
+
 private:
     // ============================================================
     // add
