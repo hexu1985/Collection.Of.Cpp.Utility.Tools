@@ -141,4 +141,10 @@ std::unique_ptr<Selector> make_poll_selector() {
     return std::make_unique<PollSelector>();
 }
 
+inline
+std::unique_ptr<Selector> make_poll_selector(std::error_code& ec) {
+    ec.clear();
+    return std::make_unique<PollSelector>();
+}
+
 } // namespace unpsock
