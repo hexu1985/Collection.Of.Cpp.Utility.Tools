@@ -2,10 +2,48 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <algorithm>
 
 #include "socket.hpp"
 
 using namespace unpsock;
+
+void server(const std::string& host, int port) {
+    Socket sock(Family::INET, AddrType::STREAM);
+    sock.set_reuse_addr(true);
+    sock.bind(Address::from_ip(host, port));
+    sock.listen(1);
+    std::cout << "Listening at " << sock.getsockname().to_string() << std::endl;
+
+    while (true) {
+        auto [sc, sockname] = sock.accept();
+        std::cout << "Processing up to 1024 bytes at a time from "
+                  << sockname.to_string() << std::endl;
+
+        int n = 0;
+        while (true) {
+            auto data =sc.recv(1024);
+            if (data.empty()) {
+                break;
+            }
+
+            std::transform(data.begin(), data.end(), data.begin(),
+                    [](uint8_t c) {
+                    return static_cast<uint8_t>(std::toupper(static_cast<unsigned char>(c)));
+                    });
+
+            sc.sendall(data);
+            n += data.size();
+
+            std::printf("\r  %d bytes processed so far ", n);
+            std::fflush(stdout);
+        }
+
+        std::printf("\n");
+        sc.close();
+        std::cout << "  Socket closed" << std::endl;
+    }
+}
 
 void client(const std::string& host, int port, int bytecount) {
     Socket sock(Family::INET, AddrType::STREAM);
@@ -46,12 +84,6 @@ void client(const std::string& host, int port, int bytecount) {
     }
     std::printf("\n");
     sock.close();
-}
-
-void server(const std::string& host, int port) {
-    // TODO: 实现 server 逻辑
-    std::cout << "server host=" << host
-              << " port=" << port << std::endl;
 }
 
 int main(int argc, char* argv[]) {
