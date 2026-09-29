@@ -62,11 +62,11 @@ struct SelectorErrorCategory : std::error_category {
     const char* name() const noexcept override { return "Selector"; }
     std::string message(int ev) const override {
         switch (static_cast<SelectorErrc>(ev)) {
-            case SelectorErrc::Success:          return "success";
-            case SelectorErrc::AlreadyRegistered:return "fd already registered";
-            case SelectorErrc::NotRegistered:    return "fd not registered";
-            case SelectorErrc::BackendUnavailable:return "no selector backend available";
-            case SelectorErrc::WaitFailed:       return "selector wait failed";
+            case SelectorErrc::Success:             return "success";
+            case SelectorErrc::AlreadyRegistered:   return "fd already registered";
+            case SelectorErrc::NotRegistered:       return "fd not registered";
+            case SelectorErrc::BackendUnavailable:  return "no selector backend available";
+            case SelectorErrc::WaitFailed:          return "selector wait failed";
         }
         return "unknown selector error";
     }
