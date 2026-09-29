@@ -3,11 +3,49 @@
 #include <string>
 #include <stdexcept>
 
+#include "socket.hpp"
+
+using namespace unpsock;
+
 void client(const std::string& host, int port, int bytecount) {
-    // TODO: 实现 client 逻辑
-    std::cout << "client host=" << host
-              << " port=" << port
-              << " bytecount=" << bytecount << std::endl;
+    Socket sock(Family::INET, AddrType::STREAM);
+    bytecount = (bytecount + 15) / 16 * 16;
+    std::string message = "capitalize this!";
+
+    std::cout << "Sending " << bytecount
+              << " bytes of data, in chunks of 16 bytes" << std::endl;
+    sock.connect(Address::from_ip(host, port));
+
+    int sent = 0;
+    while (sent < bytecount) {
+        sock.sendall(message);
+        sent += message.size();
+        std::printf("\r  %d bytes sent ", sent);
+        std::fflush(stdout);
+    }
+    std::printf("\n");
+    sock.shutdown_write();
+
+    std::cout << "Receiving all the data the server sends back" << std::endl;
+
+    int received = 0;
+    while (true) {
+        auto data = sock.recv(42);
+        if (received == 0) {
+            // 等价 Python repr(data) 打印首块数据
+            std::cout << "  The first data received says \"";
+            std::cout.write(reinterpret_cast<char *>(data.data()), data.size());
+            std::cout << "\"" << std::endl;
+        }
+        if (data.empty()) {
+            break;
+        }
+        received += data.size();
+        std::printf("\r  %d bytes received ", received);
+        std::fflush(stdout);
+    }
+    std::printf("\n");
+    sock.close();
 }
 
 void server(const std::string& host, int port) {
