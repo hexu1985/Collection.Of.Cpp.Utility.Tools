@@ -1,0 +1,2 @@
+# Boost.Build 配置
+using gcc : arm : /usr/bin/arm-linux-gnueabihf-g++ ;

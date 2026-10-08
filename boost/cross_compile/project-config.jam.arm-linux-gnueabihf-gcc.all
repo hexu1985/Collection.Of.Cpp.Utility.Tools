@@ -1,0 +1,8 @@
+# Boost.Build 配置
+using gcc : arm : /usr/bin/arm-linux-gnueabihf-g++ :
+    <cflags>"-g -Wall -O2"
+    <cxxflags>"-std=c++11 -g -Wall -O2"
+    <linkflags>""
+    <archiver>/usr/bin/arm-linux-gnueabihf-ar
+    <ranlib>/usr/bin/arm-linux-gnueabihf-ranlib
+    ;
