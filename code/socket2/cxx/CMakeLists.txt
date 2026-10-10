@@ -10,8 +10,8 @@ message( STATUS "CMAKE_PROJECT_NAME = ${CMAKE_PROJECT_NAME}" )
 message( STATUS "PROJECT_SOURCE_DIR = ${PROJECT_SOURCE_DIR}" )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/unpsock )
-#add_subdirectory(hello)
-#add_subdirectory(echo)
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty )
+add_subdirectory(tcp)
 
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
