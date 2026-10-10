@@ -108,6 +108,7 @@ int main(int argc, char* argv[]) {
 
         options.parse_positional({"role", "host", "bytecount"});
         options.positional_help("role host [bytecount]");
+        options.show_positional_help();
 
         auto result = options.parse(argc, argv);
 
