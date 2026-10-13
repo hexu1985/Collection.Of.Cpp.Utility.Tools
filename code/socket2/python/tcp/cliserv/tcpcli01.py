@@ -4,6 +4,17 @@ import socket
 SERV_PORT = 9877   # 对应 C 代码中的 SERV_PORT
 MAXLINE = 4096     # 对应 MAXLINE
 
+def readline(sockfd, maxlen):
+    """模拟 C 中的 Readline：逐字节读取直到遇到 '\n' 或 EOF"""
+    buf = bytearray()
+    while len(buf) < maxlen:
+        ch = sockfd.recv(1)
+        if not ch:
+            break
+        buf += ch
+        if ch == b'\n':
+            break
+    return bytes(buf)
 
 def str_cli(fp, sockfd):
     """从 fp 读取一行发送到 socket，并从 socket 读取一行写回 fp"""
@@ -23,20 +34,6 @@ def str_cli(fp, sockfd):
 
         sys.stdout.write(recvline.decode())
         sys.stdout.flush()
-
-
-def readline(sockfd, maxlen):
-    """模拟 C 中的 Readline：逐字节读取直到遇到 '\n' 或 EOF"""
-    buf = bytearray()
-    while len(buf) < maxlen:
-        ch = sockfd.recv(1)
-        if not ch:
-            break
-        buf += ch
-        if ch == b'\n':
-            break
-    return bytes(buf)
-
 
 def main():
     if len(sys.argv) != 2:
