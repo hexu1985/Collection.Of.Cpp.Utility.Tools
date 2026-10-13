@@ -1,0 +1,59 @@
+#include "socket.hpp"
+
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cerrno>
+#include <unistd.h>
+
+using namespace unpsock;
+
+const int SERV_PORT = 9877;   // 对应 C 代码中的 SERV_PORT
+const int LISTENQ = 1024;     // 对应 LISTENQ
+const int MAXLINE = 4096;     // 对应 MAXLINE
+
+// 对应 C 中的 str_echo：把收到的数据回显给客户端
+void str_echo(Socket& sock)
+{
+    while (true) {
+        auto data = sock.recv(MAXLINE);
+        if (data.empty())
+            break;
+        sock.sendall(data);
+    }
+
+    sock.close();
+}
+
+int main()
+{
+    Socket listen_sock(Family::INET, AddrType::STREAM);
+
+    auto servaddr = Address::any(SERV_PORT);
+
+    listen_sock.bind(servaddr);
+    listen_sock.listen(LISTENQ);
+
+    for (;;) {
+        auto [conn_sock, cliaddr] = listen_sock.accept();
+
+        // fork 子进程处理连接
+        pid_t pid = fork();
+        if (pid == 0) {
+            // 子进程
+            listen_sock.close();
+            str_echo(conn_sock);       // 处理请求
+            std::exit(0);           // 对应 C 中的 exit(0)
+        } else if (pid > 0) {
+            // 父进程
+            conn_sock.close();
+        } else {
+            perror("fork");
+            std::exit(1);
+        }
+    }
+
+    // 不会执行到这里
+    listen_sock.close();
+    return 0;
+}
