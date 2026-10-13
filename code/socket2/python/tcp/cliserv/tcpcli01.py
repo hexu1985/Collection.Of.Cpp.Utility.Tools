@@ -6,18 +6,36 @@ MAXLINE = 4096     # 对应 MAXLINE
 
 
 def str_cli(fp, sockfd):
-    """对应 C 中的 str_cli：从 fp 读一行发给服务器，读回一行写到 stdout"""
-    rf = sockfd.makefile('rb')
-    for sendline in fp:
+    """从 fp 读取一行发送到 socket，并从 socket 读取一行写回 fp"""
+    while True:
+        sendline = fp.readline(MAXLINE)
+        if not sendline:
+            break  # EOF
+
+        # Writen：Python 的 sendall 保证全部发送
         sockfd.sendall(sendline.encode())
 
-        recvline = rf.readline(MAXLINE)
+        # Readline：从 socket 读取一行
+        recvline = readline(sockfd, MAXLINE)
         if not recvline:
             print("str_cli: server terminated prematurely")
             sys.exit(1)
 
         sys.stdout.write(recvline.decode())
         sys.stdout.flush()
+
+
+def readline(sockfd, maxlen):
+    """模拟 C 中的 Readline：逐字节读取直到遇到 '\n' 或 EOF"""
+    buf = bytearray()
+    while len(buf) < maxlen:
+        ch = sockfd.recv(1)
+        if not ch:
+            break
+        buf += ch
+        if ch == b'\n':
+            break
+    return bytes(buf)
 
 
 def main():
