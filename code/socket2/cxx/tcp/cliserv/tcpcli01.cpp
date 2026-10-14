@@ -2,10 +2,6 @@
 
 #include <iostream>
 #include <string>
-#include <cstdlib>
-#include <cstring>
-#include <cerrno>
-#include <unistd.h>
 
 using namespace unpsock;
 
@@ -71,9 +67,9 @@ int main(int argc, char *argv[])
     }
 
     Socket sock(Family::INET, AddrType::STREAM);
-    auto serv_addr = Address::from_ip(argv[1], SERV_PORT);
+    auto servaddr = Address::from_ip(argv[1], SERV_PORT);
 
-    sock.connect(serv_addr);
+    sock.connect(servaddr);
 
     str_cli(std::cin, sock);
 

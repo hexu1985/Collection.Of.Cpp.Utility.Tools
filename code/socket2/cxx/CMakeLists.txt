@@ -12,6 +12,7 @@ message( STATUS "PROJECT_SOURCE_DIR = ${PROJECT_SOURCE_DIR}" )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/unpsock )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty )
 add_subdirectory(tcp)
+add_subdirectory(udp)
 
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 

@@ -2,9 +2,7 @@
 #include "wrapsignal.hpp"
 
 #include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <cerrno>
+
 #include <unistd.h>
 
 using namespace unpsock;
