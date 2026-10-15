@@ -3,10 +3,11 @@ Fast DDS 2.14.7 纯源码依赖编译时，其核心库和主要第三方依赖�
 ### 核心库依赖
 | 依赖库 | 推荐版本 |
 | :--- | :--- |
-| **Fast CDR** | v2.2.7  |
-| **Foonathan Memory Vendor** | v1.3.1  |
+| **Fast CDR** | v2.2.8  |
+| **Foonathan Memory** | v0.7-3  |
 | **Asio** | v1.18.1  |
 | **TinyXML2** | v6.0.0  |
+| **googletest**  | v1.13.x（主要针对单元测试）   |
 | **OpenSSL** | v3.1.1（主要针对安全功能）  |
 
 ### 构建工具与编译器
