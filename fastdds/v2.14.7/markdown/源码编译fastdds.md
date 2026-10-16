@@ -72,3 +72,29 @@ export LD_LIBRARY_PATH=~/Fast-DDS/install/lib:$LD_LIBRARY_PATH
 - **`-DSECURITY=ON`**：启用安全通信（需 OpenSSL）。
 - **`-DPERFORMANCE_TESTS=ON`**：编译性能测试。
 
+### 源码编译fastdds的单元测试
+
+1. 源码编译googletest
+
+版本依赖googletest的v1.14.x版本
+https://gitee.com/mirrors/googletest.git
+```
+$ cd ~/fast_dds
+$ git clone https://github.com/google/googletest.git
+$ cd googletest
+$ git checkout v1.14.x
+$ cmake -S. -Bbuild
+$ cmake --build build --parallel 4
+$ cmake --install build --prefix ~/fast_dds/install
+```
+
+7. 编译fastdds单元测试
+
+```bash
+$ cd ~/fast_dds
+$ cd Fast-DDS # change to branch 2.8.2
+$ cmake -S. -Bbuild -DCMAKE_INSTALL_PREFIX=~/fast_dds/install \
+    -DEPROSIMA_BUILD_TESTS=ON -DFASTRTPS_API_TESTS=ON \
+    -DGTest_ROOT=~/fast_dds/install -DAsio_INCLUDE_DIR=~/fast_dds/asio-1.18.1/include
+$ cmake --build build -j8
+```
