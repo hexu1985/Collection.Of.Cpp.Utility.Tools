@@ -18,44 +18,26 @@ int main(int argc, char* argv[]) {
     const std::string group_ip = argv[1];
     const uint16_t port = static_cast<uint16_t>(std::stoi(argv[2]));
 
-    try {
-        // 1. UDP socket
-        Socket recv_sock(Family::INET, AddrType::DGRAM);
+    Socket recv_sock(Family::INET, AddrType::DGRAM);
 
-        // 2. SO_REUSEADDR
-        recv_sock.set_reuse_addr(true);
+    recv_sock.set_reuse_addr(true);
 
-        // 3. bind to INADDR_ANY:port
-        recv_sock.bind(Address::any(port, Family::INET));
+    recv_sock.bind(Address::any(port, Family::INET));
 
-        // 4. IP_ADD_MEMBERSHIP（唯一需要"手写"的部分）
-        struct ip_mreq mreq{};
-        if (::inet_pton(AF_INET, group_ip.c_str(), &mreq.imr_multiaddr) != 1) {
-            std::cerr << "invalid group ip: " << group_ip << "\n";
-            return 1;
+    recv_sock.join_multicast_group(Address::from_ip(group_ip, 0, Family::INET));
+
+    for (;;) {
+        std::error_code ec;
+        auto [data, peer] = recv_sock.recvfrom(BUF_SIZE - 1, ec);
+
+        if (ec) {
+            std::cerr << "recvfrom error: " << ec.message() << "\n";
+            break;
         }
-        mreq.imr_interface.s_addr = htonl(INADDR_ANY);
 
-        recv_sock.setsockopt<struct ip_mreq>(
-            IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq);
-
-        // 5. recv loop
-        for (;;) {
-            std::error_code ec;
-            auto [data, peer] = recv_sock.recvfrom(BUF_SIZE - 1, ec);
-
-            if (ec) {
-                std::cerr << "recvfrom error: " << ec.message() << "\n";
-                break;
-            }
-
-            std::cout.write(reinterpret_cast<const char*>(data.data()),
-                            static_cast<std::streamsize>(data.size()));
-            std::cout.flush();
-        }
-    } catch (const SocketException& e) {
-        std::cerr << "socket error: " << e.what() << "\n";
-        return 1;
+        std::cout.write(reinterpret_cast<const char*>(data.data()),
+                static_cast<std::streamsize>(data.size()));
+        std::cout.flush();
     }
 
     return 0;

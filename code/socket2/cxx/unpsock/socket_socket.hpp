@@ -654,12 +654,109 @@ public:
 
     // ---- 组播 TTL（发送端） ----
     void set_multicast_ttl(int ttl) {
-        assert(ttl >= 0 && ttl <= 255);
-        setsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL, static_cast<unsigned char>(ttl));
+        std::error_code ec;
+        set_multicast_ttl(ttl, ec);
+        if (ec) throw SocketError(ec, "set_multicast_ttl failed");
+    }
+
+    void set_multicast_ttl(int ttl, std::error_code& ec) noexcept {
+        ec.clear();
+        if (ttl < 0 || ttl > 255) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        unsigned char v = static_cast<unsigned char>(ttl);
+        setsockopt_impl(IPPROTO_IP, IP_MULTICAST_TTL, &v, sizeof(v), ec);
     }
 
     int multicast_ttl() const {
         return getsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL);
+    }
+
+    // ---- 组播：加入组 ----
+    void join_multicast_group(const Address& group,
+                              const Address& iface = Address{}) {
+        std::error_code ec;
+        join_multicast_group(group, iface, ec);
+        if (ec) throw SocketError(ec, "join_multicast_group failed");
+    }
+
+    void join_multicast_group(const Address& group,
+                              const Address& iface,
+                              std::error_code& ec) noexcept {
+        ec.clear();
+
+        struct ip_mreq mreq{};
+        if (!group.to_in_addr(mreq.imr_multiaddr)) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        if (iface.empty()) {
+            mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+        } else if (!iface.to_in_addr(mreq.imr_interface)) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+
+        setsockopt_impl(IPPROTO_IP, IP_ADD_MEMBERSHIP,
+                        &mreq, sizeof(mreq), ec);
+    }
+
+    // ---- 组播：离开组 ----
+    void leave_multicast_group(const Address& group,
+                               const Address& iface = Address{}) {
+        std::error_code ec;
+        leave_multicast_group(group, iface, ec);
+        if (ec) throw SocketError(ec, "leave_multicast_group failed");
+    }
+
+    void leave_multicast_group(const Address& group,
+                               const Address& iface,
+                               std::error_code& ec) noexcept {
+        ec.clear();
+        struct ip_mreq mreq{};
+        if (!group.to_in_addr(mreq.imr_multiaddr)) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        if (iface.empty()) {
+            mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+        } else if (!iface.to_in_addr(mreq.imr_interface)) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        setsockopt_impl(IPPROTO_IP, IP_DROP_MEMBERSHIP,
+                        &mreq, sizeof(mreq), ec);
+    }
+
+    void set_multicast_interface(const Address& iface) {
+        std::error_code ec;
+        set_multicast_interface(iface, ec);
+        if (ec) throw SocketError(ec, "set_multicast_interface failed");
+    }
+
+    void set_multicast_interface(const Address& iface,
+                                 std::error_code& ec) noexcept {
+        ec.clear();
+        struct in_addr addr{};
+        if (!iface.to_in_addr(addr)) {   // 需要上一轮建议的 to_in_addr
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        setsockopt_impl(IPPROTO_IP, IP_MULTICAST_IF,
+                        &addr, sizeof(addr), ec);
+    }
+
+    void set_multicast_loop(bool on) {
+        std::error_code ec;
+        set_multicast_loop(on, ec);
+        if (ec) throw SocketError(ec, "set_multicast_loop failed");
+    }
+    
+    void set_multicast_loop(bool on, std::error_code& ec) noexcept {
+        ec.clear();
+        unsigned char v = on ? 1 : 0;
+        setsockopt_impl(IPPROTO_IP, IP_MULTICAST_LOOP, &v, sizeof(v), ec);
     }
 
     // ============================================================

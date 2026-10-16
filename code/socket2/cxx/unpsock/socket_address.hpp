@@ -311,6 +311,22 @@ public:
 
     explicit operator bool() const noexcept { return !empty(); }
 
+    // 仅 IPv4 有效；非 IPv4 返回 false，不修改 out
+    bool to_in_addr(struct in_addr& out) const noexcept {
+        if (family_ != Family::INET) return false;
+        auto* sin = reinterpret_cast<const struct sockaddr_in*>(&storage_);
+        out = sin->sin_addr;
+        return true;
+    }
+
+    // 仅 IPv6 有效
+    bool to_in6_addr(struct in6_addr& out) const noexcept {
+        if (family_ != Family::INET6) return false;
+        auto* sin6 = reinterpret_cast<const struct sockaddr_in6*>(&storage_);
+        out = sin6->sin6_addr;
+        return true;
+    }
+
     // ===== 底层访问 =====
     const struct sockaddr* sockaddr_ptr() const noexcept {
         return reinterpret_cast<const struct sockaddr*>(&storage_);
