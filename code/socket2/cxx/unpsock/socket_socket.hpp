@@ -9,6 +9,7 @@
 #include <utility>
 #include <chrono>
 #include <cerrno>
+#include <cassert>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -649,6 +650,16 @@ public:
     std::chrono::milliseconds send_timeout() const {
         return to_milliseconds(
             getsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO));
+    }
+
+    // ---- 组播 TTL（发送端） ----
+    void set_multicast_ttl(int ttl) {
+        assert(ttl >= 0 && ttl <= 255);
+        setsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL, static_cast<unsigned char>(ttl));
+    }
+
+    int multicast_ttl() const {
+        return getsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL);
     }
 
     // ============================================================
