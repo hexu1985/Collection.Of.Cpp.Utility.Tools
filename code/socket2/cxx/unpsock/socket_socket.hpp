@@ -916,7 +916,7 @@ public:
             return;
         }
         unsigned char v = static_cast<unsigned char>(ttl);
-        setsockopt_impl(IPPROTO_IP, IP_MULTICAST_TTL, &v, sizeof(v), ec);
+        setsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL, v, ec);
     }
 
     // ---- 组播：加入组 ----
@@ -927,7 +927,7 @@ public:
         if (ec) throw SocketError(ec, "join_multicast_group failed");
     }
 
-    void join_multicast_group(const Address& group,
+    void join_multicast_group(const Address& group, 
                               const Address& iface,
                               std::error_code& ec) noexcept {
         ec.clear();
@@ -944,8 +944,7 @@ public:
             return;
         }
 
-        setsockopt_impl(IPPROTO_IP, IP_ADD_MEMBERSHIP,
-                        &mreq, sizeof(mreq), ec);
+        setsockopt<struct ip_mreq>(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq, ec);
     }
 
     // ---- 组播：离开组 ----
@@ -956,10 +955,11 @@ public:
         if (ec) throw SocketError(ec, "leave_multicast_group failed");
     }
 
-    void leave_multicast_group(const Address& group,
+    void leave_multicast_group(const Address& group, 
                                const Address& iface,
                                std::error_code& ec) noexcept {
         ec.clear();
+
         struct ip_mreq mreq{};
         if (!group.to_in_addr(mreq.imr_multiaddr)) {
             ec = std::make_error_code(std::errc::invalid_argument);
@@ -971,8 +971,8 @@ public:
             ec = std::make_error_code(std::errc::invalid_argument);
             return;
         }
-        setsockopt_impl(IPPROTO_IP, IP_DROP_MEMBERSHIP,
-                        &mreq, sizeof(mreq), ec);
+
+        setsockopt<struct ip_mreq>(IPPROTO_IP, IP_DROP_MEMBERSHIP, mreq, ec);
     }
 
     void set_multicast_interface(const Address& iface) {
@@ -985,12 +985,11 @@ public:
                                  std::error_code& ec) noexcept {
         ec.clear();
         struct in_addr addr{};
-        if (!iface.to_in_addr(addr)) {   // 需要上一轮建议的 to_in_addr
+        if (!iface.to_in_addr(addr)) {
             ec = std::make_error_code(std::errc::invalid_argument);
             return;
         }
-        setsockopt_impl(IPPROTO_IP, IP_MULTICAST_IF,
-                        &addr, sizeof(addr), ec);
+        setsockopt<struct in_addr>(IPPROTO_IP, IP_MULTICAST_IF, addr, ec);
     }
 
     void set_multicast_loop(bool on) {
@@ -1002,7 +1001,7 @@ public:
     void set_multicast_loop(bool on, std::error_code& ec) noexcept {
         ec.clear();
         unsigned char v = on ? 1 : 0;
-        setsockopt_impl(IPPROTO_IP, IP_MULTICAST_LOOP, &v, sizeof(v), ec);
+        setsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_LOOP, v, ec);
     }
 
     // ============================================================
