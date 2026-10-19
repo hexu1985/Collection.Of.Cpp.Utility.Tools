@@ -6,6 +6,7 @@ project_root_dir=$( pwd )
 
 echo ${project_root_dir}
 cmake -S. -Bbuild_x86 -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DSECURITY=OFF \
     -DFASTDDS_ENFORCE_LOG_INFO=ON \
     -DCOMPILE_EXAMPLES=ON \
     -DPERFORMANCE_TESTS=ON \
