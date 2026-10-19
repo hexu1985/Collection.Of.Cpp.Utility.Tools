@@ -553,103 +553,353 @@ public:
     }
 
     // ============================================================
-    // 常用 option 便捷函数
+    // 常用 option 便捷函数（异常版 + 错误码版）
     // ============================================================
 
-    // ---- SO_REUSEADDR ----
+    // ---------- SO_REUSEADDR ----------
+
     bool reuse_addr() const {
-        return getsockopt<int>(SOL_SOCKET, SO_REUSEADDR) != 0;
-    }
-    
-    void set_reuse_addr(bool on) {
-        setsockopt<int>(SOL_SOCKET, SO_REUSEADDR, on ? 1 : 0);
+        std::error_code ec;
+        bool v = reuse_addr(ec);
+        if (ec) {
+            throw SocketError(ec, "reuse_addr failed");
+        }
+        return v;
     }
 
-    // ---- SO_REUSEPORT ----
+    bool reuse_addr(std::error_code& ec) const noexcept {
+        ec.clear();
+        int v = getsockopt<int>(SOL_SOCKET, SO_REUSEADDR, ec);
+        if (ec) return false;
+        return v != 0;
+    }
+
+    void set_reuse_addr(bool on) {
+        std::error_code ec;
+        set_reuse_addr(on, ec);
+        if (ec) {
+            throw SocketError(ec, "set_reuse_addr failed");
+        }
+    }
+
+    void set_reuse_addr(bool on, std::error_code& ec) noexcept {
+        ec.clear();
+        setsockopt<int>(SOL_SOCKET, SO_REUSEADDR, on ? 1 : 0, ec);
+    }
+
+    // ---------- SO_REUSEPORT ----------
+
     bool reuse_port() const {
-        return getsockopt<int>(SOL_SOCKET, SO_REUSEPORT) != 0;
+        std::error_code ec;
+        bool v = reuse_port(ec);
+        if (ec) {
+            throw SocketError(ec, "reuse_port failed");
+        }
+        return v;
+    }
+
+    bool reuse_port(std::error_code& ec) const noexcept {
+        ec.clear();
+        int v = getsockopt<int>(SOL_SOCKET, SO_REUSEPORT, ec);
+        if (ec) return false;
+        return v != 0;
     }
 
     void set_reuse_port(bool on) {
-        setsockopt<int>(SOL_SOCKET, SO_REUSEPORT, on ? 1 : 0);
+        std::error_code ec;
+        set_reuse_port(on, ec);
+        if (ec) {
+            throw SocketError(ec, "set_reuse_port failed");
+        }
     }
 
-    // ---- SO_KEEPALIVE ----
+    void set_reuse_port(bool on, std::error_code& ec) noexcept {
+        ec.clear();
+        setsockopt<int>(SOL_SOCKET, SO_REUSEPORT, on ? 1 : 0, ec);
+    }
+
+    // ---------- SO_KEEPALIVE ----------
+
     bool keep_alive() const {
-        return getsockopt<int>(SOL_SOCKET, SO_KEEPALIVE) != 0;
+        std::error_code ec;
+        bool v = keep_alive(ec);
+        if (ec) {
+            throw SocketError(ec, "keep_alive failed");
+        }
+        return v;
+    }
+
+    bool keep_alive(std::error_code& ec) const noexcept {
+        ec.clear();
+        int v = getsockopt<int>(SOL_SOCKET, SO_KEEPALIVE, ec);
+        if (ec) return false;
+        return v != 0;
     }
 
     void set_keep_alive(bool on) {
-        setsockopt<int>(SOL_SOCKET, SO_KEEPALIVE, on ? 1 : 0);
+        std::error_code ec;
+        set_keep_alive(on, ec);
+        if (ec) {
+            throw SocketError(ec, "set_keep_alive failed");
+        }
     }
 
-    // ---- TCP_NODELAY ----
+    void set_keep_alive(bool on, std::error_code& ec) noexcept {
+        ec.clear();
+        setsockopt<int>(SOL_SOCKET, SO_KEEPALIVE, on ? 1 : 0, ec);
+    }
+
+    // ---------- TCP_NODELAY ----------
+
     bool tcp_nodelay() const {
-        return getsockopt<int>(IPPROTO_TCP, TCP_NODELAY) != 0;
+        std::error_code ec;
+        bool v = tcp_nodelay(ec);
+        if (ec) {
+            throw SocketError(ec, "tcp_nodelay failed");
+        }
+        return v;
+    }
+
+    bool tcp_nodelay(std::error_code& ec) const noexcept {
+        ec.clear();
+        int v = getsockopt<int>(IPPROTO_TCP, TCP_NODELAY, ec);
+        if (ec) return false;
+        return v != 0;
     }
 
     void set_tcp_nodelay(bool on) {
-        setsockopt<int>(IPPROTO_TCP, TCP_NODELAY, on ? 1 : 0);
+        std::error_code ec;
+        set_tcp_nodelay(on, ec);
+        if (ec) {
+            throw SocketError(ec, "set_tcp_nodelay failed");
+        }
     }
 
-    // ---- SO_BROADCAST（UDP） ----
+    void set_tcp_nodelay(bool on, std::error_code& ec) noexcept {
+        ec.clear();
+        setsockopt<int>(IPPROTO_TCP, TCP_NODELAY, on ? 1 : 0, ec);
+    }
+
+    // ---------- SO_BROADCAST（UDP） ----------
+
     bool broadcast() const {
-        return getsockopt<int>(SOL_SOCKET, SO_BROADCAST) != 0;
+        std::error_code ec;
+        bool v = broadcast(ec);
+        if (ec) {
+            throw SocketError(ec, "broadcast failed");
+        }
+        return v;
+    }
+
+    bool broadcast(std::error_code& ec) const noexcept {
+        ec.clear();
+        int v = getsockopt<int>(SOL_SOCKET, SO_BROADCAST, ec);
+        if (ec) return false;
+        return v != 0;
     }
 
     void set_broadcast(bool on) {
-        setsockopt<int>(SOL_SOCKET, SO_BROADCAST, on ? 1 : 0);
+        std::error_code ec;
+        set_broadcast(on, ec);
+        if (ec) {
+            throw SocketError(ec, "set_broadcast failed");
+        }
     }
 
-    // ---- SO_RCVBUF / SO_SNDBUF ----
+    void set_broadcast(bool on, std::error_code& ec) noexcept {
+        ec.clear();
+        setsockopt<int>(SOL_SOCKET, SO_BROADCAST, on ? 1 : 0, ec);
+    }
+
+    // ---------- SO_RCVBUF / SO_SNDBUF ----------
+
     int recv_buffer_size() const {
-        return getsockopt<int>(SOL_SOCKET, SO_RCVBUF);
+        std::error_code ec;
+        int v = recv_buffer_size(ec);
+        if (ec) {
+            throw SocketError(ec, "recv_buffer_size failed");
+        }
+        return v;
+    }
+
+    int recv_buffer_size(std::error_code& ec) const noexcept {
+        ec.clear();
+        return getsockopt<int>(SOL_SOCKET, SO_RCVBUF, ec);
     }
 
     void set_recv_buffer_size(int bytes) {
-        setsockopt<int>(SOL_SOCKET, SO_RCVBUF, bytes);
+        std::error_code ec;
+        set_recv_buffer_size(bytes, ec);
+        if (ec) {
+            throw SocketError(ec, "set_recv_buffer_size failed");
+        }
+    }
+
+    void set_recv_buffer_size(int bytes, std::error_code& ec) noexcept {
+        ec.clear();
+        if (bytes < 0) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        setsockopt<int>(SOL_SOCKET, SO_RCVBUF, bytes, ec);
     }
 
     int send_buffer_size() const {
-        return getsockopt<int>(SOL_SOCKET, SO_SNDBUF);
+        std::error_code ec;
+        int v = send_buffer_size(ec);
+        if (ec) {
+            throw SocketError(ec, "send_buffer_size failed");
+        }
+        return v;
+    }
+
+    int send_buffer_size(std::error_code& ec) const noexcept {
+        ec.clear();
+        return getsockopt<int>(SOL_SOCKET, SO_SNDBUF, ec);
     }
 
     void set_send_buffer_size(int bytes) {
-        setsockopt<int>(SOL_SOCKET, SO_SNDBUF, bytes);
+        std::error_code ec;
+        set_send_buffer_size(bytes, ec);
+        if (ec) {
+            throw SocketError(ec, "set_send_buffer_size failed");
+        }
     }
 
-    // ---- SO_LINGER ----
+    void set_send_buffer_size(int bytes, std::error_code& ec) noexcept {
+        ec.clear();
+        if (bytes < 0) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        setsockopt<int>(SOL_SOCKET, SO_SNDBUF, bytes, ec);
+    }
+
+    // ---------- SO_LINGER ----------
+
     struct linger linger_opt() const {
-        return getsockopt<struct linger>(SOL_SOCKET, SO_LINGER);
+        std::error_code ec;
+        struct linger l = linger_opt(ec);
+        if (ec) {
+            throw SocketError(ec, "linger_opt failed");
+        }
+        return l;
+    }
+
+    struct linger linger_opt(std::error_code& ec) const noexcept {
+        ec.clear();
+        struct linger l{};
+        l = getsockopt<struct linger>(SOL_SOCKET, SO_LINGER, ec);
+        // 失败时 getsockopt<T>(ec) 返回 T{}，此时 ec 已非空
+        return l;
     }
 
     void set_linger(bool on, int seconds) {
+        std::error_code ec;
+        set_linger(on, seconds, ec);
+        if (ec) {
+            throw SocketError(ec, "set_linger failed");
+        }
+    }
+
+    void set_linger(bool on, int seconds, std::error_code& ec) noexcept {
+        ec.clear();
+        if (seconds < 0) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
         struct linger l{};
         l.l_onoff  = on ? 1 : 0;
         l.l_linger = seconds;
-        setsockopt<struct linger>(SOL_SOCKET, SO_LINGER, l);
+        setsockopt<struct linger>(SOL_SOCKET, SO_LINGER, l, ec);
     }
 
-    // ---- SO_RCVTIMEO / SO_SNDTIMEO ----
-    // 传入 std::chrono::milliseconds，内部转成 timeval
+    // ---------- SO_RCVTIMEO / SO_SNDTIMEO ----------
+
     void set_recv_timeout(std::chrono::milliseconds ms) {
+        std::error_code ec;
+        set_recv_timeout(ms, ec);
+        if (ec) {
+            throw SocketError(ec, "set_recv_timeout failed");
+        }
+    }
+
+    void set_recv_timeout(std::chrono::milliseconds ms, std::error_code& ec) noexcept {
+        ec.clear();
+        if (ms.count() < 0) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
         struct timeval tv = to_timeval(ms);
-        setsockopt<struct timeval>(SOL_SOCKET, SO_RCVTIMEO, tv);
+        setsockopt<struct timeval>(SOL_SOCKET, SO_RCVTIMEO, tv, ec);
     }
 
     void set_send_timeout(std::chrono::milliseconds ms) {
+        std::error_code ec;
+        set_send_timeout(ms, ec);
+        if (ec) {
+            throw SocketError(ec, "set_send_timeout failed");
+        }
+    }
+
+    void set_send_timeout(std::chrono::milliseconds ms, std::error_code& ec) noexcept {
+        ec.clear();
+        if (ms.count() < 0) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
         struct timeval tv = to_timeval(ms);
-        setsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO, tv);
+        setsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO, tv, ec);
     }
 
     std::chrono::milliseconds recv_timeout() const {
-        return to_milliseconds(
-            getsockopt<struct timeval>(SOL_SOCKET, SO_RCVTIMEO));
+        std::error_code ec;
+        auto v = recv_timeout(ec);
+        if (ec) {
+            throw SocketError(ec, "recv_timeout failed");
+        }
+        return v;
+    }
+
+    std::chrono::milliseconds recv_timeout(std::error_code& ec) const noexcept {
+        ec.clear();
+        struct timeval tv = getsockopt<struct timeval>(SOL_SOCKET, SO_RCVTIMEO, ec);
+        if (ec) return std::chrono::milliseconds(0);
+        return to_milliseconds(tv);
     }
 
     std::chrono::milliseconds send_timeout() const {
-        return to_milliseconds(
-            getsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO));
+        std::error_code ec;
+        auto v = send_timeout(ec);
+        if (ec) {
+            throw SocketError(ec, "send_timeout failed");
+        }
+        return v;
+    }
+
+    std::chrono::milliseconds send_timeout(std::error_code& ec) const noexcept {
+        ec.clear();
+        struct timeval tv = getsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO, ec);
+        if (ec) return std::chrono::milliseconds(0);
+        return to_milliseconds(tv);
+    }
+
+    // ---------- IP_MULTICAST_TTL ----------
+
+    int multicast_ttl() const {
+        std::error_code ec;
+        int v = multicast_ttl(ec);
+        if (ec) {
+            throw SocketError(ec, "multicast_ttl failed");
+        }
+        return v;
+    }
+
+    int multicast_ttl(std::error_code& ec) const noexcept {
+        ec.clear();
+        unsigned char v = getsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL, ec);
+        if (ec) return 0;
+        return static_cast<int>(v);
     }
 
     // ---- 组播 TTL（发送端） ----
@@ -667,10 +917,6 @@ public:
         }
         unsigned char v = static_cast<unsigned char>(ttl);
         setsockopt_impl(IPPROTO_IP, IP_MULTICAST_TTL, &v, sizeof(v), ec);
-    }
-
-    int multicast_ttl() const {
-        return getsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL);
     }
 
     // ---- 组播：加入组 ----
@@ -752,7 +998,7 @@ public:
         set_multicast_loop(on, ec);
         if (ec) throw SocketError(ec, "set_multicast_loop failed");
     }
-    
+
     void set_multicast_loop(bool on, std::error_code& ec) noexcept {
         ec.clear();
         unsigned char v = on ? 1 : 0;
