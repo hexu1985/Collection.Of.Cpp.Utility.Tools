@@ -30,7 +30,7 @@ public:
 
     // ---- 异常版本 ----
     Socket(Family family, AddrType type) {
-        create(detail::to_af(family), detail::to_socktype(type));
+        create_socket(detail::to_af(family), detail::to_socktype(type));
         family_ = family;
         type_ = type;
     }
@@ -38,7 +38,7 @@ public:
     // ---- 错误码版本 ----
     Socket(Family family, AddrType type, std::error_code& ec) noexcept {
         ec.clear();
-        create(detail::to_af(family), detail::to_socktype(type), ec);
+        create_socket(detail::to_af(family), detail::to_socktype(type), ec);
         if (!ec) {
             family_ = family;
             type_ = type;
@@ -55,6 +55,8 @@ public:
     Socket(Socket&& other) noexcept
         : fd_(other.fd_), family_(other.family_), type_(other.type_) {
         other.fd_ = -1;
+        other.family_ = Family::UNSPEC;
+        other.type_ = AddrType::STREAM;
     }
 
     Socket& operator=(Socket&& other) noexcept {
@@ -64,6 +66,8 @@ public:
             family_ = other.family_;
             type_ = other.type_;
             other.fd_ = -1;
+            other.family_ = Family::UNSPEC;
+            other.type_ = AddrType::STREAM;
         }
         return *this;
     }
@@ -89,6 +93,10 @@ public:
     // ---- bind：错误码版本 ----
     void bind(const Address& addr, std::error_code& ec) noexcept {
         ec.clear();
+        if (fd_ < 0) {
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
+        }        
         if (::bind(fd_, addr.sockaddr_ptr(), addr.sockaddr_len()) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -110,6 +118,7 @@ public:
             ec = std::make_error_code(std::errc::bad_file_descriptor);
             return;
         }
+
         if (::listen(fd_, backlog) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -169,6 +178,10 @@ public:
     // ---- connect(Address)：错误码版本 ----
     void connect(const Address& addr, std::error_code& ec) noexcept {
         ec.clear();
+        if (fd_ < 0) {
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
+        }
 
         int rc;
         do {
@@ -181,10 +194,9 @@ public:
     }
 
     // ---- connect(host, port)：异常版本 ----
-    void connect(const std::string& host, uint16_t port,
-                 Family family = Family::UNSPEC) {
+    void connect(const std::string& host, uint16_t port) {
         std::error_code ec;
-        connect(host, port, family, ec);
+        connect(host, port, ec);
         if (ec) {
             throw SocketError(ec, "connect failed: " + host + ":" + std::to_string(port));
         }
@@ -193,9 +205,14 @@ public:
     // ---- connect(host, port)：错误码版本 ----
     // 注意：resolve 失败时 ec 是 gai_category 的码
     void connect(const std::string& host, uint16_t port,
-                 Family family, std::error_code& ec) noexcept {
+                 std::error_code& ec) noexcept {
         ec.clear();
-        Address addr = Address::resolve(host, port, family, type_, ec);
+        if (fd_ < 0) {
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
+        }
+
+        Address addr = Address::resolve(host, port, family_, type_, ec);
         if (ec) return;
         connect(addr, ec);
     }
@@ -218,6 +235,10 @@ public:
     // 对端关闭时返回空 vector 且 ec 为空；出错时 ec 非空
     std::vector<uint8_t> recv(size_t bufsize, std::error_code& ec) noexcept {
         ec.clear();
+        if (bufsize == 0) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return {};
+        }        
         std::vector<uint8_t> buf(bufsize);
         ssize_t n = recv_impl(buf.data(), bufsize, ec);
         if (ec) return {};
@@ -245,24 +266,25 @@ public:
     }
 
     // ---- sendall：异常版本 ----
-    void sendall(const void* data, size_t len) {
+    size_t sendall(const void* data, size_t len) {
         std::error_code ec;
-        sendall(data, len, ec);
+        auto n = sendall(data, len, ec);
         if (ec) {
             throw SocketError(ec, "sendall failed");
         }
+        return n;
     }
 
-    void sendall(const std::vector<uint8_t>& data) {
-        sendall(data.data(), data.size());
+    size_t sendall(const std::vector<uint8_t>& data) {
+        return sendall(data.data(), data.size());
     }
 
-    void sendall(const std::string& data) {
-        sendall(data.data(), data.size());
+    size_t sendall(const std::string& data) {
+        return sendall(data.data(), data.size());
     }
 
     // ---- sendall：错误码版本 ----
-    void sendall(const void* data, size_t len, std::error_code& ec) noexcept {
+    size_t sendall(const void* data, size_t len, std::error_code& ec) noexcept {
         ec.clear();
         auto* p = static_cast<const uint8_t*>(data);
         size_t sent = 0;
@@ -271,23 +293,19 @@ public:
             if (n < 0) {
                 if (errno == EINTR) continue;
                 ec = std::error_code(errno, std::system_category());
-                return;
-            }
-            if (n == 0) {
-                // 理论上阻塞 socket 不会返回 0，但防御性处理
-                ec = std::make_error_code(std::errc::io_error);
-                return;
+                return sent;
             }
             sent += static_cast<size_t>(n);
         }
+        return sent;
     }
 
-    void sendall(const std::vector<uint8_t>& data, std::error_code& ec) noexcept {
-        sendall(data.data(), data.size(), ec);
+    size_t sendall(const std::vector<uint8_t>& data, std::error_code& ec) noexcept {
+        return sendall(data.data(), data.size(), ec);
     }
 
-    void sendall(const std::string& data, std::error_code& ec) noexcept {
-        sendall(data.data(), data.size(), ec);
+    size_t sendall(const std::string& data, std::error_code& ec) noexcept {
+        return sendall(data.data(), data.size(), ec);
     }
 
     // ---- send：异常版本 ----
@@ -416,10 +434,6 @@ public:
     // ---- getsockname：错误码版本 ----
     Address getsockname(std::error_code& ec) const noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return {};
-        }
         struct sockaddr_storage storage;
         socklen_t len = sizeof(storage);
         if (::getsockname(fd_, reinterpret_cast<struct sockaddr*>(&storage),
@@ -444,10 +458,6 @@ public:
     // ---- getpeername：错误码版本 ----
     Address getpeername(std::error_code& ec) const noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return {};
-        }
         struct sockaddr_storage storage;
         socklen_t len = sizeof(storage);
         if (::getpeername(fd_, reinterpret_cast<struct sockaddr*>(&storage),
@@ -1027,7 +1037,6 @@ public:
     // ---- shutdown_write：错误码版本 ----
     void shutdown_write(std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) return;
         if (::shutdown(fd_, SHUT_WR) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -1045,7 +1054,6 @@ public:
     // ---- shutdown_read：错误码版本 ----
     void shutdown_read(std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) return;
         if (::shutdown(fd_, SHUT_RD) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -1063,7 +1071,6 @@ public:
     // ---- shutdown_both：错误码版本 ----
     void shutdown_both(std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) return;
         if (::shutdown(fd_, SHUT_RDWR) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -1091,17 +1098,17 @@ private:
             static_cast<long long>(tv.tv_usec) / 1000);
     }
 
-    // ---- create：异常版本 ----
-    void create(int af, int socktype) {
+    // ---- create_socket：异常版本 ----
+    void create_socket(int af, int socktype) {
         std::error_code ec;
-        create(af, socktype, ec);
+        create_socket(af, socktype, ec);
         if (ec) {
             throw SocketError(ec, "socket creation failed");
         }
     }
 
-    // ---- create：错误码版本 ----
-    void create(int af, int socktype,
+    // ---- create_socket：错误码版本 ----
+    void create_socket(int af, int socktype,
                 std::error_code& ec) noexcept {
         ec.clear();
         fd_ = ::socket(af, socktype, 0);
@@ -1115,10 +1122,6 @@ private:
     ssize_t recv_impl(void* buf, size_t bufsize,
                       std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return -1;
-        }
         while (true) {
             ssize_t n = ::recv(fd_, buf, bufsize, 0);
             if (n < 0 && errno == EINTR) continue;
@@ -1151,10 +1154,6 @@ private:
                       void* buf, socklen_t* len,
                       std::error_code& ec) const noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
         if (buf == nullptr || len == nullptr) {
             ec = std::make_error_code(std::errc::invalid_argument);
             return;
@@ -1182,10 +1181,6 @@ private:
                     const void* buf, socklen_t len,
                     std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
         if (buf == nullptr) {
             ec = std::make_error_code(std::errc::invalid_argument);
             return;

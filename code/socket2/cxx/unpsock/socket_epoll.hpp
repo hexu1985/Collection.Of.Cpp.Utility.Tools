@@ -24,6 +24,9 @@ public:
 
     bool init(std::error_code& ec) {
         ec.clear();
+        if (epfd_ >= 0) {
+            return true;
+        }
         epfd_ = ::epoll_create1(EPOLL_CLOEXEC);
         // 构造阶段无法通过 ec 出参返回，这里记录一个标志，第一次使用时暴露
         if (epfd_ < 0) {

@@ -16,6 +16,15 @@
 #include <netdb.h>
 #include <sys/un.h>
 
+/* Posix.1g requires the SUN_LEN() macro but not all implementations DefinE
+   it (yet).  Note that this 4.4BSD macro works regardless whether there is
+   a length field or not. */
+#ifndef	SUN_LEN
+/* $$.Im SUN_LEN$$ */
+# define	SUN_LEN(su) \
+	(sizeof(*(su)) - sizeof((su)->sun_path) + strlen((su)->sun_path))
+#endif
+
 namespace unpsock {
 
 // ---------- 地址族 ----------
@@ -94,7 +103,7 @@ public:
 
     // ===== 静态构造：错误码版本 =====
     static Address from_ip(const std::string& ip, uint16_t port,
-                           Family family, std::error_code& ec) noexcept {
+                           Family family, std::error_code& ec) {
         Address addr;
         addr.from_ip_impl(ip, port, family, ec);
         return addr;
@@ -110,9 +119,26 @@ public:
     }
 
     static Address from_unix(const std::string& path,
-                             std::error_code& ec) noexcept {
+                             std::error_code& ec) {
         Address addr;
         addr.from_unix_impl(path, ec);
+        return addr;
+    }
+
+    // ===== 从 sockaddr 构造 =====
+    static Address from_sockaddr(const struct sockaddr* sa, socklen_t len) {
+        std::error_code ec;
+        Address addr = from_sockaddr(sa, len, ec);
+        if (ec) {
+            throw AddressError(ec, "from_sockaddr failed");
+        }
+        return addr;
+    }
+
+    static Address from_sockaddr(const struct sockaddr* sa, socklen_t len,
+                                 std::error_code& ec) {
+        Address addr;
+        addr.from_sockaddr_impl(sa, len, ec);
         return addr;
     }
 
@@ -132,7 +158,7 @@ public:
                                             uint16_t port,
                                             Family family,
                                             AddrType type,
-                                            std::error_code& ec) noexcept {
+                                            std::error_code& ec) {
         ec.clear();
         std::vector<Address> out;
 
@@ -170,7 +196,7 @@ public:
 
     static Address resolve(const std::string& host, uint16_t port,
                            Family family, AddrType type,
-                           std::error_code& ec) noexcept {
+                           std::error_code& ec) {
         auto all = resolve_all(host, port, family, type, ec);
         if (ec) return Address{};
         if (all.empty()) {
@@ -188,7 +214,7 @@ public:
         return a;
     }
 
-    static Address any(uint16_t port, Family family, std::error_code& ec) noexcept {
+    static Address any(uint16_t port, Family family, std::error_code& ec) {
         ec.clear();
         Address addr;
         if (family == Family::INET) {
@@ -221,7 +247,7 @@ public:
     }
 
     static Address loopback(uint16_t port, Family family,
-                            std::error_code& ec) noexcept {
+                            std::error_code& ec) {
         ec.clear();
         Address addr;
         if (family == Family::INET) {
@@ -243,13 +269,6 @@ public:
             return addr;
         }
         ec = std::make_error_code(std::errc::invalid_argument);
-        return addr;
-    }
-
-    // ===== 从 sockaddr 构造 =====
-    static Address from_sockaddr(const struct sockaddr* sa, socklen_t len) {
-        Address addr;
-        addr.from_sockaddr_impl(sa, len);
         return addr;
     }
 
@@ -290,9 +309,9 @@ public:
     }
 
     // ===== 属性 =====
-    Family family() const noexcept { return family_; }
+    Family family() const { return family_; }
 
-    uint16_t port() const noexcept {
+    uint16_t port() const {
         if (family_ == Family::INET) {
             auto* sin = reinterpret_cast<const struct sockaddr_in*>(&storage_);
             return ntohs(sin->sin_port);
@@ -304,15 +323,15 @@ public:
         return 0;
     }
 
-    bool is_ipv4() const noexcept { return family_ == Family::INET; }
-    bool is_ipv6() const noexcept { return family_ == Family::INET6; }
-    bool is_unix() const noexcept { return family_ == Family::UNIX; }
-    bool empty() const noexcept { return family_ == Family::UNSPEC; }
+    bool is_ipv4() const { return family_ == Family::INET; }
+    bool is_ipv6() const { return family_ == Family::INET6; }
+    bool is_unix() const { return family_ == Family::UNIX; }
+    bool empty() const { return family_ == Family::UNSPEC; }
 
-    explicit operator bool() const noexcept { return !empty(); }
+    explicit operator bool() const { return !empty(); }
 
     // 仅 IPv4 有效；非 IPv4 返回 false，不修改 out
-    bool to_in_addr(struct in_addr& out) const noexcept {
+    bool to_in_addr(struct in_addr& out) const {
         if (family_ != Family::INET) return false;
         auto* sin = reinterpret_cast<const struct sockaddr_in*>(&storage_);
         out = sin->sin_addr;
@@ -320,7 +339,7 @@ public:
     }
 
     // 仅 IPv6 有效
-    bool to_in6_addr(struct in6_addr& out) const noexcept {
+    bool to_in6_addr(struct in6_addr& out) const {
         if (family_ != Family::INET6) return false;
         auto* sin6 = reinterpret_cast<const struct sockaddr_in6*>(&storage_);
         out = sin6->sin6_addr;
@@ -328,20 +347,20 @@ public:
     }
 
     // ===== 底层访问 =====
-    const struct sockaddr* sockaddr_ptr() const noexcept {
+    const struct sockaddr* sockaddr_ptr() const {
         return reinterpret_cast<const struct sockaddr*>(&storage_);
     }
 
-    struct sockaddr* sockaddr_ptr() noexcept {
+    struct sockaddr* sockaddr_ptr() {
         return reinterpret_cast<struct sockaddr*>(&storage_);
     }
 
-    socklen_t sockaddr_len() const noexcept { return len_; }
+    socklen_t sockaddr_len() const { return len_; }
 
     struct sockaddr_storage to_storage() const { return storage_; }
 
     // ===== 比较 =====
-    bool operator==(const Address& other) const noexcept {
+    bool operator==(const Address& other) const {
         if (family_ != other.family_) return false;
 
         switch (family_) {
@@ -355,19 +374,19 @@ public:
                 auto* a = reinterpret_cast<const struct sockaddr_in6*>(&storage_);
                 auto* b = reinterpret_cast<const struct sockaddr_in6*>(&other.storage_);
                 return a->sin6_port == b->sin6_port &&
-                       std::memcmp(&a->sin6_addr, &b->sin6_addr, 16) == 0;
+                       std::memcmp(&a->sin6_addr, &b->sin6_addr, sizeof(in6_addr)) == 0;
             }
             case Family::UNIX: {
                 auto* a = reinterpret_cast<const struct sockaddr_un*>(&storage_);
                 auto* b = reinterpret_cast<const struct sockaddr_un*>(&other.storage_);
-                return std::strcmp(a->sun_path, b->sun_path) == 0;
+                return std::memcmp(a->sun_path, b->sun_path, sizeof(((struct sockaddr_un*)nullptr)->sun_path)) == 0;
             }
             default:
                 return true;
         }
     }
 
-    bool operator!=(const Address& other) const noexcept {
+    bool operator!=(const Address& other) const {
         return !(*this == other);
     }
 
@@ -376,7 +395,7 @@ private:
     socklen_t len_ = 0;
     Family family_ = Family::UNSPEC;
 
-    void clear() noexcept {
+    void clear() {
         std::memset(&storage_, 0, sizeof(storage_));
         len_ = 0;
         family_ = Family::UNSPEC;
@@ -385,7 +404,7 @@ private:
     // ---------- 内部实现 ----------
 
     void from_ip_impl(const std::string& ip, uint16_t port,
-                      Family family, std::error_code& ec) noexcept {
+                      Family family, std::error_code& ec) {
         ec.clear();
         clear();
 
@@ -415,7 +434,7 @@ private:
     }
 
     void from_unix_impl(const std::string& path,
-                        std::error_code& ec) noexcept {
+                        std::error_code& ec) {
         ec.clear();
         clear();
 
@@ -432,16 +451,30 @@ private:
         std::strncpy(sun->sun_path, path.c_str(), kSunPathCap - 1);
         sun->sun_path[kSunPathCap - 1] = '\0';
 
-        len_ = static_cast<socklen_t>(
-            offsetof(struct sockaddr_un, sun_path) + path.size() + 1);
+        len_ = SUN_LEN(sun);
         family_ = Family::UNIX;
     }
 
-    void from_sockaddr_impl(const struct sockaddr* sa, socklen_t len) noexcept {
+    void from_sockaddr_impl(const struct sockaddr* sa, socklen_t len,
+            std::error_code& ec) {
+        ec.clear();
         clear();
-        if (sa == nullptr || len == 0) return;
-        if (len > sizeof(storage_)) return;
-
+        if (sa == nullptr || len < sizeof(sa_family_t)) {
+            ec = std::make_error_code(std::errc::invalid_argument); 
+            return;
+        }
+        if (len > sizeof(storage_)) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        if (sa->sa_family == AF_INET && len < sizeof(sockaddr_in)) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
+        if (sa->sa_family == AF_INET6 && len < sizeof(sockaddr_in6)) {
+            ec = std::make_error_code(std::errc::invalid_argument);
+            return;
+        }
         std::memcpy(&storage_, sa, len);
         len_ = len;
         family_ = detail::from_af(sa->sa_family);

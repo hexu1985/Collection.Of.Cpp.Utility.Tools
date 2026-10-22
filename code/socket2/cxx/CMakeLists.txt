@@ -13,6 +13,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/unpsock )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty )
 add_subdirectory(tcp)
 add_subdirectory(udp)
+add_subdirectory(unixdomain)
 
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
