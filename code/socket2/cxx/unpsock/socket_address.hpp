@@ -177,10 +177,15 @@ public:
             return out;
         }
 
+        struct Guard { addrinfo* p; ~Guard() { if (p) ::freeaddrinfo(p); } } guard{result};       
         for (auto* p = result; p != nullptr; p = p->ai_next) {
-            out.push_back(Address::from_sockaddr(p->ai_addr, p->ai_addrlen));
+            Address address;
+            if (address.from_sockaddr_impl(p->ai_addr, p->ai_addrlen, ec)) {
+                out.push_back(address);
+            }
         }
-        ::freeaddrinfo(result);
+        ec.clear();
+
         return out;
     }
 
@@ -403,7 +408,7 @@ private:
 
     // ---------- 内部实现 ----------
 
-    void from_ip_impl(const std::string& ip, uint16_t port,
+    bool from_ip_impl(const std::string& ip, uint16_t port,
                       Family family, std::error_code& ec) {
         ec.clear();
         clear();
@@ -415,7 +420,7 @@ private:
             if (::inet_pton(AF_INET, ip.c_str(), &sin->sin_addr) == 1) {
                 len_ = sizeof(struct sockaddr_in);
                 family_ = Family::INET;
-                return;
+                return true;
             }
         }
 
@@ -426,14 +431,15 @@ private:
             if (::inet_pton(AF_INET6, ip.c_str(), &sin6->sin6_addr) == 1) {
                 len_ = sizeof(struct sockaddr_in6);
                 family_ = Family::INET6;
-                return;
+                return true;
             }
         }
 
         ec = std::make_error_code(std::errc::invalid_argument);
+        return false;
     }
 
-    void from_unix_impl(const std::string& path,
+    bool from_unix_impl(const std::string& path,
                         std::error_code& ec) {
         ec.clear();
         clear();
@@ -443,7 +449,7 @@ private:
 
         if (path.size() >= kSunPathCap) {
             ec = std::make_error_code(std::errc::filename_too_long);
-            return;
+            return false;
         }
 
         auto* sun = reinterpret_cast<struct sockaddr_un*>(&storage_);
@@ -453,31 +459,21 @@ private:
 
         len_ = SUN_LEN(sun);
         family_ = Family::UNIX;
+        return true;
     }
 
-    void from_sockaddr_impl(const struct sockaddr* sa, socklen_t len,
+    bool from_sockaddr_impl(const struct sockaddr* sa, socklen_t len,
             std::error_code& ec) {
         ec.clear();
         clear();
-        if (sa == nullptr || len < sizeof(sa_family_t)) {
+        if (sa == nullptr || len > sizeof(storage_)) {
             ec = std::make_error_code(std::errc::invalid_argument); 
-            return;
-        }
-        if (len > sizeof(storage_)) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return;
-        }
-        if (sa->sa_family == AF_INET && len < sizeof(sockaddr_in)) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return;
-        }
-        if (sa->sa_family == AF_INET6 && len < sizeof(sockaddr_in6)) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return;
+            return false;
         }
         std::memcpy(&storage_, sa, len);
         len_ = len;
         family_ = detail::from_af(sa->sa_family);
+        return true;
     }
 };
 
