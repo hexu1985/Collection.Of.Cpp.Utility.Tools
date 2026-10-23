@@ -318,6 +318,14 @@ public:
         return n;
     }
 
+    size_t send(const std::vector<uint8_t>& data) {
+        return send(data.data(), data.size());
+    }
+
+    size_t send(const std::string& data) {
+        return send(data.data(), data.size());
+    }
+
     // ---- send：错误码版本 ----
     size_t send(const void* data, size_t len, std::error_code& ec) noexcept {
         ec.clear();
@@ -331,6 +339,14 @@ public:
             return 0;
         }
         return static_cast<size_t>(n);
+    }
+
+    size_t send(const std::vector<uint8_t>& data, std::error_code& ec) noexcept {
+        return send(data.data(), data.size(), ec);
+    }
+
+    size_t send(const std::string& data, std::error_code& ec) noexcept {
+        return send(data.data(), data.size(), ec);
     }
 
     // ============================================================
