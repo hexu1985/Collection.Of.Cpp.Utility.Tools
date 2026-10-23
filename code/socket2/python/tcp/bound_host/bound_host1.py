@@ -1,5 +1,6 @@
 import socket
 import sys
+import time
 
 BUF_SIZE = 30  # 对应 #define BUF_SIZE 30
 
@@ -41,6 +42,7 @@ def main():
     try:
         i=0
         while True:
+            time.sleep(5)  # sleep(5)：delay 5 sec
             message = clnt_sock.recv(BUF_SIZE)
             if not message:      # 收到空数据表示客户端关闭了连接
                 break

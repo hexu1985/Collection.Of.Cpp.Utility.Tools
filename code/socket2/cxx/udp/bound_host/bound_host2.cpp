@@ -23,6 +23,8 @@ int main(int argc, char* argv[])
     sock.sendto(msg2, your_adr);
     sock.sendto(msg3, your_adr);
 
+    sock.close();
+
     return 0;
 }
 

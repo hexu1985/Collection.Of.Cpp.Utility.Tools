@@ -29,8 +29,8 @@ def main():
         # 对应 memset + sin_family + inet_addr + htons
         #   inet_addr(argv[1]) -> 字符串 IP 直接交给 sendto
         #   htons(atoi(argv[2])) -> 直接传 int
-        your_adr = (host, port)
-        sock.connect(your_adr)
+        serv_adr = (host, port)
+        sock.connect(serv_adr)
 
         # 注意：C 里发的是 sizeof(msgN)，包含结尾 '\0'
         #   即 "Hi!" 实际发 4 字节（H i ! \0）
