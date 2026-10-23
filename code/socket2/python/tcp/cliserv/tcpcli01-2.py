@@ -10,7 +10,8 @@ def str_cli(fp, sockfd):
         sockfd.sendall(sendline.encode())
         recvline = rf.readline()          # 读到 '\n' 或 EOF
         if not recvline:
-            sys.exit("str_cli: server terminated prematurely")
+            print("str_cli: server terminated prematurely")
+            sys.exit(1)
         sys.stdout.write(recvline.decode())
         sys.stdout.flush()
 
