@@ -16,8 +16,8 @@ int main(int argc, char* argv[])
 
     Socket serv_sock(Family::INET, AddrType::STREAM);
 
-    auto serv_addr = Address::any(std::atoi(argv[1]), Family::INET);
-    serv_sock.bind(serv_addr);
+    auto serv_adr = Address::any(std::atoi(argv[1]), Family::INET);
+    serv_sock.bind(serv_adr);
     serv_sock.listen(5);
 
     // ---- Selector ----

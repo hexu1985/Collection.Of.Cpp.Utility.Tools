@@ -14,9 +14,9 @@ int main(int argc, char* argv[])
 	}
 
     Socket sock(Family::INET, AddrType::STREAM);
-    auto serv_addr = Address::from_ip(argv[1], std::stoi(argv[2]));
+    auto serv_adr = Address::from_ip(argv[1], std::stoi(argv[2]));
 
-    sock.connect(serv_addr);
+    sock.connect(serv_adr);
     std::cout << "Connected..........." << std::endl;
 
     std::string message;

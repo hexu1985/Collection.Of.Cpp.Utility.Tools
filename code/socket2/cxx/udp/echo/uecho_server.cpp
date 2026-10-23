@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 
     Socket serv_sock(Family::INET, AddrType::DGRAM);
 
-    auto serv_addr = Address::any(std::atoi(argv[1]));
-    serv_sock.bind(serv_addr);
+    auto serv_adr = Address::any(std::atoi(argv[1]));
+    serv_sock.bind(serv_adr);
 
     const int BUF_SIZE = 30;
     while (true) {

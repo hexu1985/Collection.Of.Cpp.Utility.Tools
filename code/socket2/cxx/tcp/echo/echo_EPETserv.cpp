@@ -18,8 +18,8 @@ int main(int argc, char* argv[])
     Socket serv_sock(Family::INET, AddrType::STREAM);
     serv_sock.set_reuse_addr(true);
 
-    auto serv_addr = Address::any(std::atoi(argv[1]), Family::INET);
-    serv_sock.bind(serv_addr);
+    auto serv_adr = Address::any(std::atoi(argv[1]), Family::INET);
+    serv_sock.bind(serv_adr);
     serv_sock.listen(5);
     serv_sock.set_nonblocking(true);   // 原程序对监听 socket 也非阻塞
 

@@ -38,5 +38,7 @@ int main(int argc, char* argv[])
                   << std::ends;
     }
 
+    sock.close();
+
     return 0;
 }

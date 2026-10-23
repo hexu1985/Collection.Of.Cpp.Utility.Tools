@@ -15,14 +15,14 @@ int main(int argc, char* argv[])
 
     Socket serv_sock(Family::INET, AddrType::STREAM);
 
-    auto serv_addr = Address::any(std::atoi(argv[1]));
-    serv_sock.bind(serv_addr);
+    auto serv_adr = Address::any(std::atoi(argv[1]));
+    serv_sock.bind(serv_adr);
     serv_sock.listen(5);
 
     const int BUF_SIZE = 1024;
 	for(int i=0; i<5; i++)
 	{
-        auto [clnt_sock, clnt_addr] = serv_sock.accept();
+        auto [clnt_sock, clnt_adr] = serv_sock.accept();
         std::cout << "Connected client " << i+1 << std::endl;
 
         while (true) {
