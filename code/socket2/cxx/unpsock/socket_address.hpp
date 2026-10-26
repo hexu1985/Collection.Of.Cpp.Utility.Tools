@@ -159,6 +159,43 @@ public:
                                             Family family,
                                             AddrType type,
                                             std::error_code& ec) {
+        std::string port_str = std::to_string(port);
+        return resolve_all(host, port_str, family, type, ec);
+    }
+
+    static Address resolve(const std::string& host, uint16_t port,
+                           Family family = Family::UNSPEC,
+                           AddrType type = AddrType::STREAM) {
+        std::error_code ec;
+        auto address = resolve(host, port, family, type, ec);
+        if (ec) throw AddressError(ec, "resolve failed: " + host);
+        return address;
+    }
+
+    static Address resolve(const std::string& host, uint16_t port,
+                           Family family, AddrType type,
+                           std::error_code& ec) {
+        std::string port_str = std::to_string(port);
+        return resolve(host, port_str, family, type, ec);
+    }
+
+    // ===== DNS 解析：异常版本 =====
+    static std::vector<Address> resolve_all(const std::string& host,
+                                            const std::string& serv,
+                                            Family family = Family::UNSPEC,
+                                            AddrType type = AddrType::STREAM) {
+        std::error_code ec;
+        auto out = resolve_all(host, serv, family, type, ec);
+        if (ec) throw AddressError(ec, "resolve_all failed: " + host + ", " + serv);
+        return out;
+    }
+
+    // ===== DNS 解析：错误码版本 =====
+    static std::vector<Address> resolve_all(const std::string& host,
+                                            const std::string& serv,
+                                            Family family,
+                                            AddrType type,
+                                            std::error_code& ec) {
         ec.clear();
         std::vector<Address> out;
 
@@ -168,10 +205,10 @@ public:
         hints.ai_flags = AI_CANONNAME;
 
         const char* node = host.empty() ? nullptr : host.c_str();
-        std::string port_str = std::to_string(port);
+        const char* service = serv.empty() ? nullptr : serv.c_str();
 
         struct addrinfo* result = nullptr;
-        int rc = ::getaddrinfo(node, port_str.c_str(), &hints, &result);
+        int rc = ::getaddrinfo(node, service, &hints, &result);
         if (rc != 0) {
             ec = make_gai_error_code(rc);
             return out;
@@ -189,20 +226,19 @@ public:
         return out;
     }
 
-    static Address resolve(const std::string& host, uint16_t port,
+    static Address resolve(const std::string& host, const std::string& serv,
                            Family family = Family::UNSPEC,
                            AddrType type = AddrType::STREAM) {
-        auto all = resolve_all(host, port, family, type);
-        if (all.empty()) {
-            throw AddressError("resolve: no address for " + host);
-        }
-        return all.front();
+        std::error_code ec;
+        auto address = resolve(host, serv, family, type, ec);
+        if (ec) throw AddressError(ec, "resolve failed: " + host + ", " + serv);
+        return address;
     }
 
-    static Address resolve(const std::string& host, uint16_t port,
+    static Address resolve(const std::string& host, const std::string& serv,
                            Family family, AddrType type,
                            std::error_code& ec) {
-        auto all = resolve_all(host, port, family, type, ec);
+        auto all = resolve_all(host, serv, family, type, ec);
         if (ec) return Address{};
         if (all.empty()) {
             ec = make_gai_error_code(EAI_NONAME);
