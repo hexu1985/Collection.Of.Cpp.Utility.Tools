@@ -23,11 +23,9 @@ int main(int argc, char* argv[])
     const int BUF_SIZE = 30;
     for (int i=0; i<3; i++) {
         std::this_thread::sleep_for(std::chrono::seconds(5));
-        auto [message, your_adr] = serv_sock.recvfrom(BUF_SIZE);
-        serv_sock.sendto(message, your_adr);
-        std::cout << "Message " << i+1 
-                  << std::string_view(reinterpret_cast<const char*>(message.data()), message.size())
-                  << std::endl;
+        auto [data, your_adr] = serv_sock.recvfrom(BUF_SIZE);
+        auto message = std::string_view(reinterpret_cast<const char*>(data.data()), data.size());
+        std::cout << "Message " << i+1 << ": " << message << std::endl; 
     }
 
     serv_sock.close();

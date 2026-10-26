@@ -35,9 +35,9 @@ def main():
         #   即 "Hi!" 实际发 4 字节（H i ! \0）
         #   Python 若直接 sendto(b"Hi!", ...) 只发 3 字节
         #   为了严格对齐 C 的行为，这里手动加上 b'\0'
-        sock.sendto(msg1 + b"\0", your_adr)
-        sock.sendto(msg2 + b"\0", your_adr)
-        sock.sendto(msg3 + b"\0", your_adr)
+        sock.sendto(msg1, your_adr)
+        sock.sendto(msg2, your_adr)
+        sock.sendto(msg3, your_adr)
     finally:
         sock.close()
 
