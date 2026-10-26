@@ -218,6 +218,118 @@ public:
     }
 
     // ============================================================
+    // connect_timed：带超时的 connect（非阻塞 connect + select）
+    // ============================================================
+
+    // ---- 异常版本 ----
+    void connect_timed(const Address& addr,
+                       std::chrono::milliseconds timeout) {
+        std::error_code ec;
+        connect_timed(addr, timeout, ec);
+        if (ec) {
+            throw SocketError(ec, "connect_timed failed: " + addr.to_string());
+        }
+    }
+
+    // ---- 错误码版本 ----
+    void connect_timed(const Address& addr,
+                       std::chrono::milliseconds timeout,
+                       std::error_code& ec) noexcept {
+        ec.clear();
+        if (fd_ < 0) {
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
+        }
+
+        // ---------- 1. 保存并设置非阻塞 ----------
+        int old_flags = ::fcntl(fd_, F_GETFL, 0);
+        if (old_flags < 0) {
+            ec = std::error_code(errno, std::system_category());
+            return;
+        }
+        if (::fcntl(fd_, F_SETFL, old_flags | O_NONBLOCK) < 0) {
+            ec = std::error_code(errno, std::system_category());
+            return;
+        }
+
+        // 恢复标志：析构时自动执行，无论正常返回还是异常退出
+        struct FlagsGuard {
+            int fd;
+            int flags;
+            ~FlagsGuard() { if (fd >= 0) ::fcntl(fd, F_SETFL, flags); }
+        } guard{fd_, old_flags};
+
+        // ---------- 2. 发起非阻塞 connect ----------
+        int rc = ::connect(fd_, addr.sockaddr_ptr(), addr.sockaddr_len());
+
+        if (rc == 0) {
+            return;   // 立即连接成功（localhost 常见）
+        }
+        if (errno != EINPROGRESS) {
+            ec = std::error_code(errno, std::system_category());
+            return;
+        }
+
+        // ---------- 3. select 等待可写（或可读，连接异常时也会触发） ----------
+        fd_set rset, wset;
+        FD_ZERO(&rset);
+        FD_SET(fd_, &rset);
+        wset = rset;
+
+        struct timeval tv = to_timeval(timeout);
+
+        int n;
+        do {
+            n = ::select(fd_ + 1, &rset, &wset, nullptr, &tv);
+        } while (n < 0 && errno == EINTR);
+
+        if (n < 0) {
+            ec = std::error_code(errno, std::system_category());
+            return;
+        }
+        if (n == 0) {
+            ec = std::make_error_code(std::errc::timed_out);
+            return;
+        }
+
+        // ---------- 4. 用 SO_ERROR 取真实结果 ----------
+        int error = getsockopt<int>(SOL_SOCKET, SO_ERROR, ec);
+        if (ec) {
+            return;
+        }
+        if (error != 0) {
+            ec = std::error_code(error, std::system_category());
+            return;
+        }
+        // 成功：guard 析构时恢复原阻塞标志
+    }
+
+    // ---- 便捷重载：host + port（异常版） ----
+    void connect_timed(const std::string& host, uint16_t port,
+                       std::chrono::milliseconds timeout) {
+        std::error_code ec;
+        connect_timed(host, port, timeout, ec);
+        if (ec) {
+            throw SocketError(ec, "connect_timed failed: " + host + ":" +
+                                   std::to_string(port));
+        }
+    }
+
+    // ---- 便捷重载：host + port（错误码版） ----
+    void connect_timed(const std::string& host, uint16_t port,
+                       std::chrono::milliseconds timeout,
+                       std::error_code& ec) noexcept {
+        ec.clear();
+        if (fd_ < 0) {
+            ec = std::make_error_code(std::errc::bad_file_descriptor);
+            return;
+        }
+        Address addr = Address::resolve(host, port, family_, type_, ec);
+        if (ec) return;
+        connect_timed(addr, timeout, ec);
+    }
+
+    // ============================================================
     // 数据收发（TCP）
     // ============================================================
 
