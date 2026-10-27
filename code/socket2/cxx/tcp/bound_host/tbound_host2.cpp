@@ -6,10 +6,10 @@ using namespace unpsock;
 
 int main(int argc, char* argv[])
 {
-	if(argc!=3){
+    if(argc!=3){
         std::cerr << "Usage: " << argv[0] << " <IP> <port>\n";
-		exit(1);
-	}
+        exit(1);
+    }
 
     std::string msg1="Hi!";
     std::string msg2="I'm another UDP host!";

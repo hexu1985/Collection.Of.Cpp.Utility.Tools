@@ -51,12 +51,12 @@ int main(int argc, char* argv[]) {
     }
     std::cout << "Connected client " << std::endl;
 
-    char message[BUF_SIZE];
+    char message[BUF_SIZE+1];
     int i = 0;
     while (true) {
         sleep(5);  // sleep(5)：delay 5 sec
 
-        int str_len = read(clnt_sock, message, BUF_SIZE-1);
+        int str_len = read(clnt_sock, message, BUF_SIZE);
         if (str_len <= 0) {  // 收到空数据表示客户端关闭了连接
             break;
         }

@@ -11,7 +11,7 @@ void error_handling(const char *message);
 int main(int argc, char *argv[])
 {
     int sock;
-    char message[BUF_SIZE];
+    char message[BUF_SIZE+1];
     struct sockaddr_in my_adr, your_adr;
     socklen_t adr_sz;
     int str_len, i;
@@ -39,12 +39,7 @@ int main(int argc, char *argv[])
         adr_sz=sizeof(your_adr);
         str_len=recvfrom(sock, message, BUF_SIZE, 0, 
                                 (struct sockaddr*)&your_adr, &adr_sz);     
-
-        if (str_len < BUF_SIZE) {
-            message[str_len] = '\0';
-        } else {
-            message[BUF_SIZE-1] = '\0';
-        }
+        message[str_len] = '\0';
 
         printf("Message %d: %s \n", i+1, message);
     }

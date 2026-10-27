@@ -32,13 +32,9 @@ def main():
         serv_adr = (host, port)
         sock.connect(serv_adr)
 
-        # 注意：C 里发的是 sizeof(msgN)，包含结尾 '\0'
-        #   即 "Hi!" 实际发 4 字节（H i ! \0）
-        #   Python 若直接 sendto(b"Hi!", ...) 只发 3 字节
-        #   为了严格对齐 C 的行为，这里手动加上 b'\0'
-        sock.send(msg1 + b"\0")
-        sock.send(msg2 + b"\0")
-        sock.send(msg3 + b"\0")
+        sock.send(msg1)
+        sock.send(msg2)
+        sock.send(msg3)
     finally:
         sock.close()
 
