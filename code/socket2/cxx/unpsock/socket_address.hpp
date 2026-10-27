@@ -217,11 +217,11 @@ public:
         struct Guard { addrinfo* p; ~Guard() { if (p) ::freeaddrinfo(p); } } guard{result};       
         for (auto* p = result; p != nullptr; p = p->ai_next) {
             Address address;
-            if (address.from_sockaddr_impl(p->ai_addr, p->ai_addrlen, ec)) {
+            std::error_code _;
+            if (address.from_sockaddr_impl(p->ai_addr, p->ai_addrlen, _)) {
                 out.push_back(address);
             }
         }
-        ec.clear();
 
         return out;
     }
@@ -238,6 +238,7 @@ public:
     static Address resolve(const std::string& host, const std::string& serv,
                            Family family, AddrType type,
                            std::error_code& ec) {
+        ec.clear();
         auto all = resolve_all(host, serv, family, type, ec);
         if (ec) return Address{};
         if (all.empty()) {

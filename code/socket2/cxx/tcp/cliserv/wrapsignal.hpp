@@ -32,7 +32,6 @@ Sigfunc *signal(int signo, Sigfunc* func, std::error_code& ec)
         return SIG_ERR;
     }
 
-    ec.clear();                 // 成功：清空错误码
     return oact.sa_handler;
 }
 

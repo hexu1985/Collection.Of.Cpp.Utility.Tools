@@ -125,8 +125,7 @@ private:
     // ============================================================
     std::vector<ReadyEvent> wait_impl(
         std::optional<std::chrono::milliseconds> timeout,
-        std::error_code& ec) override
-    {
+        std::error_code& ec) override {
         ec.clear();
         if (!check_init(ec)) return {};
 
@@ -163,6 +162,7 @@ private:
     std::unordered_map<int, Event> map_;
 
     bool check_init(std::error_code& ec) const {
+        ec.clear();
         if (epfd_ < 0) {
             ec = std::error_code(EBADF,  std::system_category());
             return false;
@@ -193,7 +193,6 @@ private:
 
 inline
 std::unique_ptr<Selector> make_epoll_selector(std::error_code& ec) {
-    ec.clear();
     auto p = std::unique_ptr<EpollSelector>(new EpollSelector());
     if (!p->init(ec)) {
         return nullptr;

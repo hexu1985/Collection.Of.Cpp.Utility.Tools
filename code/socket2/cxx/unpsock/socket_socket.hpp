@@ -37,7 +37,6 @@ public:
 
     // ---- 错误码版本 ----
     Socket(Family family, AddrType type, std::error_code& ec) noexcept {
-        ec.clear();
         create_socket(detail::to_af(family), detail::to_socktype(type), ec);
         if (!ec) {
             family_ = family;
@@ -93,10 +92,6 @@ public:
     // ---- bind：错误码版本 ----
     void bind(const Address& addr, std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }        
         if (::bind(fd_, addr.sockaddr_ptr(), addr.sockaddr_len()) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -114,11 +109,6 @@ public:
     // ---- listen：错误码版本 ----
     void listen(int backlog, std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
-
         if (::listen(fd_, backlog) != 0) {
             ec = std::error_code(errno, std::system_category());
         }
@@ -137,11 +127,6 @@ public:
     // ---- accept：错误码版本 ----
     std::pair<Socket, Address> accept(std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return {Socket(), Address()};
-        }
-
         struct sockaddr_storage storage;
         socklen_t len = sizeof(storage);
 
@@ -178,11 +163,6 @@ public:
     // ---- connect(Address)：错误码版本 ----
     void connect(const Address& addr, std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
-
         int rc;
         do {
             rc = ::connect(fd_, addr.sockaddr_ptr(), addr.sockaddr_len());
@@ -206,12 +186,6 @@ public:
     // 注意：resolve 失败时 ec 是 gai_category 的码
     void connect(const std::string& host, uint16_t port,
                  std::error_code& ec) noexcept {
-        ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
-
         Address addr = Address::resolve(host, port, family_, type_, ec);
         if (ec) return;
         connect(addr, ec);
@@ -236,11 +210,6 @@ public:
                        std::chrono::milliseconds timeout,
                        std::error_code& ec) noexcept {
         ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
-
         // ---------- 1. 保存并设置非阻塞 ----------
         int old_flags = ::fcntl(fd_, F_GETFL, 0);
         if (old_flags < 0) {
@@ -319,11 +288,6 @@ public:
     void connect_timed(const std::string& host, uint16_t port,
                        std::chrono::milliseconds timeout,
                        std::error_code& ec) noexcept {
-        ec.clear();
-        if (fd_ < 0) {
-            ec = std::make_error_code(std::errc::bad_file_descriptor);
-            return;
-        }
         Address addr = Address::resolve(host, port, family_, type_, ec);
         if (ec) return;
         connect_timed(addr, timeout, ec);
@@ -371,7 +335,6 @@ public:
     // ---- recv(void*, size_t)：错误码版本 ----
     // 返回实际字节数；对端关闭返回 0 且 ec 为空；出错返回 0 且 ec 非空
     size_t recv(void* buf, size_t bufsize, std::error_code& ec) noexcept {
-        ec.clear();
         ssize_t n = recv_impl(buf, bufsize, ec);
         if (ec) return 0;
         return static_cast<size_t>(n);
@@ -611,14 +574,19 @@ public:
     // 错误码版
     void set_nonblocking(bool enable, std::error_code& ec) noexcept {
         ec.clear();
-
         int flags = ::fcntl(fd_, F_GETFL, 0);
-        if (flags < 0) { ec = std::error_code(errno, std::system_category()); return; }
+        if (flags < 0) {
+            ec = std::error_code(errno, std::system_category());
+            return;
+        }
 
         if (enable) flags |= O_NONBLOCK;
         else        flags &= ~O_NONBLOCK;
 
-        if (::fcntl(fd_, F_SETFL, flags) < 0) { ec = std::error_code(errno, std::system_category()); return; }
+        if (::fcntl(fd_, F_SETFL, flags) < 0) {
+            ec = std::error_code(errno, std::system_category());
+            return;
+        }
     }
 
     // 查询：无 ec 版返回 bool（失败 false），有 ec 版精确报错
@@ -633,9 +601,11 @@ public:
 
     bool is_nonblocking(std::error_code& ec) const noexcept {
         ec.clear();
-
         int flags = ::fcntl(fd_, F_GETFL, 0);
-        if (flags < 0) { ec = std::error_code(errno, std::system_category()); return false; }
+        if (flags < 0) {
+            ec = std::error_code(errno, std::system_category());
+            return false;
+        }
         return (flags & O_NONBLOCK) != 0;
     }
 
@@ -706,7 +676,6 @@ public:
     }
 
     bool reuse_addr(std::error_code& ec) const noexcept {
-        ec.clear();
         int v = getsockopt<int>(SOL_SOCKET, SO_REUSEADDR, ec);
         if (ec) return false;
         return v != 0;
@@ -721,7 +690,6 @@ public:
     }
 
     void set_reuse_addr(bool on, std::error_code& ec) noexcept {
-        ec.clear();
         setsockopt<int>(SOL_SOCKET, SO_REUSEADDR, on ? 1 : 0, ec);
     }
 
@@ -737,7 +705,6 @@ public:
     }
 
     bool reuse_port(std::error_code& ec) const noexcept {
-        ec.clear();
         int v = getsockopt<int>(SOL_SOCKET, SO_REUSEPORT, ec);
         if (ec) return false;
         return v != 0;
@@ -752,7 +719,6 @@ public:
     }
 
     void set_reuse_port(bool on, std::error_code& ec) noexcept {
-        ec.clear();
         setsockopt<int>(SOL_SOCKET, SO_REUSEPORT, on ? 1 : 0, ec);
     }
 
@@ -768,7 +734,6 @@ public:
     }
 
     bool keep_alive(std::error_code& ec) const noexcept {
-        ec.clear();
         int v = getsockopt<int>(SOL_SOCKET, SO_KEEPALIVE, ec);
         if (ec) return false;
         return v != 0;
@@ -783,7 +748,6 @@ public:
     }
 
     void set_keep_alive(bool on, std::error_code& ec) noexcept {
-        ec.clear();
         setsockopt<int>(SOL_SOCKET, SO_KEEPALIVE, on ? 1 : 0, ec);
     }
 
@@ -799,7 +763,6 @@ public:
     }
 
     bool tcp_nodelay(std::error_code& ec) const noexcept {
-        ec.clear();
         int v = getsockopt<int>(IPPROTO_TCP, TCP_NODELAY, ec);
         if (ec) return false;
         return v != 0;
@@ -814,7 +777,6 @@ public:
     }
 
     void set_tcp_nodelay(bool on, std::error_code& ec) noexcept {
-        ec.clear();
         setsockopt<int>(IPPROTO_TCP, TCP_NODELAY, on ? 1 : 0, ec);
     }
 
@@ -830,7 +792,6 @@ public:
     }
 
     bool broadcast(std::error_code& ec) const noexcept {
-        ec.clear();
         int v = getsockopt<int>(SOL_SOCKET, SO_BROADCAST, ec);
         if (ec) return false;
         return v != 0;
@@ -845,7 +806,6 @@ public:
     }
 
     void set_broadcast(bool on, std::error_code& ec) noexcept {
-        ec.clear();
         setsockopt<int>(SOL_SOCKET, SO_BROADCAST, on ? 1 : 0, ec);
     }
 
@@ -861,7 +821,6 @@ public:
     }
 
     int recv_buffer_size(std::error_code& ec) const noexcept {
-        ec.clear();
         return getsockopt<int>(SOL_SOCKET, SO_RCVBUF, ec);
     }
 
@@ -892,7 +851,6 @@ public:
     }
 
     int send_buffer_size(std::error_code& ec) const noexcept {
-        ec.clear();
         return getsockopt<int>(SOL_SOCKET, SO_SNDBUF, ec);
     }
 
@@ -925,7 +883,6 @@ public:
     }
 
     struct linger linger_opt(std::error_code& ec) const noexcept {
-        ec.clear();
         struct linger l{};
         l = getsockopt<struct linger>(SOL_SOCKET, SO_LINGER, ec);
         // 失败时 getsockopt<T>(ec) 返回 T{}，此时 ec 已非空
@@ -1000,7 +957,6 @@ public:
     }
 
     std::chrono::milliseconds recv_timeout(std::error_code& ec) const noexcept {
-        ec.clear();
         struct timeval tv = getsockopt<struct timeval>(SOL_SOCKET, SO_RCVTIMEO, ec);
         if (ec) return std::chrono::milliseconds(0);
         return to_milliseconds(tv);
@@ -1016,7 +972,6 @@ public:
     }
 
     std::chrono::milliseconds send_timeout(std::error_code& ec) const noexcept {
-        ec.clear();
         struct timeval tv = getsockopt<struct timeval>(SOL_SOCKET, SO_SNDTIMEO, ec);
         if (ec) return std::chrono::milliseconds(0);
         return to_milliseconds(tv);
@@ -1034,7 +989,6 @@ public:
     }
 
     int multicast_ttl(std::error_code& ec) const noexcept {
-        ec.clear();
         unsigned char v = getsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_TTL, ec);
         if (ec) return 0;
         return static_cast<int>(v);
@@ -1069,7 +1023,6 @@ public:
                               const Address& iface,
                               std::error_code& ec) noexcept {
         ec.clear();
-
         struct ip_mreq mreq{};
         if (!group.to_in_addr(mreq.imr_multiaddr)) {
             ec = std::make_error_code(std::errc::invalid_argument);
@@ -1097,7 +1050,6 @@ public:
                                const Address& iface,
                                std::error_code& ec) noexcept {
         ec.clear();
-
         struct ip_mreq mreq{};
         if (!group.to_in_addr(mreq.imr_multiaddr)) {
             ec = std::make_error_code(std::errc::invalid_argument);
@@ -1137,7 +1089,6 @@ public:
     }
 
     void set_multicast_loop(bool on, std::error_code& ec) noexcept {
-        ec.clear();
         unsigned char v = on ? 1 : 0;
         setsockopt<unsigned char>(IPPROTO_IP, IP_MULTICAST_LOOP, v, ec);
     }

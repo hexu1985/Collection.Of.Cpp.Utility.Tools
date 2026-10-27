@@ -22,10 +22,6 @@ private:
     // ============================================================
     void add_impl(int fd, Event events, std::error_code& ec) override {
         ec.clear();
-        if (fd < 0) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return;
-        }
         if (map_.count(fd)) {
             ec = make_selector_ec(SelectorErrc::AlreadyRegistered);
             return;
@@ -38,10 +34,6 @@ private:
     // ============================================================
     void modify_impl(int fd, Event events, std::error_code& ec) override {
         ec.clear();
-        if (fd < 0) {
-            ec = std::make_error_code(std::errc::invalid_argument);
-            return;
-        }
         auto it = map_.find(fd);
         if (it == map_.end()) {
             ec = make_selector_ec(SelectorErrc::NotRegistered);
@@ -68,10 +60,8 @@ private:
     // ============================================================
     std::vector<ReadyEvent> wait_impl(
         std::optional<std::chrono::milliseconds> timeout,
-        std::error_code& ec) override
-    {
+        std::error_code& ec) override {
         ec.clear();
-
         std::vector<struct pollfd> pfds;
         pfds.reserve(map_.size());
         for (const auto& [fd, ev] : map_) {
@@ -143,7 +133,6 @@ std::unique_ptr<Selector> make_poll_selector() {
 
 inline
 std::unique_ptr<Selector> make_poll_selector(std::error_code& ec) {
-    ec.clear();
     return std::make_unique<PollSelector>();
 }
 

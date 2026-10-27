@@ -10,7 +10,6 @@ const int MAXLINE = 4096;     // 对应 MAXLINE
 inline std::string readline(Socket& sock, size_t maxlen,
                                      std::error_code& ec) noexcept
 {
-    ec.clear();
     std::string out;
 
     out.reserve(maxlen);   // 最多 maxlen 字节，一次分配到位
