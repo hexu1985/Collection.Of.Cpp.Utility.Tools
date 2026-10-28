@@ -16,8 +16,6 @@ static void print_error(const std::string& title, const SelectorError& err) {
     std::cout << "----------------------------------------\n";
     std::cout << "场景    : " << title << "\n";
     std::cout << "what()  : " << err.what() << "\n";
-    std::cout << "errnum(): " << err.errnum() << "\n";
-    std::cout << "errmsg(): " << err.errmsg() << "\n";
     std::cout << "category: " << err.code().category().name() << "\n";
     std::cout << "code    : " << err.code().value() << "\n";
     std::cout << "----------------------------------------\n\n";
@@ -137,7 +135,6 @@ int main() {
             SelectorError err(ec, "compare");
             std::cout << "enum=" << static_cast<int>(c)
                       << "  category.message=" << ec.message()
-                      << "  err.errmsg()=" << err.errmsg()
                       << "\n";
         }
         std::cout << "\n";
@@ -151,7 +148,6 @@ int main() {
             SelectorError err("compare", c);
             std::cout << "errno=" << c
                       << "  strerror=" << std::strerror(c)
-                      << "  err.errmsg()=" << err.errmsg()
                       << "\n";
         }
         std::cout << "\n";
@@ -168,8 +164,6 @@ int main() {
                 "fd 未注册");
         } catch (const SocketException& e) {
             std::cout << "捕获为 SocketException\n";
-            std::cout << "  errnum(): " << e.errnum() << "\n";
-            std::cout << "  errmsg(): " << e.errmsg() << "\n";
             std::cout << "  what()  : " << e.what() << "\n";
         }
         std::cout << "\n";

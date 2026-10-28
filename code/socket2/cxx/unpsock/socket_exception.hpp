@@ -46,10 +46,6 @@ public:
 
     SocketException(std::error_code ec, const std::string& what)
         : std::system_error(ec, what) {}
-
-    int errnum() const noexcept { return code().value(); }
-
-    std::string errmsg() const { return code().message(); }
 };
 
 class AddressError : public SocketException {

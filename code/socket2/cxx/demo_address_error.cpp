@@ -15,8 +15,6 @@ static void print_error(const std::string& title, const AddressError& err) {
     std::cout << "----------------------------------------\n";
     std::cout << "场景    : " << title << "\n";
     std::cout << "what()  : " << err.what() << "\n";
-    std::cout << "errnum(): " << err.errnum() << "\n";
-    std::cout << "errmsg(): " << err.errmsg() << "\n";
     std::cout << "category: " << err.code().category().name() << "\n";
     std::cout << "code    : " << err.code().value() << "\n";
     std::cout << "----------------------------------------\n\n";
@@ -100,7 +98,6 @@ int main() {
             AddressError err("compare", c);
             std::cout << "code=" << c
                       << "  gai_strerror=" << ::gai_strerror(c)
-                      << "  err.errmsg()=" << err.errmsg()
                       << "\n";
         }
         std::cout << "\n";
@@ -113,8 +110,6 @@ int main() {
             throw AddressError("解析失败，抛出 AddressError", EAI_NONAME);
         } catch (const SocketException& e) {
             std::cout << "捕获为 SocketException\n";
-            std::cout << "  errnum(): " << e.errnum() << "\n";
-            std::cout << "  errmsg(): " << e.errmsg() << "\n";
             std::cout << "  what()  : " << e.what() << "\n";
         } catch (...) {
             std::cout << "捕获到未知异常\n";
