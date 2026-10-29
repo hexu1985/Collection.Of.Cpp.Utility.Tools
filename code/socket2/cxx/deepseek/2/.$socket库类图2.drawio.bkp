@@ -1,0 +1,225 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1">
+  <diagram name="unpsock 类图" id="unpsock-class-diagram">
+    <mxGraphModel dx="1434" dy="870" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;unpsock 类图&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;" parent="1" vertex="1">
+          <mxGeometry x="670" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ext_system_error" value="«external» std::system_error" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="200" y="60" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ext_error_category" value="«external» std::error_category" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;align=center;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="60" width="560" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SocketException" value="&lt;b&gt;SocketException&lt;/b&gt;&lt;hr&gt;&lt;i&gt;+ SocketException(errnum, what)&lt;/i&gt;&lt;br&gt;&lt;i&gt;+ SocketException(ec, what)&lt;/i&gt;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="200" y="160" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="AddressError" value="&lt;b&gt;AddressError&lt;/b&gt;&lt;hr/&gt;+ AddressError(what, gai_errnum)&lt;br/&gt;+ AddressError(ec, what)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="60" y="360" width="240" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="SocketError" value="&lt;b&gt;SocketError&lt;/b&gt;&lt;hr/&gt;+ SocketError(what, errnum)&lt;br/&gt;+ SocketError(ec, what)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="320" y="360" width="240" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="SelectorError" value="&lt;b&gt;SelectorError&lt;/b&gt;&lt;hr/&gt;+ SelectorError(what, errnum)&lt;br/&gt;+ SelectorError(ec, what)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="580" y="360" width="240" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="GaiCategory" value="&lt;b&gt;GaiCategory&lt;/b&gt;&lt;hr/&gt;+ name() : &quot;getaddrinfo&quot;&lt;br/&gt;+ message(ev) : string" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="160" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="SelectorErrorCategory" value="&lt;b&gt;SelectorErrorCategory&lt;/b&gt;&lt;hr/&gt;+ name() : &quot;Selector&quot;&lt;br/&gt;+ message(ev) : string" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1320" y="160" width="280" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Family" value="&lt;b&gt;«enumeration»&lt;br/&gt;Family&lt;/b&gt;&lt;hr/&gt;INET&lt;br/&gt;INET6&lt;br/&gt;UNIX&lt;br/&gt;UNSPEC" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="80" y="540" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="AddrType" value="&lt;b&gt;«enumeration»&lt;br/&gt;AddrType&lt;/b&gt;&lt;hr/&gt;STREAM&lt;br/&gt;DGRAM" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="390" y="540" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Event" value="&lt;b&gt;«enumeration»&lt;br/&gt;Event&lt;/b&gt;&lt;hr/&gt;None = 0&lt;br/&gt;Read = 1&lt;br/&gt;Write = 2&lt;br/&gt;Error = 4&lt;br/&gt;Hangup = 8&lt;br/&gt;EdgeTrigger = 1&lt;br/&gt;&lt;br/&gt;&lt;i&gt;支持 operator| / operator&amp;amp; / has_event&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="700" y="510" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="SelectorErrc" value="&lt;b&gt;«enumeration»&lt;br/&gt;SelectorErrc&lt;/b&gt;&lt;hr/&gt;Success&lt;br/&gt;AlreadyRegistered&lt;br/&gt;NotRegistered&lt;br/&gt;BackendUnavailable&lt;br/&gt;WaitFailed" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1430" y="380" width="220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="ReadyEvent" value="&lt;b&gt;ReadyEvent&lt;/b&gt;&lt;hr/&gt;+ fd : int&lt;br/&gt;+ events : Event" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1220" y="630" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Address" value="&lt;b&gt;Address&lt;/b&gt;&lt;hr/&gt;- storage_ : sockaddr_storage&lt;br/&gt;- len_ : socklen_t&lt;br/&gt;- family_ : Family&lt;hr/&gt;+ static from_ip(ip, port, family[, ec]) : Address&lt;br/&gt;+ static from_unix(path[, ec]) : Address&lt;br/&gt;+ static from_sockaddr(sa, len[, ec]) : Address&lt;br/&gt;+ static resolve_all(host, port/serv[, ec]) : vector&amp;lt;Address&amp;gt;&lt;br/&gt;+ static resolve(host, port/serv[, ec]) : Address&lt;br/&gt;+ static any(port, family[, ec]) : Address&lt;br/&gt;+ static loopback(port, family[, ec]) : Address&lt;hr/&gt;+ ip() : string&lt;br/&gt;+ to_string() : string&lt;br/&gt;+ family() : Family&lt;br/&gt;+ port() : uint16_t&lt;br/&gt;+ is_ipv4() / is_ipv6() / is_unix() / empty() : bool&lt;br/&gt;+ operator bool() : bool&lt;br/&gt;+ to_in_addr(out) / to_in6_addr(out) : bool&lt;br/&gt;+ sockaddr_ptr() : sockaddr*&lt;br/&gt;+ sockaddr_len() : socklen_t&lt;br/&gt;+ to_storage() : sockaddr_storage&lt;br/&gt;+ operator== / operator!= : bool" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="30" y="850" width="340" height="370" as="geometry" />
+        </mxCell>
+        <mxCell id="Socket" value="&lt;b&gt;Socket&lt;/b&gt;&lt;hr/&gt;- fd_ : int&lt;br/&gt;- family_ : Family&lt;br/&gt;- type_ : AddrType&lt;hr/&gt;+ Socket() / Socket(family, type[, ec])&lt;br/&gt;+ Socket(fd, family, type) / ~Socket()&lt;hr/&gt;+ bind(addr[, ec])&lt;br/&gt;+ listen(backlog[, ec])&lt;br/&gt;+ accept([ec]) : pair&amp;lt;Socket, Address&amp;gt;&lt;hr/&gt;+ connect(addr|host, port[, ec])&lt;br/&gt;+ connect_timed(..., timeout[, ec])&lt;hr/&gt;+ recv(bufsize[, ec]) : vector&amp;lt;uint8_t&amp;gt;&lt;br/&gt;+ recv(buf, size[, ec]) : size_t&lt;br/&gt;+ sendall(data, len[, ec]) : size_t&lt;br/&gt;+ send(data, len[, ec]) : size_t&lt;br/&gt;+ recvfrom(bufsize[, ec]) : pair&amp;lt;vector&amp;lt;uint8_t&amp;gt;, Address&amp;gt;&lt;br/&gt;+ sendto(data, len, addr[, ec]) : size_t&lt;hr/&gt;+ getsockname / getpeername([ec]) : Address&lt;br/&gt;+ fileno() : int / family() : Family / type() : AddrType&lt;br/&gt;+ valid() / closed() : bool&lt;hr/&gt;+ set_nonblocking(enable[, ec])&lt;br/&gt;+ is_nonblocking([ec]) : bool&lt;hr/&gt;+ getsockopt&amp;lt;T&amp;gt; / setsockopt&amp;lt;T&amp;gt;(...)&lt;br/&gt;+ reuse_addr / set_reuse_addr&lt;br/&gt;+ reuse_port / set_reuse_port&lt;br/&gt;+ keep_alive / set_keep_alive&lt;br/&gt;+ tcp_nodelay / set_tcp_nodelay&lt;br/&gt;+ broadcast / set_broadcast&lt;br/&gt;+ recv/send_buffer_size / set_*&lt;br/&gt;+ linger_opt / set_linger&lt;br/&gt;+ set_recv/send_timeout / recv/send_timeout&lt;br/&gt;+ multicast_ttl / set_multicast_ttl&lt;br/&gt;+ join/leave_multicast_group&lt;br/&gt;+ set_multicast_interface / set_multicast_loop&lt;hr/&gt;+ close()&lt;br/&gt;+ shutdown_read/write/both([ec])" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="460" y="850" width="420" height="620" as="geometry" />
+        </mxCell>
+        <mxCell id="Selector" value="&lt;b&gt;«abstract» Selector&lt;/b&gt;&lt;hr/&gt;+ supports_edge_trigger() : bool {virtual}&lt;hr/&gt;+ add(fd, events[, ec])&lt;br/&gt;+ modify(fd, events[, ec])&lt;br/&gt;+ remove(fd[, ec])&lt;br/&gt;+ wait(timeout[, ec]) : vector&amp;lt;ReadyEvent&amp;gt;&lt;hr/&gt;+ add(Socket&amp;amp;, events[, ec])&lt;br/&gt;+ modify(Socket&amp;amp;, events[, ec])&lt;br/&gt;+ remove(Socket&amp;amp;[, ec])&lt;hr/&gt;# add_impl(fd, events, ec) = 0&lt;br/&gt;# modify_impl(fd, events, ec) = 0&lt;br/&gt;# remove_impl(fd, ec) = 0&lt;br/&gt;# wait_impl(timeout, ec) = 0" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1070" y="850" width="400" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="SelectSelector" value="&lt;b&gt;SelectSelector&lt;/b&gt;&lt;hr/&gt;- map_ : std::map&amp;lt;int, Event&amp;gt;&lt;hr/&gt;# add_impl / modify_impl / remove_impl / wait_impl" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="940" y="1400" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="PollSelector" value="&lt;b&gt;PollSelector&lt;/b&gt;&lt;hr/&gt;- map_ : std::unordered_map&amp;lt;int, Event&amp;gt;&lt;hr/&gt;# add_impl / modify_impl / remove_impl / wait_impl" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1240" y="1400" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="EpollSelector" value="&lt;b&gt;EpollSelector&lt;/b&gt;&lt;hr/&gt;- epfd_ : int&lt;br/&gt;- map_ : std::unordered_map&amp;lt;int, Event&amp;gt;&lt;hr/&gt;+ init() / init(ec) : bool&lt;br/&gt;+ supports_edge_trigger() : bool&lt;hr/&gt;# add_impl / modify_impl / remove_impl / wait_impl&lt;br/&gt;- to_epoll(e) : uint32_t {static}&lt;br/&gt;- from_epoll(e) : Event {static}" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1540" y="1400" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="inh1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#b85450;" parent="1" source="AddressError" target="SocketException" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="320" />
+              <mxPoint x="370" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inh2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#b85450;" parent="1" source="SocketError" target="SocketException" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440" y="320" />
+              <mxPoint x="370" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inh3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#b85450;" parent="1" source="SelectorError" target="SocketException" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="320" />
+              <mxPoint x="370" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inh4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#b85450;" parent="1" source="SocketException" target="ext_system_error" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#9673a6;" parent="1" source="GaiCategory" target="ext_error_category" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#9673a6;" parent="1" source="SelectorErrorCategory" target="ext_error_category" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" source="SelectSelector" target="Selector" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1060" y="1320" />
+              <mxPoint x="1270" y="1320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inh8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" source="PollSelector" target="Selector" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1360" y="1320" />
+              <mxPoint x="1270" y="1320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inh9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" source="EpollSelector" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1270" y="1250" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1660" y="1320" />
+              <mxPoint x="1270" y="1320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dep1" value="使用" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;strokeWidth=1;strokeColor=#6c8ebf;" parent="1" source="Socket" target="Address" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dep2" value="使用" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" source="Selector" target="Socket" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dep3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" source="Selector" target="Event" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="1050" />
+              <mxPoint x="940" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dep4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#82b366;" parent="1" source="Selector" target="ReadyEvent" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="780" />
+              <mxPoint x="1320" y="780" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dep5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#d6b656;" parent="1" source="Address" target="Family" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="770" />
+              <mxPoint x="170" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dep6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#d6b656;" parent="1" source="Address" target="AddrType" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="770" />
+              <mxPoint x="470" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dep7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#d6b656;" parent="1" source="Socket" target="Family" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="770" />
+              <mxPoint x="170" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dep8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#d6b656;" parent="1" source="Socket" target="AddrType" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="770" />
+              <mxPoint x="470" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dep9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#9673a6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="SelectorErrorCategory" target="SelectorErrc" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1461.2900000000002" y="290" as="sourcePoint" />
+            <mxPoint x="1209.9955172413795" y="592.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1461" y="260" />
+              <mxPoint x="1461" y="300" />
+              <mxPoint x="1540" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="D2VJDGq7rYF7R25qM3y5-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#FF6666;" parent="1" source="AddressError" target="GaiCategory" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1040" y="330" as="sourcePoint" />
+            <mxPoint x="867.1199999999999" y="217.89999999999998" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="270" y="295" />
+              <mxPoint x="680" y="295" />
+              <mxPoint x="680" y="218" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="D2VJDGq7rYF7R25qM3y5-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#FF6666;entryX=0.214;entryY=1.013;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.671;exitY=0.012;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="SelectorError" target="SelectorErrorCategory" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="422.1" as="sourcePoint" />
+            <mxPoint x="1347.12" y="280" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="750" y="361" />
+              <mxPoint x="750" y="330" />
+              <mxPoint x="1380" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="D2VJDGq7rYF7R25qM3y5-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#82b366;entryX=1.002;entryY=0.888;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ReadyEvent" target="Event" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="780" as="sourcePoint" />
+            <mxPoint x="1220" y="650" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1220" y="710" />
+              <mxPoint x="1220" y="688" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

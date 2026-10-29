@@ -1,0 +1,63 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1">
+  <diagram id="unpsock-logical-model" name="unpsock 逻辑模型">
+    <mxGraphModel dx="1434" dy="870" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="container" value="unpsock（逻辑模型）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#333333;verticalAlign=top;align=center;fontStyle=1;fontSize=18;spacingTop=14;container=1;collapsible=0;" parent="1" vertex="1">
+          <mxGeometry x="70" y="30" width="790" height="620" as="geometry" />
+        </mxCell>
+        <mxCell id="addr" value="Address&lt;br&gt;地址值对象（值语义）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="36.381578947368425" y="85.09803921568627" width="218.28947368421052" height="72.94117647058823" as="geometry" />
+        </mxCell>
+        <mxCell id="sel" value="Selector&lt;br&gt;I/O 多路复用抽象（多态）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="550.0015789473684" y="85.09941176470585" width="218.28947368421052" height="72.94117647058823" as="geometry" />
+        </mxCell>
+        <mxCell id="sel_select" value="select 后端&lt;br&gt;Selector 的具体实现" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="31.188421052631554" y="279.6035294117647" width="218.28947368421052" height="60.78431372549019" as="geometry" />
+        </mxCell>
+        <mxCell id="sel_poll" value="poll 后端&lt;br&gt;Selector 的具体实现" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="289.99842105263156" y="279.6047058823529" width="218.28947368421052" height="60.78431372549019" as="geometry" />
+        </mxCell>
+        <mxCell id="sel_epoll" value="epoll 后端&lt;br&gt;Selector 的具体实现" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="549.9984210526316" y="279.6058823529412" width="218.28947368421052" height="60.78431372549019" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sel_select" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#666666;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="container" source="sel" target="sel_select" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="support_label" value="支撑设施：" style="text;html=1;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;fontColor=#333333;" parent="container" vertex="1">
+          <mxGeometry x="36.381578947368425" y="437.6470588235294" width="207.89473684210526" height="30.392156862745097" as="geometry" />
+        </mxCell>
+        <mxCell id="exc" value="异常体系&lt;br&gt;SocketException 及派生" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="36.381578947368425" y="480.1960784313725" width="218.28947368421052" height="85.09803921568627" as="geometry" />
+        </mxCell>
+        <mxCell id="errcat" value="错误类别&lt;br&gt;gai_category / selector_category" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="285.85526315789474" y="480.1960784313725" width="218.28947368421052" height="85.09803921568627" as="geometry" />
+        </mxCell>
+        <mxCell id="host" value="主机名查询&lt;br&gt;local_hostname()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="535.328947368421" y="480.1960784313725" width="218.28947368421052" height="85.09803921568627" as="geometry" />
+        </mxCell>
+        <mxCell id="sock" value="Socket&lt;br&gt;句柄 RAII（移动语义）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" parent="container" vertex="1">
+          <mxGeometry x="285.8515789473684" y="85.10294117647058" width="218.28947368421052" height="72.94117647058823" as="geometry" />
+        </mxCell>
+        <mxCell id="m1VBF8BP8WFFvLrZOPWp-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#666666;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="container" source="sel" target="sel_poll">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="168" as="sourcePoint" />
+            <mxPoint x="150" y="290" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="659" y="168" />
+              <mxPoint x="660" y="220" />
+              <mxPoint x="399" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1VBF8BP8WFFvLrZOPWp-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#666666;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="container">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="160" as="sourcePoint" />
+            <mxPoint x="660" y="280.04" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
