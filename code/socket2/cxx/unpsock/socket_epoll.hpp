@@ -192,6 +192,13 @@ private:
 };
 
 inline
+std::unique_ptr<Selector> make_epoll_selector() {
+    auto p = std::unique_ptr<EpollSelector>(new EpollSelector());
+    p->init();
+    return p;
+}
+
+inline
 std::unique_ptr<Selector> make_epoll_selector(std::error_code& ec) {
     auto p = std::unique_ptr<EpollSelector>(new EpollSelector());
     if (!p->init(ec)) {
