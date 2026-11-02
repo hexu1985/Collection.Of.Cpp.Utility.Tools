@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1">
   <diagram name="unpsock 类图" id="unpsock-class-diagram">
-    <mxGraphModel dx="1434" dy="870" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1900" math="0" shadow="0">
+    <mxGraphModel dx="2607" dy="1582" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1900" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -31,20 +31,20 @@
         <mxCell id="SelectorErrorCategory" value="&lt;b&gt;SelectorErrorCategory&lt;/b&gt;&lt;hr/&gt;+ name() : &quot;Selector&quot;&lt;br/&gt;+ message(ev) : string" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="1320" y="160" width="280" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="Family" value="&lt;b&gt;«enumeration»&lt;br/&gt;Family&lt;/b&gt;&lt;hr/&gt;INET&lt;br/&gt;INET6&lt;br/&gt;UNIX&lt;br/&gt;UNSPEC" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+        <mxCell id="Family" value="&lt;b&gt;«enumeration»&lt;br/&gt;Family&lt;/b&gt;&lt;hr/&gt;INET&lt;br/&gt;INET6&lt;br/&gt;UNIX&lt;br/&gt;UNSPEC" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="80" y="540" width="180" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="AddrType" value="&lt;b&gt;«enumeration»&lt;br/&gt;AddrType&lt;/b&gt;&lt;hr/&gt;STREAM&lt;br/&gt;DGRAM" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+        <mxCell id="AddrType" value="&lt;b&gt;«enumeration»&lt;br/&gt;AddrType&lt;/b&gt;&lt;hr/&gt;STREAM&lt;br/&gt;DGRAM" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="390" y="540" width="160" height="100" as="geometry" />
         </mxCell>
         <mxCell id="Event" value="&lt;b&gt;«enumeration»&lt;br/&gt;Event&lt;/b&gt;&lt;hr/&gt;None = 0&lt;br/&gt;Read = 1&lt;br/&gt;Write = 2&lt;br/&gt;Error = 4&lt;br/&gt;Hangup = 8&lt;br/&gt;EdgeTrigger = 1&lt;br/&gt;&lt;br/&gt;&lt;i&gt;支持 operator| / operator&amp;amp; / has_event&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
-          <mxGeometry x="700" y="510" width="200" height="200" as="geometry" />
+          <mxGeometry x="890" y="550" width="200" height="200" as="geometry" />
         </mxCell>
         <mxCell id="SelectorErrc" value="&lt;b&gt;«enumeration»&lt;br/&gt;SelectorErrc&lt;/b&gt;&lt;hr/&gt;Success&lt;br/&gt;AlreadyRegistered&lt;br/&gt;NotRegistered&lt;br/&gt;BackendUnavailable&lt;br/&gt;WaitFailed" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="1430" y="380" width="220" height="130" as="geometry" />
         </mxCell>
         <mxCell id="ReadyEvent" value="&lt;b&gt;ReadyEvent&lt;/b&gt;&lt;hr/&gt;+ fd : int&lt;br/&gt;+ events : Event" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
-          <mxGeometry x="1220" y="630" width="200" height="90" as="geometry" />
+          <mxGeometry x="1220" y="620" width="200" height="90" as="geometry" />
         </mxCell>
         <mxCell id="Address" value="&lt;b&gt;Address&lt;/b&gt;&lt;hr/&gt;- storage_ : sockaddr_storage&lt;br/&gt;- len_ : socklen_t&lt;br/&gt;- family_ : Family&lt;hr/&gt;+ static from_ip(ip, port, family[, ec]) : Address&lt;br/&gt;+ static from_unix(path[, ec]) : Address&lt;br/&gt;+ static from_sockaddr(sa, len[, ec]) : Address&lt;br/&gt;+ static resolve_all(host, port/serv[, ec]) : vector&amp;lt;Address&amp;gt;&lt;br/&gt;+ static resolve(host, port/serv[, ec]) : Address&lt;br/&gt;+ static any(port, family[, ec]) : Address&lt;br/&gt;+ static loopback(port, family[, ec]) : Address&lt;hr/&gt;+ ip() : string&lt;br/&gt;+ to_string() : string&lt;br/&gt;+ family() : Family&lt;br/&gt;+ port() : uint16_t&lt;br/&gt;+ is_ipv4() / is_ipv6() / is_unix() / empty() : bool&lt;br/&gt;+ operator bool() : bool&lt;br/&gt;+ to_in_addr(out) / to_in6_addr(out) : bool&lt;br/&gt;+ sockaddr_ptr() : sockaddr*&lt;br/&gt;+ sockaddr_len() : socklen_t&lt;br/&gt;+ to_storage() : sockaddr_storage&lt;br/&gt;+ operator== / operator!= : bool" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=8;spacingRight=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="30" y="850" width="340" height="370" as="geometry" />
@@ -152,7 +152,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="dep6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#d6b656;" parent="1" source="Address" target="AddrType" edge="1">
+        <mxCell id="dep6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" parent="1" source="Address" target="AddrType" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="230" y="770" />
@@ -160,7 +160,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="dep7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#d6b656;" parent="1" source="Socket" target="Family" edge="1">
+        <mxCell id="dep7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" parent="1" source="Socket" target="Family" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="650" y="770" />
@@ -168,7 +168,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="dep8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#d6b656;" parent="1" source="Socket" target="AddrType" edge="1">
+        <mxCell id="dep8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" parent="1" source="Socket" target="AddrType" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="650" y="770" />
@@ -209,14 +209,10 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="D2VJDGq7rYF7R25qM3y5-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=1;dashed=1;strokeWidth=1;strokeColor=#82b366;entryX=1.002;entryY=0.888;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ReadyEvent" target="Event" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1000" y="780" as="sourcePoint" />
-            <mxPoint x="1220" y="650" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="1220" y="710" />
-              <mxPoint x="1220" y="688" />
-            </Array>
+        <mxCell id="1bsQHhTwDUnY-V7o5SKd-2" value="" style="endArrow=none;startArrow=diamondThin;endFill=0;startFill=1;html=1;verticalAlign=bottom;labelBackgroundColor=none;strokeWidth=1;startSize=8;endSize=8;rounded=0;entryX=1.006;entryY=0.602;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.009;exitY=0.56;exitDx=0;exitDy=0;exitPerimeter=0;fillColor=#d5e8d4;strokeColor=#82b366;" edge="1" parent="1" source="ReadyEvent" target="Event">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1210" y="670" as="sourcePoint" />
+            <mxPoint x="1100" y="670" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
