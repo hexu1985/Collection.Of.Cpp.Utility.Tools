@@ -35,15 +35,15 @@ private:
     void reset();
 
 private:
-    eprosima::fastdds::dds::DomainParticipant* m_participant=nullptr;
+    eprosima::fastdds::dds::DomainParticipant* participant_=nullptr;
 
-    eprosima::fastdds::dds::TypeSupport m_type_support;
+    eprosima::fastdds::dds::TypeSupport type_;
 
-    eprosima::fastdds::dds::Publisher* m_publisher=nullptr;
+    eprosima::fastdds::dds::Publisher* publisher_=nullptr;
 
-    eprosima::fastdds::dds::Topic* m_topic=nullptr;
+    eprosima::fastdds::dds::Topic* topic_=nullptr;
 
-    eprosima::fastdds::dds::DataWriter* m_data_writer=nullptr;
+    eprosima::fastdds::dds::DataWriter* writer_=nullptr;
 };
 
 }   // namespace fdds

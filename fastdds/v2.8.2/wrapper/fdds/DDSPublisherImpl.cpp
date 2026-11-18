@@ -9,30 +9,30 @@ DDSPublisherImpl::~DDSPublisherImpl() {
 bool DDSPublisherImpl::init(const Config& config) {
     reset();
 
-    m_participant = config.participant;
-    if (m_participant == nullptr) {
+    participant_ = config.participant;
+    if (participant_ == nullptr) {
         goto error_handle;
     }
 
     //REGISTER TYPES
-    m_type_support = config.type_support;
-    m_type_support.register_type(m_participant);
+    type_ = config.type_support;
+    type_.register_type(participant_);
 
     //CREATE THE PUBLISHER
-    m_publisher = m_participant->create_publisher(config.publisher_qos);
-    if (m_publisher == nullptr) {
+    publisher_ = participant_->create_publisher(config.publisher_qos);
+    if (publisher_ == nullptr) {
         goto error_handle;
     }
 
     //CREATE THE TOPIC
-    m_topic = m_participant->create_topic(config.topic_name, m_type_support.get_type_name(), config.topic_qos);
-    if (m_topic == nullptr) {
+    topic_ = participant_->create_topic(config.topic_name, type_.get_type_name(), config.topic_qos);
+    if (topic_ == nullptr) {
         goto error_handle;
     }
 
     //CREATE THE DATAWRITER
-    m_data_writer = m_publisher->create_datawriter(m_topic, config.data_writer_qos, config.data_writer_listener);
-    if (m_data_writer == nullptr) {
+    writer_ = publisher_->create_datawriter(topic_, config.data_writer_qos, config.data_writer_listener);
+    if (writer_ == nullptr) {
         goto error_handle;
     }
 
@@ -44,32 +44,32 @@ error_handle:
 }
 
 void DDSPublisherImpl::reset() {
-    if (m_data_writer != nullptr)
+    if (writer_ != nullptr)
     {
-        m_publisher->delete_datawriter(m_data_writer);
+        publisher_->delete_datawriter(writer_);
     }
-    if (m_publisher != nullptr)
+    if (publisher_ != nullptr)
     {
-        m_participant->delete_publisher(m_publisher);
+        participant_->delete_publisher(publisher_);
     }
-    if (m_topic != nullptr)
+    if (topic_ != nullptr)
     {
-        m_participant->delete_topic(m_topic);
+        participant_->delete_topic(topic_);
     }
 
-    m_data_writer = nullptr;
-    m_publisher = nullptr;
-    m_topic = nullptr;
-    m_type_support.reset();
-    m_participant = nullptr;
+    writer_ = nullptr;
+    publisher_ = nullptr;
+    topic_ = nullptr;
+    type_.reset();
+    participant_ = nullptr;
 }
 
 bool DDSPublisherImpl::write(void* data) {
-    if (m_data_writer == nullptr) {
+    if (writer_ == nullptr) {
         return false;
     }
 
-    return m_data_writer->write(data);
+    return writer_->write(data);
 }
 
 }   // namespace fdds
