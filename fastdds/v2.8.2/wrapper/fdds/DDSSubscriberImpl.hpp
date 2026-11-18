@@ -8,7 +8,7 @@
 
 namespace fdds {
 
-class DDSSubsriberImpl {
+class DDSSubscriberImpl {
 public:
     struct Config {
         eprosima::fastdds::dds::DomainParticipant* participant=nullptr;
@@ -20,12 +20,12 @@ public:
         eprosima::fastdds::dds::DataReaderListener* data_reader_listener=nullptr;
     };
 
-    DDSSubsriberImpl() = default;
+    DDSSubscriberImpl() = default;
     
-    virtual ~DDSSubsriberImpl();
+    virtual ~DDSSubscriberImpl();
 
-    DDSSubsriberImpl(const DDSSubsriberImpl&) = delete;
-    const DDSSubsriberImpl& operator =(const DDSSubsriberImpl&) = delete;
+    DDSSubscriberImpl(const DDSSubscriberImpl&) = delete;
+    const DDSSubscriberImpl& operator =(const DDSSubscriberImpl&) = delete;
 
     bool init(const Config& config);
 

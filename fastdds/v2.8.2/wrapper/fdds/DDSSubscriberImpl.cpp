@@ -1,12 +1,12 @@
-#include "DDSSubsriberImpl.hpp"
+#include "DDSSubscriberImpl.hpp"
 
 namespace fdds {
 
-DDSSubsriberImpl::~DDSSubsriberImpl() {
+DDSSubscriberImpl::~DDSSubscriberImpl() {
     reset();
 }
 
-bool DDSSubsriberImpl::init(const Config& config) {
+bool DDSSubscriberImpl::init(const Config& config) {
     reset();
 
     m_participant = config.participant;
@@ -43,7 +43,7 @@ error_handle:
     return false;
 }
 
-void DDSSubsriberImpl::reset() {
+void DDSSubscriberImpl::reset() {
     if (m_data_reader != nullptr)
     {
         m_subscriber->delete_datareader(m_data_reader);
@@ -64,7 +64,7 @@ void DDSSubsriberImpl::reset() {
     m_participant = nullptr;
 }
 
-eprosima::fastrtps::types::ReturnCode_t DDSSubsriberImpl::take_next_sample(void* data, 
+eprosima::fastrtps::types::ReturnCode_t DDSSubscriberImpl::take_next_sample(void* data, 
         eprosima::fastdds::dds::SampleInfo* info) {
     if (m_data_reader == nullptr) {
         return eprosima::fastrtps::types::ReturnCode_t::RETCODE_ERROR;
