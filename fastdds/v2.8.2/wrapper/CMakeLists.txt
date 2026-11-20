@@ -21,4 +21,6 @@ if(NOT tinyxml2_FOUND)
     find_package(tinyxml2 REQUIRED)
 endif()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/fdds)
 add_subdirectory(fdds)
+add_subdirectory(examples/api)

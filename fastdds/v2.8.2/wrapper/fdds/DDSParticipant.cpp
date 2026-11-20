@@ -83,7 +83,7 @@ DDSParticipant::~DDSParticipant() {
     participant_ = nullptr;
 }
 
-DomainParticipant* DDSParticipant::get_domain_participant() {
+DomainParticipant* DDSParticipant::getDomainParticipant() {
     return participant_;
 }
 

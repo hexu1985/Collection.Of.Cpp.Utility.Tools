@@ -37,7 +37,7 @@ private:
     eprosima::fastdds::dds::DomainParticipant* participant_ = nullptr;
 
 public:
-    eprosima::fastdds::dds::DomainParticipant* get_domain_participant();
+    eprosima::fastdds::dds::DomainParticipant* getDomainParticipant();
     static DDSParticipant& getInstance();
 
     // get DomainId of singleton，if setenv FDDS_DOMAIN_ID, use FDDS_DOMAIN_ID, otherwise use 0
