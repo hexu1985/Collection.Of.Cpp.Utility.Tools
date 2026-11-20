@@ -8,6 +8,7 @@
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 
 using namespace eprosima::fastdds::dds;
+using namespace eprosima::fastrtps::rtps;
 
 namespace {
 
@@ -15,7 +16,7 @@ std::string get_host_name() {
     char hostname[256] = {0};
 
     if (gethostname(hostname, sizeof(hostname)) != 0) {
-        return "unknown";
+        return "null";
     }
 
     return hostname;
@@ -27,10 +28,18 @@ std::string generate_participant_qos_name() {
     return os.str();
 }
 
-std::string to_string(const eprosima::fastrtps::rtps::GUID_t& guid) {
+std::string to_string(const GUID_t& guid) {
     std::stringstream os;
     os << guid;
     return os.str();
+}
+
+std::string get_guid(DomainParticipant* participant) {
+    if (participant == nullptr) {
+        return "null";
+    }
+
+    return to_string(participant->guid());
 }
 
 }   // namespace
@@ -65,6 +74,80 @@ DDSParticipant::DDSParticipant() {
 }
 
 DDSParticipant::~DDSParticipant() {
+    if (participant_ == nullptr) {
+        return;
+    }
+
+    auto factory = DomainParticipantFactory::get_instance();
+    factory->delete_participant(participant_);
+    participant_ = nullptr;
+}
+
+DomainParticipant* DDSParticipant::get_domain_participant() {
+    return participant_;
+}
+
+DDSParticipant& DDSParticipant::getInstance() {
+    static DDSParticipant instance;
+    return instance;
+}
+
+DDSParticipant::ParticipantListener::ParticipantListener() : DomainParticipantListener() {
+}
+
+DDSParticipant::ParticipantListener::~ParticipantListener() {
+}
+
+void DDSParticipant::ParticipantListener::on_participant_discovery(
+        DomainParticipant* participant, 
+        ParticipantDiscoveryInfo&& info)
+{
+    std::string participant_guid = get_guid(participant);
+    std::string discovery_guid = to_string(info.info.m_guid);
+
+    if (info.status == ParticipantDiscoveryInfo::DISCOVERED_PARTICIPANT)
+    {
+        logWarning(DDS_PARTICIPANT, "New participant discovered :PARTICIPANT[" << participant_guid << "] :DISCOVERY_PARTICIPANT[" << discovery_guid << "]");
+    }
+    else if (info.status == ParticipantDiscoveryInfo::REMOVED_PARTICIPANT ||
+            info.status == ParticipantDiscoveryInfo::DROPPED_PARTICIPANT)
+    {
+        logWarning(DDS_PARTICIPANT, "New participant lost :PARTICIPANT[" << participant_guid << "] :DISCOVERY_PARTICIPANT[" << discovery_guid << "]");
+    }
+}
+
+void DDSParticipant::ParticipantListener::on_subscriber_discovery(
+        DomainParticipant* participant,
+        ReaderDiscoveryInfo&& info)
+{
+    std::string participant_guid = get_guid(participant);
+    std::string discovery_guid = to_string(info.info.guid());
+
+    if (info.status == ReaderDiscoveryInfo::DISCOVERED_READER)
+    {
+        logWarning(DDS_PARTICIPANT, "New subscriber discovered :PARTICIPANT[" << participant_guid << "] :DISCOVERY_SUBSCRIBER[" << discovery_guid << "]");
+    }
+    else if (info.status == ReaderDiscoveryInfo::REMOVED_READER)
+    {
+        logWarning(DDS_PARTICIPANT, "New subscriber lost :PARTICIPANT[" << participant_guid << "] :DISCOVERY_SUBSCRIBER[" << discovery_guid << "]");
+    }
+}
+
+void DDSParticipant::ParticipantListener::on_publisher_discovery(
+        DomainParticipant* participant,
+        WriterDiscoveryInfo&& info)
+{
+    std::string participant_guid = get_guid(participant);
+    std::string discovery_guid = to_string(info.info.guid());
+
+    if (info.status == WriterDiscoveryInfo::DISCOVERED_WRITER)
+    {
+        logWarning(DDS_PARTICIPANT, "New publisher discovered :PARTICIPANT[" << participant_guid << "] :DISCOVERY_PUBLISHER[" << discovery_guid << "]");
+    }
+    else if (info.status == eprosima::fastrtps::rtps::WriterDiscoveryInfo::REMOVED_WRITER)
+    {
+        logWarning(DDS_PARTICIPANT, "New publisher lost :PARTICIPANT[" << participant_guid << "] :DISCOVERY_PUBLISHER[" << discovery_guid << "]");
+    }
 }
 
 }   // namespace
