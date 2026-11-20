@@ -39,6 +39,9 @@ private:
 public:
     eprosima::fastdds::dds::DomainParticipant* get_domain_participant();
     static DDSParticipant& getInstance();
+
+    // get DomainId of singleton，if setenv FDDS_DOMAIN_ID, use FDDS_DOMAIN_ID, otherwise use 0
+    static int getDomainId();
 };
 
 }   // fdds
