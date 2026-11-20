@@ -1,7 +1,6 @@
 #include "DDSPublisherBase.hpp"
 
 #include <string>
-#include <fastdds/dds/log/Log.hpp>
 
 namespace {
 
@@ -21,6 +20,10 @@ std::string get_topic_name(eprosima::fastdds::dds::DataWriter* writer) {
 }   // namespace
 
 namespace fdds {
+
+bool DDSPublisherBase::init(const Config& config) {
+    return true;
+}
 
 void DDSPublisherBase::PubListener::on_publication_matched(
         eprosima::fastdds::dds::DataWriter* writer,

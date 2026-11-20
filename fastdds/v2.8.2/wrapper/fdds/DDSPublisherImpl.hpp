@@ -10,14 +10,21 @@ namespace fdds {
 
 class DDSPublisherImpl {
 public:
+    using DomainParticipant = eprosima::fastdds::dds::DomainParticipant;
+    using TypeSupport = eprosima::fastdds::dds::TypeSupport;
+    using PublisherQos = eprosima::fastdds::dds::PublisherQos;
+    using TopicQos = eprosima::fastdds::dds::TopicQos;
+    using DataWriterQos = eprosima::fastdds::dds::DataWriterQos;
+    using DataWriterListener = eprosima::fastdds::dds::DataWriterListener;
+
     struct Config {
-        eprosima::fastdds::dds::DomainParticipant* participant=nullptr;
-        eprosima::fastdds::dds::TypeSupport type_support;
-        eprosima::fastdds::dds::PublisherQos publisher_qos=eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT;
-        eprosima::fastdds::dds::TopicQos topic_qos=eprosima::fastdds::dds::TOPIC_QOS_DEFAULT;
+        DomainParticipant* participant = nullptr;
+        TypeSupport type_support;
+        PublisherQos publisher_qos = eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT;
+        TopicQos topic_qos = eprosima::fastdds::dds::TOPIC_QOS_DEFAULT;
         std::string topic_name;
-        eprosima::fastdds::dds::DataWriterQos data_writer_qos=eprosima::fastdds::dds::DATAWRITER_QOS_DEFAULT;
-        eprosima::fastdds::dds::DataWriterListener* data_writer_listener=nullptr;
+        DataWriterQos data_writer_qos=eprosima::fastdds::dds::DATAWRITER_QOS_DEFAULT;
+        DataWriterListener* data_writer_listener = nullptr;
     };
 
     DDSPublisherImpl() = default;
@@ -35,15 +42,15 @@ private:
     void reset();
 
 private:
-    eprosima::fastdds::dds::DomainParticipant* participant_=nullptr;
+    eprosima::fastdds::dds::DomainParticipant* participant_ = nullptr;
 
     eprosima::fastdds::dds::TypeSupport type_;
 
-    eprosima::fastdds::dds::Publisher* publisher_=nullptr;
+    eprosima::fastdds::dds::Publisher* publisher_ = nullptr;
 
-    eprosima::fastdds::dds::Topic* topic_=nullptr;
+    eprosima::fastdds::dds::Topic* topic_ = nullptr;
 
-    eprosima::fastdds::dds::DataWriter* writer_=nullptr;
+    eprosima::fastdds::dds::DataWriter* writer_ = nullptr;
 };
 
 }   // namespace fdds
