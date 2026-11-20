@@ -27,6 +27,12 @@ std::string generate_participant_qos_name() {
     return os.str();
 }
 
+std::string to_string(const eprosima::fastrtps::rtps::GUID_t& guid) {
+    std::stringstream os;
+    os << guid;
+    return os.str();
+}
+
 }   // namespace
 
 namespace fdds {
@@ -41,8 +47,6 @@ int DDSParticipant::getDomainId() {
 }
 
 DDSParticipant::DDSParticipant() {
-    DomainId_t domain_id = getDomainId();
-
     DomainParticipantQos pqos = PARTICIPANT_QOS_DEFAULT;
 
     auto factory = DomainParticipantFactory::get_instance();
@@ -51,6 +55,13 @@ DDSParticipant::DDSParticipant() {
         logWarning(DDS_PARTICIPANT, "get_participant_qos_from_profile failed, use default qos");
     }
     pqos.name(generate_participant_qos_name());
+
+    DomainId_t domain_id = getDomainId();
+    participant_ = factory->create_participant(domain_id, pqos, &listener_, StatusMask::none());
+    if (participant_ == nullptr) {
+        logError(DDS_PARTICIPANT, "create_participant failed");
+        return;
+    }
 }
 
 DDSParticipant::~DDSParticipant() {
