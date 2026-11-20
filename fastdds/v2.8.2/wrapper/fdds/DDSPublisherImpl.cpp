@@ -91,8 +91,9 @@ void DDSPublisherImpl::reset() {
     participant_ = nullptr;
 }
 
-bool DDSPublisherImpl::write(void* data) {
+bool DDSPublisherImpl::publish(void* data) {
     if (writer_ == nullptr) {
+        logError(DDS_PUBLISHER_IMPL, "writer_ is nullptr");
         return false;
     }
 

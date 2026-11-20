@@ -17,10 +17,14 @@ std::string get_topic_name(eprosima::fastdds::dds::DataWriter* writer) {
     return topic->get_name();
 }
 
-fdds::DDSPublisherImpl::Config make_publisher_impl_config(const fdds::DDSPublisherBase::Config& base_config) {
+fdds::DDSPublisherImpl::Config make_publisher_impl_config(
+        const fdds::DDSPublisherBase::Config& base_config,
+        eprosima::fastdds::dds::DataWriterListener* listener
+        ) {
     fdds::DDSPublisherImpl::Config impl_config;
-    // TODO
-    impl_config.participant = nullptr;
+
+    // participant
+    impl_config.participant = base_config.participant;
 
     // type and topic name
     impl_config.type_support = base_config.type_support;
@@ -46,6 +50,9 @@ fdds::DDSPublisherImpl::Config make_publisher_impl_config(const fdds::DDSPublish
     // publish mode
     impl_config.data_writer_qos.publish_mode().kind = base_config.publish_mode_kind;
 
+    // listener
+    impl_config.data_writer_listener = listener;
+
     return impl_config;
 }  
 
@@ -53,10 +60,19 @@ fdds::DDSPublisherImpl::Config make_publisher_impl_config(const fdds::DDSPublish
 
 namespace fdds {
 
-
 bool DDSPublisherBase::init(const Config& config) {
-    auto impl_config = make_publisher_impl_config(config);
-    return true;
+    auto impl_config = make_publisher_impl_config(config, &listener_);
+    return impl_.init(impl_config);
+}
+
+bool DDSPublisherBase::publish(void* data) {
+    if (listener_.firstConnected_ || listener_.matched_ > 0)
+    {
+        return impl_.publish(data);
+    } else {
+        logError(DDS_PUBLISHER_BASE, "publish failed: no subscriber matched");
+        return false;
+    }
 }
 
 void DDSPublisherBase::PubListener::on_publication_matched(
@@ -68,6 +84,7 @@ void DDSPublisherBase::PubListener::on_publication_matched(
     if (info.current_count_change == 1)
     {
         matched_ = info.current_count;
+        firstConnected_ = true;
         logWarning(DDS_PUBLISHER_BASE, "Publisher matched. matched_: " << matched_ << ":TOPIC[" << topic_name << "]");
     }
     else if (info.current_count_change == -1)

@@ -14,6 +14,7 @@ public:
     using ResourceLimitsQosPolicy = eprosima::fastdds::dds::ResourceLimitsQosPolicy;
 
     struct Config {
+        eprosima::fastdds::dds::DomainParticipant* participant = nullptr;
         eprosima::fastdds::dds::TypeSupport type_support;
         std::string topic_name;
         ReliabilityQosPolicyKind reliability_kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
@@ -26,9 +27,11 @@ public:
         PublishModeQosPolicyKind publish_mode_kind = eprosima::fastdds::dds::SYNCHRONOUS_PUBLISH_MODE;
     };
 
-    DDSPublisherBase(); 
+    DDSPublisherBase() = default;
 
     bool init(const Config& config);
+
+    bool publish(void* data);
 
 protected:
     class PubListener : public eprosima::fastdds::dds::DataWriterListener {

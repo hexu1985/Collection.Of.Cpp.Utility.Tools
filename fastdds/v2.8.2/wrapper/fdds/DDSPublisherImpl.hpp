@@ -36,7 +36,7 @@ public:
 
     bool init(const Config& config);
 
-    bool write(void* data);
+    bool publish(void* data);
 
 private:
     void reset();
